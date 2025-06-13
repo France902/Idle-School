@@ -120,6 +120,7 @@
         let cond = false;
 
         function updatePosition() {
+
             preside.style.marginLeft = posX + 'px';
             preside.style.marginTop = posY + 'px';
             if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
@@ -137,38 +138,44 @@
         }
 
         window.addEventListener('keydown', function(event) {
-            switch(event.key) {
-                case 'w':
-                    posY -= 20;
-                    break;
-                case 'a':
-                    posX -= 20;
-                    break;
-                case 's':
-                    posY += 20;
-                    break;
-                case 'd':
-                    posX += 20;
-                    break;
-                case 'q':
-                    posX -= 20;
-                    posY -= 20;
-                    break;
-                case 'e':
-                    posX += 20;
-                    posY -= 20;
-                    break;  
-                case 'z':
-                    posX -= 20;
-                    posY += 20;
-                    break;
-                case 'c':
-                    posX += 20;
-                    posY += 20;
-                    break;
-                default:
-                    return;
-            }
+                switch(event.key) {
+                    case 'w':
+                        if(posY > 0) posY -= 20;
+                        break;
+                    case 's':
+                        if(posY < window.innerHeight - 75) posY += 20;
+                        break;
+                    case 'a':
+                        if(posX > 0) posX -= 20;
+                        break;
+                    case 'd':
+                        if(posX < window.innerWidth - 75) posX += 20;
+                        break;
+                    case 'q':
+                        if(posX > 0 && posY > 0) {
+                            posX -= 20;
+                            posY -= 20;
+                        }
+                        break;
+                    case 'e':
+                        if(posX < window.innerWidth - 75 && posY > 0) {
+                            posX += 20;
+                            posY -= 20;
+                        }
+                        break;  
+                    case 'z':
+                        if(posX > 0 && posY < window.innerHeight - 75) {
+                            posX -= 20;
+                            posY += 20;
+                        }
+                        break;
+                    case 'c':
+                        if(posX < window.innerWidth - 75 && posY < window.innerHeight - 75) {
+                            posX += 20;
+                            posY += 20;
+                        }
+                        break;
+                    }
             updatePosition();
         });
     </script>
