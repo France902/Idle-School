@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            background-color: rgb(186, 240, 254);
+        }
+
+        #piattaforma_1 {
+            width: 150px;
+            height: 100px;
+            position: fixed;
+            background-color: rgb(168, 108, 3);
+            margin-top: 300px;
+            margin-left: 700px;
+            z-index: -1;
+        }
+        #piattaforma_2 {
+            width: 450px;
+            height: 400px;
+            position: fixed;
+            background-color: rgb(124, 3, 168);
+            margin-top: 150px;
+            margin-left: 550px;
+            display: none; 
+            z-index: -1;
+        }
+
+        #preside {
+            width: 75px;
+            height: 75px;
+            background-color: green;
+            position : fixed;
+            margin-top: 500px;
+            margin-left: 200px;
+            transition: margin-left 0.1s, margin-top 0.1s; 
+        }
+
+        .studente {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position : fixed;
+            margin-top: 570px;
+            margin-left: 800px;
+        }
+        
+    </style>
+
+</head>
+<body>
+    <div id="preside"></div>
+    <canvas id="progressCircle" width="100" height="100" style="position: fixed; top: -150px; left: 590px; background: transparent; display: none;"></canvas>
+    
+
+    <div class="studente"></div>
+
+
+
+    <div id="piattaforma_1"></div>
+    <div id="piattaforma_2"></div>
+
+
+    <script>
+        const preside = document.getElementById('preside');
+        const canvas = document.getElementById('progressCircle');
+        const piattaforma_1 = document.getElementById('piattaforma_1');
+        const piattaforma_2 = document.getElementById('piattaforma_2');
+        const studente = document.querySelector('.studente');
+
+
+    const ctx = canvas.getContext('2d');
+    let progress = 0;
+    const radius = 30;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    
+    canvas.style.marginLeft = '138px'; 
+    canvas.style.marginTop = '350px';
+
+    function drawCircle(progress) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw base circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#bbb';
+        ctx.lineWidth = 11;
+        ctx.stroke();
+
+        // Draw progress arc
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, -Math.PI/2, -Math.PI/2 + 2 * Math.PI * progress, false);
+        ctx.strokeStyle = '#228B22';
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+
+    function animate() {
+        if (progress < 1) {
+            progress += 0.0042;
+            drawCircle(progress);
+            requestAnimationFrame(animate);
+        }
+    }
+
+
+
+
+
+        let posX = 200;
+        let posY = 500;
+        let cond = false;
+
+        function updatePosition() {
+            preside.style.marginLeft = posX + 'px';
+            preside.style.marginTop = posY + 'px';
+            if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
+                cond = true;
+                canvas.style.display = 'block';
+                drawCircle(progress);
+                animate();
+                setTimeout(() => {
+                    piattaforma_1.style.display = 'none';
+                    piattaforma_2.style.display = 'block';
+                    canvas.style.display = 'none';
+                    
+                }, 2000);
+            }
+        }
+
+        window.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'w':
+                    posY -= 20;
+                    break;
+                case 'a':
+                    posX -= 20;
+                    break;
+                case 's':
+                    posY += 20;
+                    break;
+                case 'd':
+                    posX += 20;
+                    break;
+                case 'q':
+                    posX -= 20;
+                    posY -= 20;
+                    break;
+                case 'e':
+                    posX += 20;
+                    posY -= 20;
+                    break;  
+                case 'z':
+                    posX -= 20;
+                    posY += 20;
+                    break;
+                case 'c':
+                    posX += 20;
+                    posY += 20;
+                    break;
+                default:
+                    return;
+            }
+            updatePosition();
+        });
+    </script>
+</body>
+</html>
