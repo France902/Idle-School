@@ -13,6 +13,21 @@
             background-color: rgb(186, 240, 254);
         }
 
+        h1 {
+            position: fixed;
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 32px;
+            text-align: center;
+
+        }
+        p {
+            position: fixed;
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 22px;
+            text-align: center;
+        }
         #piattaforma_1 {
             width: 150px;
             height: 100px;
@@ -32,7 +47,6 @@
             display: none; 
             z-index: -1;
         }
-
         #preside {
             width: 75px;
             height: 75px;
@@ -42,7 +56,20 @@
             margin-left: 200px;
             transition: margin-left 0.1s, margin-top 0.1s; 
         }
-
+        #banco {
+            width: 100px;
+            height: 50px;
+            background-color: brown;
+            position: fixed;
+            transform: rotate(90deg);
+        }
+        #cattedra {
+            width: 150px;
+            height: 50px;
+            background-color: rgb(255, 0, 0);
+            position: fixed;
+            transform: rotate(90deg);
+        }
         .studente {
             width: 50px;
             height: 50px;
@@ -58,10 +85,22 @@
 <body>
     <div id="preside"></div>
     <canvas id="progressCircle" width="100" height="100" style="position: fixed; top: -150px; left: 590px; background: transparent; display: none;"></canvas>
-    
+    <h1 id="unlocked" style="margin-left: 620px; margin-top: 50px; display: none;">You've Unlocked </h1>
 
+    <p id="soldi" style="position: fixed; right: 20px; left: auto;">0€</p>
+    <p id="classi" style="position: fixed; top: 40px; right: 20px; left: auto;">0/5 🏫</p>
+
+
+    <div id="cartello-verticale" style="position: fixed; width: 30px; height: 100px; background: #8B5A2B; left: 1008px; top: 540px; z-index: 1;"></div>
+    <div id="cartello-orizzontale" style="position: fixed; width: 150px; height: 80px; background: #8B5A2B;  left: 950px; top: 460px; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 18px; color: #333;">
+        <p id="testo_cartello" style="font-size: 25px;">A new school <br> is opening!</p>
+    </div>
     <div id="piattaforma_1"></div>
-    <div id="piattaforma_2"></div>
+    <div id="piattaforma_2">
+        <div id="banco" style="margin-top: 50px; margin-left: 280px; "><p>Banco1</p></div>
+        <div id="banco" style="margin-top: 250px; margin-left: 280px;"><p>Banco2</p></div>
+        <div id="cattedra" style="margin-top: 150px; margin-left: 30px;"><p>Cattedra</p></div>
+    </div>
 
 
     <script>
@@ -70,10 +109,13 @@
         const piattaforma_1 = document.getElementById('piattaforma_1');
         const piattaforma_2 = document.getElementById('piattaforma_2');
         const studente = document.querySelector('.studente');
+        const unlockedText = document.getElementById('unlocked');
+        let soldi = 0;
+        let classi = 0;
         let fila_studenti = 5;
 
 
-        function createStudent() {
+        function createStudents() {
             let cont = 570;
             for (let i = 0; i < fila_studenti; i++) {
                 const newStudent = document.createElement('div');
@@ -83,8 +125,7 @@
                 document.body.appendChild(newStudent);
             }
         }
-        createStudent();
-
+        createStudents();
 
 
 
@@ -141,6 +182,7 @@
             preside.style.marginLeft = posX + 'px';
             preside.style.marginTop = posY + 'px';
             if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
+                piattaforma_1.style.border = '5px solid #228B22';
                 cond = true;
                 canvas.style.display = 'block';
                 drawCircle(progress);
@@ -149,7 +191,17 @@
                     piattaforma_1.style.display = 'none';
                     piattaforma_2.style.display = 'block';
                     canvas.style.display = 'none';
-                    
+                    unlockedText.style.display = 'block';
+                    unlockedText.innerHTML += "<br>your first classroom!";
+                    document.getElementById("testo_cartello").style.fontSize = "15px";
+
+                    document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
+                    setTimeout(() => {
+                        unlockedText.innerHTML = "You've Unlocked ";
+                        unlockedText.style.display = 'none';
+                    }, 2000);
+                    classi += 1;
+                    document.getElementById('classi').innerText = classi + "/5 🏫";
                 }, 2000);
             }
         }
