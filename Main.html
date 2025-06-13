@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Idle School</title>
     <style>
 
         body {
@@ -60,10 +60,6 @@
     <canvas id="progressCircle" width="100" height="100" style="position: fixed; top: -150px; left: 590px; background: transparent; display: none;"></canvas>
     
 
-    <div class="studente"></div>
-
-
-
     <div id="piattaforma_1"></div>
     <div id="piattaforma_2"></div>
 
@@ -74,6 +70,30 @@
         const piattaforma_1 = document.getElementById('piattaforma_1');
         const piattaforma_2 = document.getElementById('piattaforma_2');
         const studente = document.querySelector('.studente');
+        let fila_studenti = 5;
+
+
+        function createStudent() {
+            let cont = 570;
+            for (let i = 0; i < fila_studenti; i++) {
+                const newStudent = document.createElement('div');
+                newStudent.className = 'studente';
+                newStudent.style.marginTop = cont + "px";
+                cont += 55;
+                document.body.appendChild(newStudent);
+            }
+        }
+        createStudent();
+
+
+
+
+
+
+
+
+
+
 
 
     const ctx = canvas.getContext('2d');
@@ -105,13 +125,11 @@
 
     function animate() {
         if (progress < 1) {
-            progress += 0.0042;
+            progress += 0.0084;
             drawCircle(progress);
             requestAnimationFrame(animate);
         }
     }
-
-
 
 
 
@@ -120,7 +138,6 @@
         let cond = false;
 
         function updatePosition() {
-
             preside.style.marginLeft = posX + 'px';
             preside.style.marginTop = posY + 'px';
             if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
