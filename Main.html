@@ -91,8 +91,8 @@
     <p id="classi" style="position: fixed; top: 40px; right: 20px; left: auto;">0/5 🏫</p>
 
 
-    <div id="cartello-verticale" style="position: fixed; width: 30px; height: 100px; background: #8B5A2B; left: 1008px; top: 540px; z-index: 1;"></div>
-    <div id="cartello-orizzontale" style="position: fixed; width: 150px; height: 80px; background: #8B5A2B;  left: 950px; top: 460px; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 18px; color: #333;">
+    <div id="cartello-verticale" style="position: fixed; width: 30px; height: 100px; background: #8B5A2B; left: 1108px; top: 540px; z-index: 1;"></div>
+    <div id="cartello-orizzontale" style="position: fixed; width: 150px; height: 80px; background: #8B5A2B;  left: 1050px; top: 460px; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 18px; color: #333;">
         <p id="testo_cartello" style="font-size: 25px;">A new school <br> is opening!</p>
     </div>
     <div id="piattaforma_1"></div>
@@ -112,8 +112,11 @@
         const unlockedText = document.getElementById('unlocked');
         let soldi = 0;
         let classi = 0;
-        let fila_studenti = 5;
-
+        let fila_studenti = 6;
+   
+        let students = document.createElement('div');
+        students.id = 'students-container';
+        document.body.appendChild(students);
 
         function createStudents() {
             let cont = 570;
@@ -122,8 +125,10 @@
                 newStudent.className = 'studente';
                 newStudent.style.marginTop = cont + "px";
                 cont += 55;
-                document.body.appendChild(newStudent);
+                students.appendChild(newStudent);
+                
             }
+
         }
         createStudents();
 
@@ -166,7 +171,7 @@
 
     function animate() {
         if (progress < 1) {
-            progress += 0.0084;
+            progress += 0.0168;
             drawCircle(progress);
             requestAnimationFrame(animate);
         }
@@ -181,29 +186,7 @@
         function updatePosition() {
             preside.style.marginLeft = posX + 'px';
             preside.style.marginTop = posY + 'px';
-            if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
-                piattaforma_1.style.border = '5px solid #228B22';
-                cond = true;
-                canvas.style.display = 'block';
-                drawCircle(progress);
-                animate();
-                setTimeout(() => {
-                    piattaforma_1.style.display = 'none';
-                    piattaforma_2.style.display = 'block';
-                    canvas.style.display = 'none';
-                    unlockedText.style.display = 'block';
-                    unlockedText.innerHTML += "<br>your first classroom!";
-                    document.getElementById("testo_cartello").style.fontSize = "15px";
-
-                    document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
-                    setTimeout(() => {
-                        unlockedText.innerHTML = "You've Unlocked ";
-                        unlockedText.style.display = 'none';
-                    }, 2000);
-                    classi += 1;
-                    document.getElementById('classi').innerText = classi + "/5 🏫";
-                }, 2000);
-            }
+            control_position(posX, posY);
         }
 
         window.addEventListener('keydown', function(event) {
@@ -247,6 +230,215 @@
                     }
             updatePosition();
         });
+        function control_position(posX, posY) {
+            if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
+
+                piattaforma_1.style.border = '5px solid #228B22';
+                cond = true;
+                canvas.style.display = 'block';
+                drawCircle(progress);
+                animate();
+                setTimeout(() => {
+                    piattaforma_1.style.display = 'none';
+                    piattaforma_2.style.display = 'block';
+                    canvas.style.display = 'none';
+                    unlockedText.style.display = 'block';
+                    unlockedText.innerHTML += "<br>your first classroom!";
+                    document.getElementById("testo_cartello").style.fontSize = "15px";
+
+                    document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
+                    setTimeout(() => {
+                        unlockedText.innerHTML = "You've Unlocked ";
+                        unlockedText.style.display = 'none';
+                    }, 2000);
+                    classi += 1;
+                    document.getElementById('classi').innerText = classi + "/5 🏫";
+                    farming_1();
+                }, 2000);
+            }
+        }
+
+        function farming_1() {
+            let ricavo = 10;
+            let entra = true;
+            let pos_student = 0;
+            let pos1 = 0;
+            setTimeout(() => {
+                const newStudent = document.createElement('div');
+            newStudent.className = 'studente';
+            newStudent.style.marginTop = 900 + "px";
+            students.appendChild(newStudent);  
+            for (let i = pos1+1; i < students.children.length; i++) {
+                let stud = students.children[i];
+                let currentTop = parseInt(stud.style.marginTop);
+                stud.style.transition = 'margin-top 0.5s ease-in-out';
+                if(i==students.children.length-1){
+                    setTimeout(() => {
+                        stud.style.marginTop = (currentTop - 55) + "px";
+                    }, 1);
+                }
+                else{
+                    stud.style.marginTop = (currentTop - 55) + "px";
+                    }
+            }
+            }, 1000);
+            
+
+            animazione_studente_entrata_1(pos_student);
+            pos_student += 1;
+            setInterval(() => {
+                if(entra == true){
+                    soldi += ricavo;
+                    entra = false;
+                    animazione_studente_uscita_1(pos1);
+                }
+                else {
+                    entra = true;
+                    setTimeout(() => {
+                        const newStudent = document.createElement('div');
+                    newStudent.className = 'studente';
+                    newStudent.style.marginTop = 900 + "px";
+                    students.appendChild(newStudent);  
+                    for (let i = pos1; i < students.children.length; i++) {
+                        let stud = students.children[i];
+                        let currentTop = parseInt(stud.style.marginTop);
+                        stud.style.transition = 'margin-top 0.5s ease-in-out';
+                        if(i==students.children.length-1){
+                            setTimeout(() => {
+                                stud.style.marginTop = (currentTop - 55) + "px";
+                            }, 1);
+                        }
+                        else{
+                            stud.style.marginTop = (currentTop - 55) + "px";
+                            }
+                    }
+                    }, 1000);
+                    animazione_studente_entrata_1(pos_student);
+                    pos1 = pos_student;
+                    pos_student += 1;
+        
+                    
+                    
+                }
+                document.getElementById('soldi').innerText = soldi + "€";
+            }, 5000);
+            let pos2 = 1;
+            setTimeout(() => {
+                setTimeout(() => {
+                    const newStudent = document.createElement('div');
+                    newStudent.className = 'studente';
+                    newStudent.style.marginTop = 900 + "px";
+                    students.appendChild(newStudent);
+                    for (let i = pos2+1; i < students.children.length; i++) {
+                        let stud = students.children[i];
+                        let currentTop = parseInt(stud.style.marginTop);
+                        stud.style.transition = 'margin-top 0.5s ease-in-out';
+                        if(i==students.children.length-1){
+                            setTimeout(() => {
+                                stud.style.marginTop = (currentTop - 55) + "px";
+                            }, 50);
+                        }
+                        else{
+                            stud.style.marginTop = (currentTop - 55) + "px";
+                        }
+                    }
+                }, 1000);
+                
+                animazione_studente_entrata2(pos_student);
+                pos_student += 1;
+                let entra2 = true;
+                setInterval(() => {
+                if(entra2 == true){
+                    soldi += ricavo;
+                    entra2 = false;
+                    animazione_studente_uscita_2(pos2);
+                    
+                }
+                else {
+                    entra2 = true;
+                    animazione_studente_entrata2(pos_student);
+                    setTimeout(() => {
+                    const newStudent = document.createElement('div');
+                    newStudent.className = 'studente';
+                    newStudent.style.marginTop = 900 + "px";
+                    students.appendChild(newStudent);
+                    for (let i = pos2+1; i < students.children.length; i++) {
+                        let stud = students.children[i];
+                        let currentTop = parseInt(stud.style.marginTop);
+                        stud.style.transition = 'margin-top 0.5s ease-in-out';
+                        if(i==students.children.length-1){
+                            setTimeout(() => {
+                                stud.style.marginTop = (currentTop - 55) + "px";
+                            }, 50);
+                        }
+                        else{
+                            stud.style.marginTop = (currentTop - 55) + "px";
+                        }
+                    }
+                }, 1000);
+                
+                    pos2 = pos_student;
+                    pos_student +=1;
+                    
+                }
+                document.getElementById('soldi').innerText = soldi + "€";
+            }, 5000);
+            }, 2000);
+        }
+        function animazione_studente_entrata_1(pos) {
+            let studente = students.children[pos];
+            let posY = parseInt(studente.style.marginTop);
+            studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
+            studente.style.marginTop = 550 + 'px';
+            setTimeout(() => {
+                studente.style.marginLeft = 910 + 'px';
+            }, 500);
+            setTimeout(() => {
+                studente.style.transition = 'margin-top 1.5s ease-in-out';
+                studente.style.marginTop = 200 + 'px';
+            }, 1200);
+        }
+        function animazione_studente_entrata2(pos){
+            let studente = students.children[pos];
+            let posY = parseInt(studente.style.marginTop);
+            studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
+            studente.style.marginTop = 550 + 'px';
+            setTimeout(() => {
+                studente.style.marginLeft = 910 + 'px';
+            }, 500);
+            setTimeout(() => {
+                studente.style.transition = 'margin-top 1s ease-in-out';
+                studente.style.marginTop = 400 + 'px';
+            }, 1200);
+        }
+
+        function animazione_studente_uscita_1(pos) {
+            let studente = students.children[pos];
+            let posY = parseInt(studente.style.marginTop);
+            studente.style.transition = 'margin-top 1s ease-in-out, margin-left 1s ease-in-out';
+            studente.style.marginTop = 50 + 'px';
+            setTimeout(() => {
+                studente.style.marginLeft = 300 + 'px';
+            }, 1000);
+            setTimeout(() => {
+                studente.style.transition = 'margin-top 1.5s ease-in-out, margin-left 1s ease-in-out';
+                studente.style.marginTop = 1000 + 'px';
+            }, 2000);
+        }
+        function animazione_studente_uscita_2(pos) {
+            let studente = students.children[pos];
+            let posY = parseInt(studente.style.marginTop);
+            studente.style.transition = 'margin-top 1s ease-in-out, margin-left 1s ease-in-out';
+            studente.style.marginTop = 50 + 'px';
+            setTimeout(() => {
+                studente.style.transition = 'margin-top 1.5s ease-in-out, margin-left 1s ease-in-out';
+                studente.style.marginLeft = 300 + 'px';
+            }, 1000);
+            setTimeout(() => {
+                studente.style.transition = 'margin-top 1.5s ease-in-out, margin-left 1s ease-in-out';
+                studente.style.marginTop = 1000 + 'px';
+            }, 2000);
+        }
     </script>
 </body>
 </html>
