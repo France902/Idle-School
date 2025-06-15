@@ -56,13 +56,14 @@
             margin-left: 200px;
             transition: margin-left 0.1s, margin-top 0.1s; 
         }
-        #banco {
+        .banco {
             width: 100px;
             height: 50px;
             background-color: brown;
             position: fixed;
             transform: rotate(90deg);
         }
+        
         #cattedra {
             width: 150px;
             height: 50px;
@@ -78,7 +79,25 @@
             margin-top: 570px;
             margin-left: 800px;
         }
-        
+        .blocco_pulizia {
+            height: 100px;
+            width: 60px;
+            position: fixed;
+            background-color: red;
+            animation: fadeOpacity 1s infinite alternate;
+        }
+
+        @keyframes fadeOpacity {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
 
 </head>
@@ -97,10 +116,13 @@
     </div>
     <div id="piattaforma_1"></div>
     <div id="piattaforma_2">
-        <div id="banco" style="margin-top: 50px; margin-left: 280px; "><p>Banco1</p></div>
-        <div id="banco" style="margin-top: 250px; margin-left: 280px;"><p>Banco2</p></div>
+        <div class="banco" id="banco1" style="margin-top: 50px; margin-left: 280px; "><p>Banco1</p></div>
+        <div class="banco" id="banco2" style="margin-top: 250px; margin-left: 280px;"><p>Banco2</p></div>
         <div id="cattedra" style="margin-top: 150px; margin-left: 30px;"><p>Cattedra</p></div>
     </div>
+    <div id="blocco_pulizia_1" class="blocco_pulizia" style="margin-left: 926px; margin-top: 178px; display: none;"></div>
+    <div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 926px; margin-top: 378px; display: none;"></div>
+
 
 
     <script>
@@ -110,9 +132,13 @@
         const piattaforma_2 = document.getElementById('piattaforma_2');
         const studente = document.querySelector('.studente');
         const unlockedText = document.getElementById('unlocked');
+        const banco1 = document.getElementById('banco1');
+        const banco2 = document.getElementById('banco2')
+
         let soldi = 0;
         let classi = 0;
         let fila_studenti = 6;
+        let condizione_click = false;
    
         let students = document.createElement('div');
         students.id = 'students-container';
@@ -257,132 +283,18 @@
                 }, 2000);
             }
         }
-
+        let pos_student = 0;
         function farming_1() {
             let ricavo = 10;
             let entra = true;
-            let pos_student = 0;
+            let entra2 = true;
             let pos1 = 0;
-            setTimeout(() => {
-                const newStudent = document.createElement('div');
-            newStudent.className = 'studente';
-            newStudent.style.marginTop = 900 + "px";
-            students.appendChild(newStudent);  
-            for (let i = pos1+1; i < students.children.length; i++) {
-                let stud = students.children[i];
-                let currentTop = parseInt(stud.style.marginTop);
-                stud.style.transition = 'margin-top 0.5s ease-in-out';
-                if(i==students.children.length-1){
-                    setTimeout(() => {
-                        stud.style.marginTop = (currentTop - 55) + "px";
-                    }, 1);
-                }
-                else{
-                    stud.style.marginTop = (currentTop - 55) + "px";
-                    }
-            }
-            }, 1000);
-            
-
-            animazione_studente_entrata_1(pos_student);
-            pos_student += 1;
-            setInterval(() => {
-                if(entra == true){
-                    soldi += ricavo;
-                    entra = false;
-                    animazione_studente_uscita_1(pos1);
-                }
-                else {
-                    entra = true;
-                    setTimeout(() => {
-                        const newStudent = document.createElement('div');
-                    newStudent.className = 'studente';
-                    newStudent.style.marginTop = 900 + "px";
-                    students.appendChild(newStudent);  
-                    for (let i = pos1; i < students.children.length; i++) {
-                        let stud = students.children[i];
-                        let currentTop = parseInt(stud.style.marginTop);
-                        stud.style.transition = 'margin-top 0.5s ease-in-out';
-                        if(i==students.children.length-1){
-                            setTimeout(() => {
-                                stud.style.marginTop = (currentTop - 55) + "px";
-                            }, 1);
-                        }
-                        else{
-                            stud.style.marginTop = (currentTop - 55) + "px";
-                            }
-                    }
-                    }, 1000);
-                    animazione_studente_entrata_1(pos_student);
-                    pos1 = pos_student;
-                    pos_student += 1;
-        
-                    
-                    
-                }
-                document.getElementById('soldi').innerText = soldi + "€";
-            }, 5000);
             let pos2 = 1;
+           
+            interval1(entra, pos1, ricavo);
+            
             setTimeout(() => {
-                setTimeout(() => {
-                    const newStudent = document.createElement('div');
-                    newStudent.className = 'studente';
-                    newStudent.style.marginTop = 900 + "px";
-                    students.appendChild(newStudent);
-                    for (let i = pos2+1; i < students.children.length; i++) {
-                        let stud = students.children[i];
-                        let currentTop = parseInt(stud.style.marginTop);
-                        stud.style.transition = 'margin-top 0.5s ease-in-out';
-                        if(i==students.children.length-1){
-                            setTimeout(() => {
-                                stud.style.marginTop = (currentTop - 55) + "px";
-                            }, 50);
-                        }
-                        else{
-                            stud.style.marginTop = (currentTop - 55) + "px";
-                        }
-                    }
-                }, 1000);
-                
-                animazione_studente_entrata2(pos_student);
-                pos_student += 1;
-                let entra2 = true;
-                setInterval(() => {
-                if(entra2 == true){
-                    soldi += ricavo;
-                    entra2 = false;
-                    animazione_studente_uscita_2(pos2);
-                    
-                }
-                else {
-                    entra2 = true;
-                    animazione_studente_entrata2(pos_student);
-                    setTimeout(() => {
-                    const newStudent = document.createElement('div');
-                    newStudent.className = 'studente';
-                    newStudent.style.marginTop = 900 + "px";
-                    students.appendChild(newStudent);
-                    for (let i = pos2+1; i < students.children.length; i++) {
-                        let stud = students.children[i];
-                        let currentTop = parseInt(stud.style.marginTop);
-                        stud.style.transition = 'margin-top 0.5s ease-in-out';
-                        if(i==students.children.length-1){
-                            setTimeout(() => {
-                                stud.style.marginTop = (currentTop - 55) + "px";
-                            }, 50);
-                        }
-                        else{
-                            stud.style.marginTop = (currentTop - 55) + "px";
-                        }
-                    }
-                }, 1000);
-                
-                    pos2 = pos_student;
-                    pos_student +=1;
-                    
-                }
-                document.getElementById('soldi').innerText = soldi + "€";
-            }, 5000);
+                interval2(entra2, pos2, ricavo);  
             }, 2000);
         }
         function animazione_studente_entrata_1(pos) {
@@ -391,11 +303,11 @@
             studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
             studente.style.marginTop = 550 + 'px';
             setTimeout(() => {
-                studente.style.marginLeft = 910 + 'px';
+                studente.style.marginLeft = (parseInt(banco1.style.marginLeft) + 550 + 80) + 'px';
             }, 500);
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1.5s ease-in-out';
-                studente.style.marginTop = 200 + 'px';
+                studente.style.marginTop = (parseInt(banco1.style.marginTop) + 150 ) + 'px';
             }, 1200);
         }
         function animazione_studente_entrata2(pos){
@@ -404,11 +316,11 @@
             studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
             studente.style.marginTop = 550 + 'px';
             setTimeout(() => {
-                studente.style.marginLeft = 910 + 'px';
+                studente.style.marginLeft = (parseInt(banco2.style.marginLeft) + 550 + 80) + 'px';
             }, 500);
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1s ease-in-out';
-                studente.style.marginTop = 400 + 'px';
+                studente.style.marginTop = (parseInt(banco2.style.marginTop) + 150 ) + 'px';
             }, 1200);
         }
 
@@ -439,6 +351,117 @@
                 studente.style.marginTop = 1000 + 'px';
             }, 2000);
         }
+        function interval1(entra, pos1, ricavo) {
+               setTimeout(() => {
+                    const newStudent = document.createElement('div');
+                    newStudent.className = 'studente';
+                    newStudent.style.marginTop = 900 + "px";
+                    students.appendChild(newStudent);  
+                    for (let i = pos1+1; i < students.children.length; i++) {
+                        let stud = students.children[i];
+                        let currentTop = parseInt(stud.style.marginTop);
+                        stud.style.transition = 'margin-top 0.5s ease-in-out';
+                        if(i==students.children.length-1){
+                            setTimeout(() => {
+                                stud.style.marginTop = (currentTop - 55) + "px";
+                            }, 1);
+                        }
+                        else{
+                            stud.style.marginTop = (currentTop - 55) + "px";
+                            }
+                    }
+                    }, 1000);
+                    entra=true;
+                animazione_studente_entrata_1(pos_student);
+                pos1 = pos_student;
+                pos_student += 1;
+                let Interval_1 = setInterval(() => {
+
+            
+                if(entra == true){
+                    soldi += ricavo;
+                    entra = false;
+                    document.getElementById('blocco_pulizia_1').style.display = 'block';
+                    animazione_studente_uscita_1(pos1);
+
+                    clearInterval(Interval_1);
+                    controllo_pulizia(entra, pos1, ricavo);
+                   
+                }
+                document.getElementById('soldi').innerText = soldi + "€";
+            }, 5000);
+            }
+        function controllo_pulizia(entra, pos1, ricavo) {
+                window.addEventListener('keydown', function(event) {
+                if(parseInt(preside.style.marginLeft) == 920 && parseInt(preside.style.marginTop) >= 120 && parseInt(preside.style.marginTop) <= 260 && event.key == 'p') {
+                    if(condizione_click == false){
+                    removeEventListener('keydown', arguments.callee);
+                    condizione_click = true;
+                    setTimeout(() => {
+                        condizione_click = false;
+                    }, 1000);
+                    setTimeout(() => { document.body.style.pointerEvents = ""; }, 5000);
+                    
+                    document.getElementById('blocco_pulizia_1').style.display = 'none';
+                    interval1(entra, pos1, ricavo);
+                } 
+            }
+            });
+            }
+        function interval2(entra2, pos2, ricavo) {
+            setTimeout(() => {
+                    const newStudent = document.createElement('div');
+                    newStudent.className = 'studente';
+                    newStudent.style.marginTop = 900 + "px";
+                    students.appendChild(newStudent);
+                    for (let i = pos2+1; i < students.children.length; i++) {
+                        let stud = students.children[i];
+                        let currentTop = parseInt(stud.style.marginTop);
+                        stud.style.transition = 'margin-top 0.5s ease-in-out';
+                        if(i==students.children.length-1){
+                            setTimeout(() => {
+                                stud.style.marginTop = (currentTop - 55) + "px";
+                            }, 50);
+                        }
+                        else{
+                            stud.style.marginTop = (currentTop - 55) + "px";
+                        }
+                    }
+                }, 1000);
+                entra2=true;
+                animazione_studente_entrata2(pos_student);
+                pos2 = pos_student;
+                pos_student += 1;
+            let Interval_2 = setInterval(() => {
+                    
+                if(entra2 == true){
+                    soldi += ricavo;
+                    document.getElementById('soldi').innerText = soldi + "€";
+                    entra2 = false;
+                    document.getElementById('blocco_pulizia_2').style.display = 'block';
+                    animazione_studente_uscita_2(pos2);
+                    clearInterval(Interval_2);
+                    controllo_pulizia_2(entra2, pos2, ricavo);
+                }
+                
+            }, 5000);
+        }
+        function controllo_pulizia_2(entra2, pos2, ricavo) {
+                window.addEventListener('keydown', function(event) {  
+                if(parseInt(preside.style.marginLeft) == 920 && parseInt(preside.style.marginTop) >= 320 && parseInt(preside.style.marginTop) <= 460 && event.key == 'p') {
+                    if(condizione_click == false){
+                    removeEventListener('keydown', arguments.callee);
+                    window.removeEventListener('keydown', arguments.callee);
+                    condizione_click = true;
+                    setTimeout(() => {
+                        condizione_click = false;
+                    }, 1000);
+                    document.getElementById('blocco_pulizia_2').style.display = 'none';
+                    interval2(entra2, pos2, ricavo);
+                }
+                } 
+            });
+            }
     </script>
 </body>
 </html>
