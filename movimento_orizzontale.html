@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        img {
+            max-width: 400px;
+            height: auto;
+        }
+        #preside {
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: top 0.06s ease-in-out, left 0.06s ease-in-out;
+            transform: scaleX(-1);
+        }
+        @keyframes move {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(7.5px) translateY(-5px); }
+            50% { transform: translateX(15px) translateY(-10px); }
+            50% { transform: translateX(18.75px) translateY(-10px); }
+            60% { transform: translateX(22.5px) translateY(-5px); }
+            100% { transform: translateX(30px) translateY(0);  }
+        }
+    </style>
+</head>
+<body>
+    <img id="preside" src="Preside.png" alt="">
+    <script>
+        const preside = document.getElementById('preside');
+        Posx = 0;
+        Posy = 0;
+        function handleKeydown(event) {
+            if (event.key === 'd') {
+                preside.style.transform = "scaleX(1)";
+                preside.style.top = (parseFloat(Posy) ) + 'px';
+                preside.style.left = (parseFloat(Posx) ) + 'px';
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) + 7.5) + 'px';
+                }, 60);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) + 15) + 'px';
+                }, 120);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) + 18.75) + 'px';
+                }, 180);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) + 22.5) + 'px';
+                }, 240);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) ) + 'px';
+                    preside.style.left = (parseFloat(Posx) + 30) + 'px';
+                    Posx += 30;
+                }, 300);
+                
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                        window.addEventListener('keydown', handleKeydown);
+                }, 300);
+                
+            }
+            if (event.key === 'a') {
+                preside.style.transform = "scaleX(-1)";
+                preside.style.top = (parseFloat(Posy) ) + 'px';
+                preside.style.left = (parseFloat(Posx) ) + 'px';
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) - 7.5) + 'px';
+                }, 60);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) - 15) + 'px';
+                }, 120);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) - 18.75) + 'px';
+                }, 180);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
+                    preside.style.left = (parseFloat(Posx) - 22.5) + 'px';
+                }, 240);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) ) + 'px';
+                    preside.style.left = (parseFloat(Posx) - 30) + 'px';
+                    Posx -= 30;
+                }, 300);
+                
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                        window.addEventListener('keydown', handleKeydown);
+                }, 300);
+            }
+
+        }
+        window.addEventListener('keydown', handleKeydown);
+    </script>
+</body>
+</html>
