@@ -177,7 +177,10 @@
     
     canvas.style.marginLeft = '138px'; 
     canvas.style.marginTop = '350px';
-
+    
+    let animationId = null;
+    let condizione_posizione = true;
+    let cond_start = false;
     function drawCircle(progress) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Draw base circle
@@ -196,13 +199,21 @@
     }
 
     function animate() {
+        condizione_posizione = true;
         if (progress < 1) {
             progress += 0.0084;
             drawCircle(progress);
-            requestAnimationFrame(animate);
+            animationId = requestAnimationFrame(animate);
         }
     }
 
+    function stopAnimation() {
+        condizione_posizione = false;
+        canvas.style.display = 'none';
+        piattaforma_1.style.border = 'none';
+        cancelAnimationFrame(animationId);
+        animationId = null;
+}
 
 
         let posX = 200;
@@ -215,73 +226,57 @@
             control_position(posX, posY);
         }
 
+       let pressedKeys = {};
+
         window.addEventListener('keydown', function(event) {
-                switch(event.key) {
-                    case 'w':
-                        if(posY > 0) posY -= 20;
-                        break;
-                    case 's':
-                        if(posY < window.innerHeight - 75) posY += 20;
-                        break;
-                    case 'a':
-                        if(posX > 0) posX -= 20;
-                        break;
-                    case 'd':
-                        if(posX < window.innerWidth - 75) posX += 20;
-                        break;
-                    case 'q':
-                        if(posX > 0 && posY > 0) {
-                            posX -= 20;
-                            posY -= 20;
-                        }
-                        break;
-                    case 'e':
-                        if(posX < window.innerWidth - 75 && posY > 0) {
-                            posX += 20;
-                            posY -= 20;
-                        }
-                        break;  
-                    case 'z':
-                        if(posX > 0 && posY < window.innerHeight - 75) {
-                            posX -= 20;
-                            posY += 20;
-                        }
-                        break;
-                    case 'c':
-                        if(posX < window.innerWidth - 75 && posY < window.innerHeight - 75) {
-                            posX += 20;
-                            posY += 20;
-                        }
-                        break;
-                    }
+            pressedKeys[event.key.toLowerCase()] = true;
+
+            if (pressedKeys['w'] && posY > 0) posY -= 20;
+            if (pressedKeys['s'] && posY < window.innerHeight - 75) posY += 20;
+            if (pressedKeys['a'] && posX > 0) posX -= 20;
+            if (pressedKeys['d'] && posX < window.innerWidth - 75) posX += 20;
+
             updatePosition();
         });
+
+        window.addEventListener('keyup', function(event) {
+            delete pressedKeys[event.key.toLowerCase()];
+        });
+
         function control_position(posX, posY) {
             if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
-
                 piattaforma_1.style.border = '5px solid #228B22';
                 cond = true;
                 canvas.style.display = 'block';
+                cond_start = true;
                 drawCircle(progress);
                 animate();
                 setTimeout(() => {
-                    piattaforma_1.style.display = 'none';
-                    piattaforma_2.style.display = 'block';
-                    canvas.style.display = 'none';
-                    unlockedText.style.display = 'block';
-                    unlockedText.innerHTML += "<br>your first classroom!";
-                    document.getElementById("testo_cartello").style.fontSize = "15px";
-
-                    document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
-                    setTimeout(() => {
-                        unlockedText.innerHTML = "You've Unlocked ";
-                        unlockedText.style.display = 'none';
-                    }, 2000);
-                    classi += 1;
-                    document.getElementById('classi').innerText = classi + "/5 🏫";
-                    farming_1();
+                    if(condizione_posizione) {
+                        piattaforma_1.style.display = 'none';
+                        piattaforma_2.style.display = 'block';
+                        canvas.style.display = 'none';
+                        unlockedText.style.display = 'block';
+                        unlockedText.innerHTML += "<br>your first classroom!";
+                        document.getElementById("testo_cartello").style.fontSize = "15px";
+                        document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
+                        setTimeout(() => {
+                            unlockedText.innerHTML = "You've Unlocked ";
+                            unlockedText.style.display = 'none';
+                        }, 2000);
+                        classi += 1;
+                        document.getElementById('classi').innerText = classi + "/5 🏫";
+                        farming_1();
+                }
                 }, 2000);
-            }
+            } else {
+                cond = false;
+                progress = 0;
+                if(cond_start) {
+                    stopAnimation();
+                }
+                cond_start = false;
+            }  
         }
         let pos_student = 0;
         function farming_1() {
