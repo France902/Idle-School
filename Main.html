@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,  user-scalable=no,">
     <title>Idle School</title>
     <style>
 
         body {
             margin: 0;
             padding: 0;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden; 
             background-color: rgb(186, 240, 254);
         }
@@ -17,7 +19,7 @@
             position: fixed;
             color: black;
             font-family: Arial, sans-serif;
-            font-size: 32px;
+            font-size: 1.8vw;
             text-align: center;
 
         }
@@ -25,67 +27,73 @@
             position: fixed;
             color: black;
             font-family: Arial, sans-serif;
-            font-size: 22px;
+            font-size: 1.2vw;
             text-align: center;
         }
         #piattaforma_1 {
-            width: 150px;
-            height: 100px;
+            width: 10vw;
+            height: 12vh;
             position: fixed;
             background-color: rgb(168, 108, 3);
-            margin-top: 300px;
-            margin-left: 700px;
+            margin-top: 40vh;
+            margin-left: 46vw;
             z-index: -1;
         }
         #piattaforma_2 {
-            width: 450px;
-            height: 400px;
+            width: 23.44vw;        
+            height: 33.33vh;      
             position: fixed;
             background-color: rgb(124, 3, 168);
-            margin-top: 150px;
-            margin-left: 550px;
+            margin-top: 28.5vh;    
+            margin-left: 39.65vw;  
             display: none; 
             z-index: -1;
         }
-        #preside {
-            width: 75px;
-            height: 75px;
-            background-color: green;
-            position : fixed;
-            margin-top: 500px;
-            margin-left: 200px;
-            transition: margin-left 0.1s, margin-top 0.1s; 
-        }
-        .banco {
-            width: 100px;
-            height: 50px;
-            background-color: brown;
-            position: fixed;
-            transform: rotate(90deg);
-        }
-        
-        #cattedra {
-            width: 150px;
-            height: 50px;
-            background-color: rgb(255, 0, 0);
-            position: fixed;
-            transform: rotate(90deg);
-        }
-        .studente {
-            width: 50px;
-            height: 50px;
-            background-color: red;
-            position : fixed;
-            margin-top: 570px;
-            margin-left: 800px;
-        }
-        .blocco_pulizia {
-            height: 100px;
-            width: 60px;
-            position: fixed;
-            background-color: red;
-            animation: fadeOpacity 1s infinite alternate;
-        }
+
+#preside {
+    width: 3.91vw;         
+    height: 6.60vh;       
+    background-color: green;
+    position: fixed;
+    top: 57.5vh;  
+    left: 12.92vw; 
+    transition: left 0.1s, top 0.1s;
+}
+
+.banco {
+    width: 5.21vw;         
+    height: 4.17vh;       
+    background-color: brown;
+    position: fixed;
+    transform: rotate(90deg);
+}
+
+#cattedra {
+    width: 7.81vw;         
+    height: 4.17vh;        
+    background-color: rgb(255, 0, 0);
+    position: fixed;
+    transform: rotate(90deg);
+}
+
+.studente {
+    width: 2.6vw;          
+    height: 4.17vh;       
+    background-color: red;
+    position: fixed;
+    margin-top: 47.5vh;   
+    margin-left: 51.67vw;  
+}
+
+.blocco_pulizia {
+    height: 8.33vh;        
+    width: 3.13vw;         
+    position: fixed;
+    background-color: red;
+    animation: fadeOpacity 1s infinite alternate;
+}
+
+
 
         @keyframes fadeOpacity {
             0% {
@@ -103,25 +111,32 @@
 </head>
 <body>
     <div id="preside"></div>
-    <canvas id="progressCircle" width="100" height="100" style="position: fixed; top: -150px; left: 590px; background: transparent; display: none;"></canvas>
-    <h1 id="unlocked" style="margin-left: 620px; margin-top: 50px; display: none;">You've Unlocked </h1>
+    <canvas id="progressCircle" style="position: fixed; top: -13.5vh; left: 26.23vw; background: transparent; display: none; width: 15vw; height: 15vh;"></canvas>
 
-    <p id="soldi" style="position: fixed; right: 20px; left: auto;">0€</p>
-    <p id="classi" style="position: fixed; top: 40px; right: 20px; left: auto;">0/5 🏫</p>
+<h1 id="unlocked" style="margin-left: 42.29vw; margin-top: 15vh; display: none;">You've Unlocked </h1>
 
+<p id="soldi" style="position: fixed; right: 1.04vw; left: auto;">0€</p>
 
-    <div id="cartello-verticale" style="position: fixed; width: 30px; height: 100px; background: #8B5A2B; left: 1108px; top: 540px; z-index: 1;"></div>
-    <div id="cartello-orizzontale" style="position: fixed; width: 150px; height: 80px; background: #8B5A2B;  left: 1050px; top: 460px; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 18px; color: #333;">
-        <p id="testo_cartello" style="font-size: 25px;">A new school <br> is opening!</p>
-    </div>
-    <div id="piattaforma_1"></div>
-    <div id="piattaforma_2">
-        <div class="banco" id="banco1" style="margin-top: 50px; margin-left: 280px; "><p>Banco1</p></div>
-        <div class="banco" id="banco2" style="margin-top: 250px; margin-left: 280px;"><p>Banco2</p></div>
-        <div id="cattedra" style="margin-top: 150px; margin-left: 30px;"><p>Cattedra</p></div>
-    </div>
-    <div id="blocco_pulizia_1" class="blocco_pulizia" style="margin-left: 926px; margin-top: 178px; display: none;"></div>
-    <div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 926px; margin-top: 378px; display: none;"></div>
+<p id="classi" style="position: fixed; top: 3.33vh; right: 1.04vw; left: auto;">0/5 🏫</p>
+
+<div id="cartello-verticale" style="position: fixed; width: 1.56vw; height: 8.6vh; background: #8B5A2B; left: 68vw; top: 76vh; z-index: 1;"></div>
+
+<div id="cartello-orizzontale" style="position: fixed; width: 8vw; height: 7.87vh; background: #8B5A2B; left: 64.69vw; top: 68.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333;">
+    <p id="testo_cartello" style="font-size: 1.2vw;">A new school <br> is opening!</p>
+</div>
+
+<div id="piattaforma_1"></div>
+
+<div id="piattaforma_2">
+    <div class="banco" id="banco1" style="margin-top: 4.17vh; margin-left: 14.58vw;"><p>Banco1</p></div>
+    <div class="banco" id="banco2" style="margin-top: 20.83vh; margin-left: 14.58vw;"><p>Banco2</p></div>
+    <div id="cattedra" style="margin-top: 12.5vh; margin-left: 1.56vw;"><p>Cattedra</p></div>
+</div>
+
+<div id="blocco_pulizia_1" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 31vh; display: none;"></div>
+
+<div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 47vh; display: none;"></div>
+
 
 
 
@@ -139,18 +154,19 @@
         let classi = 0;
         let fila_studenti = 6;
         let condizione_click = false;
+
    
         let students = document.createElement('div');
         students.id = 'students-container';
         document.body.appendChild(students);
 
         function createStudents() {
-            let cont = 570;
+            let cont = 70.5;
             for (let i = 0; i < fila_studenti; i++) {
                 const newStudent = document.createElement('div');
                 newStudent.className = 'studente';
-                newStudent.style.marginTop = cont + "px";
-                cont += 55;
+                newStudent.style.marginTop = cont + "vh";
+                cont += 5;
                 students.appendChild(newStudent);
                 
             }
@@ -175,12 +191,13 @@
     const centerY = canvas.height / 2;
 
     
-    canvas.style.marginLeft = '138px'; 
-    canvas.style.marginTop = '350px';
+    canvas.style.marginLeft = '17.5vw'; 
+    canvas.style.marginTop = '42.17vh';
     
     let animationId = null;
     let condizione_posizione = true;
-    let cond_start = false;
+    let cond_start = false, cond_stanza1 = false;
+    let settime = null;
     function drawCircle(progress) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Draw base circle
@@ -200,15 +217,18 @@
 
     function animate() {
         condizione_posizione = true;
-        if (progress < 1) {
-            progress += 0.0084;
+        if (progress < 1 ) {
+            progress += 0.0042;
             drawCircle(progress);
             animationId = requestAnimationFrame(animate);
         }
     }
 
     function stopAnimation() {
+        progress = 0;
+        clearTimeout(settime);
         condizione_posizione = false;
+        cond_stanza1 = false;
         canvas.style.display = 'none';
         piattaforma_1.style.border = 'none';
         cancelAnimationFrame(animationId);
@@ -216,13 +236,14 @@
 }
 
 
-        let posX = 200;
-        let posY = 500;
+        let posX = 12.92;
+        let posY = 57.5;
         let cond = false;
 
         function updatePosition() {
-            preside.style.marginLeft = posX + 'px';
-            preside.style.marginTop = posY + 'px';
+            preside.style.left = posX + 'vw';
+            preside.style.top = posY + 'vh';
+            console.log(`Position: (${posX}, ${posY})`);
             control_position(posX, posY);
         }
 
@@ -230,13 +251,13 @@
 
         window.addEventListener('keydown', function(event) {
             pressedKeys[event.key.toLowerCase()] = true;
-
-            if (pressedKeys['w'] && posY > 0) posY -= 20;
-            if (pressedKeys['s'] && posY < window.innerHeight - 75) posY += 20;
-            if (pressedKeys['a'] && posX > 0) posX -= 20;
-            if (pressedKeys['d'] && posX < window.innerWidth - 75) posX += 20;
-
+            if (pressedKeys['w']) posY -= 2;
+            if (pressedKeys['s']) posY += 2;
+            if (pressedKeys['a']) posX -= 1.6;
+            if (pressedKeys['d']) posX += 1.6;
+         
             updatePosition();
+            
         });
 
         window.addEventListener('keyup', function(event) {
@@ -244,38 +265,45 @@
         });
 
         function control_position(posX, posY) {
-            if(posX >= 710 && posX <= 770  && posY >= 300 && posY <= 320 && cond==false){
-                piattaforma_1.style.border = '5px solid #228B22';
-                cond = true;
+            if (posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47 && cond_stanza1 == false){
+                piattaforma_1.style.border = '0.3vw solid #228B22';
+                cond_stanza1 = true;
                 canvas.style.display = 'block';
                 cond_start = true;
                 drawCircle(progress);
                 animate();
-                setTimeout(() => {
+                settime = setTimeout(() => {
                     if(condizione_posizione) {
                         piattaforma_1.style.display = 'none';
                         piattaforma_2.style.display = 'block';
                         canvas.style.display = 'none';
                         unlockedText.style.display = 'block';
                         unlockedText.innerHTML += "<br>your first classroom!";
-                        document.getElementById("testo_cartello").style.fontSize = "15px";
+                        document.getElementById("testo_cartello").style.fontSize = "0.8vw";
                         document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
                         setTimeout(() => {
                             unlockedText.innerHTML = "You've Unlocked ";
                             unlockedText.style.display = 'none';
                         }, 2000);
                         classi += 1;
-                        document.getElementById('classi').innerText = classi + "/5 🏫";
+                        document.getElementById('classi').innerText = classi + " 🏫";
                         farming_1();
                 }
                 }, 2000);
             } else {
-                cond = false;
-                progress = 0;
-                if(cond_start) {
-                    stopAnimation();
+                if(posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47){
+                    return;
                 }
-                cond_start = false;
+                else{
+                    cond = false;
+                    progress = 0;
+                    if(cond_start) {
+                        
+                        stopAnimation();
+                    }
+                    cond_start = false;
+                }
+                
             }  
         }
         let pos_student = 0;
@@ -296,26 +324,28 @@
             let studente = students.children[pos];
             let posY = parseInt(studente.style.marginTop);
             studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
-            studente.style.marginTop = 550 + 'px';
+            studente.style.marginTop = '62.83vh'; 
             setTimeout(() => {
-                studente.style.marginLeft = (parseInt(banco1.style.marginLeft) + 550 + 80) + 'px';
+                studente.style.marginLeft = (parseFloat(banco1.style.marginLeft) + 44) + 'vw'; 
             }, 500);
+
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1.5s ease-in-out';
-                studente.style.marginTop = (parseInt(banco1.style.marginTop) + 150 ) + 'px';
+                studente.style.marginTop = (parseFloat(banco1.style.marginTop) + 28) + 'vh'; 
             }, 1200);
         }
         function animazione_studente_entrata2(pos){
             let studente = students.children[pos];
             let posY = parseInt(studente.style.marginTop);
             studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
-            studente.style.marginTop = 550 + 'px';
+            studente.style.marginTop = '62.83vh';
             setTimeout(() => {
-                studente.style.marginLeft = (parseInt(banco2.style.marginLeft) + 550 + 80) + 'px';
+                studente.style.marginLeft = (parseFloat(banco2.style.marginLeft) + 44) + 'vw';
             }, 500);
+
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1s ease-in-out';
-                studente.style.marginTop = (parseInt(banco2.style.marginTop) + 150 ) + 'px';
+                studente.style.marginTop = (parseFloat(banco2.style.marginTop) + 28) + 'vh';
             }, 1200);
         }
 
@@ -323,46 +353,48 @@
             let studente = students.children[pos];
             let posY = parseInt(studente.style.marginTop);
             studente.style.transition = 'margin-top 1s ease-in-out, margin-left 1s ease-in-out';
-            studente.style.marginTop = 50 + 'px';
+            studente.style.marginTop = '4.17vh';
             setTimeout(() => {
-                studente.style.marginLeft = 300 + 'px';
+                studente.style.marginLeft = '15.63vw'; 
             }, 1000);
+
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1.5s ease-in-out, margin-left 1s ease-in-out';
-                studente.style.marginTop = 1000 + 'px';
+                studente.style.marginTop = '103.33vh'; 
             }, 2000);
         }
         function animazione_studente_uscita_2(pos) {
             let studente = students.children[pos];
             let posY = parseInt(studente.style.marginTop);
             studente.style.transition = 'margin-top 1s ease-in-out, margin-left 1s ease-in-out';
-            studente.style.marginTop = 50 + 'px';
+            studente.style.marginTop = '4.17vh';
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1.5s ease-in-out, margin-left 1s ease-in-out';
-                studente.style.marginLeft = 300 + 'px';
+                studente.style.marginLeft = '15.63vw';
             }, 1000);
+
             setTimeout(() => {
                 studente.style.transition = 'margin-top 1.5s ease-in-out, margin-left 1s ease-in-out';
-                studente.style.marginTop = 1000 + 'px';
+                studente.style.marginTop = '103.33vh';
             }, 2000);
         }
         function interval1(entra, pos1, ricavo) {
                setTimeout(() => {
                     const newStudent = document.createElement('div');
                     newStudent.className = 'studente';
-                    newStudent.style.marginTop = 900 + "px";
+                    newStudent.style.marginTop = '100vh';
                     students.appendChild(newStudent);  
                     for (let i = pos1+1; i < students.children.length; i++) {
                         let stud = students.children[i];
-                        let currentTop = parseInt(stud.style.marginTop);
+                        let currentTop = parseFloat(stud.style.marginTop);
                         stud.style.transition = 'margin-top 0.5s ease-in-out';
                         if(i==students.children.length-1){
                             setTimeout(() => {
-                                stud.style.marginTop = (currentTop - 55) + "px";
-                            }, 1);
+                                stud.style.marginTop = (currentTop - 4.58) + 'vh';
+                            }, 50);
                         }
                         else{
-                            stud.style.marginTop = (currentTop - 55) + "px";
+                            stud.style.marginTop = (currentTop - 4.58) + 'vh';
                             }
                     }
                     }, 1000);
@@ -388,7 +420,7 @@
             }
         function controllo_pulizia(entra, pos1, ricavo) {
                 window.addEventListener('keydown', function(event) {
-                if(parseInt(preside.style.marginLeft) == 920 && parseInt(preside.style.marginTop) >= 120 && parseInt(preside.style.marginTop) <= 260 && event.key == 'p') {
+                if(parseInt(preside.style.left) == 59 && parseInt(preside.style.top) >= 24 && parseInt(preside.style.top) <= 36 && (event.key == 'c' || event.key == 'C')) {
                     if(condizione_click == false){
                     removeEventListener('keydown', arguments.callee);
                     condizione_click = true;
@@ -407,7 +439,7 @@
             setTimeout(() => {
                     const newStudent = document.createElement('div');
                     newStudent.className = 'studente';
-                    newStudent.style.marginTop = 900 + "px";
+                    newStudent.style.marginTop = '100vh';
                     students.appendChild(newStudent);
                     for (let i = pos2+1; i < students.children.length; i++) {
                         let stud = students.children[i];
@@ -415,11 +447,11 @@
                         stud.style.transition = 'margin-top 0.5s ease-in-out';
                         if(i==students.children.length-1){
                             setTimeout(() => {
-                                stud.style.marginTop = (currentTop - 55) + "px";
+                                stud.style.marginTop = (currentTop - 4.58) + 'vh';
                             }, 50);
                         }
                         else{
-                            stud.style.marginTop = (currentTop - 55) + "px";
+                            stud.style.marginTop = (currentTop - 4.58) + 'vh';
                         }
                     }
                 }, 1000);
@@ -442,8 +474,9 @@
             }, 5000);
         }
         function controllo_pulizia_2(entra2, pos2, ricavo) {
-                window.addEventListener('keydown', function(event) {  
-                if(parseInt(preside.style.marginLeft) == 920 && parseInt(preside.style.marginTop) >= 320 && parseInt(preside.style.marginTop) <= 460 && event.key == 'p') {
+                window.addEventListener('keydown', function(event) {
+
+                if(parseInt(preside.style.left) == 59 && parseInt(preside.style.top) >= 40 && parseInt(preside.style.top) <= 52 && (event.key == 'c' || event.key == 'C')) {
                     if(condizione_click == false){
                     removeEventListener('keydown', arguments.callee);
                     window.removeEventListener('keydown', arguments.callee);
