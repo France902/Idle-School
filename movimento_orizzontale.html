@@ -41,7 +41,9 @@
         Posy = 0;
         function handleKeydown(event) {
             if (event.key === 'd') {
+                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 preside.style.transform = "scaleX(1)";
+                preside.src = "preside.png";
                 preside.style.top = (parseFloat(Posy) ) + 'px';
                 preside.style.left = (parseFloat(Posx) ) + 'px';
                 setTimeout(() => {
@@ -73,7 +75,9 @@
                 
             }
             if (event.key === 'a') {
+                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 preside.style.transform = "scaleX(-1)";
+                preside.src = "preside.png";
                 preside.style.top = (parseFloat(Posy) ) + 'px';
                 preside.style.left = (parseFloat(Posx) ) + 'px';
                 setTimeout(() => {
@@ -98,10 +102,91 @@
                     Posx -= 30;
                 }, 300);
                 
+                
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
                         window.addEventListener('keydown', handleKeydown);
                 }, 300);
+            }
+            if (event.key === 's') {
+                preside.src = "preside.png";
+                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+                if(preside.style.transform === "scaleX(1)") {
+                    preside.style.top = (parseFloat(Posy) ) + 'px';
+                    preside.style.left = (parseFloat(Posx) ) + 'px';
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 7.5 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) + 5) + 'px';
+                    }, 60);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 15 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) + 10 ) + 'px';
+                    }, 120);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 10 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) + 18.75) + 'px';
+                    }, 180);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 22.5 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) + 5) + 'px';
+                    }, 240);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 30 ) + 'px';
+                        preside.style.left = (parseFloat(Posx)) + 'px';
+                        Posy += 30;
+                    }, 300);
+                } else{
+                    preside.style.top = (parseFloat(Posy) ) + 'px';
+                    preside.style.left = (parseFloat(Posx) ) + 'px';
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 7.5 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) - 5) + 'px';
+                    }, 60);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 15 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) - 10 ) + 'px';
+                    }, 120);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 10 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) - 18.75) + 'px';
+                    }, 180);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 22.5 ) + 'px';
+                        preside.style.left = (parseFloat(Posx) - 5) + 'px';
+                    }, 240);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(Posy) + 30 ) + 'px';
+                        preside.style.left = (parseFloat(Posx)) + 'px';
+                        Posy += 30;
+                    }, 300);
+                }
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                        window.addEventListener('keydown', handleKeydown);
+                }, 300);
+            }
+            if (event.key === 'w') {
+                preside.src = "preside_dietro.png";
+                preside.style.top = (parseFloat(Posy) ) + 'px';
+                preside.style.left = (parseFloat(Posx) ) + 'px';
+                preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 25 ) + 'px';
+                }, 100);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 37 ) + 'px';
+                }, 200);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 50 ) + 'px';
+                }, 300);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(Posy) - 40 ) + 'px';
+                    Posy -= 40;
+                }, 400);
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                        window.addEventListener('keydown', handleKeydown);
+                }, 400);
             }
 
         }
