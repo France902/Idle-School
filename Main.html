@@ -222,7 +222,7 @@
     
     let animationId = null;
     let condizione_posizione = true;
-    let cond_start = false, cond_stanza1 = false;
+    let cond_start = false, cond_stanza1 = false, cond_stanza2 = false;
     let settime = null;
     function drawCircle(progress) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -291,7 +291,7 @@
         });
 
         function control_position(posX, posY) {
-            if (posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47 && cond_stanza1 == false){
+            if (posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47 && cond_stanza1 == false && cond_stanza2 == false){
                 piattaforma_1.style.border = '0.3vw solid #228B22';
                 cond_stanza1 = true;
                 canvas.style.display = 'block';
@@ -300,6 +300,7 @@
                 animate();
                 settime = setTimeout(() => {
                     if(condizione_posizione) {
+                        cond_stanza2 = true;
                         piattaforma_1.style.display = 'none';
                         piattaforma_2.style.display = 'block';
                         canvas.style.display = 'none';
