@@ -23,14 +23,6 @@
             transition: top 0.06s ease-in-out, left 0.06s ease-in-out;
             transform: scaleX(-1);
         }
-        @keyframes move {
-            0% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(7.5px) translateY(-5px); }
-            50% { transform: translateX(15px) translateY(-10px); }
-            50% { transform: translateX(18.75px) translateY(-10px); }
-            60% { transform: translateX(22.5px) translateY(-5px); }
-            100% { transform: translateX(30px) translateY(0);  }
-        }
     </style>
 </head>
 <body>
@@ -44,30 +36,29 @@
                 preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 preside.style.transform = "scaleX(1)";
                 preside.src = "preside.png";
-                preside.style.top = (parseFloat(Posy) ) + 'px';
-                preside.style.left = (parseFloat(Posx) ) + 'px';
+                preside.style.top = (parseFloat(Posy)) + 'vh';
+                preside.style.left = (parseFloat(Posx)) + 'vw';
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) + 7.5) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.46) + 'vh';
+                    preside.style.left = (parseFloat(Posx) + 0.39) + 'vw';
                 }, 60);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) + 15) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.93) + 'vh';
+                    preside.style.left = (parseFloat(Posx) + 0.78) + 'vw';
                 }, 120);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) + 18.75) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.93) + 'vh';
+                    preside.style.left = (parseFloat(Posx) + 0.98) + 'vw';
                 }, 180);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) + 22.5) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.46) + 'vh';
+                    preside.style.left = (parseFloat(Posx) + 1.17) + 'vw';
                 }, 240);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) ) + 'px';
-                    preside.style.left = (parseFloat(Posx) + 30) + 'px';
-                    Posx += 30;
+                    preside.style.top = (parseFloat(Posy)) + 'vh';
+                    preside.style.left = (parseFloat(Posx) + 1.56) + 'vw';
+                    Posx += 1.56;
                 }, 300);
-                
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
                         window.addEventListener('keydown', handleKeydown);
@@ -80,84 +71,87 @@
                 preside.src = "preside.png";
                 preside.style.top = (parseFloat(Posy) ) + 'px';
                 preside.style.left = (parseFloat(Posx) ) + 'px';
+                preside.style.top = (parseFloat(Posy)) + 'vh';
+                preside.style.left = (parseFloat(Posx)) + 'vw';
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) - 7.5) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.46) + 'vh';
+                    preside.style.left = (parseFloat(Posx) - 0.39) + 'vw';
                 }, 60);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) - 15) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.93) + 'vh';
+                    preside.style.left = (parseFloat(Posx) - 0.78) + 'vw';
                 }, 120);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 10 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) - 18.75) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.93) + 'vh';
+                    preside.style.left = (parseFloat(Posx) - 0.98) + 'vw';
                 }, 180);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 5 ) + 'px';
-                    preside.style.left = (parseFloat(Posx) - 22.5) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 0.46) + 'vh';
+                    preside.style.left = (parseFloat(Posx) - 1.17) + 'vw';
                 }, 240);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) ) + 'px';
-                    preside.style.left = (parseFloat(Posx) - 30) + 'px';
-                    Posx -= 30;
+                    preside.style.top = (parseFloat(Posy)) + 'vh';
+                    preside.style.left = (parseFloat(Posx) - 1.56) + 'vw';
+                    Posx -= 1.56;
                 }, 300);
-                
-                
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
                         window.addEventListener('keydown', handleKeydown);
                 }, 300);
             }
             if (event.key === 's') {
-                preside.src = "preside.png";
+                preside.src = "preside_davanti.png";
                 preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 if(preside.style.transform === "scaleX(1)") {
                     preside.style.top = (parseFloat(Posy) ) + 'px';
                     preside.style.left = (parseFloat(Posx) ) + 'px';
+                    preside.style.top = (parseFloat(Posy)) + 'vh';
+                    preside.style.left = (parseFloat(Posx)) + 'vw';
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 7.5 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) + 5) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 0.69) + 'vh';
+                        preside.style.left = (parseFloat(Posx) + 0.26) + 'vw';
                     }, 60);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 15 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) + 10 ) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 1.39) + 'vh';
+                        preside.style.left = (parseFloat(Posx) + 0.52) + 'vw';
                     }, 120);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 10 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) + 18.75) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 0.93) + 'vh';
+                        preside.style.left = (parseFloat(Posx) + 0.98) + 'vw';
                     }, 180);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 22.5 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) + 5) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 2.08) + 'vh';
+                        preside.style.left = (parseFloat(Posx) + 0.26) + 'vw';
                     }, 240);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 30 ) + 'px';
-                        preside.style.left = (parseFloat(Posx)) + 'px';
-                        Posy += 30;
+                        preside.style.top = (parseFloat(Posy) + 2.78) + 'vh';
+                        preside.style.left = (parseFloat(Posx)) + 'vw';
+                        Posy += 2.78;
                     }, 300);
+
                 } else{
-                    preside.style.top = (parseFloat(Posy) ) + 'px';
-                    preside.style.left = (parseFloat(Posx) ) + 'px';
+                    preside.style.top = (parseFloat(Posy)) + 'vh';
+                    preside.style.left = (parseFloat(Posx)) + 'vw';
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 7.5 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) - 5) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 0.69) + 'vh';
+                        preside.style.left = (parseFloat(Posx) - 0.26) + 'vw';
                     }, 60);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 15 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) - 10 ) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 1.39) + 'vh';
+                        preside.style.left = (parseFloat(Posx) - 0.52) + 'vw';
                     }, 120);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 10 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) - 18.75) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 0.93) + 'vh';
+                        preside.style.left = (parseFloat(Posx) - 0.98) + 'vw';
                     }, 180);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 22.5 ) + 'px';
-                        preside.style.left = (parseFloat(Posx) - 5) + 'px';
+                        preside.style.top = (parseFloat(Posy) + 2.08) + 'vh';
+                        preside.style.left = (parseFloat(Posx) - 0.26) + 'vw';
                     }, 240);
                     setTimeout(() => {
-                        preside.style.top = (parseFloat(Posy) + 30 ) + 'px';
-                        preside.style.left = (parseFloat(Posx)) + 'px';
-                        Posy += 30;
+                        preside.style.top = (parseFloat(Posy) + 2.78) + 'vh';
+                        preside.style.left = (parseFloat(Posx)) + 'vw';
+                        Posy += 2.78;
                     }, 300);
                 }
                 window.removeEventListener('keydown', handleKeydown);
@@ -170,18 +164,20 @@
                 preside.style.top = (parseFloat(Posy) ) + 'px';
                 preside.style.left = (parseFloat(Posx) ) + 'px';
                 preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                preside.style.top = (parseFloat(Posy)) + 'vh';
+                preside.style.left = (parseFloat(Posx)) + 'vw';
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 25 ) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 2.31) + 'vh';
                 }, 100);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 37 ) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 3.43) + 'vh';
                 }, 200);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 50 ) + 'px';
+                    preside.style.top = (parseFloat(Posy) - 4.63) + 'vh';
                 }, 300);
                 setTimeout(() => {
-                    preside.style.top = (parseFloat(Posy) - 40 ) + 'px';
-                    Posy -= 40;
+                    preside.style.top = (parseFloat(Posy) - 3.7) + 'vh';
+                    Posy -= 3.7;
                 }, 400);
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
