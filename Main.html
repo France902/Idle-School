@@ -93,6 +93,30 @@
     animation: fadeOpacity 1s infinite alternate;
 }
 
+.hud-container {
+    position: fixed;
+    top: 1.5vh;
+    right: 1vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1vh;
+    z-index: 5;
+}
+
+.hud-box {
+    background-color: rgba(0, 0, 0, 0.6); /* sfondo opaco */
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 1.2vw;
+    padding: 0.6vh 1vw;
+    border: 0.15vw solid white;
+    border-radius: 0.6vw;
+    min-width: 8vw;
+    text-align: right;
+}
+
+
 
 
         @keyframes fadeOpacity {
@@ -115,9 +139,11 @@
 
 <h1 id="unlocked" style="margin-left: 42.29vw; margin-top: 15vh; display: none;">You've Unlocked </h1>
 
-<p id="soldi" style="position: fixed; right: 1.04vw; left: auto;">0€</p>
+<div class="hud-container">
+    <div id="soldi" class="hud-box">0€</div>
+    <div id="classi" class="hud-box">0/5 🏫</div>
+</div>
 
-<p id="classi" style="position: fixed; top: 3.33vh; right: 1.04vw; left: auto;">0/5 🏫</p>
 
 <div id="cartello-verticale" style="position: fixed; width: 1.56vw; height: 8.6vh; background: #8B5A2B; left: 68vw; top: 76vh; z-index: 1;"></div>
 
