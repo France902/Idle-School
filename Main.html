@@ -24,10 +24,11 @@
             position: fixed;
             color: black;
             font-family: Arial, sans-serif;
-            font-size: 1.8vw;
+            font-size: 1.4vw;
             text-align: center;
 
         }
+
         p {
             position: fixed;
             color: black;
@@ -35,6 +36,7 @@
             font-size: 1.2vw;
             text-align: center;
         }
+
         #piattaforma_1 {
             width: 10vw;
             height: 12vh;
@@ -43,6 +45,7 @@
             transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
             z-index: -1;
         }
+
         #piattaforma_2 {
             width: 23.44vw;        
             height: 33.33vh;      
@@ -53,7 +56,6 @@
             display: none; 
             z-index: -1;
         }
-
         #preside {
             width: 30vw;
             height: 30vh;
@@ -61,64 +63,107 @@
             top: -10vh;
             left: -9.5vw;
             transition: left 0.1s, top 0.1s;
-        }   
+        } 
 
-.banco {
-    width: 5.21vw;         
-    height: 4.17vh;       
-    background-color: brown;
-    position: fixed;
-    transform: rotate(90deg);
-}
+        #cattedra {
+            width: 7.81vw;         
+            height: 4.17vh;        
+            background-color: rgb(255, 0, 0);
+            position: fixed;
+            transform: rotate(90deg);
+        }
 
-#cattedra {
-    width: 7.81vw;         
-    height: 4.17vh;        
-    background-color: rgb(255, 0, 0);
-    position: fixed;
-    transform: rotate(90deg);
-}
+        #studente {
+            width: 3.3vw;          
+            height: 5vh;       
+            background-color: red;
+            position: fixed;
+            top: 39vh;   
+            left: 72.7vw;
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
 
-#studente {
-    width: 3.3vw;          
-    height: 5vh;       
-    background-color: red;
-    position: fixed;
-    top: 39vh;   
-    left: 72.7vw;
-    transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
-}
+        #entrata_scuola {
+            width: 51vw; 
+            height: 100vh; 
+            position: fixed;
+            z-index: -3; 
+            transform: scale(2); 
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
 
-.blocco_pulizia {
-    height: 8.33vh;        
-    width: 3.13vw;         
-    position: fixed;
-    background-color: red;
-    animation: fadeOpacity 1s infinite alternate;
-}
+        #preside_container {
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 10vw; 
+            height: 10vw; 
+            border-radius: 1vw;
+        }
 
-.hud-container {
-    position: fixed;
-    top: 1.5vh;
-    right: 1vw;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 1vh;
-    z-index: 5;
-}
+        #progressCircle {
+            position: fixed; 
+            top: -13.5vh; 
+            left: 26.23vw; 
+            background: transparent; 
+            display: none; 
+            width: 15vw; 
+            height: 15vh;
+        }
+        #missioni {
+            position: fixed; 
+            left: 80vw; 
+            top: 14vh; 
+            width: 17vw;
+        }
+        .banco {
+            width: 5.21vw;         
+            height: 4.17vh;       
+            background-color: brown;
+            position: fixed;
+            transform: rotate(90deg);
+        }
 
-.hud-box {
-    background-color: rgba(0, 0, 0, 0.6); 
-    color: white;
-    font-family: Arial, sans-serif;
-    font-size: 1.2vw;
-    padding: 0.6vh 1vw;
-    border: 0.15vw solid white;
-    border-radius: 0.6vw;
-    min-width: 8vw;
-    text-align: right;
-}
+        .blocco_pulizia {
+            height: 8.33vh;        
+            width: 3.13vw;         
+            position: fixed;
+            background-color: red;
+            animation: fadeOpacity 1s infinite alternate;
+        }
+
+        .hud-container {
+            position: fixed;
+            top: 1.5vh;
+            right: 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1vh;
+            z-index: 5;
+        }
+
+        .hud-box {
+            background-color: rgba(0, 0, 0, 0.6); 
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 1.2vw;
+            padding: 0.6vh 1vw;
+            border: 0.15vw solid white;
+            border-radius: 0.6vw;
+            min-width: 8vw;
+            text-align: right;
+        }
+        .hud_missioni {
+            background-color: rgba(50, 50, 50, 0.6); 
+            opacity: 0.9;
+            border: 0.15vw solid white;
+            padding: 0.6vh 1vw;
+        }
 
         @keyframes fadeOpacity {
             0% {
@@ -132,27 +177,37 @@
             }
         }
     </style>
-
 </head>
+
 <body>
    <div id="Edificio_scolastico">
-        <img src="scuola.png" class="scuola-img" style="width: 51vw; height: 100vh; position: fixed; z-index: -3; transform: scale(2); top: -80vh; left: 48vw; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
+        <img src="scuola.png" class="scuola-img" id="entrata_scuola" style="top: -80vh; left: 48vw;">
         <div id="piattaforma_1" class="scuola-img" style="left: 69vw; top: 25vh;"></div>
     </div>
-    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 10vw; height: 10vw; border-radius: 1vw;">
+
+    <div id="preside_container">
         <img src="Preside.png" id="preside">
     </div>
 
-    <canvas id="progressCircle" style="position: fixed; top: -13.5vh; left: 26.23vw; background: transparent; display: none; width: 15vw; height: 15vh;"></canvas>
-
-    <h1 id="unlocked" style="margin-left: 42.29vw; margin-top: 15vh; display: none;">You've Unlocked </h1>
+    <canvas id="progressCircle"></canvas>
 
     <div class="hud-container">
         <div id="soldi" class="hud-box">0€</div>
-        <div id="classi" class="hud-box">0/5 🏫</div>
+        <div id="classi" class="hud-box">0 🏫</div>
     </div>
 
-    <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;;">
+    <div id="missioni" class="hud_missioni" onclick="menu_missioni()">
+        <h1 class="missione_1" style="width: 14vw; left: 85vw; text-align: left; top: 14vh; word-break: break-word; white-space: normal;">missione 1</h1>
+        <img class="missione_1" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
+        <br><br>
+        <h1 class="missione_2" style="width: 14vw; left: 85vw; text-align: left; top: 22vh; word-break: break-word; white-space: normal;">missione 2</h1>
+        <img class="missione_2" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
+        <br><br>
+        <h1 class="missione_3" style="width: 14vw; left: 85vw; text-align: left; top: 29vh; word-break: break-word; white-space: normal;">missione 3</h1>
+        <img class="missione_3" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
+    </div>
+
+    <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
         <p id="testo_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
     </div>
 
