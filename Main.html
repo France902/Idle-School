@@ -18,13 +18,18 @@
             height: 100vh;
             overflow: hidden; 
             background-color: rgb(186, 240, 254);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
         }
 
         h1 {
             position: fixed;
-            color: black;
+            color: white;
             font-family: Arial, sans-serif;
-            font-size: 1.4vw;
+            font-size: 1.2vw;
             text-align: center;
 
         }
@@ -160,8 +165,9 @@
         }
         .hud_missioni {
             background-color: rgba(50, 50, 50, 0.6); 
-            opacity: 0.9;
+            opacity: 1;
             border: 0.15vw solid white;
+            border-radius: 0.6vw;
             padding: 0.6vh 1vw;
         }
 
@@ -197,13 +203,13 @@
     </div>
 
     <div id="missioni" class="hud_missioni" onclick="menu_missioni()">
-        <h1 class="missione_1" style="width: 14vw; left: 85vw; text-align: left; top: 14vh; word-break: break-word; white-space: normal;">missione 1</h1>
+        <h1 class="missione_1" style="width: 14vw; left: 85vw; text-align: left; top: 14.5vh; word-break: break-word; white-space: normal; ">missione 1</h1>
         <img class="missione_1" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
         <br><br>
-        <h1 class="missione_2" style="width: 14vw; left: 85vw; text-align: left; top: 22vh; word-break: break-word; white-space: normal;">missione 2</h1>
+        <h1 class="missione_2" style="width: 14vw; left: 85vw; text-align: left; top: 24vh; word-break: break-word; white-space: normal; ">missione 2</h1>
         <img class="missione_2" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
         <br><br>
-        <h1 class="missione_3" style="width: 14vw; left: 85vw; text-align: left; top: 29vh; word-break: break-word; white-space: normal;">missione 3</h1>
+        <h1 class="missione_3" style="width: 14vw; left: 85vw; text-align: left; top: 33.5vh; word-break: break-word; white-space: normal; ">missione 3</h1>
         <img class="missione_3" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
     </div>
 
