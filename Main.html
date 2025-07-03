@@ -16,13 +16,16 @@
             padding: 0;
             width: 100vw;
             height: 100vh;
-            overflow: hidden; 
+            overflow: hidden;
             background-color: rgb(186, 240, 254);
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             pointer-events: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
         }
 
         h1 {
@@ -163,12 +166,78 @@
             min-width: 8vw;
             text-align: right;
         }
+
         .hud_missioni {
-            background-color: rgba(50, 50, 50, 0.6); 
+            position: absolute;
+            top: 14.5vh;
+            right: 5vw;
+            width: 17vw;
+            background-color: rgba(50, 50, 50, 0.6);
             opacity: 1;
             border: 0.15vw solid white;
             border-radius: 0.6vw;
-            padding: 0.6vh 1vw;
+            padding: 0.6vh 0 0.6vh 1vw; 
+            color: white;
+            box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            pointer-events: auto;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            top: 0.6vh;
+            right: 0.4vw;
+            width: 2vw;
+            height: 3vh;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .missione_1, .missione_2, .missione_3 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 3.3vh 0;
+            cursor: pointer;
+        }
+
+        .missione_1 h1, .missione_2 h1, .missione_3 h1 {
+            font-size: 1.7vw;
+            margin: 0;
+            padding-left: 4vw;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .missione_1 img, .missione_2 img, .missione_3 img {
+            width: 3vw;
+            height: 5vh;
+        }
+
+        .missione_2, .missione_3 {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            
+        }
+
+        .hud_missioni.open .missione_1, .hud_missioni.open .missione_2, .hud_missioni.open .missione_3 {
+            opacity: 1;
+            cursor: auto;
+        }
+
+        .hud_missioni.closed .missione_1 {
+            cursor: pointer;
+        }
+
+        .hud_missioni.closed {
+            max-height: 10vh;
+            cursor: pointer;
+        }
+
+        .hud_missioni.open {
+            max-height: 30vh;
+            cursor: auto;
         }
 
         @keyframes fadeOpacity {
@@ -202,15 +271,20 @@
         <div id="classi" class="hud-box">0 🏫</div>
     </div>
 
-    <div id="missioni" class="hud_missioni" onclick="menu_missioni()">
-        <h1 class="missione_1" style="width: 14vw; left: 85vw; text-align: left; top: 14.5vh; word-break: break-word; white-space: normal; ">missione 1</h1>
-        <img class="missione_1" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
-        <br><br>
-        <h1 class="missione_2" style="width: 14vw; left: 85vw; text-align: left; top: 24vh; word-break: break-word; white-space: normal; ">missione 2</h1>
-        <img class="missione_2" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
-        <br><br>
-        <h1 class="missione_3" style="width: 14vw; left: 85vw; text-align: left; top: 33.5vh; word-break: break-word; white-space: normal; ">missione 3</h1>
-        <img class="missione_3" src="icona_punto_interrogativo.png" style="width: 3vw; height: 5vh;">
+        <div id="missioni" class="hud_missioni closed" >
+        <img class="toggle-icon" src="icona_menu_missioni.png" alt="Icona Toggle" onclick="menu_missioni()">
+        <div class="missione_1" onclick="toggleMenu()">
+            <img src="icona_punto_interrogativo.png" alt="Icona Missione 1">
+            <h1>missione 1</h1>
+        </div>
+        <div class="missione_2" onclick="toggleMenu()">
+            <img src="icona_punto_interrogativo.png" alt="Icona Missione 2">
+            <h1>missione 2</h1>
+        </div>
+        <div class="missione_3" onclick="toggleMenu()">
+            <img src="icona_punto_interrogativo.png" alt="Icona Missione 3">
+            <h1>missione 3</h1>
+        </div>
     </div>
 
     <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
@@ -239,6 +313,7 @@
         const unlockedText = document.getElementById('unlocked');
         const banco1 = document.getElementById('banco1');
         const banco2 = document.getElementById('banco2')
+        const toggle_icon = document.querySelector('.toggle-icon');
 
         let soldi = 0;
         let classi = 0;
@@ -263,16 +338,6 @@
             }
         }
         createStudents();
-
-
-
-
-
-
-
-
-
-
 
     const ctx = canvas.getContext('2d');
     let progress = 0;
@@ -675,6 +740,19 @@ const preside = document.getElementById('preside');
                 } 
             });
             }
+
+            function toggleMenu() {
+            const menu = document.getElementById('missioni');
+            menu.classList.toggle('open');
+            menu.classList.toggle('closed');
+        }
+        
+        toggle_icon.addEventListener('mouseenter', function() {
+            toggle_icon.style.opacity = '0.7';
+        });
+        toggle_icon.addEventListener('mouseleave', function() {
+            toggle_icon.style.opacity = '1';
+        });
     </script>
 </body>
 </html>
