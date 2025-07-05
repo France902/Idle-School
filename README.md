@@ -83,3 +83,15 @@ Dopo qualche vendita arriva Bob, il capo della Building & Co, dicendo che sono p
 Si costruisce così l’entrata della scuola e, con i guadagni costanti dello stand dei libri, anche l’arredamento, personalizzabile. Si finisce il corridoio principale e, poco più avanti, un’area vuota a destra suggerisce un nuovo spazio di costruzione. Per aumentare i guadagni si può anche potenziare lo stand dei libri. Il protagonista dice tra sé che è il momento di costruire le aule. Appare una piattaforma nello spazio vuoto e, sbloccandola, si costruisce una piccola stanza con banco e cattedra.
 
 Parte una cinematica con un dezoom dell’edificio e uno zoom sull’entrata, dove c’è un nastro rosso e alcuni bambini con i genitori. Il protagonista dice che è tempo di aprire la scuola. Si torna all’entrata e si taglia il nastro. Dopo un momento di festa finisce il prologo e si continua con il gioco.
+
+Si migliora l’aula aggiungendo un secondo banco e qualche scaffale. Il protagonista, vedendo i primi bambini sedersi, si chiede però chi potrà insegnare loro. Decide quindi di chiamare sua zia Catherine, un’ex insegnante ormai in pensione, e le chiede se vuole insegnare nella sua scuola. Catherine accetta volentieri e arriva subito. Lei sarà la prima insegnante. Il protagonista fa notare che dovrà cercare altri insegnanti, anche più giovani, per riempire le aule e aumentare il livello della scuola.
+
+Da quel momento Catherine si siede alla cattedra e parte il secondo ciclo di guadagno. I bambini studiano per circa 15 secondi e, quando se ne vanno felici, lasciano una mancia di 10 monete. Uno dei primi bambini però esce insoddisfatto e non lascia nulla. Il protagonista osserva che più la scuola e le aule saranno belle e attrezzate, più si alzerà l’indicatore di qualità e più bambini studieranno felici.
+
+Quando un bambino finisce di studiare e se ne va, c’è la possibilità che sporchi il banco, rendendolo inutilizzabile. Il protagonista si fa quindi dare da Matthew uno straccio e dello sgrassatore e pulisce il banco a mano, impiegandoci circa 2 secondi.
+
+Dopo qualche altra vendita arriva un cartolaio ambulante sulla strada vicina. Attira l’attenzione del protagonista e gli dice che da lui si possono comprare libri e materiale scolastico. Si sblocca così la sezione negozio: comprando materiale scolastico e mettendolo in aula si aumenta la mancia degli studenti.
+
+Raggiunta la cifra di 500 monete si può sbloccare la seconda aula, un po’ più grande della prima, con spazio per 3 banchi. Una volta costruita, con o senza arredamento aggiuntivo, il protagonista si fa dare da Catherine una lista di contatti di insegnanti di tutte le età e qualificati, che però richiederanno un certo prestigio per essere sbloccati. Si apre così il menu insegnanti. Il primo insegnante sarà disponibile a 50 di prestigio.
+
+Gli studenti di questa seconda aula lasceranno una mancia di 20 monete. Sbloccata la seconda aula, che funzionerà come la precedente, si potrà anche potenziare la prima. Si potranno migliorare i banchi per renderli più resistenti e igienici e appendere cartelloni che aumenteranno la qualità della scuola.
