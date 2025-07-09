@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: rgb(186, 240, 254);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+        }
+        #mappa {
+            width: 100vw; 
+            height: 100vh; 
+            position: fixed;
+            z-index: -3; 
+            transform: scale(7);
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
+        #preside_container {
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 10vw; 
+            height: 10vw; 
+            border-radius: 1vw;
+        }
+        #preside {
+            width: 30vw;
+            height: 30vh;
+            position: fixed;
+            top: -10vh;
+            left: -9.5vw;
+            transition: left 0.1s, top 0.1s;
+        } 
+    </style>
+</head>
+<body>
+       <div id="Edificio_scolastico" >
+        <img src="nature-2147400.jpg" class="scuola-img" id="mappa" style="left: 0vw; top: 0vh;">
+    </div>
+        <div id="preside_container">
+        <img src="Preside.png" id="preside">
+    </div>
+
+    <script>
+        const preside = document.getElementById('preside');
+        const scuolaImgs = document.querySelectorAll('.scuola-img');
+        let posX = -9.5;
+        let posY = -10;
+        preside.style.top = posX + 'vh';
+        preside.style.left = posY + 'vw';
+        
+        function handleKeydown(event) {
+            if (event.key === 'd') {
+                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+                preside.style.transform = "scaleX(1)";
+                preside.src = "Preside.png";
+                preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                scuolaImgs.forEach(img => {
+                    img.style.left = (parseFloat(img.style.left) - 3.08) + 'vw';
+                });
+                
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
+                }, 60);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
+                }, 120);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                }, 180);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
+                }, 240);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
+                    posX += 3.08;
+                }, 300);
+                window.removeEventListener('keydown', handleKeydown);
+
+                setTimeout(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                }, 250);  
+            }
+            if (event.key === 'a') {
+                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+                preside.style.transform = "scaleX(-1)";
+                preside.src = " Preside.png";
+                preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                scuolaImgs.forEach(img => {
+                    img.style.left = (parseFloat(img.style.left) + 3.08) + 'vw';
+                });
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
+                }, 60);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
+                }, 120);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                }, 180);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
+                }, 240);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
+                    posX += 3.08;
+                }, 300);
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                }, 250);  
+            }
+            if (event.key === 's') {
+                preside.src = "Preside_davanti.png";
+                preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                    preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                    scuolaImgs.forEach(img => {
+                        img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
+                    });
+                    setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) + 3) + 'vh';
+                    }, 40);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(preside.style.top) + 2) + 'vh';
+                    }, 100);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(preside.style.top) - 2) + 'vh';
+                    }, 225);
+                    setTimeout(() => {
+                        preside.style.top = (parseFloat(preside.style.top) -  3) + 'vh';
+                        posY += 4.7;
+                    }, 300);
+                    window.removeEventListener('keydown', handleKeydown);
+                    setTimeout(() => {
+                            window.addEventListener('keydown', handleKeydown);
+                    }, 280);
+            }
+            if (event.key === 'w') {
+                preside.src = "Preside_dietro.png";
+                preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                scuolaImgs.forEach(img => {
+                    img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
+                });                
+                setTimeout(() => {
+                preside.style.top = (parseFloat(preside.style.top) - 3) + 'vh';
+                }, 40);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) - 2) + 'vh';
+                }, 100);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) + 2) + 'vh';
+                }, 225);
+                setTimeout(() => {
+                    preside.style.top = (parseFloat(preside.style.top) +  3) + 'vh';
+                    posY -= 4.7;
+                }, 300);
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                }, 280);
+            }
+            // control_position(posX, posY);
+        }
+        window.addEventListener('keydown', handleKeydown);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+         body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: rgb(186, 240, 254);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+        }
+        #immagine_preside_dialoghi {
+            position: fixed;
+            z-index: -1;
+            height: 120vh;
+            top: -33vh;
+            left: -35vw;
+            object-fit: cover;
+            pointer-events: none;
+            transform: scale(0.8); 
+            transform-origin: center center;
+            transition: all 0.3s ease-in-out;
+        }
+        #personaggio_anonimo_dialoghi {
+            position: fixed;
+            z-index: -1;
+            height: 80vh;
+            top: 5vh;
+            left: 20vw;
+            object-fit: cover;
+            pointer-events: none; 
+            transform: scale(0.8); 
+            transform-origin: center center;
+            transition: all 0.3s ease-in-out;
+        }
+        
+
+        #container-dialogo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: end;
+        }
+        #dialogo {
+            background-color: rgba(255, 255, 255);
+            border-radius: 1.5vw;
+            padding-left: 2vw;
+            padding-right: 2vw;
+            margin: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 80vw;
+            height: 33vh;
+            font-size: 2.2vw;
+            color: black;
+            text-align: left;
+            font-family: "Comic Neue", cursive;
+            font-weight: 400;
+            position: fixed;
+            z-index: 0;
+        }
+        #dialogo-testo {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            margin-top: 7.5vh;
+            margin-left: 1.5vw;
+        }
+        #nome-personaggio {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            margin-top: 1.8vh;
+        }
+        #box-nome{
+            background-color: rgba(255, 255, 255);
+            border-radius: 0.5vw;
+            padding-left: 0.5vw;
+            padding-right: 0.5vw;
+            margin: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            width: 14vw;
+            height: 7vh;
+            top: 54vh;
+            font-size: 2vw;
+            left: 11vw;
+            color: black;
+            text-align: center;
+            font-family: "Comic Neue", cursive;
+            font-weight: 500;
+            position: fixed;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="container-dialogo">
+        <div id="box-nome">
+            <p id="nome-personaggio">nome personaggio</p>
+        </div>
+        <div id="dialogo">
+            <p id="dialogo-testo">Prova-dialogo</p>
+        </div>
+    </div>
+    <img src="Preside.png" alt="" id="immagine_preside_dialoghi">
+
+    <img src="Personaggio_anonimo.png" alt="" id="personaggio_anonimo_dialoghi">
+
+    <script>
+        const dialogo = document.getElementById('dialogo');
+        const dialogoTesto = document.getElementById('dialogo-testo');
+        const immaginePreside = document.getElementById('immagine_preside_dialoghi');
+        const personaggioAnonimo = document.getElementById('personaggio_anonimo_dialoghi');
+
+        let cond_testo = true;
+        let cond_skip = true;
+
+        function mostraTestoAnimato(testo, velocita = 15) {
+            dialogoTesto.textContent = "";
+            cond_skip = true;
+            let i = 0;
+            function scriviLettera() {
+                if (!cond_testo) {
+                    dialogoTesto.textContent = testo;
+                    cond_testo = true; 
+                    return;
+                }
+                if (i < testo.length) {
+                    dialogoTesto.textContent += testo[i];
+                    i++;
+                    setTimeout(scriviLettera, velocita);
+                }
+                else{
+                    cond_skip = false;
+                    window.removeEventListener('keydown', arguments.callee);
+                    window.removeEventListener('mousedown', arguments.callee);
+                }
+            }
+            scriviLettera();
+        }
+        function cambiaNome(nome) {
+            const nomePersonaggio = document.getElementById('nome-personaggio');
+            nomePersonaggio.textContent = nome;
+        }
+        function cambiaboxNome(posizione) {
+            const boxNome = document.getElementById('box-nome');
+            if(posizione == 1) {
+                boxNome.style.left = "11vw";
+                immaginePreside.style.transform = "scale(0.9)";
+                personaggioAnonimo.style.opacity = "0.8";
+                immaginePreside.style.opacity = "1";
+                personaggioAnonimo.style.transform = "scale(0.8)";
+            }
+            else {
+                boxNome.style.left = "73vw";
+                immaginePreside.style.transform = "scale(0.8)";
+                personaggioAnonimo.style.opacity = "1";
+                immaginePreside.style.opacity = "0.8";
+                personaggioAnonimo.style.transform = "scale(0.9)";
+            }
+        }
+
+        mostraTestoAnimato("Prova dialogo animato");
+        cambiaNome("nome preside");
+        cambiaboxNome(1);
+
+        const righe = [
+            [
+            "secondo dialogo",
+            "Urso",
+            2
+            ],
+            [
+            "terzo dialogo",
+            "nome preside",
+            1
+            ],
+            [
+            "quarto dialogo",
+            "Urso",
+            2
+            ],
+            [
+            "quinto dialogo",
+            "nome preside",
+            1
+            ]
+        ];
+        let indexRiga = 0;
+
+        function mostraProssimaRiga() {
+            if (indexRiga < righe.length) {
+                mostraTestoAnimato(righe[indexRiga][0]);
+                cambiaNome(righe[indexRiga][1]);
+                cambiaboxNome(righe[indexRiga][2]);
+                indexRiga++;
+            } else {
+                
+            }
+        }
+
+
+
+        setTimeout(controllo_skip(), 100);
+
+        function controllo_skip() {
+            window.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && cond_skip) {
+                cond_skip = false;
+                cond_testo = false; 
+            }
+            else{
+                if(event.key === 'Enter') {
+                    mostraProssimaRiga();
+                }
+            }
+            });
+
+            window.addEventListener('mousedown', function(event) {
+                if (event.button === 0 && cond_skip) { 
+                    cond_skip = false;
+                    cond_testo = false;
+                }
+                else{
+                if(event.button === 0) {
+                    mostraProssimaRiga();
+                }
+            }
+            });
+            
+        }
+        
+    </script>
+</body>
+</html>
