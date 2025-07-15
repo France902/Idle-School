@@ -1,73 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background-color: rgb(186, 240, 254);
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            pointer-events: none;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
-        }
-        #mappa {
-            width: 100vw; 
-            height: 100vh; 
-            position: fixed;
-            z-index: -3; 
-            transform: scale(7);
-            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
-        }
-        #preside_container {
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 10vw; 
-            height: 10vw; 
-            border-radius: 1vw;
-        }
-        #preside {
-            width: 30vw;
-            height: 30vh;
-            position: fixed;
-            top: -10vh;
-            left: -9.5vw;
-            transition: left 0.1s, top 0.1s;
-        } 
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zoom Smooth</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: rgb(186, 240, 254);
+      user-select: none;
+      pointer-events: none;
+    }
+    img {
+        image-rendering: crisp-edges; 
+    }
+    #world {
+      transform: scale(0.07);
+      transform-origin: center center;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      margin-left: -5vw;
+      margin-top: 5vh;
+      will-change: transform;
+    }
+
+    .scuola-img {
+      width: 100vw;
+      height: 130vh;
+      position: fixed;
+      z-index: 0;
+      transform: scale(2);
+      transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+      will-change: transform, left, top;
+    }
+
+    #preside_container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 10vw;
+      height: 10vw;
+      border-radius: 1vw;
+    }
+
+    #preside {
+      width: 30vw;
+      height: 30vh;
+      position: fixed;
+      top: 0vh;
+      left: 0vw;
+      transition: left 0.1s, top 0.1s;
+    }
+
+    p {
+      position: fixed;
+      color: black;
+      font-family: Arial, sans-serif;
+      font-size: 4vw;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-       <div id="Edificio_scolastico" >
-        <img src="nature-2147400.jpg" class="scuola-img" id="mappa" style="left: 0vw; top: 0vh;">
-    </div>
-        <div id="preside_container">
-        <img src="Preside.png" id="preside">
+    
+  <div id="world">
+    <div id="Edificio_scolastico" style="z-index: -1;">
+      <img class="scuola-img" style="left: 0vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 0vw; top: 0vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 200vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 200vw; top: 0vh;" src="map-small.jpg" />
+        
+        <img class="scuola-img" style="left: -200vw; top: 0vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: -200vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: -200vw; top: -520vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 0vw; top: -520vh;" src="map-small.jpg" />
+        
+        <img class="scuola-img" style="left: 200vw; top: -520vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: -520vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: 0vh;" src="map-small.jpg" />
+        
+        <img class="scuola-img" style="left: 0vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 200vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: -200vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+
     </div>
 
-    <script>
-        const preside = document.getElementById('preside');
-        const scuolaImgs = document.querySelectorAll('.scuola-img');
-        let posX = -9.5;
-        let posY = -10;
-        preside.style.top = posX + 'vh';
-        preside.style.left = posY + 'vw';
-        
-        function handleKeydown(event) {
+    <div id="preside_container">
+      <img src="Preside.png" id="preside" />
+    </div>
+  </div>
+
+  <script>
+    const preside = document.getElementById('preside');
+    const scuolaImgs = document.querySelectorAll('.scuola-img');
+    let posX = -5.9;
+    let posY = -13;
+    preside.style.top = posY + 'vh';
+    preside.style.left = posX + 'vw';
+
+            function handleKeydown(event) {
             if (event.key === 'd') {
                 preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 preside.style.transform = "scaleX(1)";
@@ -181,7 +225,24 @@
             // control_position(posX, posY);
         }
         window.addEventListener('keydown', handleKeydown);
+const world = document.getElementById('world');
+ function scala() {
+    let scale = 0.07;
+    let speed = 0.003; 
+    function animate(){
+        scale += speed;
+        if (scale >= 1) {
+            scale = 1;
+            world.style.transform = `scale(1)`;
+        } else {
+            world.style.transform = `scale(${scale})`;
+            requestAnimationFrame(animate);
+        }
+    }
+    requestAnimationFrame(animate);
+}
 
-    </script>
+    setTimeout(scala, 1000);
+  </script>
 </body>
 </html>
