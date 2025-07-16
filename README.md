@@ -48,7 +48,7 @@ Grafica: Stile cartoonesco, allegro e accattivante.
 
 
 
-Narrativa: Leggera ma carismatica, con scrittura carismatica.
+Narrativa: Leggera ma carismatica.
 
 Linee guida (partendo da inizio gioco)
 
