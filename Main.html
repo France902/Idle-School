@@ -316,7 +316,7 @@
         <img class="scuola-img" style="left: 400vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
 
         <div id="piattaforme_container">
-            <img class="scuola-img" src="a_rock.jpg" style="position: fixed; left: 40vw; top: -30vh; width: 8vw; height: 13vh; z-index: 0;">
+            <img class="scuola-img" src="a_rock.jpg" style="position: fixed; left: 40vw; top: -30vh; width: 8.5vw; height: 13vh; z-index: 0;">
         </div>
     </div>
     
@@ -471,6 +471,7 @@
                 preside.style.transform = "scaleX(1)";
                 preside.src = "Preside.png";
                 preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                posX += 3;
                 scuolaImgs.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) - 3) + 'vw';
                 });
@@ -489,7 +490,6 @@
                 }, 240);
                 setTimeout(() => {
                     preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
-                    posX += 3.08;
                 }, 300);
                 window.removeEventListener('keydown', handleKeydown);
 
@@ -501,6 +501,7 @@
                 preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 preside.style.transform = "scaleX(-1)";
                 preside.src = " Preside.png";
+                posX -= 3;
                 preside.style.top = (parseFloat(preside.style.top)) + 'vh';
                 scuolaImgs.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) + 3) + 'vw';
@@ -519,7 +520,6 @@
                 }, 240);
                 setTimeout(() => {
                     preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
-                    posX += 3.08;
                 }, 300);
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
@@ -529,6 +529,7 @@
             if (event.key === 's') {
                 preside.src = "Preside_davanti.png";
                 preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                posY += 5;
                     preside.style.top = (parseFloat(preside.style.top)) + 'vh';
                     scuolaImgs.forEach(img => {
                         img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
@@ -544,7 +545,6 @@
                     }, 225);
                     setTimeout(() => {
                         preside.style.top = (parseFloat(preside.style.top) -  3) + 'vh';
-                        posY += 4.7;
                     }, 300);
                     window.removeEventListener('keydown', handleKeydown);
                     setTimeout(() => {
@@ -555,6 +555,7 @@
                 preside.src = "Preside_dietro.png";
                 preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
                 preside.style.top = (parseFloat(preside.style.top)) + 'vh';
+                posY -= 5;
                 scuolaImgs.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
                 });                
@@ -569,14 +570,13 @@
                 }, 225);
                 setTimeout(() => {
                     preside.style.top = (parseFloat(preside.style.top) +  3) + 'vh';
-                    posY -= 4.7;
                 }, 300);
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
                     window.addEventListener('keydown', handleKeydown);
                 }, 280);
             }
-            // control_position(posX, posY);
+            control_position(posX, posY);
         }
         window.addEventListener('keydown', handleKeydown);
 const world = document.getElementById('world');
@@ -598,46 +598,22 @@ const world = document.getElementById('world');
 
     setTimeout(scala, 1000);
         let cond = false;
+        let cond_piattaforma_1 = false;
+
         function control_position(posX, posY) {
-            if (posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47 && cond_stanza1 == false && cond_stanza2 == false){
-                piattaforma_1.style.border = '0.3vw solid #228B22';
-                cond_stanza1 = true;
-                canvas.style.display = 'block';
-                cond_start = true;
-                drawCircle(progress);
-                animate();
+            if (posX >= 33 && posX <= 48 && posY >= -45 && posY <= -20 && cond_piattaforma_1 == false){
+                alert(posX + " " + posY)
+                condizione_posizione = true;
                 settime = setTimeout(() => {
                     if(condizione_posizione) {
-                        cond_stanza2 = true;
-                        piattaforma_1.style.display = 'none';
-                        piattaforma_2.style.display = 'block';
-                        canvas.style.display = 'none';
-                        unlockedText.style.display = 'block';
-                        unlockedText.innerHTML += "<br>your first classroom!";
-                        document.getElementById("testo_cartello").style.fontSize = "0.8vw";
-                        document.getElementById("testo_cartello").innerHTML = 'Nome della scuola <br> che verrà deciso <br> dopo aver schiacciato <br> dalla schermata iniziale';
-                        setTimeout(() => {
-                            unlockedText.innerHTML = "You've Unlocked ";
-                            unlockedText.style.display = 'none';
-                        }, 2000);
-                        classi += 1;
-                        document.getElementById('classi').innerText = classi + " 🏫";
-                        farming_1();
+                        cond_piattaforma_1 = true;
+                        alert("gyat");
                 }
                 }, 2000);
             } else {
-                if(posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47){
-                    return;
-                }
-                else{
-                    cond = false;
-                    progress = 0;
-                    if(cond_start) {
-                        stopAnimation();
-                    }
-                    cond_start = false;
-                }
-                
+                clearTimeout(settime);
+                condizione_posizione = false;
+                cond_piattaforma_1 = false;
             }  
         }
         let pos_student = 0;
