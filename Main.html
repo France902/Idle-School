@@ -243,6 +243,8 @@
             z-index: 1;
         }
 
+       
+
         .banco {
             width: 5.21vw;         
             height: 4.17vh;       
@@ -380,7 +382,9 @@
 
 <body>
     
-    
+    <div id="loader-container" >
+         <div id="loader-bar"></div>
+    </div>
   <div id="world">
     <div id="Edificio_scolastico" style="z-index: -1;">
       <img class="scuola-img" style="left: 0vw; top: -260vh;" src="map-small.jpg" />
@@ -425,6 +429,9 @@
     </div>
 
     </div>
+
+    
+
     
     <div class="hud-container">
         <div id="soldi" class="hud-box">0€</div>
@@ -469,6 +476,7 @@
 
 
     <script>
+        function iniziaGioco(){
         const canvas = document.getElementById('progressCircle');
         const piattaforma_1 = document.getElementById('piattaforma_1');
         const piattaforma_2 = document.getElementById('piattaforma_2');
@@ -821,14 +829,14 @@ const world = document.getElementById('world');
     requestAnimationFrame(animate);
 }
 controllo_skip();
-     // setTimeout(scala, 1000);
+     setTimeout(scala, 1000);
         let cond = false;
         let cond_piattaforma_1 = false;
 
         function control_position(posX, posY) {
             if (posX >= 33 && posX <= 48 && posY >= -45 && posY <= -20 && cond_piattaforma_1 == false){
                 condizione_posizione = true;
-                settime = setTimeout(() => {
+                let settime = setTimeout(() => {
                     if(condizione_posizione) {
                     cond_piattaforma_1 = true;
                     container_dialogo.style.opacity = '1';
@@ -1038,6 +1046,10 @@ controllo_skip();
         toggle_icon.addEventListener('mouseleave', function() {
             toggle_icon.style.opacity = '1';
         });
+        }
+
+        window.onload = iniziaGioco;
+
     </script>
 </body>
 </html>
