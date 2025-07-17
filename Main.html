@@ -19,13 +19,11 @@
             overflow: hidden;
             background-color: rgb(186, 240, 254);
             user-select: none;
+            pointer-events: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             pointer-events: none;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
         }
 
         h1 {
@@ -43,6 +41,23 @@
             font-family: Arial, sans-serif;
             font-size: 1.2vw;
             text-align: center;
+        }
+
+        img {
+        image-rendering: crisp-edges; 
+        }
+
+        #world {
+        transform: scale(0.07);
+        transform-origin: center center;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        margin-left: -5vw;
+        margin-top: 5vh;
+        will-change: transform;
         }
 
         #piattaforma_1 {
@@ -64,14 +79,39 @@
             display: none; 
             z-index: -1;
         }
+
+        #preside_container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-110%, -120%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 10vw;
+            height: 10vw;
+            border-radius: 1vw;
+        }
+
+        #piattaforme_container {
+            position: fixed;
+            transform: translate(-510%, 250%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 10vw;
+            height: 10vw;
+            border-radius: 1vw;
+        }
+
         #preside {
             width: 30vw;
             height: 30vh;
             position: fixed;
-            top: -10vh;
-            left: -9.5vw;
+            top: 0vh;
+            left: 0vw;
             transition: left 0.1s, top 0.1s;
-        } 
+        }
 
         #cattedra {
             width: 7.81vw;         
@@ -98,19 +138,6 @@
             z-index: -3; 
             transform: scale(2); 
             transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
-        }
-
-        #preside_container {
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 10vw; 
-            height: 10vw; 
-            border-radius: 1vw;
         }
 
         #progressCircle {
@@ -239,6 +266,15 @@
             max-height: 30vh;
             cursor: auto;
         }
+        .scuola-img {
+            width: 100vw;
+            height: 130vh;
+            position: fixed;
+            z-index: 0;
+            transform: scale(2);
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            will-change: transform, left, top;
+        }
 
         @keyframes fadeOpacity {
             0% {
@@ -255,22 +291,44 @@
 </head>
 
 <body>
-   <div id="Edificio_scolastico">
-        <img src="scuola.png" class="scuola-img" id="entrata_scuola" style="top: -80vh; left: 48vw;">
-        <div id="piattaforma_1" class="scuola-img" style="left: 69vw; top: 25vh;"></div>
-    </div>
+    
+    
+  <div id="world">
+    <div id="Edificio_scolastico" style="z-index: -1;">
+      <img class="scuola-img" style="left: 0vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 0vw; top: 0vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 200vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 200vw; top: 0vh;" src="map-small.jpg" />
+        
+        <img class="scuola-img" style="left: -200vw; top: 0vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: -200vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: -200vw; top: -520vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 0vw; top: -520vh;" src="map-small.jpg" />
+        
+        <img class="scuola-img" style="left: 200vw; top: -520vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: -520vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: -260vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: 0vh;" src="map-small.jpg" />
+        
+        <img class="scuola-img" style="left: 0vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 200vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: -200vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+        <img class="scuola-img" style="left: 400vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
 
+        <div id="piattaforme_container">
+            <img class="scuola-img" src="a_rock.jpg" style="position: fixed; left: 40vw; top: -30vh; width: 8vw; height: 13vh; z-index: 0;">
+        </div>
+    </div>
+    
     <div id="preside_container">
         <img src="Preside.png" id="preside">
     </div>
-
-    <canvas id="progressCircle"></canvas>
-
+    </div>
+    
     <div class="hud-container">
         <div id="soldi" class="hud-box">0€</div>
+        <!--
         <div id="classi" class="hud-box">0 🏫</div>
-    </div>
-
         <div id="missioni" class="hud_missioni closed" >
         <img class="toggle-icon" src="icona_menu_missioni.png" alt="Icona Toggle" onclick="menu_missioni()">
         <div class="missione_1" onclick="toggleMenu()">
@@ -302,6 +360,10 @@
 
     <div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 47vh; display: none;"></div>
 
+        -->
+    </div>
+
+        
 
 
 
@@ -337,9 +399,11 @@
                 students.appendChild(newStudent);
             }
         }
-        createStudents();
+        
+        // createStudents();
 
-    const ctx = canvas.getContext('2d');
+    /* const ctx = canvas.getContext('2d');
+    
     let progress = 0;
     const radius = 30;
     const centerX = canvas.width / 2;
@@ -353,6 +417,7 @@
     let condizione_posizione = true;
     let cond_start = false, cond_stanza1 = false, cond_stanza2 = false;
     let settime = null;
+    
     function drawCircle(progress) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Draw base circle
@@ -389,23 +454,25 @@
         cancelAnimationFrame(animationId);
         animationId = null;
 }
+        */
 
-const preside = document.getElementById('preside');
-        const scuolaImgs = document.querySelectorAll('.scuola-img');
-        let posX = -9.5;
-        let posY = -10;
-        preside.style.top = posX + 'vh';
-        preside.style.left = posY + 'vw';
-        
-        function handleKeydown(event) {
+        const preside = document.getElementById('preside');
+    const scuolaImgs = document.querySelectorAll('.scuola-img');
+    let posX = 0;
+    let posY = 0;
+
+    preside.style.top = posY + 'vh';
+    preside.style.left = posX + 'vw';
+
+            function handleKeydown(event) {
+
             if (event.key === 'd') {
                 preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 preside.style.transform = "scaleX(1)";
                 preside.src = "Preside.png";
                 preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                students.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out;";
                 scuolaImgs.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) - 3.08) + 'vw';
+                    img.style.left = (parseFloat(img.style.left) - 3) + 'vw';
                 });
                 
                 setTimeout(() => {
@@ -436,7 +503,7 @@ const preside = document.getElementById('preside');
                 preside.src = " Preside.png";
                 preside.style.top = (parseFloat(preside.style.top)) + 'vh';
                 scuolaImgs.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) + 3.08) + 'vw';
+                    img.style.left = (parseFloat(img.style.left) + 3) + 'vw';
                 });
                 setTimeout(() => {
                     preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
@@ -509,9 +576,27 @@ const preside = document.getElementById('preside');
                     window.addEventListener('keydown', handleKeydown);
                 }, 280);
             }
-            control_position(posX, posY);
+            // control_position(posX, posY);
         }
         window.addEventListener('keydown', handleKeydown);
+const world = document.getElementById('world');
+ function scala() {
+    let scale = 0.07;
+    let speed = 0.003; 
+    function animate(){
+        scale += speed;
+        if (scale >= 1) {
+            scale = 1;
+            world.style.transform = `scale(1)`;
+        } else {
+            world.style.transform = `scale(${scale})`;
+            requestAnimationFrame(animate);
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
+    setTimeout(scala, 1000);
         let cond = false;
         function control_position(posX, posY) {
             if (posX >= 46 && posX <= 52 && posY >= 39 && posY <= 47 && cond_stanza1 == false && cond_stanza2 == false){
@@ -548,7 +633,6 @@ const preside = document.getElementById('preside');
                     cond = false;
                     progress = 0;
                     if(cond_start) {
-                        
                         stopAnimation();
                     }
                     cond_start = false;
