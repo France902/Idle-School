@@ -362,7 +362,7 @@
             position: fixed;
             z-index: 0;
             transform: scale(2);
-            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            transition: left 0.35s ease-in-out, top 0.35s ease-in-out;
             will-change: transform, left, top;
         }
 
@@ -633,59 +633,59 @@ function setupMovimentoPreside(e, stato) {
                 p.style.transform = "scaleX(1)";
                 p.src = "Preside.png";
                 p.style.top = (parseFloat(p.style.top)) + 'vh';
-                stato.posX += 3;
+                stato.posX += 3.5;
                 e.scuolaImgs.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) - 3) + 'vw';
+                    img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
                 });
                 
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
                 }, 60);
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
                 }, 120);
                 setTimeout(() => {
                     p.style.top = (parseFloat(p.style.top)) + 'vh';
                 }, 180);
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
                 }, 240);
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
                 }, 300);
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
                     window.addEventListener('keydown', handleKeydown);
-                }, 250);  
+                }, 290);  
             }
             if (event.key === 'a') {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(-1)";
                 p.src = " Preside.png";
-                stato.posX -= 3;
+                stato.posX -= 3.5;
                 p.style.top = (parseFloat(p.style.top)) + 'vh';
                 e.scuolaImgs.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) + 3) + 'vw';
+                    img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
                 });
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
                 }, 60);
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
                 }, 120);
                 setTimeout(() => {
                     p.style.top = (parseFloat(p.style.top)) + 'vh';
                 }, 180);
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
                 }, 240);
                 setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
                 }, 300);
                 window.removeEventListener('keydown', handleKeydown);
                 setTimeout(() => {
                     window.addEventListener('keydown', handleKeydown);
-                }, 250);  
+                }, 290);  
             }
             if (event.key === 's') {
                 p.src = "Preside_davanti.png";
