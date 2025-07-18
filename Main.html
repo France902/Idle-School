@@ -470,28 +470,321 @@
 
         -->
     </div>
+<script>
+window.onload = iniziaGioco;
 
-        
+function iniziaGioco() {
+  const elementi = inizializzaElementi();
+  const stato = inizializzaStato();
+  setupDialoghi(elementi,  stato);
+  setupMovimentoPreside(elementi, stato);
+  controlloSkip(elementi, stato);
+  setTimeout(() => scalaMondo(elementi.world), 1000);
+  setupMenuToggle(elementi);
+}
+
+function inizializzaElementi() {
+  return {
+    canvas: document.getElementById('progressCircle'),
+    piattaforma_1: document.getElementById('piattaforma_1'),
+    piattaforma_2: document.getElementById('piattaforma_2'),
+    studente: document.querySelector('.studente'),
+    unlockedText: document.getElementById('unlocked'),
+    banco1: document.getElementById('banco1'),
+    banco2: document.getElementById('banco2'),
+    toggle_icon: document.querySelector('.toggle-icon'),
+    dialogo: document.getElementById('dialogo'),
+    dialogoTesto: document.getElementById('dialogo-testo'),
+    container_dialogo: document.getElementById('container-dialogo'),
+    immaginePreside: document.getElementById('immagine_preside_dialoghi'),
+    personaggioAnonimo: document.getElementById('personaggio_anonimo_dialoghi'),
+    nomePersonaggio: document.getElementById('nome-personaggio'),
+    boxNome: document.getElementById('box-nome'),
+    preside: document.getElementById('preside'),
+    scuolaImgs: document.querySelectorAll('.scuola-img'),
+    world: document.getElementById('world'),
+    soldiText: document.getElementById('soldi'),
+    blocco_pulizia_1: document.getElementById('blocco_pulizia_1'),
+    blocco_pulizia_2: document.getElementById('blocco_pulizia_2'),
+    menu: document.getElementById('missioni')
+  };
+}
+
+function inizializzaStato() {
+  return {
+    soldi: 0,
+    classi: 0,
+    fila_studenti: 10,
+    condizione_click: false,
+    posX: 0,
+    posY: 0,
+    condizione_posizione: false,
+    cond_stanza1: false,
+    cond_stanza2: false,
+    cond_dialogo1: false,
+    cond_testo: true,
+    cond_skip: true,
+    cond_piattaforma_1: false,
+    pos_student: 0,
+    cond: false
+  };
+}
+
+function scalaMondo(world) {
+  let scale = 0.07;
+  let speed = 0.006;
+  function animate() {
+    scale += speed;
+    if (scale >= 1) {
+      scale = 1;
+      world.style.transform = `scale(1)`;
+    } else {
+      world.style.transform = `scale(${scale})`;
+      requestAnimationFrame(animate);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function setupDialoghi(e, stato) {
+  const righe = [
+    ["secondo dialogo", "Urso", 2],
+    ["terzo dialogo", "nome preside", 1],
+    ["quarto dialogo", "Urso", 2],
+    ["quinto dialogo", "nome preside", 1]
+  ];
+  let index = 0;
+
+  function mostraTesto(testo, velocita = 15) {
+    e.dialogoTesto.textContent = "";
+    let i = 0;
+    stato.cond_skip = true;
+    let scrivi = function () {
+      if (!stato.cond_testo) {
+        e.dialogoTesto.textContent = testo;
+        stato.cond_testo = true;
+        return;
+      }
+      if (i < testo.length) {
+        e.dialogoTesto.textContent += testo[i++];
+        setTimeout(scrivi, velocita);
+      } else {
+        stato.cond_skip = false;
+      }
+    };
+    scrivi();
+  }
+
+  function cambiaNome(nome) {
+    e.nomePersonaggio.textContent = nome;
+  }
+
+  function cambiaboxNome(pos) {
+    const sinistra = pos === 1;
+    e.boxNome.style.left = sinistra ? "11vw" : "73vw";
+    e.immaginePreside.style.transform = sinistra ? "scale(0.9)" : "scale(0.8)";
+    e.personaggioAnonimo.style.transform = sinistra ? "scale(0.8)" : "scale(0.9)";
+    e.immaginePreside.style.opacity = sinistra ? "1" : "0.8";
+    e.personaggioAnonimo.style.opacity = sinistra ? "0.8" : "1";
+  }
+
+  function mostraProssimaRiga() {
+    
+    if (index < righe.length) {
+      mostraTesto(righe[index][0]);
+      cambiaNome(righe[index][1]);
+      cambiaboxNome(righe[index][2]);
+      index++;
+    }
+  }
+
+  mostraTesto("Prova dialogo animato");
+  cambiaNome("nome preside");
+  cambiaboxNome(1);
+
+  window.mostraProssimaRiga = mostraProssimaRiga;
+}
+
+function controlloSkip(elementi, stato) {
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (stato.cond_skip && stato.cond_dialogo1) stato.cond_testo = false;
+      else if (stato.cond_dialogo1) window.mostraProssimaRiga();
+    }
+  });
+
+  window.addEventListener('mousedown', e => {
+    if (e.button === 0) {
+      if (stato.cond_skip && stato.cond_dialogo1) stato.cond_testo = false;
+      else if (stato.cond_dialogo1) window.mostraProssimaRiga();
+    }
+  });
+}
+
+function setupMovimentoPreside(e, stato) {
+  const p = e.preside;
+  p.style.top = '0vh';
+  p.style.left = '0vw';
+  window.addEventListener('keydown', handleKeydown);
+
+  function handleKeydown(event) {
+    if (event.key === 'd') {
+                p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+                p.style.transform = "scaleX(1)";
+                p.src = "Preside.png";
+                p.style.top = (parseFloat(p.style.top)) + 'vh';
+                stato.posX += 3;
+                e.scuolaImgs.forEach(img => {
+                    img.style.left = (parseFloat(img.style.left) - 3) + 'vw';
+                });
+                
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                }, 60);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                }, 120);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top)) + 'vh';
+                }, 180);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                }, 240);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                }, 300);
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                }, 250);  
+            }
+            if (event.key === 'a') {
+                p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+                p.style.transform = "scaleX(-1)";
+                p.src = " Preside.png";
+                stato.posX -= 3;
+                p.style.top = (parseFloat(p.style.top)) + 'vh';
+                e.scuolaImgs.forEach(img => {
+                    img.style.left = (parseFloat(img.style.left) + 3) + 'vw';
+                });
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                }, 60);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) - 0.8) + 'vh';
+                }, 120);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top)) + 'vh';
+                }, 180);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                }, 240);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + 0.8) + 'vh';
+                }, 300);
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                }, 250);  
+            }
+            if (event.key === 's') {
+                p.src = "Preside_davanti.png";
+                p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                stato.posY += 5;
+                    p.style.top = (parseFloat(p.style.top)) + 'vh';
+                    e.scuolaImgs.forEach(img => {
+                        img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
+                    });
+                    setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + 3) + 'vh';
+                    }, 40);
+                    setTimeout(() => {
+                        p.style.top = (parseFloat(p.style.top) + 2) + 'vh';
+                    }, 100);
+                    setTimeout(() => {
+                        p.style.top = (parseFloat(p.style.top) - 2) + 'vh';
+                    }, 225);
+                    setTimeout(() => {
+                        p.style.top = (parseFloat(p.style.top) -  3) + 'vh';
+                    }, 300);
+                    window.removeEventListener('keydown', handleKeydown);
+                    setTimeout(() => {
+                            window.addEventListener('keydown', handleKeydown);
+                    }, 280);
+            }
+            if (event.key === 'w') {
+                p.src = "Preside_dietro.png";
+                p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
+                p.style.top = (parseFloat(p.style.top)) + 'vh';
+                stato.posY -= 5;
+                e.scuolaImgs.forEach(img => {
+                    img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
+                });                
+                setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 3) + 'vh';
+                }, 40);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) - 2) + 'vh';
+                }, 100);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + 2) + 'vh';
+                }, 225);
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) +  3) + 'vh';
+                }, 300);
+                window.removeEventListener('keydown', handleKeydown);
+                setTimeout(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                }, 280);
+            }
+            control_position(stato.posX, stato.posY, stato, e);
+        }
+  }
 
 
+function setupMenuToggle(e) {
+  e.toggle_icon.addEventListener('mouseenter', () => e.toggle_icon.style.opacity = '0.7');
+  e.toggle_icon.addEventListener('mouseleave', () => e.toggle_icon.style.opacity = '1');
+  e.toggle_icon.addEventListener('click', () => {
+    e.menu.classList.toggle('open');
+    e.menu.classList.toggle('closed');
+  });
+}
 
-    <script>
-        function iniziaGioco(){
-        const canvas = document.getElementById('progressCircle');
-        const piattaforma_1 = document.getElementById('piattaforma_1');
-        const piattaforma_2 = document.getElementById('piattaforma_2');
-        const studente = document.querySelector('.studente');
-        const unlockedText = document.getElementById('unlocked');
-        const banco1 = document.getElementById('banco1');
-        const banco2 = document.getElementById('banco2')
-        const toggle_icon = document.querySelector('.toggle-icon');
+function control_position(posX, posY, stato, e) {
+    let settime;
+            if (posX >= 33 && posX <= 48 && posY >= -45 && posY <= -20 && stato.cond_piattaforma_1 == false){
+                stato.condizione_posizione = true;
+                settime = setTimeout(() => {
+                    if(stato.condizione_posizione) {
+                    stato.cond_piattaforma_1 = true;
+                    e.container_dialogo.style.opacity = '1';
+                    stato.cond_dialogo1 = true;
+                }
+                }, 2000);
+            } else {
+                clearTimeout(settime);
+                stato.condizione_posizione = false;
+                stato.cond_piattaforma_1 = false;
+            }  
+        }
 
-        let soldi = 0;
-        let classi = 0;
-        let fila_studenti = 10;
-        let condizione_click = false;
+        /*
+        let pos_student = 0;
+        function farming_1() {
+            let ricavo = 10;
+            let entra = true;
+            let entra2 = true;
+            let pos1 = 0;
+            let pos2 = 1;
+           
+            interval1(entra, pos1, ricavo);
+            
+            setTimeout(() => {
+                interval2(entra2, pos2, ricavo);  
+            }, 2000);
+        }
 
-   
         let students = document.createElement('div');
         students.id = 'students-container';
         document.body.appendChild(students);
@@ -509,9 +802,9 @@
             }
         }
         
-        // createStudents();
+        createStudents();
 
-    /* const ctx = canvas.getContext('2d');
+     const ctx = canvas.getContext('2d');
     
     let progress = 0;
     const radius = 30;
@@ -563,307 +856,8 @@
         cancelAnimationFrame(animationId);
         animationId = null;
 }
-        */
 
-        const dialogo = document.getElementById('dialogo');
-        const dialogoTesto = document.getElementById('dialogo-testo');
-        const container_dialogo = document.getElementById('container-dialogo');
-        const immaginePreside = document.getElementById('immagine_preside_dialoghi');
-        const personaggioAnonimo = document.getElementById('personaggio_anonimo_dialoghi');
-
-        let cond_testo = true;
-        let cond_skip = true;
-        let cond_dialogo1 = false;
-
-        function mostraTestoAnimato(testo, velocita = 15) {
-            dialogoTesto.textContent = "";
-            cond_skip = true;
-            let i = 0;
-            let scriviLettera = function() {
-                if (!cond_testo) {
-                    dialogoTesto.textContent = testo;
-                    cond_testo = true; 
-                    return;
-                }
-                if (i < testo.length) {
-                    dialogoTesto.textContent += testo[i];
-                    i++;
-                    setTimeout(scriviLettera, velocita);
-                }
-                else{
-                    cond_skip = false;
-                    window.removeEventListener('keydown', arguments.callee);
-                    window.removeEventListener('mousedown', arguments.callee);
-                }
-            }
-            scriviLettera();
-        }
-        function cambiaNome(nome) {
-            const nomePersonaggio = document.getElementById('nome-personaggio');
-            nomePersonaggio.textContent = nome;
-        }
-        function cambiaboxNome(posizione) {
-            const boxNome = document.getElementById('box-nome');
-            if(posizione == 1) {
-                boxNome.style.left = "11vw";
-                immaginePreside.style.transform = "scale(0.9)";
-                personaggioAnonimo.style.opacity = "0.8";
-                immaginePreside.style.opacity = "1";
-                personaggioAnonimo.style.transform = "scale(0.8)";
-            }
-            else {
-                boxNome.style.left = "73vw";
-                immaginePreside.style.transform = "scale(0.8)";
-                personaggioAnonimo.style.opacity = "1";
-                immaginePreside.style.opacity = "0.8";
-                personaggioAnonimo.style.transform = "scale(0.9)";
-            }
-        }
-
-        mostraTestoAnimato("Prova dialogo animato");
-        cambiaNome("nome preside");
-        cambiaboxNome(1);
-        
-
-        const righe = [
-            [
-            "secondo dialogo",
-            "Urso",
-            2
-            ],
-            [
-            "terzo dialogo",
-            "nome preside",
-            1
-            ],
-            [
-            "quarto dialogo",
-            "Urso",
-            2
-            ],
-            [
-            "quinto dialogo",
-            "nome preside",
-            1
-            ]
-        ];
-        let indexRiga = 0;
-
-        function mostraProssimaRiga() {
-            if (indexRiga < righe.length) {
-                mostraTestoAnimato(righe[indexRiga][0]);
-                cambiaNome(righe[indexRiga][1]);
-                cambiaboxNome(righe[indexRiga][2]);
-                indexRiga++;
-            } else {
-                
-            }
-        }
-
-
-
-
-        function controllo_skip() {
-            window.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && cond_skip && cond_dialogo1) {
-                cond_skip = false;
-                cond_testo = false; 
-            }
-            else{
-                if(event.key === 'Enter' && cond_dialogo1) {
-                    mostraProssimaRiga();
-                }
-            }
-            });
-
-            window.addEventListener('mousedown', function(event) {
-                if (event.button === 0 && cond_skip && cond_dialogo1) { 
-                    cond_skip = false;
-                    cond_testo = false;
-                }
-                else{
-                if(event.button === 0 && cond_dialogo1) {
-                    mostraProssimaRiga();
-                }
-            }
-            });
-            
-        }
-    const preside = document.getElementById('preside');
-    const scuolaImgs = document.querySelectorAll('.scuola-img');
-    let posX = 0;
-    let posY = 0;
-
-    preside.style.top = posY + 'vh';
-    preside.style.left = posX + 'vw';
-
-            function handleKeydown(event) {
-
-            if (event.key === 'd') {
-                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
-                preside.style.transform = "scaleX(1)";
-                preside.src = "Preside.png";
-                preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                posX += 3;
-                scuolaImgs.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) - 3) + 'vw';
-                });
-                
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
-                }, 60);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
-                }, 120);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                }, 180);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
-                }, 240);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
-                }, 300);
-                window.removeEventListener('keydown', handleKeydown);
-
-                setTimeout(() => {
-                    window.addEventListener('keydown', handleKeydown);
-                }, 250);  
-            }
-            if (event.key === 'a') {
-                preside.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
-                preside.style.transform = "scaleX(-1)";
-                preside.src = " Preside.png";
-                posX -= 3;
-                preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                scuolaImgs.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) + 3) + 'vw';
-                });
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
-                }, 60);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) - 0.8) + 'vh';
-                }, 120);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                }, 180);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
-                }, 240);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) + 0.8) + 'vh';
-                }, 300);
-                window.removeEventListener('keydown', handleKeydown);
-                setTimeout(() => {
-                    window.addEventListener('keydown', handleKeydown);
-                }, 250);  
-            }
-            if (event.key === 's') {
-                preside.src = "Preside_davanti.png";
-                preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
-                posY += 5;
-                    preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                    scuolaImgs.forEach(img => {
-                        img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
-                    });
-                    setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) + 3) + 'vh';
-                    }, 40);
-                    setTimeout(() => {
-                        preside.style.top = (parseFloat(preside.style.top) + 2) + 'vh';
-                    }, 100);
-                    setTimeout(() => {
-                        preside.style.top = (parseFloat(preside.style.top) - 2) + 'vh';
-                    }, 225);
-                    setTimeout(() => {
-                        preside.style.top = (parseFloat(preside.style.top) -  3) + 'vh';
-                    }, 300);
-                    window.removeEventListener('keydown', handleKeydown);
-                    setTimeout(() => {
-                            window.addEventListener('keydown', handleKeydown);
-                    }, 280);
-            }
-            if (event.key === 'w') {
-                preside.src = "Preside_dietro.png";
-                preside.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
-                preside.style.top = (parseFloat(preside.style.top)) + 'vh';
-                posY -= 5;
-                scuolaImgs.forEach(img => {
-                    img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
-                });                
-                setTimeout(() => {
-                preside.style.top = (parseFloat(preside.style.top) - 3) + 'vh';
-                }, 40);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) - 2) + 'vh';
-                }, 100);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) + 2) + 'vh';
-                }, 225);
-                setTimeout(() => {
-                    preside.style.top = (parseFloat(preside.style.top) +  3) + 'vh';
-                }, 300);
-                window.removeEventListener('keydown', handleKeydown);
-                setTimeout(() => {
-                    window.addEventListener('keydown', handleKeydown);
-                }, 280);
-            }
-            control_position(posX, posY);
-        }
-        window.addEventListener('keydown', handleKeydown);
-const world = document.getElementById('world');
- function scala() {
-    let scale = 0.07;
-    let speed = 0.006; 
-    function animate(){
-        scale += speed;
-        if (scale >= 1) {
-            scale = 1;
-            world.style.transform = `scale(1)`;
-        } else {
-            world.style.transform = `scale(${scale})`;
-            requestAnimationFrame(animate);
-        }
-    }
-    requestAnimationFrame(animate);
-}
-controllo_skip();
-     setTimeout(scala, 1000);
-        let cond = false;
-        let cond_piattaforma_1 = false;
-
-        function control_position(posX, posY) {
-            if (posX >= 33 && posX <= 48 && posY >= -45 && posY <= -20 && cond_piattaforma_1 == false){
-                condizione_posizione = true;
-                let settime = setTimeout(() => {
-                    if(condizione_posizione) {
-                    cond_piattaforma_1 = true;
-                    container_dialogo.style.opacity = '1';
-                    cond_dialogo1 = true;
-                }
-                }, 2000);
-            } else {
-                clearTimeout(settime);
-                condizione_posizione = false;
-                cond_piattaforma_1 = false;
-            }  
-        }
-        let pos_student = 0;
-        function farming_1() {
-            let ricavo = 10;
-            let entra = true;
-            let entra2 = true;
-            let pos1 = 0;
-            let pos2 = 1;
-           
-            interval1(entra, pos1, ricavo);
-            
-            setTimeout(() => {
-                interval2(entra2, pos2, ricavo);  
-            }, 2000);
-        }
-        function animazione_studente_entrata_1(pos) {
+function animazione_studente_entrata_1(pos) {
             let studente = students.children[pos];
             let posY = parseInt(studente.style.marginTop);
             studente.style.transition = 'margin-top 0.5s ease-in-out, margin-left 0.7s ease-in-out';
@@ -1047,9 +1041,7 @@ controllo_skip();
             toggle_icon.style.opacity = '1';
         });
         }
+        
+        */
+</script>
 
-        window.onload = iniziaGioco;
-
-    </script>
-</body>
-</html>
