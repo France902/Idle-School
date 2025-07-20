@@ -95,6 +95,28 @@
             width: 10vw;
             height: 10vw;
             border-radius: 1vw;
+            opacity: 0;
+        }
+
+        #bob_container{
+            position: fixed;
+            left: 70vw;
+            top: 39vh;
+        }
+        #bob_personaggio{
+            transform: translate(-1);
+            width: 28vw;
+            height: 20vh;
+        }
+
+        #terziario_container{
+            position: fixed;
+            left: 80vw;
+            top: 39vh;
+        }
+        #terziario_personaggio{
+            width: 28vw;
+            height: 20vh;
         }
 
         #preside {
@@ -242,13 +264,24 @@
             position: fixed;
             z-index: 1;
         }
+
         #canvas {
             position: fixed;
             width: 1001vw;  
             height: 1200vh;
             overflow: hidden; 
         }
-       
+        #vignetta_bob, #vignetta_terziario {
+            position: fixed;
+            width: 10vw;
+            height: 15vh;
+            top: 32vh;
+            left: 82.8vw;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.1s ease-in-out, left 0.25s ease-in-out, top 0.25s ease-in-out;
+        }
+
         .banco {
             width: 5.21vw;         
             height: 4.17vh;       
@@ -390,7 +423,7 @@
   <div id="world">
     <div id="Edificio_scolastico" style="z-index: -1;">
     <div id="canvas" class="scuola-img" style="top: -690vh; left: -320vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed;">
+        <img   src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed;">
         <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 250vw;">
         <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 500vw;">
         <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 750vw;">
@@ -421,6 +454,7 @@
     <div id="preside_container">
         <img src="Preside.png" id="preside">
     </div>
+    
 
     <div id="container-dialogo">
         <div id="box-nome">
@@ -482,11 +516,13 @@ window.onload = iniziaGioco;
 function iniziaGioco() {
   const elementi = inizializzaElementi();
   const stato = inizializzaStato();
+  creazionePersonaggiSecondari(elementi, stato);
   setupDialoghi(elementi,  stato);
   setupMovimentoPreside(elementi, stato);
   controlloSkip(elementi, stato);
   setTimeout(() => scalaMondo(elementi.world), 1000);
   setupMenuToggle(elementi);
+
 }
 
 function inizializzaElementi() {
@@ -512,7 +548,9 @@ function inizializzaElementi() {
     soldiText: document.getElementById('soldi'),
     blocco_pulizia_1: document.getElementById('blocco_pulizia_1'),
     blocco_pulizia_2: document.getElementById('blocco_pulizia_2'),
-    menu: document.getElementById('missioni')
+    menu: document.getElementById('missioni'), 
+    imgsArray: Array.from(document.querySelectorAll('.scuola-img'))
+
   };
 }
 
@@ -531,8 +569,13 @@ function inizializzaStato() {
     cond_testo: true,
     cond_skip: true,
     cond_piattaforma_1: false,
+    cond_movimento: false,
     pos_student: 0,
-    cond: false
+    cond: false,
+    posBX: 70,
+    posBY: 39,
+    cond_saltoT: false,
+    cond_saltoB: true,
   };
 }
 
@@ -632,18 +675,20 @@ function setupMovimentoPreside(e, stato) {
   p.style.top = '0vh';
   p.style.left = '0vw';
   window.addEventListener('keydown', handleKeydown);
+  
 
   function handleKeydown(event) {
+        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'))
     if (event.key === 'd') {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(1)";
                 p.src = "Preside.png";
                 p.style.top = (parseFloat(p.style.top)) + 'vh';
                 stato.posX += 3.5;
-                e.scuolaImgs.forEach(img => {
+                e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
                 });
-                
+
                 setTimeout(() => {
                     p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
                 }, 60);
@@ -670,7 +715,7 @@ function setupMovimentoPreside(e, stato) {
                 p.src = " Preside.png";
                 stato.posX -= 3.5;
                 p.style.top = (parseFloat(p.style.top)) + 'vh';
-                e.scuolaImgs.forEach(img => {
+                e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
                 });
                 setTimeout(() => {
@@ -698,9 +743,9 @@ function setupMovimentoPreside(e, stato) {
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
                 stato.posY += 5;
                     p.style.top = (parseFloat(p.style.top)) + 'vh';
-                    e.scuolaImgs.forEach(img => {
-                        img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
-                    });
+                    e.imgsArray.forEach(img => {
+                    img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
+                });
                     setTimeout(() => {
                     p.style.top = (parseFloat(p.style.top) + 3) + 'vh';
                     }, 40);
@@ -723,9 +768,9 @@ function setupMovimentoPreside(e, stato) {
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
                 p.style.top = (parseFloat(p.style.top)) + 'vh';
                 stato.posY -= 5;
-                e.scuolaImgs.forEach(img => {
+                e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
-                });                
+                });            
                 setTimeout(() => {
                 p.style.top = (parseFloat(p.style.top) - 3) + 'vh';
                 }, 40);
@@ -760,7 +805,6 @@ function setupMenuToggle(e) {
 function control_position(posX, posY, stato, e) {
     let settime;
             if (posX >= 33 && posX <= 51 && posY >= -35 && posY <= -20 && stato.cond_piattaforma_1 == false){
-                alert("si")
                 stato.condizione_posizione = true;
                 settime = setTimeout(() => {
                     if(stato.condizione_posizione) {
@@ -775,6 +819,173 @@ function control_position(posX, posY, stato, e) {
                 stato.cond_piattaforma_1 = false;
             }  
         }
+
+function creazionePersonaggiSecondari(e, stato) {
+    //Bob
+    const bobContainer = document.createElement('div');
+    bobContainer.id = 'bob_container';
+    const bobImg = document.createElement('img');
+    bobImg.id = 'bob_personaggio';
+    bobImg.src = 'Personaggio_anonimo.png'; 
+    bobContainer.className = 'scuola-img';
+    bobContainer.appendChild(bobImg);
+    e.world.appendChild(bobContainer);
+    stato.posBX = bobContainer.style.left = '70vw';
+    stato.posBY = bobContainer.style.top = '39vh';
+    e.bob_container = bobContainer;
+    e.bob_personaggio = bobImg;
+
+    animazioneBobInizio(e, stato);
+
+    //Terziario
+    
+    const pTerziario = document.createElement('div');
+    pTerziario.id = 'terziario_container'
+    const terziarioImg = document.createElement('img');
+    terziarioImg.id = 'terziario_personaggio';
+    terziarioImg.src = 'Personaggio_anonimo.png'; 
+    pTerziario.className = 'scuola-img';
+    pTerziario.appendChild(terziarioImg);
+    e.world.appendChild(pTerziario);
+    pTerziario.style.left = '80vw';
+    pTerziario.style.top = '39vh';
+    e.terziario_container = pTerziario;
+    e.terziario_personaggio = terziarioImg;
+
+    animazioneTerziarioInizio(e, stato);
+}
+
+function animazioneBobInizio(e, stato) {
+    e.bob_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    let posX = stato.posBX;
+    let posY = stato.posBY;
+    const vignetta = document.createElement('img');
+    vignetta.id = 'vignetta_bob';
+    vignetta.src = 'vignetta_dialogo.png';
+    vignetta.style.left = '82.8vw';
+    vignetta.style.top = '32vh';
+    vignetta.className = 'scuola-img';
+    e.world.appendChild(vignetta);
+    e.vignetta_bob = vignetta;
+
+    let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+    setTimeout(() => {
+                if (!stato.cond_movimento) {
+                    vignetta.style.opacity = '1';
+                }
+                setTimeout(() => {
+                        vignetta.style.opacity = '0';
+                }, 3000);
+    }, tempo_vignetta);
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoT) {
+                    stato.cond_saltoB = false;
+                    stato.cond_saltoT = true;
+                    posY = parseFloat(e.bob_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.bob_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.bob_container.style.top) + 3;
+                        e.bob_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+    
+    setInterval(() => {
+            let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoT) {
+                    stato.cond_saltoB = false;
+                    stato.cond_saltoT = true;
+                    posY = parseFloat(e.bob_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.bob_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.bob_container.style.top) + 3;
+                        e.bob_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+            let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                        if (!stato.cond_movimento) {
+                            vignetta.style.opacity = '1';
+                        }
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+    }, 5000);
+}
+
+function animazioneTerziarioInizio(e, stato) {
+    e.terziario_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    let posX = 80;
+    let posY = 39;
+    const vignetta = document.createElement('img');
+    vignetta.id = 'vignetta_terziario';
+    vignetta.style.left = '93vw';
+    vignetta.style.top = '32vh';
+    vignetta.src = 'vignetta_dialogo.png';
+    vignetta.className = 'scuola-img';
+    e.world.appendChild(vignetta);
+    e.vignetta_terziario = vignetta;
+    let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let tempo_vignetta = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                        if (!stato.cond_movimento) {
+                            vignetta.style.opacity = '1';
+                            posX = parseFloat(e.terziario_container.style.left);
+                            vignetta.style.left = `${posX + 13}vw`;
+                        }
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoB) {
+                    stato.cond_saltoT = false;
+                    stato.cond_saltoB = true;
+                    posY = parseFloat(e.terziario_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.terziario_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.terziario_container.style.top) + 3;
+                        e.terziario_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+    
+    setInterval(() => {
+            let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoB) {
+                    stato.cond_saltoT = false;
+                    stato.cond_saltoB = true;
+                    posY = parseFloat(e.terziario_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.terziario_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.terziario_container.style.top) + 3;
+                        e.terziario_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+            let tempo_vignetta = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                        if (!stato.cond_movimento) {
+                            vignetta.style.opacity = '1';
+                            posX = parseFloat(e.terziario_container.style.left);
+                            vignetta.style.left = `${posX+13}vw`;
+                        }
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+    }, 5000);
+}
+
 
         /*
         let pos_student = 0;
