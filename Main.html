@@ -475,7 +475,7 @@
     
     <div class="hud-container">
         <div id="soldi" class="hud-box">0€</div>
-        <!--
+        
         <div id="classi" class="hud-box">0 🏫</div>
         <div id="missioni" class="hud_missioni closed" >
         <img class="toggle-icon" src="icona_menu_missioni.png" alt="Icona Toggle" onclick="menu_missioni()">
@@ -492,7 +492,7 @@
             <h1>missione 3</h1>
         </div>
     </div>
-
+<!--
     <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
         <p id="testo_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
     </div>
@@ -507,8 +507,8 @@
     <div id="blocco_pulizia_1" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 31vh; display: none;"></div>
 
     <div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 47vh; display: none;"></div>
-
-        -->
+-->
+        
     </div>
 <script>
 window.onload = iniziaGioco;
@@ -674,6 +674,9 @@ function setupMovimentoPreside(e, stato) {
   const p = e.preside;
   p.style.top = '0vh';
   p.style.left = '0vw';
+  // if(stato.cond_movimento) window.addEventListener('keydown', handleKeydown);
+  // else window.removeEventListener('keydown', handleKeydown);
+
   window.addEventListener('keydown', handleKeydown);
   
 
