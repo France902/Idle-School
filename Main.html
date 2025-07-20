@@ -242,9 +242,13 @@
             position: fixed;
             z-index: 1;
         }
-
+        #canvas {
+            position: fixed;
+            width: 1001vw;  
+            height: 1200vh;
+            overflow: hidden; 
+        }
        
-
         .banco {
             width: 5.21vw;         
             height: 4.17vh;       
@@ -357,11 +361,9 @@
             cursor: auto;
         }
         .scuola-img {
-            width: 100vw;
-            height: 130vh;
             position: fixed;
             z-index: 0;
-            transform: scale(2);
+            transform: scale(1);
             transition: left 0.35s ease-in-out, top 0.35s ease-in-out;
             will-change: transform, left, top;
         }
@@ -387,30 +389,34 @@
     </div>
   <div id="world">
     <div id="Edificio_scolastico" style="z-index: -1;">
-      <img class="scuola-img" style="left: 0vw; top: -260vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 0vw; top: 0vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 200vw; top: -260vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 200vw; top: 0vh;" src="map-small.jpg" />
-        
-        <img class="scuola-img" style="left: -200vw; top: 0vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: -200vw; top: -260vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: -200vw; top: -520vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 0vw; top: -520vh;" src="map-small.jpg" />
-        
-        <img class="scuola-img" style="left: 200vw; top: -520vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 400vw; top: -520vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 400vw; top: -260vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 400vw; top: 0vh;" src="map-small.jpg" />
-        
-        <img class="scuola-img" style="left: 0vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 200vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: -200vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
-        <img class="scuola-img" style="left: 400vw; top: 200vh; height: 90vh;" src="map-small.jpg" />
+    <div id="canvas" class="scuola-img" style="top: -690vh; left: -320vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 250vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 500vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 750vw;">
 
-        <div id="piattaforme_container">
-            <img class="scuola-img" src="a_rock.jpg" style="position: fixed; left: 40vw; top: -30vh; width: 8.5vw; height: 13vh; z-index: 0;">
-        </div>
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh; left: 250vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh; left: 500vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh; left: 750vw;">
+
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh; left: 250vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh; left: 500vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh; left: 750vw;">
+
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh; left: 250vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh; left: 500vw;">
+        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh; left: 750vw;">
+
     </div>
+        
+    </div>
+
+    <div id="piattaforme_container">
+            <img class="scuola-img" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
+        </div>
     
     <div id="preside_container">
         <img src="Preside.png" id="preside">
@@ -753,7 +759,8 @@ function setupMenuToggle(e) {
 
 function control_position(posX, posY, stato, e) {
     let settime;
-            if (posX >= 33 && posX <= 48 && posY >= -45 && posY <= -20 && stato.cond_piattaforma_1 == false){
+            if (posX >= 33 && posX <= 51 && posY >= -35 && posY <= -20 && stato.cond_piattaforma_1 == false){
+                alert("si")
                 stato.condizione_posizione = true;
                 settime = setTimeout(() => {
                     if(stato.condizione_posizione) {
