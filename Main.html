@@ -41,16 +41,16 @@
         }
 
         #world {
-        transform: scale(0.07);
-        transform-origin: center center;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-start;
-        margin-left: -5vw;
-        margin-top: 5vh;
-        will-change: transform;
+            transform: scale(0.07);
+            transform-origin: center center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            margin-left: -5vw;
+            margin-top: 5vh;
+            will-change: transform;
         }
 
         #piattaforma_1 {
@@ -76,7 +76,7 @@
         #preside_container {
             position: fixed;
             top: 50%;
-            left: 50%;
+            left: 30%;
             transform: translate(-110%, -120%);
             display: flex;
             align-items: center;
@@ -319,6 +319,7 @@
             border-radius: 0.6vw;
             min-width: 8vw;
             text-align: right;
+            position: fixed;
         }
 
         .hud_missioni {
@@ -474,9 +475,10 @@
 
     
     <div class="hud-container">
+        <img src="icona_zoom.png" onclick=" scala(true)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
+        <img src="icona_dezoom.png" onclick="scala(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
         <div id="soldi" class="hud-box">0€</div>
-        
-        <div id="classi" class="hud-box">0 🏫</div>
+        <div id="classi" class="hud-box" style="top: 8vh;">0 🏫</div>
         <div id="missioni" class="hud_missioni closed" >
         <img class="toggle-icon" src="icona_menu_missioni.png" alt="Icona Toggle" onclick="menu_missioni()">
         <div class="missione_1" onclick="toggleMenu()">
@@ -491,7 +493,9 @@
             <img src="icona_punto_interrogativo.png" alt="Icona Missione 3">
             <h1>missione 3</h1>
         </div>
+        
     </div>
+    
 <!--
     <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
         <p id="testo_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
@@ -510,19 +514,19 @@
 -->
         
     </div>
+    
 <script>
 window.onload = iniziaGioco;
 
 function iniziaGioco() {
   const elementi = inizializzaElementi();
   const stato = inizializzaStato();
-  creazionePersonaggiSecondari(elementi, stato);
   setupDialoghi(elementi,  stato);
   setupMovimentoPreside(elementi, stato);
   controlloSkip(elementi, stato);
-  setTimeout(() => scalaMondo(elementi.world), 1000);
+  setTimeout(() => scalaMondo(elementi), 1000);
+  scriptGioco(elementi, stato)
   setupMenuToggle(elementi);
-
 }
 
 function inizializzaElementi() {
@@ -543,6 +547,7 @@ function inizializzaElementi() {
     nomePersonaggio: document.getElementById('nome-personaggio'),
     boxNome: document.getElementById('box-nome'),
     preside: document.getElementById('preside'),
+    preside_container: document.getElementById('preside_container'),
     scuolaImgs: document.querySelectorAll('.scuola-img'),
     world: document.getElementById('world'),
     soldiText: document.getElementById('soldi'),
@@ -579,16 +584,32 @@ function inizializzaStato() {
   };
 }
 
-function scalaMondo(world) {
+let zoom = 1;
+function scala(condizione, elementi = inizializzaElementi(), stato = inizializzaStato()) {
+    elementi.world.style.transition = "transform 0.3s ease-in-out";
+    if (condizione) {
+        if (zoom <= 1.5) {
+            zoom += 0.07;
+            elementi.world.style.transform = `scale(${zoom})`;
+        }
+    }
+    else{
+        if (zoom >= 0.5) {
+            zoom -= 0.07;
+            elementi.world.style.transform = `scale(${zoom})`;
+        }
+    }
+}
+function scalaMondo(e) {
   let scale = 0.07;
   let speed = 0.006;
   function animate() {
     scale += speed;
     if (scale >= 1) {
       scale = 1;
-      world.style.transform = `scale(1)`;
+      e.world.style.transform = `scale(1)`;
     } else {
-      world.style.transform = `scale(${scale})`;
+      e.world.style.transform = `scale(${scale})`;
       requestAnimationFrame(animate);
     }
   }
@@ -822,8 +843,67 @@ function control_position(posX, posY, stato, e) {
                 stato.cond_piattaforma_1 = false;
             }  
         }
+    function scriptGioco(e, stato) {
+        centralizzazionePreside(e, stato);
+        creazioneBob(e, stato);
+        diaologoB_P1(e, stato);
+    }
+function centralizzazionePreside(e, stato) {
+    const p = e.preside_container;
+    p.style.top = "50%";
+    p.style.left = "30%";
+    p.style.transition = "left 0.1s ease-out, top 0.1s ease-out";
+        setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 2) + '%';
+                p.style.left = (parseFloat(p.style.left) + 1) + '%';
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 2) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2) + '%';
+            }, 75);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 0.5) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
+            }, 160);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + 0.5) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
+            }, 260);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
+            }, 360);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
+                p.style.left = (parseFloat(p.style.left) + 1 ) + '%';
+            }, 460);
+    }, 2000);
+    setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 2) + '%';
+                p.style.left = (parseFloat(p.style.left) + 1) + '%';
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 2) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2) + '%';
+            }, 75);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) - 0.5) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
+            }, 175);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + 0.5) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
+            }, 275);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
+                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
+            }, 375);
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
+                p.style.left = (parseFloat(p.style.left) + 1 ) + '%';
+            }, 475);
+    }, 3000);
+}
 
-function creazionePersonaggiSecondari(e, stato) {
+function creazioneBob(e, stato) {
     //Bob
     const bobContainer = document.createElement('div');
     bobContainer.id = 'bob_container';
