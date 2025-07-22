@@ -737,7 +737,7 @@ function setupMovimentoPreside(e, stato) {
             stato.cond_ripetizione = true; 
             setTimeout(() => {
                 stato.cond_ripetizione = false;
-            }, 20);
+            }, 50);
         }
        keysPressed.add(event.key);
        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
@@ -757,6 +757,7 @@ function setupMovimentoPreside(e, stato) {
         }
             
             if ((event.key === 'A' || event.key === 'a') && !stato.cond_ripetizione) {
+                
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(-1)";
                 p.src = " Preside.png";
@@ -764,8 +765,7 @@ function setupMovimentoPreside(e, stato) {
                 e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
                 });
-                if(!event.shiftKey) animazioneSaltoLat(false);
-                else animazioneSaltoLat(true);
+                animazioneSaltoLat();
             }
             if ((event.key === 'D' || event.key === 'd') && !stato.cond_ripetizione) {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
@@ -775,8 +775,7 @@ function setupMovimentoPreside(e, stato) {
                 e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
                 });
-                if(!event.shiftKey) animazioneSaltoLat(false);
-                else animazioneSaltoLat(true);
+                animazioneSaltoLat();
             }
             if ((event.key === 'S' || event.key === 's')  && !stato.cond_ripetizione) {
                 p.src = "Preside_davanti.png";
@@ -785,8 +784,7 @@ function setupMovimentoPreside(e, stato) {
                     e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
                 });
-                if(!event.shiftKey) animazioneSaltoVert1(false);
-                else animazioneSaltoVert1(true);
+                animazioneSaltoVert1();
             }
             if ((event.key === 'W' || event.key === 'w')  && !stato.cond_ripetizione) {
                 p.src = "Preside_dietro.png";
@@ -795,8 +793,7 @@ function setupMovimentoPreside(e, stato) {
                 e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
                 });            
-                if(!event.shiftKey) animazioneSaltoVert2(false);
-                else animazioneSaltoVert2(true);
+                animazioneSaltoVert2();
             }
             
             control_position(stato.posX, stato.posY, stato, e);
@@ -804,7 +801,7 @@ function setupMovimentoPreside(e, stato) {
         function handleKeyup(event) {
             keysPressed.delete(event.key);
         }
-        function animazioneSaltoLat(cond) {
+        function animazioneSaltoLat() {
             const step = [60, 120, 180, 240, 300];
             const delta = [-1, -1, 0, 1, 1];
             step.forEach((ms, i) => {
@@ -812,12 +809,13 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
                 }, ms);
             });
-            if(cond) window.removeEventListener('keydown', handleKeydown);
+             window.removeEventListener('keydown', handleKeydown);
+            
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
-        function animazioneSaltoVert1(cond) {
+        function animazioneSaltoVert1() {
             const step = [40, 100, 225, 300];
             const delta = [+2.5, +1.5, -1.5, -2.5];
             step.forEach((ms, i) => {
@@ -825,12 +823,12 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vw';
                 }, ms);
             });
-            if(cond) window.removeEventListener('keydown', handleKeydown);
+            window.removeEventListener('keydown', handleKeydown);
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
-        function animazioneSaltoVert2(cond){
+        function animazioneSaltoVert2(){
             const step = [40, 100, 225, 300];
             const delta = [-2.5, -1.5, +1.5, +2.5];
             step.forEach((ms, i) => {
@@ -838,12 +836,12 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vw';
                 }, ms);
             });
-            if(cond) window.removeEventListener('keydown', handleKeydown);
+            window.removeEventListener('keydown', handleKeydown);
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
-        function animazioneSaltoObliquoL(cond) {
+        function animazioneSaltoObliquoL() {
             const step = [40, 100, 225, 300];
             const delta = [-2.5, -1.5, +1.5, +2.5];
             step.forEach((ms, i) => {
@@ -851,7 +849,7 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
                 }, ms);
             });
-            if(cond) window.removeEventListener('keydown', handleKeydown);
+            window.removeEventListener('keydown', handleKeydown);
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
