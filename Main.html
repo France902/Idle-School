@@ -570,7 +570,7 @@ function inizializzaStato() {
     condizione_posizione: false,
     cond_stanza1: false,
     cond_stanza2: false,
-    cond_dialogo1: false,
+    cond_dialogo: false,
     cond_testo: true,
     cond_skip: true,
     cond_piattaforma_1: false,
@@ -618,10 +618,12 @@ function scalaMondo(e) {
 
 function setupDialoghi(e, stato) {
   const righe = [
-    ["secondo dialogo", "Urso", 2],
-    ["terzo dialogo", "nome preside", 1],
-    ["quarto dialogo", "Urso", 2],
-    ["quinto dialogo", "nome preside", 1]
+    ["Ciao! Sono Bob, della Building & Co!", "Bob", 2, false],
+    ["Questo posto è proprio enorme!", "Bob", 2, false],
+    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1, false],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori baccia della città!", "Bob", 2, false],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo!", "Bob", 2, false],
+    ["", "", 2, true],
   ];
   let index = 0;
 
@@ -659,7 +661,11 @@ function setupDialoghi(e, stato) {
   }
 
   function mostraProssimaRiga() {
-    
+    if(righe[index][3] == true){
+        stato.cond_testo = false;
+        stato.cond_skip = false;
+        e.container_dialogo.style.opacity = 0;
+    }
     if (index < righe.length) {
       mostraTesto(righe[index][0]);
       cambiaNome(righe[index][1]);
@@ -678,15 +684,15 @@ function setupDialoghi(e, stato) {
 function controlloSkip(elementi, stato) {
   window.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
-      if (stato.cond_skip && stato.cond_dialogo1) stato.cond_testo = false;
-      else if (stato.cond_dialogo1) window.mostraProssimaRiga();
+      if (stato.cond_skip && stato.cond_dialogo) stato.cond_testo = false;
+      else if (stato.cond_dialogo) window.mostraProssimaRiga();
     }
   });
 
   window.addEventListener('mousedown', e => {
     if (e.button === 0) {
-      if (stato.cond_skip && stato.cond_dialogo1) stato.cond_testo = false;
-      else if (stato.cond_dialogo1) window.mostraProssimaRiga();
+      if (stato.cond_skip && stato.cond_dialogo) stato.cond_testo = false;
+      else if (stato.cond_dialogo) window.mostraProssimaRiga();
     }
   });
 }
@@ -834,7 +840,7 @@ function control_position(posX, posY, stato, e) {
                     if(stato.condizione_posizione) {
                     stato.cond_piattaforma_1 = true;
                     e.container_dialogo.style.opacity = '1';
-                    stato.cond_dialogo1 = true;
+                    stato.cond_dialogo = true;
                 }
                 }, 2000);
             } else {
@@ -852,56 +858,81 @@ function centralizzazionePreside(e, stato) {
     const p = e.preside_container;
     p.style.top = "50%";
     p.style.left = "30%";
-    p.style.transition = "left 0.1s ease-out, top 0.1s ease-out";
-        setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 2) + '%';
-                p.style.left = (parseFloat(p.style.left) + 1) + '%';
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 2) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2) + '%';
-            }, 80);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 0.5) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
-            }, 160);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + 0.5) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
-            }, 260);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
-            }, 360);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
-                p.style.left = (parseFloat(p.style.left) + 1 ) + '%';
-            }, 460);
-    }, 2000);
-    setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 2) + '%';
-                p.style.left = (parseFloat(p.style.left) + 1) + '%';
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 2) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2) + '%';
-            }, 80);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 0.5) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
-            }, 160);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + 0.5) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
-            }, 260);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
-                p.style.left = (parseFloat(p.style.left) + 2 ) + '%';
-            }, 360);
-            setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + 2 ) + '%';
-                p.style.left = (parseFloat(p.style.left) + 1 ) + '%';
-            }, 460);
-    }, 3000);
+    doppioSalto(p);
 }
+async function doppioSalto(p) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    await sleep(2000); 
+    await saltaDestraP(p);
+    await sleep(500); 
+    await saltaDestraP(p); 
+}
+
+async function saltaDestraP(personaggio) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.1s ease-out, left 0.1s ease-out";
+
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + '%';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + '%';
+    };
+
+
+    await step(-2, 1, 0);
+    await step(-2, 2, 100);
+    await step(-0.5, 2, 100);
+    await step(0.5, 2, 100);
+    await step(2, 2, 100);
+    await step(2, 1, 100);
+}
+
+async function saltaDestra(personaggio) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+    };
+
+
+    await step(-1.5, 1.5, 0);
+    await step(-1.5, 1.5, 60);
+    await step(-0.5, 1, 60);
+    await step(0.5, 1, 60);
+    await step(1.5, 1.5, 60);
+    await step(1.5, 1.5, 60);
+}
+async function saltaSinistra(personaggio, dimezzato) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+    };
+
+    if(dimezzato){
+        await step(-0.75, -0.75, 0);
+        await step(-0.75, -0.75, 60);
+        await step(-0.5, -1, 60);
+        await step(0.5, -1, 60);
+        await step(0.75, -0.75, 60);
+        await step(0.75, -0.75, 60);
+    }
+    else{
+        await step(-1.5, -1.5, 0);
+        await step(-1.5, -1.5, 60);
+        await step(-0.5, -1, 60);
+        await step(0.5, -1, 60);
+        await step(1.5, -1.5, 60);
+        await step(1.5, -1.5, 60);
+    }
+}
+
 
 function creazioneBob(e, stato) {
     //Bob
@@ -1068,6 +1099,67 @@ function animazioneTerziarioInizio(e, stato) {
             }, tempo_vignetta);
     }, 5000);
 }
+function diaologoB_P1(e, stato) {
+    setTimeout(() => {
+        stato.cond_movimento = true;
+        const t = e.terziario_container;
+        t.style.left = '80vw';
+        t.style.top = '39vh';
+        t.style.transform = "translate(-1)";
+        e.vignetta_bob.style.opacity = '0';
+        e.vignetta_terziario.style.opacity = '0';
+
+        async function uscita(t) {
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            await saltaDestra(t);
+            await sleep(500); 
+            await saltaDestra(t); 
+            await sleep(500);
+            await togliDisplay(t); 
+        }
+        function togliDisplay(t) {
+            t.style.display = 'none';
+            muoviBob();
+        }
+        function muoviBob() {
+            e.bob_container.style.transform = "translate(-1)";
+            e.vignetta_bob.style.opacity = '1';
+            e.vignetta_bob.src = 'vignetta_esclamazione.png';
+            async function saltaBob(b) {
+                const sleep = ms => new Promise(r => setTimeout(r, ms));
+                await sleep(700);
+                await togliVignetta();
+                await sleep(500);
+                await saltaSinistra(b);
+                await sleep(500); 
+                await saltaSinistra(b); 
+                await sleep(500);
+                await saltaSinistra(b, true);
+                await sleep(500);
+                await dialogo();
+            }
+            saltaBob(e.bob_container);
+        }
+        function togliVignetta() {
+            return new Promise(resolve => {
+                e.vignetta_bob.style.opacity = '0';
+                setTimeout(() => {
+                    resolve();
+                }, 200);
+            });
+        }
+        function dialogo(){
+            e.container_dialogo.style.opacity = '1';
+            stato.cond_skip = true;
+            stato.cond_dialogo = true;
+            mostraProssimaRiga();
+        }
+        uscita(t);
+
+    }, 5000);
+}
+
+
 
 
         /*
