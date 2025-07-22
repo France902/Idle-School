@@ -198,7 +198,7 @@
         #container-dialogo {
             position: fixed;
             top: 0;
-            left: 4.7vw;
+            left: 0vw;
             width: 100vw;
             height: 90vh;
             display: flex;
@@ -455,8 +455,7 @@
     <div id="preside_container">
         <img src="Preside.png" id="preside">
     </div>
-    
-
+    </div>
     <div id="container-dialogo">
         <div id="box-nome">
             <p id="nome-personaggio">nome personaggio</p>
@@ -468,9 +467,6 @@
 
         <img src="Personaggio_anonimo.png" alt="" id="personaggio_anonimo_dialoghi">
     </div>
-
-    </div>
-
     
 
     
@@ -580,6 +576,7 @@ function inizializzaStato() {
     posBY: 39,
     cond_saltoT: false,
     cond_saltoB: true,
+    cond_ripetizione: false
   };
 }
 
@@ -653,7 +650,7 @@ function setupDialoghi(e, stato) {
 
   function cambiaboxNome(pos) {
     const sinistra = pos === 1;
-    e.boxNome.style.left = sinistra ? "11vw" : "73vw";
+    e.boxNome.style.left = sinistra ? "11vw" : "65vw";
     e.immaginePreside.style.transform = sinistra ? "scale(0.9)" : "scale(0.8)";
     e.personaggioAnonimo.style.transform = sinistra ? "scale(0.8)" : "scale(0.9)";
     e.immaginePreside.style.opacity = sinistra ? "1" : "0.8";
@@ -717,23 +714,30 @@ function setupMovimentoPreside(e, stato) {
     const keysPressed = new Set();
 
   function handleKeydown(event) {
+        if (!event.shiftKey && event.repeat) {
+            stato.cond_ripetizione = true; 
+            setTimeout(() => {
+                stato.cond_ripetizione = false;
+            }, 20);
+        }
        keysPressed.add(event.key);
        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
-       if (keysPressed.has('a') && keysPressed.has('d')) {
-            alert("si")
-            return; 
+       if (keysPressed.has('a') && keysPressed.has('w') && !stato.cond_ripetizione) {
+            p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+            p.style.transform = "scaleX(-1)";
+            p.src = " Preside.png";
+            stato.posX -= 3.5;
+            stato.posY -= 3.5;
+            e.imgsArray.forEach(img => {
+                img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
+                img.style.top = (parseFloat(img.style.top) + 3.5) + 'vh';
+            });
+            if(!event.shiftKey) animazioneSaltoObliquoL(false);
+            else animazioneSaltoObliquoL(true);
+            return;
         }
-    if (event.key === 'd') {
-                p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
-                p.style.transform = "scaleX(1)";
-                p.src = "Preside.png";
-                stato.posX += 3.5;
-                e.imgsArray.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
-                });
-                animazioneSaltoLat();
-            }
-            if (event.key === 'a') {
+            
+            if ((event.key === 'A' || event.key === 'a') && !stato.cond_ripetizione) {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(-1)";
                 p.src = " Preside.png";
@@ -741,33 +745,47 @@ function setupMovimentoPreside(e, stato) {
                 e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
                 });
-                animazioneSaltoLat();
+                if(!event.shiftKey) animazioneSaltoLat(false);
+                else animazioneSaltoLat(true);
             }
-            if (event.key === 's') {
+            if ((event.key === 'D' || event.key === 'd') && !stato.cond_ripetizione) {
+                p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+                p.style.transform = "scaleX(1)";
+                p.src = "Preside.png";
+                stato.posX += 3.5;
+                e.imgsArray.forEach(img => {
+                    img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
+                });
+                if(!event.shiftKey) animazioneSaltoLat(false);
+                else animazioneSaltoLat(true);
+            }
+            if ((event.key === 'S' || event.key === 's')  && !stato.cond_ripetizione) {
                 p.src = "Preside_davanti.png";
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
                 stato.posY += 5;
                     e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
                 });
-                    animazioneSaltoVert1();
+                if(!event.shiftKey) animazioneSaltoVert1(false);
+                else animazioneSaltoVert1(true);
             }
-            if (event.key === 'w') {
+            if ((event.key === 'W' || event.key === 'w')  && !stato.cond_ripetizione) {
                 p.src = "Preside_dietro.png";
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
                 stato.posY -= 5;
                 e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
                 });            
-                animazioneSaltoVert2();
+                if(!event.shiftKey) animazioneSaltoVert2(false);
+                else animazioneSaltoVert2(true);
             }
             
             control_position(stato.posX, stato.posY, stato, e);
         }
         function handleKeyup(event) {
-                keysPressed.delete(event.key);
+            keysPressed.delete(event.key);
         }
-        function animazioneSaltoLat() {
+        function animazioneSaltoLat(cond) {
             const step = [60, 120, 180, 240, 300];
             const delta = [-1, -1, 0, 1, 1];
             step.forEach((ms, i) => {
@@ -775,12 +793,12 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
                 }, ms);
             });
-            window.removeEventListener('keydown', handleKeydown);
+            if(cond) window.removeEventListener('keydown', handleKeydown);
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
-        function animazioneSaltoVert1() {
+        function animazioneSaltoVert1(cond) {
             const step = [40, 100, 225, 300];
             const delta = [+2.5, +1.5, -1.5, -2.5];
             step.forEach((ms, i) => {
@@ -788,12 +806,12 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vw';
                 }, ms);
             });
-            window.removeEventListener('keydown', handleKeydown);
+            if(cond) window.removeEventListener('keydown', handleKeydown);
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
-        function animazioneSaltoVert2(){
+        function animazioneSaltoVert2(cond){
             const step = [40, 100, 225, 300];
             const delta = [-2.5, -1.5, +1.5, +2.5];
             step.forEach((ms, i) => {
@@ -801,7 +819,20 @@ function setupMovimentoPreside(e, stato) {
                     p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vw';
                 }, ms);
             });
-            window.removeEventListener('keydown', handleKeydown);
+            if(cond) window.removeEventListener('keydown', handleKeydown);
+            setTimeout(() => {
+                window.addEventListener('keydown', handleKeydown);
+            }, 290);
+        }
+        function animazioneSaltoObliquoL(cond) {
+            const step = [40, 100, 225, 300];
+            const delta = [-2.5, -1.5, +1.5, +2.5];
+            step.forEach((ms, i) => {
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                }, ms);
+            });
+            if(cond) window.removeEventListener('keydown', handleKeydown);
             setTimeout(() => {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
