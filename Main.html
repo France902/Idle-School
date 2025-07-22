@@ -522,7 +522,6 @@ function iniziaGioco() {
   const elementi = inizializzaElementi();
   const stato = inizializzaStato();
   setupDialoghi(elementi,  stato);
-  setupMovimentoPreside(elementi, stato);
   controlloSkip(elementi, stato);
   setTimeout(() => scalaMondo(elementi), 1000);
   scriptGioco(elementi, stato)
@@ -635,6 +634,7 @@ function setupDialoghi(e, stato) {
       if (!stato.cond_testo) {
         e.dialogoTesto.textContent = testo;
         stato.cond_testo = true;
+        stato.cond_skip = false;
         return;
       }
       if (i < testo.length) {
@@ -665,6 +665,8 @@ function setupDialoghi(e, stato) {
         stato.cond_testo = false;
         stato.cond_skip = false;
         e.container_dialogo.style.opacity = 0;
+        stato.cond_movimento = true;
+        setupMovimentoPreside(e, stato);
     }
     if (index < righe.length) {
       mostraTesto(righe[index][0]);
@@ -701,124 +703,108 @@ function setupMovimentoPreside(e, stato) {
   const p = e.preside;
   p.style.top = '0vh';
   p.style.left = '0vw';
-  // if(stato.cond_movimento) window.addEventListener('keydown', handleKeydown);
-  // else window.removeEventListener('keydown', handleKeydown);
 
-  window.addEventListener('keydown', handleKeydown);
+   if(stato.cond_movimento){
+    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('keyup', handleKeyup);
+   }
+   else{
+    window.removeEventListener('keyup', handleKeyup);
+    window.removeEventListener('keydown', handleKeydown);
+   } 
+
   
+    const keysPressed = new Set();
 
   function handleKeydown(event) {
-        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'))
+       keysPressed.add(event.key);
+       e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
+       if (keysPressed.has('a') && keysPressed.has('d')) {
+            alert("si")
+            return; 
+        }
     if (event.key === 'd') {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(1)";
                 p.src = "Preside.png";
-                p.style.top = (parseFloat(p.style.top)) + 'vh';
                 stato.posX += 3.5;
                 e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
                 });
-
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
-                }, 60);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
-                }, 120);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top)) + 'vh';
-                }, 180);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
-                }, 240);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
-                }, 300);
-                window.removeEventListener('keydown', handleKeydown);
-                setTimeout(() => {
-                    window.addEventListener('keydown', handleKeydown);
-                }, 290);  
+                animazioneSaltoLat();
             }
             if (event.key === 'a') {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(-1)";
                 p.src = " Preside.png";
                 stato.posX -= 3.5;
-                p.style.top = (parseFloat(p.style.top)) + 'vh';
                 e.imgsArray.forEach(img => {
                     img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
                 });
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
-                }, 60);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 1) + 'vh';
-                }, 120);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top)) + 'vh';
-                }, 180);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
-                }, 240);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 1) + 'vh';
-                }, 300);
-                window.removeEventListener('keydown', handleKeydown);
-                setTimeout(() => {
-                    window.addEventListener('keydown', handleKeydown);
-                }, 290);  
+                animazioneSaltoLat();
             }
             if (event.key === 's') {
                 p.src = "Preside_davanti.png";
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
                 stato.posY += 5;
-                    p.style.top = (parseFloat(p.style.top)) + 'vh';
                     e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
                 });
-                    setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 3) + 'vh';
-                    }, 40);
-                    setTimeout(() => {
-                        p.style.top = (parseFloat(p.style.top) + 2) + 'vh';
-                    }, 100);
-                    setTimeout(() => {
-                        p.style.top = (parseFloat(p.style.top) - 2) + 'vh';
-                    }, 225);
-                    setTimeout(() => {
-                        p.style.top = (parseFloat(p.style.top) -  3) + 'vh';
-                    }, 300);
-                    window.removeEventListener('keydown', handleKeydown);
-                    setTimeout(() => {
-                            window.addEventListener('keydown', handleKeydown);
-                    }, 280);
+                    animazioneSaltoVert1();
             }
             if (event.key === 'w') {
                 p.src = "Preside_dietro.png";
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
-                p.style.top = (parseFloat(p.style.top)) + 'vh';
                 stato.posY -= 5;
                 e.imgsArray.forEach(img => {
                     img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
                 });            
-                setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) - 3) + 'vh';
-                }, 40);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) - 2) + 'vh';
-                }, 100);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) + 2) + 'vh';
-                }, 225);
-                setTimeout(() => {
-                    p.style.top = (parseFloat(p.style.top) +  3) + 'vh';
-                }, 300);
-                window.removeEventListener('keydown', handleKeydown);
-                setTimeout(() => {
-                    window.addEventListener('keydown', handleKeydown);
-                }, 280);
+                animazioneSaltoVert2();
             }
+            
             control_position(stato.posX, stato.posY, stato, e);
+        }
+        function handleKeyup(event) {
+                keysPressed.delete(event.key);
+        }
+        function animazioneSaltoLat() {
+            const step = [60, 120, 180, 240, 300];
+            const delta = [-1, -1, 0, 1, 1];
+            step.forEach((ms, i) => {
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                }, ms);
+            });
+            window.removeEventListener('keydown', handleKeydown);
+            setTimeout(() => {
+                window.addEventListener('keydown', handleKeydown);
+            }, 290);
+        }
+        function animazioneSaltoVert1() {
+            const step = [40, 100, 225, 300];
+            const delta = [+2.5, +1.5, -1.5, -2.5];
+            step.forEach((ms, i) => {
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vw';
+                }, ms);
+            });
+            window.removeEventListener('keydown', handleKeydown);
+            setTimeout(() => {
+                window.addEventListener('keydown', handleKeydown);
+            }, 290);
+        }
+        function animazioneSaltoVert2(){
+            const step = [40, 100, 225, 300];
+            const delta = [-2.5, -1.5, +1.5, +2.5];
+            step.forEach((ms, i) => {
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vw';
+                }, ms);
+            });
+            window.removeEventListener('keydown', handleKeydown);
+            setTimeout(() => {
+                window.addEventListener('keydown', handleKeydown);
+            }, 290);
         }
   }
 
@@ -1112,15 +1098,13 @@ function diaologoB_P1(e, stato) {
         async function uscita(t) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
             await saltaDestra(t);
-            await sleep(500); 
+            await sleep(200); 
             await saltaDestra(t); 
             await sleep(500);
-            await togliDisplay(t); 
+            await muoviBob();
+            await passivaTerziario1(t); 
         }
-        function togliDisplay(t) {
-            t.style.display = 'none';
-            muoviBob();
-        }
+        
         function muoviBob() {
             e.bob_container.style.transform = "translate(-1)";
             e.vignetta_bob.style.opacity = '1';
@@ -1129,11 +1113,11 @@ function diaologoB_P1(e, stato) {
                 const sleep = ms => new Promise(r => setTimeout(r, ms));
                 await sleep(700);
                 await togliVignetta();
-                await sleep(500);
+                await sleep(300);
                 await saltaSinistra(b);
-                await sleep(500); 
+                await sleep(400); 
                 await saltaSinistra(b); 
-                await sleep(500);
+                await sleep(300);
                 await saltaSinistra(b, true);
                 await sleep(500);
                 await dialogo();
@@ -1149,6 +1133,8 @@ function diaologoB_P1(e, stato) {
             });
         }
         function dialogo(){
+            e.bob_container.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
+            e.terziario_container.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
             e.container_dialogo.style.opacity = '1';
             stato.cond_skip = true;
             stato.cond_dialogo = true;
