@@ -526,14 +526,23 @@ function iniziaGioco() {
 
 function inizializzaElementi() {
   return {
+    // Core del gioco
     canvas: document.getElementById('progressCircle'),
+    world: document.getElementById('world'),
+    soldiText: document.getElementById('soldi'),
+    menu: document.getElementById('missioni'),
+    
+    // Giocatore e interazioni
+    studente: document.querySelector('.studente'),
+    toggle_icon: document.querySelector('.toggle-icon'),
     piattaforma_1: document.getElementById('piattaforma_1'),
     piattaforma_2: document.getElementById('piattaforma_2'),
-    studente: document.querySelector('.studente'),
-    unlockedText: document.getElementById('unlocked'),
     banco1: document.getElementById('banco1'),
     banco2: document.getElementById('banco2'),
-    toggle_icon: document.querySelector('.toggle-icon'),
+    blocco_pulizia_1: document.getElementById('blocco_pulizia_1'),
+    blocco_pulizia_2: document.getElementById('blocco_pulizia_2'),
+    
+    // Dialoghi e narrativa
     dialogo: document.getElementById('dialogo'),
     dialogoTesto: document.getElementById('dialogo-testo'),
     container_dialogo: document.getElementById('container-dialogo'),
@@ -543,42 +552,52 @@ function inizializzaElementi() {
     boxNome: document.getElementById('box-nome'),
     preside: document.getElementById('preside'),
     preside_container: document.getElementById('preside_container'),
+    
+    // Decorazioni
     scuolaImgs: document.querySelectorAll('.scuola-img'),
-    world: document.getElementById('world'),
-    soldiText: document.getElementById('soldi'),
-    blocco_pulizia_1: document.getElementById('blocco_pulizia_1'),
-    blocco_pulizia_2: document.getElementById('blocco_pulizia_2'),
-    menu: document.getElementById('missioni'), 
-    imgsArray: Array.from(document.querySelectorAll('.scuola-img'))
+    imgsArray: Array.from(document.querySelectorAll('.scuola-img')),
 
+    // Notifiche / sbloccabili
+    unlockedText: document.getElementById('unlocked')
   };
 }
+
 
 function inizializzaStato() {
   return {
+    // Stato principale
     soldi: 0,
     classi: 0,
     fila_studenti: 10,
+
+    // Interazioni e click
     condizione_click: false,
-    posX: 0,
-    posY: 0,
-    condizione_posizione: false,
-    cond_stanza1: false,
-    cond_stanza2: false,
+    cond_movimento: false,
+    cond_saltoB: true,
+    cond_saltoT: false,
+    cond_ripetizione: false,
+    cond_skip: true,
     cond_dialogo: false,
     cond_testo: true,
-    cond_skip: true,
-    cond_piattaforma_1: false,
-    cond_movimento: false,
+
+    // Posizioni
+    posX: 0,
+    posY: 0,
     pos_student: 0,
-    cond: false,
     posBX: 70,
     posBY: 39,
-    cond_saltoT: false,
-    cond_saltoB: true,
-    cond_ripetizione: false
+
+    // Condizioni ambientali
+    condizione_posizione: false,
+    cond_piattaforma_1: false,
+    cond_stanza1: false,
+    cond_stanza2: false,
+
+    // Stato generico
+    cond: false
   };
 }
+
 
 let zoom = 1;
 function scala(condizione, elementi = inizializzaElementi(), stato = inizializzaStato()) {
@@ -617,8 +636,8 @@ function setupDialoghi(e, stato) {
     ["Ciao! Sono Bob, della Building & Co!", "Bob", 2, false],
     ["Questo posto è proprio enorme!", "Bob", 2, false],
     ["Spero che ne sia valsa la pena comprarlo...", "preside", 1, false],
-    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori baccia della città!", "Bob", 2, false],
-    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo!", "Bob", 2, false],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2, false],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2, false],
     ["", "", 2, true],
   ];
   let index = 0;
