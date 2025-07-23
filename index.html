@@ -104,7 +104,7 @@
             top: 39vh;
         }
         #bob_personaggio{
-            transform: translate(-1);
+            transform: scaleX(-1);
             width: 28vw;
             height: 20vh;
         }
@@ -620,9 +620,9 @@ function scalaMondo(e) {
   let speed = 0.006;
   function animate() {
     scale += speed;
-    if (scale >= 1) {
-      scale = 1;
-      e.world.style.transform = `scale(1)`;
+    if (scale >= 0.9) {
+      scale = 0.9;
+      e.world.style.transform = `scale(0.9)`;
     } else {
       e.world.style.transform = `scale(${scale})`;
       requestAnimationFrame(animate);
@@ -740,6 +740,8 @@ function setupMovimentoPreside(e, stato) {
             }, 50);
         }
        keysPressed.add(event.key);
+       setTimeout(() => {
+        
        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
        if (keysPressed.has('a') && keysPressed.has('w') && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
@@ -751,8 +753,46 @@ function setupMovimentoPreside(e, stato) {
                 img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
                 img.style.top = (parseFloat(img.style.top) + 3.5) + 'vh';
             });
-            if(!event.shiftKey) animazioneSaltoObliquoL(false);
-            else animazioneSaltoObliquoL(true);
+            animazioneSaltoObliquoS();
+            return;
+        }
+        if (keysPressed.has('d') && keysPressed.has('w') && !stato.cond_ripetizione) {
+            p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+            p.style.transform = "scaleX(1)";
+            p.src = " Preside.png";
+            stato.posX += 3.5;
+            stato.posY -= 3.5;
+            e.imgsArray.forEach(img => {
+                img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
+                img.style.top = (parseFloat(img.style.top) + 3.5) + 'vh';
+            });
+            animazioneSaltoObliquoS();
+            return;
+        }
+        if (keysPressed.has('a') && keysPressed.has('s') && !stato.cond_ripetizione) {
+            p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+            p.style.transform = "scaleX(-1)";
+            p.src = " Preside.png";
+            stato.posX -= 3.5;
+            stato.posY += 3.5;
+            e.imgsArray.forEach(img => {
+                img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
+                img.style.top = (parseFloat(img.style.top) - 3.5) + 'vh';
+            });
+            animazioneSaltoObliquoG();
+            return;
+        }
+        if (keysPressed.has('d') && keysPressed.has('s') && !stato.cond_ripetizione) {
+            p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
+            p.style.transform = "scaleX(1)";
+            p.src = " Preside.png";
+            stato.posX += 3.5;
+            stato.posY += 3.5;
+            e.imgsArray.forEach(img => {
+                img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
+                img.style.top = (parseFloat(img.style.top) - 3.5) + 'vh';
+            });
+            animazioneSaltoObliquoS();
             return;
         }
             
@@ -761,9 +801,9 @@ function setupMovimentoPreside(e, stato) {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(-1)";
                 p.src = " Preside.png";
-                stato.posX -= 3.5;
+                stato.posX -= 4.5;
                 e.imgsArray.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
+                    img.style.left = (parseFloat(img.style.left) + 4.5) + 'vw';
                 });
                 animazioneSaltoLat();
             }
@@ -771,33 +811,35 @@ function setupMovimentoPreside(e, stato) {
                 p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
                 p.style.transform = "scaleX(1)";
                 p.src = "Preside.png";
-                stato.posX += 3.5;
+                stato.posX += 4.5;
                 e.imgsArray.forEach(img => {
-                    img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
+                    img.style.left = (parseFloat(img.style.left) - 4.5) + 'vw';
                 });
                 animazioneSaltoLat();
             }
             if ((event.key === 'S' || event.key === 's')  && !stato.cond_ripetizione) {
                 p.src = "Preside_davanti.png";
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
-                stato.posY += 5;
+                stato.posY += 6;
                     e.imgsArray.forEach(img => {
-                    img.style.top = (parseFloat(img.style.top) - 5) + 'vh';
+                    img.style.top = (parseFloat(img.style.top) - 6) + 'vh';
                 });
                 animazioneSaltoVert1();
             }
             if ((event.key === 'W' || event.key === 'w')  && !stato.cond_ripetizione) {
                 p.src = "Preside_dietro.png";
                 p.style.transition = "top 0.1s ease-in-out, left 0.1s ease-in-out";
-                stato.posY -= 5;
+                stato.posY -= 6;
                 e.imgsArray.forEach(img => {
-                    img.style.top = (parseFloat(img.style.top) + 5) + 'vh';
+                    img.style.top = (parseFloat(img.style.top) + 6) + 'vh';
                 });            
                 animazioneSaltoVert2();
             }
             
             control_position(stato.posX, stato.posY, stato, e);
+            }, 20);
         }
+        
         function handleKeyup(event) {
             keysPressed.delete(event.key);
         }
@@ -841,7 +883,7 @@ function setupMovimentoPreside(e, stato) {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
-        function animazioneSaltoObliquoL() {
+        function animazioneSaltoObliquoS() {
             const step = [40, 100, 225, 300];
             const delta = [-2.5, -1.5, +1.5, +2.5];
             step.forEach((ms, i) => {
@@ -854,7 +896,22 @@ function setupMovimentoPreside(e, stato) {
                 window.addEventListener('keydown', handleKeydown);
             }, 290);
         }
+        function animazioneSaltoObliquoG() {
+            const step = [40, 100, 225, 300];
+            const delta = [+2.5, +1.5, -1.5, -2.5];
+            step.forEach((ms, i) => {
+                setTimeout(() => {
+                    p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                }, ms);
+            });
+            window.removeEventListener('keydown', handleKeydown);
+            setTimeout(() => {
+                window.addEventListener('keydown', handleKeydown);
+            }, 290);
+        }
+        
   }
+  
 
 
 function setupMenuToggle(e) {
@@ -1139,7 +1196,7 @@ function diaologoB_P1(e, stato) {
         const t = e.terziario_container;
         t.style.left = '80vw';
         t.style.top = '39vh';
-        t.style.transform = "translate(-1)";
+        t.style.transform = "scaleX(-1)";
         e.vignetta_bob.style.opacity = '0';
         e.vignetta_terziario.style.opacity = '0';
 
@@ -1154,7 +1211,7 @@ function diaologoB_P1(e, stato) {
         }
         
         function muoviBob() {
-            e.bob_container.style.transform = "translate(-1)";
+            e.bob_container.style.transform = "scaleX(-1)";
             e.vignetta_bob.style.opacity = '1';
             e.vignetta_bob.src = 'vignetta_esclamazione.png';
             async function saltaBob(b) {
