@@ -954,7 +954,7 @@ function setupMenuToggle(e) {
         [ '163vw', '-3vh', "gruppo", 2, 1 ],
         [ '163vw', '-27vh', "gruppo", -2, 0 ],
         [ '13vw', '-27vh', "solo-lavoro", 1, 1 ],
-        [ '70vw', '90vh', "solo", -1, 1 ],
+        [ '90vw', '110vh', "solo", -1, 1 ],
     ];
 function creazionePersonaggiT(e, stato) {
     let i, N=5;
@@ -991,21 +991,14 @@ function creaPersonaggio(e, stato, i) {
         }, 8000);
     }
     else if(matriceTerz[i][2] == "solo"){
+        let posX = parseFloat(matriceTerz[i][0]) + 13;
+        let posY = parseFloat(matriceTerz[i][1]) - 10;
+        const vignetta = creaVignetta('vignetta_musica.png', posX, posY, e);
         setInterval(() => {
             animazionePassivaSolo(personaggioContainer, i, e, vignetta);
             }, 1000);
-        let posX = matriceTerz[i][0];
-        let posY = matriceTerz[i][1];
-        const vignetta = document.createElement('img');
-        vignetta.src = 'vignetta_musica.png';
-        vignetta.style.opacity = '0';
-        vignetta.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.25s ease-in-out';
-        vignetta.style.width = '10vw';
-        vignetta.style.height = '15vh';
-        vignetta.style.left = parseFloat(posX) + 13 + 'vw';
-        vignetta.style.top = parseFloat(posY) - 10 + 'vh';
-        vignetta.className = 'scuola-img';
-        e.world.appendChild(vignetta);
+
+        
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
 
         let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
@@ -1028,21 +1021,24 @@ function creaPersonaggio(e, stato, i) {
 
         }
 }
+function creaVignetta(sr, posX, posY, e){
+        const vignetta = document.createElement('img');
+        vignetta.src = sr;
+        vignetta.style.opacity = '0';
+        vignetta.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.35s ease-in-out';
+        vignetta.style.width = '10vw';
+        vignetta.style.height = '15vh';
+        vignetta.style.left = `${posX}vw`;
+        vignetta.style.top = `${posY}vh`;
+        vignetta.className = 'scuola-img';
+        e.world.appendChild(vignetta);
+        return vignetta;
+}
 function animazionePassivaGruppo(personaggio, i, e) {
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
-    let posX = matriceTerz[i][0];
-    let posY = matriceTerz[i][1];
-    const vignetta = document.createElement('img');
-    vignetta.src = 'vignetta_dialogo.png';
-    vignetta.style.opacity = '0';
-    vignetta.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.25s ease-in-out';
-    vignetta.style.width = '10vw';
-    vignetta.style.height = '15vh';
-    vignetta.style.left = parseFloat(posX) + 13 + 'vw';
-    vignetta.style.top = parseFloat(posY) - 5 + 'vh';
-    vignetta.className = 'scuola-img';
-    e.world.appendChild(vignetta);
-
+    let posX = parseFloat(matriceTerz[i][0]) + 13;
+    let posY = parseFloat(matriceTerz[i][1]) - 5;
+    const vignetta = creaVignetta('vignetta_dialogo.png', posX, posY, e);
     let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
     let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
     setTimeout(() => {
@@ -1108,8 +1104,9 @@ async function animazionePassivaSoloL(personaggio, i, e){
 async function animazionePassivaSolo(personaggio, i, e, vignetta){
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
     vignetta.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
-        let dec = (Math.floor(Math.random() * 3) + 2);
+        let dec = (Math.floor(Math.random() * 1) + 2);
         personaggio.style.top = parseFloat(personaggio.style.top) - dec + 'vh';
         vignetta.style.top = parseFloat(vignetta.style.top) - dec + 'vh';
         setTimeout(() => {
@@ -1119,9 +1116,9 @@ async function animazionePassivaSolo(personaggio, i, e, vignetta){
         await sleep(delay);
     };
 
-    step(Math.floor(Math.random() * (500 - 200 + 1)) + 200);
-    step(Math.floor(Math.random() * (500 - 200 + 1)) + 200);
-    step(Math.floor(Math.random() * (500 - 200 + 1)) + 200);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
 
 }
     
