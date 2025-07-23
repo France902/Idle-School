@@ -953,10 +953,11 @@ function setupMenuToggle(e) {
         [ '175vw', '-15vh', "gruppo", 1, 1 ],
         [ '163vw', '-3vh', "gruppo", 2, 1 ],
         [ '163vw', '-27vh', "gruppo", -2, 0 ],
-        [ '13vw', '-27vh', "solo", 1, 1 ],
+        [ '13vw', '-27vh', "solo-lavoro", 1, 1 ],
+        [ '70vw', '90vh', "solo", -1, 1 ],
     ];
 function creazionePersonaggiT(e, stato) {
-    let i, N=4;
+    let i, N=5;
     let cond_gruppo, scaleX;
     
     for(i=0;i<N;i++){
@@ -983,13 +984,49 @@ function creaPersonaggio(e, stato, i) {
     personaggioContainer.appendChild(personaggioImg);
     e.world.appendChild(personaggioContainer);
     if(matriceTerz[i][2] == "gruppo") animazionePassivaGruppo(personaggioContainer, i, e);
-    else if(matriceTerz[i][2] == "solo") {
-        animazionePassivaSolo(personaggioContainer, i, e);
+    else if(matriceTerz[i][2] == "solo-lavoro") {
+        animazionePassivaSoloL(personaggioContainer, i, e);
         setInterval(() => {
-            animazionePassivaSolo(personaggioContainer, i, e);
+            animazionePassivaSoloL(personaggioContainer, i, e);
         }, 8000);
-        
     }
+    else if(matriceTerz[i][2] == "solo"){
+        setInterval(() => {
+            animazionePassivaSolo(personaggioContainer, i, e, vignetta);
+            }, 1000);
+        let posX = matriceTerz[i][0];
+        let posY = matriceTerz[i][1];
+        const vignetta = document.createElement('img');
+        vignetta.src = 'vignetta_musica.png';
+        vignetta.style.opacity = '0';
+        vignetta.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.25s ease-in-out';
+        vignetta.style.width = '10vw';
+        vignetta.style.height = '15vh';
+        vignetta.style.left = parseFloat(posX) + 13 + 'vw';
+        vignetta.style.top = parseFloat(posY) - 10 + 'vh';
+        vignetta.className = 'scuola-img';
+        e.world.appendChild(vignetta);
+        const sleep =  ms => new Promise(r => setTimeout(r, ms));
+
+        let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+        setTimeout(() => {
+                        vignetta.style.opacity = '1';
+                    setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                    }, 2000);
+        }, tempo_vignetta);
+
+        setInterval(() => {
+                let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+                setTimeout(() => {
+                                vignetta.style.opacity = '1';
+                            setTimeout(() => {
+                                vignetta.style.opacity = '0';
+                            }, 2000);
+                }, tempo_vignetta);
+        }, 5000);
+
+        }
 }
 function animazionePassivaGruppo(personaggio, i, e) {
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
@@ -1044,9 +1081,11 @@ function animazionePassivaGruppo(personaggio, i, e) {
             }, tempo_vignetta);
     }, 5000);
 }
-async function animazionePassivaSolo(personaggio, i, e){
+async function animazionePassivaSoloL(personaggio, i, e){
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
+    
+
     
     const step = async (action, delay, scaleX) => {
         await sleep(delay);
@@ -1064,6 +1103,26 @@ async function animazionePassivaSolo(personaggio, i, e){
     await step("saltaDestra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
     await step("saltaSinistra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
     await step("saltaSinistra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
+}
+
+async function animazionePassivaSolo(personaggio, i, e, vignetta){
+    personaggio.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    vignetta.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    const step = async (delay) => {
+        let dec = (Math.floor(Math.random() * 3) + 2);
+        personaggio.style.top = parseFloat(personaggio.style.top) - dec + 'vh';
+        vignetta.style.top = parseFloat(vignetta.style.top) - dec + 'vh';
+        setTimeout(() => {
+            personaggio.style.top = parseFloat(personaggio.style.top) + dec + 'vh';
+            vignetta.style.top = parseFloat(vignetta.style.top) + dec + 'vh';
+        }, 350);
+        await sleep(delay);
+    };
+
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 200);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 200);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 200);
+
 }
     
 function centralizzazionePreside(e, stato) {
