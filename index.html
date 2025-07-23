@@ -473,7 +473,8 @@
     <div class="hud-container">
         <img src="icona_zoom.png" onclick=" scala(true)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
         <img src="icona_dezoom.png" onclick="scala(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
-        <div id="soldi" class="hud-box">0€</div>
+        <!--
+        <div id="soldi" class="hud-box">0 🪙</div>
         <div id="classi" class="hud-box" style="top: 8vh;">0 🏫</div>
         <div id="missioni" class="hud_missioni closed" >
         <img class="toggle-icon" src="icona_menu_missioni.png" alt="Icona Toggle" onclick="menu_missioni()">
@@ -489,10 +490,10 @@
             <img src="icona_punto_interrogativo.png" alt="Icona Missione 3">
             <h1>missione 3</h1>
         </div>
-        
+        -->
     </div>
-    
-<!--
+    <!--
+
     <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
         <p id="testo_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
     </div>
@@ -520,7 +521,8 @@ function iniziaGioco() {
   setupDialoghi(elementi,  stato);
   controlloSkip(elementi, stato);
   setTimeout(() => scalaMondo(elementi), 1000);
-  scriptGioco(elementi, stato)
+  scriptGioco(elementi, stato);
+  creazionePersonaggiT(elementi, stato)
   setupMenuToggle(elementi);
 }
 
@@ -743,7 +745,7 @@ function setupMovimentoPreside(e, stato) {
        setTimeout(() => {
         
        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
-       if (keysPressed.has('a') && keysPressed.has('w') && !stato.cond_ripetizione) {
+       if (((keysPressed.has('a') && keysPressed.has('w')) || (keysPressed.has('A') && keysPressed.has('W'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(-1)";
             p.src = " Preside.png";
@@ -756,7 +758,7 @@ function setupMovimentoPreside(e, stato) {
             animazioneSaltoObliquoS();
             return;
         }
-        if (keysPressed.has('d') && keysPressed.has('w') && !stato.cond_ripetizione) {
+        if (((keysPressed.has('d') && keysPressed.has('w')) || (keysPressed.has('D') && keysPressed.has('W'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(1)";
             p.src = " Preside.png";
@@ -769,7 +771,7 @@ function setupMovimentoPreside(e, stato) {
             animazioneSaltoObliquoS();
             return;
         }
-        if (keysPressed.has('a') && keysPressed.has('s') && !stato.cond_ripetizione) {
+        if (((keysPressed.has('a') && keysPressed.has('s')) || (keysPressed.has('A') && keysPressed.has('S'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(-1)";
             p.src = " Preside.png";
@@ -782,7 +784,7 @@ function setupMovimentoPreside(e, stato) {
             animazioneSaltoObliquoG();
             return;
         }
-        if (keysPressed.has('d') && keysPressed.has('s') && !stato.cond_ripetizione) {
+        if (((keysPressed.has('d') && keysPressed.has('s')) || (keysPressed.has('D') && keysPressed.has('S'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(1)";
             p.src = " Preside.png";
@@ -912,19 +914,9 @@ function setupMovimentoPreside(e, stato) {
         
   }
   
-
-
-function setupMenuToggle(e) {
-  e.toggle_icon.addEventListener('mouseenter', () => e.toggle_icon.style.opacity = '0.7');
-  e.toggle_icon.addEventListener('mouseleave', () => e.toggle_icon.style.opacity = '1');
-  e.toggle_icon.addEventListener('click', () => {
-    e.menu.classList.toggle('open');
-    e.menu.classList.toggle('closed');
-  });
-}
-
-function control_position(posX, posY, stato, e) {
+  function control_position(posX, posY, stato, e) {
     let settime;
+    /*
             if (posX >= 33 && posX <= 51 && posY >= -35 && posY <= -20 && stato.cond_piattaforma_1 == false){
                 stato.condizione_posizione = true;
                 settime = setTimeout(() => {
@@ -938,13 +930,142 @@ function control_position(posX, posY, stato, e) {
                 clearTimeout(settime);
                 stato.condizione_posizione = false;
                 stato.cond_piattaforma_1 = false;
-            }  
+            } 
+                */ 
         }
+
+function setupMenuToggle(e) {
+  e.toggle_icon.addEventListener('mouseenter', () => e.toggle_icon.style.opacity = '0.7');
+  e.toggle_icon.addEventListener('mouseleave', () => e.toggle_icon.style.opacity = '1');
+  e.toggle_icon.addEventListener('click', () => {
+    e.menu.classList.toggle('open');
+    e.menu.classList.toggle('closed');
+  });
+}
+
+
     function scriptGioco(e, stato) {
         centralizzazionePreside(e, stato);
         creazioneBob(e, stato);
         diaologoB_P1(e, stato);
     }
+    const matriceTerz = [
+        [ '175vw', '-15vh', "gruppo", 1, 1 ],
+        [ '163vw', '-3vh', "gruppo", 2, 1 ],
+        [ '163vw', '-27vh', "gruppo", -2, 0 ],
+        [ '13vw', '-27vh', "solo", 1, 1 ],
+    ];
+function creazionePersonaggiT(e, stato) {
+    let i, N=4;
+    let cond_gruppo, scaleX;
+    
+    for(i=0;i<N;i++){
+        creaPersonaggio(e, stato, i);
+    }
+}
+function creaPersonaggio(e, stato, i) {
+    const personaggioContainer = document.createElement('div');
+    personaggioContainer.style.left = matriceTerz[i][0];
+    personaggioContainer.style.top = matriceTerz[i][1];
+
+    if(matriceTerz[i][3] == 1) {
+        personaggioContainer.style.transform = 'scaleX(1)';
+    } else if (matriceTerz[i][3] == -1) {
+        personaggioContainer.style.transform = 'scaleX(-1)';
+    } 
+    personaggioContainer.className = 'scuola-img';
+    personaggioContainer.style.position = 'fixed';
+    personaggioContainer.style.zIndex = matriceTerz[i][4];
+    const personaggioImg = document.createElement('img');
+    personaggioImg.src = 'Personaggio_anonimo.png';
+    personaggioImg.style.width = '28vw';
+    personaggioImg.style.height = '20vh';
+    personaggioContainer.appendChild(personaggioImg);
+    e.world.appendChild(personaggioContainer);
+    if(matriceTerz[i][2] == "gruppo") animazionePassivaGruppo(personaggioContainer, i, e);
+    else if(matriceTerz[i][2] == "solo") {
+        animazionePassivaSolo(personaggioContainer, i, e);
+        setInterval(() => {
+            animazionePassivaSolo(personaggioContainer, i, e);
+        }, 8000);
+        
+    }
+}
+function animazionePassivaGruppo(personaggio, i, e) {
+    personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
+    let posX = matriceTerz[i][0];
+    let posY = matriceTerz[i][1];
+    const vignetta = document.createElement('img');
+    vignetta.src = 'vignetta_dialogo.png';
+    vignetta.style.opacity = '0';
+    vignetta.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.25s ease-in-out';
+    vignetta.style.width = '10vw';
+    vignetta.style.height = '15vh';
+    vignetta.style.left = parseFloat(posX) + 13 + 'vw';
+    vignetta.style.top = parseFloat(posY) - 5 + 'vh';
+    vignetta.className = 'scuola-img';
+    e.world.appendChild(vignetta);
+
+    let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+    setTimeout(() => {
+                    vignetta.style.opacity = '1';
+                setTimeout(() => {
+                        vignetta.style.opacity = '0';
+                }, 3000);
+    }, tempo_vignetta);
+            setTimeout(() => {
+                posY = parseFloat(personaggio.style.top);
+                posY = parseFloat(posY) - 3;
+                    personaggio.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(personaggio.style.top) + 3;
+                        personaggio.style.top = `${posY}vh`;
+                    }, 300);
+            }, tempo);
+    
+    setInterval(() => {
+            let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                    posY = parseFloat(personaggio.style.top);
+                    posY = parseFloat(posY) - 3;
+                    personaggio.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(personaggio.style.top) + 3;
+                        personaggio.style.top = `${posY}vh`;
+                    }, 300);
+            }, tempo);
+            let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                            vignetta.style.opacity = '1';
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+    }, 5000);
+}
+async function animazionePassivaSolo(personaggio, i, e){
+    personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
+    const sleep =  ms => new Promise(r => setTimeout(r, ms));
+    
+    const step = async (action, delay, scaleX) => {
+        await sleep(delay);
+        if(scaleX) {
+            personaggio.style.transform = 'scaleX(1)';
+        } else {
+            personaggio.style.transform = 'scaleX(-1)';
+        }
+        if (typeof window[action] === 'function') {
+            window[action](personaggio);
+        }
+    };
+
+    await step("saltaDestra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
+    await step("saltaDestra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
+    await step("saltaSinistra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
+    await step("saltaSinistra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
+}
+    
 function centralizzazionePreside(e, stato) {
     const p = e.preside_container;
     p.style.top = "50%";
