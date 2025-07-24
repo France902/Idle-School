@@ -472,6 +472,9 @@
     
     <div class="hud-container">
         <img src="icona_zoom.png" onclick=" scala(true)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
+        <br>
+        <img src="icona_casa.png" onclick="scala('predefinito')" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
+        <br>
         <img src="icona_dezoom.png" onclick="scala(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
         <!--
         <div id="soldi" class="hud-box">0 🪙</div>
@@ -600,10 +603,26 @@ function inizializzaStato() {
   };
 }
 
+const matriceTerz = [
+        [ '175vw', '-15vh', "gruppo", 1, 1 ],
+        [ '163vw', '-3vh', "gruppo", 2, 1 ],
+        [ '163vw', '-27vh', "gruppo", -2, 0 ],
+        [ '13vw', '-27vh', "solo-lavoro", 1, 1 ],
+        [ '90vw', '110vh', "solo", -1, 1 ],
+    ];
+const oggettiImportanti = [
+    [ '155vw', '-27vh', '20vw', '24vh', 'tavolo']
+];
+
 
 let zoom = 1;
 function scala(condizione, elementi = inizializzaElementi(), stato = inizializzaStato()) {
     elementi.world.style.transition = "transform 0.3s ease-in-out";
+    if(condizione === 'predefinito') {
+        zoom = 0.9;
+        elementi.world.style.transform = `scale(${zoom})`;
+        return;
+    }
     if (condizione) {
         if (zoom <= 1.5) {
             zoom += 0.07;
@@ -949,13 +968,7 @@ function setupMenuToggle(e) {
         creazioneBob(e, stato);
         diaologoB_P1(e, stato);
     }
-    const matriceTerz = [
-        [ '175vw', '-15vh', "gruppo", 1, 1 ],
-        [ '163vw', '-3vh', "gruppo", 2, 1 ],
-        [ '163vw', '-27vh', "gruppo", -2, 0 ],
-        [ '13vw', '-27vh', "solo-lavoro", 1, 1 ],
-        [ '90vw', '110vh', "solo", -1, 1 ],
-    ];
+    
 function creazionePersonaggiT(e, stato) {
     let i, N=5;
     let cond_gruppo, scaleX;
@@ -1091,7 +1104,7 @@ async function animazionePassivaSoloL(personaggio, i, e){
             personaggio.style.transform = 'scaleX(-1)';
         }
         if (typeof window[action] === 'function') {
-            window[action](personaggio);
+            window[action](personaggio, false);
         }
     };
 
@@ -1120,6 +1133,40 @@ async function animazionePassivaSolo(personaggio, i, e, vignetta){
     step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
     step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
 
+}
+
+async function passivaTerziario1(personaggio){
+    let stepX = (parseFloat(oggettiImportanti[0][0]) - parseFloat(personaggio.style.left)) / 8;
+    let stepY = (parseFloat(oggettiImportanti[0][1]) - parseFloat(personaggio.style.top) + parseFloat(oggettiImportanti[0][3])) / 5;
+    stepX = Math.round(stepX);
+    stepY = Math.round(stepY);
+
+    const sleep =  ms => new Promise(r => setTimeout(r, ms));
+    const step = async (action, delay = 500) => {
+        if (typeof window[action] === 'function') {
+            window[action](personaggio, false);
+        }
+        await sleep(delay);
+    };
+    if(stepX < 0) {
+        for(let i=0;i>stepX;i--){
+            await step("saltaSinistra");
+        }
+    } else{
+        for(let i=0;i<stepX;i++){
+            await step("saltaDestra");
+        }
+    }
+    if(stepY < 0) {
+        for(let i=0;i>stepY;i--){
+        await step("saltaSopra");
+        }
+    } else{
+        for(let i=0;i<stepY;i++){
+        await step("saltaSotto");
+        }
+    }
+    
 }
     
 function centralizzazionePreside(e, stato) {
@@ -1155,7 +1202,7 @@ async function saltaDestraP(personaggio) {
     await step(2, 1, 100);
 }
 
-async function saltaDestra(personaggio) {
+async function saltaDestra(personaggio, dimezzato) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
 
@@ -1165,13 +1212,44 @@ async function saltaDestra(personaggio) {
         personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
     };
 
-
+    if(dimezzato){
+        await step(-0.75, 0.75, 0);
+        await step(-0.75, 0.75, 60);
+        await step(-0.5, 1, 60);
+        await step(0.5, 1, 60);
+        await step(0.75, 0.75, 60);
+        await step(0.75, 0.75, 60);
+    }
+    else{
     await step(-1.5, 1.5, 0);
     await step(-1.5, 1.5, 60);
     await step(-0.5, 1, 60);
     await step(0.5, 1, 60);
     await step(1.5, 1.5, 60);
     await step(1.5, 1.5, 60);
+    }
+}
+async function saltaSopra(personaggio, dimezzato) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+    };
+
+    if(dimezzato){
+        await step(-0.75, 0);
+        await step(-0.75, 60);
+        await step(-0.5, 60);
+        await step(0.5, 60);
+    }
+    else{
+    await step(-2.5, 0);
+    await step(-2.5, 60);
+    await step(-1.5, 60);
+    await step(1.5, 60);
+    }
 }
 async function saltaSinistra(personaggio, dimezzato) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -1379,9 +1457,9 @@ function diaologoB_P1(e, stato) {
 
         async function uscita(t) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
-            await saltaDestra(t);
+            await saltaDestra(t, false);
             await sleep(200); 
-            await saltaDestra(t); 
+            await saltaDestra(t, false); 
             await sleep(500);
             await muoviBob();
             await passivaTerziario1(t); 
