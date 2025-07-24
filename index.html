@@ -975,7 +975,6 @@ function setupMovimentoPreside(e, stato) {
     }
     else{
         document.getElementById('tasto_e'+4).style.opacity = '0';
-        
     }
     /*
     let settime;
@@ -1007,11 +1006,11 @@ function setupMenuToggle(e) {
 }
 function interazione(indice, e){
     if(indice == 4){
-        matriceTerz[indice][5] = true;
+        matriceTerz[indice][4] = true;
         e.preside.style.transform = 'scaleX(1)';
         const personaggio = document.getElementById('personaggio4');
         personaggio.style.transform = 'scaleX(1)';
-        matriceTerz[4][5] = true;
+        document.getElementById('tasto_e' + indice).style.display = 'none';
         sobbalzo(personaggio, e);
     }
 }
@@ -1065,19 +1064,8 @@ function creaPersonaggio(e, stato, i) {
         setInterval(() => {
             animazionePassivaSolo(personaggioContainer, i, e, vignetta);
             }, 1000);
-        
-        const sleep =  ms => new Promise(r => setTimeout(r, ms));
-
-        let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-        setTimeout(() => {
-                        vignetta.style.opacity = '1';
-                    setTimeout(() => {
-                            vignetta.style.opacity = '0';
-                    }, 2000);
-        }, tempo_vignetta);
-
         let interval = setInterval(() => {
-            if(matriceTerz[i][5] != false){
+            if(matriceTerz[4][4] != false){
                 let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
                 setTimeout(() => {
                                 vignetta.style.opacity = '1';
@@ -1174,9 +1162,12 @@ async function animazionePassivaSoloL(personaggio, i, e){
 async function animazionePassivaSolo(personaggio, i, e, vignetta){
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
     vignetta.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+
+        
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
-        if(matriceTerz[i][5] == true){
+        if(matriceTerz[i][4] == true){
             vignetta.style.opacity = '0';
             docuement.getElementById('tasto_e'+4).style.display = 'none';
             return;
