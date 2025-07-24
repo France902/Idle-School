@@ -98,6 +98,7 @@
             opacity: 0;
         }
 
+
         #bob_container{
             position: fixed;
             left: 70vw;
@@ -466,6 +467,7 @@
         <img src="Preside.png" alt="" id="immagine_preside_dialoghi">
 
         <img src="Personaggio_anonimo.png" alt="" id="personaggio_anonimo_dialoghi">
+        
     </div>
     
 
@@ -521,6 +523,7 @@ window.onload = iniziaGioco;
 function iniziaGioco() {
   const elementi = inizializzaElementi();
   const stato = inizializzaStato();
+  creaTastiInteragibili(elementi, stato);
   setupDialoghi(elementi,  stato);
   controlloSkip(elementi, stato);
   setTimeout(() => scalaMondo(elementi), 1000);
@@ -546,6 +549,7 @@ function inizializzaElementi() {
     banco2: document.getElementById('banco2'),
     blocco_pulizia_1: document.getElementById('blocco_pulizia_1'),
     blocco_pulizia_2: document.getElementById('blocco_pulizia_2'),
+    tastoE: document.getElementById('tasto_e'),
     
     // Dialoghi e narrativa
     dialogo: document.getElementById('dialogo'),
@@ -608,7 +612,7 @@ const matriceTerz = [
         [ '163vw', '-3vh', "gruppo", 2, 1 ],
         [ '163vw', '-27vh', "gruppo", -2, 0 ],
         [ '13vw', '-27vh', "solo-lavoro", 1, 1 ],
-        [ '90vw', '110vh', "solo", -1, 1 ],
+        [ '90vw', '110vh', "solo", -1, false ],
     ];
 const oggettiImportanti = [
     [ '155vw', '-27vh', '20vw', '24vh', 'tavolo']
@@ -650,6 +654,30 @@ function scalaMondo(e) {
     }
   }
   requestAnimationFrame(animate);
+}
+
+function creaTastiInteragibili(e, stato) {
+    const tasti_pos = [
+        [false],
+        [false],
+        [false],
+        [false],
+        ['90vw', '110vh'],
+    ]
+    for(let i=0;i<tasti_pos.length;i++){
+        if(tasti_pos[i][0] != false){
+            const tasto = document.createElement('img');
+            tasto.src = 'tasto_e.png';
+            tasto.id = 'tasto_e' + i;
+            tasto.className = 'scuola-img';
+            tasto.style.width = '4vw';
+            tasto.style.height = '4vw';
+            tasto.style.opacity = '0';
+            tasto.style.left = parseFloat(tasti_pos[i][0]) + 8 + 'vw';
+            tasto.style.top = parseFloat(tasti_pos[i][1]) - 7 + 'vh';
+            e.world.appendChild(tasto);
+        }
+    }
 }
 
 function setupDialoghi(e, stato) {
@@ -764,54 +792,54 @@ function setupMovimentoPreside(e, stato) {
        setTimeout(() => {
         
        e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
-       if (((keysPressed.has('a') && keysPressed.has('w')) || (keysPressed.has('A') && keysPressed.has('W'))) && !stato.cond_ripetizione) {
+       if (((keysPressed.has('a') && keysPressed.has('w'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(-1)";
             p.src = " Preside.png";
-            stato.posX -= 3.5;
-            stato.posY -= 3.5;
+            stato.posX -= 2.25;
+            stato.posY -= 3;
             e.imgsArray.forEach(img => {
-                img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
-                img.style.top = (parseFloat(img.style.top) + 3.5) + 'vh';
+                img.style.left = (parseFloat(img.style.left) + 2.25) + 'vw';
+                img.style.top = (parseFloat(img.style.top) + 3) + 'vh';
             });
             animazioneSaltoObliquoS();
             return;
         }
-        if (((keysPressed.has('d') && keysPressed.has('w')) || (keysPressed.has('D') && keysPressed.has('W'))) && !stato.cond_ripetizione) {
+        if (((keysPressed.has('d') && keysPressed.has('w'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(1)";
             p.src = " Preside.png";
-            stato.posX += 3.5;
-            stato.posY -= 3.5;
+            stato.posX += 2.25;
+            stato.posY -= 3;
             e.imgsArray.forEach(img => {
-                img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
-                img.style.top = (parseFloat(img.style.top) + 3.5) + 'vh';
+                img.style.left = (parseFloat(img.style.left) - 2.25) + 'vw';
+                img.style.top = (parseFloat(img.style.top) + 3) + 'vh';
             });
             animazioneSaltoObliquoS();
             return;
         }
-        if (((keysPressed.has('a') && keysPressed.has('s')) || (keysPressed.has('A') && keysPressed.has('S'))) && !stato.cond_ripetizione) {
+        if (((keysPressed.has('a') && keysPressed.has('s'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(-1)";
             p.src = " Preside.png";
-            stato.posX -= 3.5;
-            stato.posY += 3.5;
+            stato.posX -= 2.25;
+            stato.posY += 3;
             e.imgsArray.forEach(img => {
-                img.style.left = (parseFloat(img.style.left) + 3.5) + 'vw';
-                img.style.top = (parseFloat(img.style.top) - 3.5) + 'vh';
+                img.style.left = (parseFloat(img.style.left) + 2.25) + 'vw';
+                img.style.top = (parseFloat(img.style.top) - 3) + 'vh';
             });
             animazioneSaltoObliquoG();
             return;
         }
-        if (((keysPressed.has('d') && keysPressed.has('s')) || (keysPressed.has('D') && keysPressed.has('S'))) && !stato.cond_ripetizione) {
+        if (((keysPressed.has('d') && keysPressed.has('s'))) && !stato.cond_ripetizione) {
             p.style.transition = "top 0.06s ease-in-out, left 0.06s ease-in-out";
             p.style.transform = "scaleX(1)";
             p.src = " Preside.png";
-            stato.posX += 3.5;
-            stato.posY += 3.5;
+            stato.posX += 2.25;
+            stato.posY += 3;
             e.imgsArray.forEach(img => {
-                img.style.left = (parseFloat(img.style.left) - 3.5) + 'vw';
-                img.style.top = (parseFloat(img.style.top) - 3.5) + 'vh';
+                img.style.left = (parseFloat(img.style.left) - 2.25) + 'vw';
+                img.style.top = (parseFloat(img.style.top) - 3) + 'vh';
             });
             animazioneSaltoObliquoS();
             return;
@@ -934,8 +962,24 @@ function setupMovimentoPreside(e, stato) {
   }
   
   function control_position(posX, posY, stato, e) {
-    let settime;
+    posX = Math.round(posX);
+    posY = Math.round(posY);
+    console.log(`posizione: ${posX}, ${posY}`);
+    if((posX >= 45 && posX <= 50) && posY == 72){
+        document.getElementById('tasto_e'+4).style.opacity = '1';
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'e' || event.key === 'E') {
+                interazione(4, e);
+            }
+        });
+    }
+    else{
+        document.getElementById('tasto_e'+4).style.opacity = '0';
+        
+    }
     /*
+    let settime;
+    
             if (posX >= 33 && posX <= 51 && posY >= -35 && posY <= -20 && stato.cond_piattaforma_1 == false){
                 stato.condizione_posizione = true;
                 settime = setTimeout(() => {
@@ -960,6 +1004,16 @@ function setupMenuToggle(e) {
     e.menu.classList.toggle('open');
     e.menu.classList.toggle('closed');
   });
+}
+function interazione(indice, e){
+    if(indice == 4){
+        matriceTerz[indice][5] = true;
+        e.preside.style.transform = 'scaleX(1)';
+        const personaggio = document.getElementById('personaggio4');
+        personaggio.style.transform = 'scaleX(1)';
+        matriceTerz[4][5] = true;
+        sobbalzo(personaggio, e);
+    }
 }
 
 
@@ -987,6 +1041,7 @@ function creaPersonaggio(e, stato, i) {
     } else if (matriceTerz[i][3] == -1) {
         personaggioContainer.style.transform = 'scaleX(-1)';
     } 
+    personaggioContainer.id = 'personaggio' + i;
     personaggioContainer.className = 'scuola-img';
     personaggioContainer.style.position = 'fixed';
     personaggioContainer.style.zIndex = matriceTerz[i][4];
@@ -1010,7 +1065,6 @@ function creaPersonaggio(e, stato, i) {
         setInterval(() => {
             animazionePassivaSolo(personaggioContainer, i, e, vignetta);
             }, 1000);
-
         
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
 
@@ -1022,7 +1076,8 @@ function creaPersonaggio(e, stato, i) {
                     }, 2000);
         }, tempo_vignetta);
 
-        setInterval(() => {
+        let interval = setInterval(() => {
+            if(matriceTerz[i][5] != false){
                 let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
                 setTimeout(() => {
                                 vignetta.style.opacity = '1';
@@ -1030,6 +1085,10 @@ function creaPersonaggio(e, stato, i) {
                                 vignetta.style.opacity = '0';
                             }, 2000);
                 }, tempo_vignetta);
+            }
+            else{
+                clearInterval(interval);
+            }
         }, 5000);
 
         }
@@ -1094,8 +1153,6 @@ async function animazionePassivaSoloL(personaggio, i, e){
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     
-
-    
     const step = async (action, delay, scaleX) => {
         await sleep(delay);
         if(scaleX) {
@@ -1119,20 +1176,46 @@ async function animazionePassivaSolo(personaggio, i, e, vignetta){
     vignetta.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
-        let dec = (Math.floor(Math.random() * 1) + 2);
-        personaggio.style.top = parseFloat(personaggio.style.top) - dec + 'vh';
-        vignetta.style.top = parseFloat(vignetta.style.top) - dec + 'vh';
-        setTimeout(() => {
-            personaggio.style.top = parseFloat(personaggio.style.top) + dec + 'vh';
-            vignetta.style.top = parseFloat(vignetta.style.top) + dec + 'vh';
-        }, 350);
-        await sleep(delay);
+        if(matriceTerz[i][5] == true){
+            vignetta.style.opacity = '0';
+            docuement.getElementById('tasto_e'+4).style.display = 'none';
+            return;
+        }
+        else{
+            let dec = (Math.floor(Math.random() * 1) + 2);
+            personaggio.style.top = parseFloat(personaggio.style.top) - dec + 'vh';
+            vignetta.style.top = parseFloat(vignetta.style.top) - dec + 'vh';
+            setTimeout(() => {
+                personaggio.style.top = parseFloat(personaggio.style.top) + dec + 'vh';
+                vignetta.style.top = parseFloat(vignetta.style.top) + dec + 'vh';
+            }, 350);
+            await sleep(delay);
+        }
+        
     };
 
     step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
     step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
     step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
 
+}
+
+async function sobbalzo(personaggio, e) {
+    personaggio.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+    };
+
+    await step(-3, 2, 0);
+    await step(-2, 2, 90);
+    await step(-1.5, 2, 90);
+    await step(1.5, 2, 100);
+    await step(2, 2, 90);
+    await step(3, 1, 90);
 }
 
 async function passivaTerziario1(personaggio){
