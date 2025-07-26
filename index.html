@@ -615,11 +615,11 @@ const matriceTerz = [
         [ '90vw', '110vh', "solo", -1, false ],
     ];
 const oggettiImportanti = [
-    [ '155vw', '-27vh', '20vw', '24vh', 'tavolo']
+    [ '158vw', '-3vh', '158vw', '-27vh', 'tavolo']
 ];
 
 
-let zoom = 1;
+let zoom = 0.9;
 function scala(condizione, elementi = inizializzaElementi(), stato = inizializzaStato()) {
     elementi.world.style.transition = "transform 0.3s ease-in-out";
     if(condizione === 'predefinito') {
@@ -964,7 +964,6 @@ function setupMovimentoPreside(e, stato) {
   function control_position(posX, posY, stato, e) {
     posX = Math.round(posX);
     posY = Math.round(posY);
-    console.log(`posizione: ${posX}, ${posY}`);
     if((posX >= 45 && posX <= 50) && posY == 72){
         document.getElementById('tasto_e'+4).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
@@ -1061,11 +1060,8 @@ function creaPersonaggio(e, stato, i) {
         let posX = parseFloat(matriceTerz[i][0]) + 13;
         let posY = parseFloat(matriceTerz[i][1]) - 10;
         const vignetta = creaVignetta('vignetta_musica.png', posX, posY, e);
-        setInterval(() => {
-            animazionePassivaSolo(personaggioContainer, i, e, vignetta);
-            }, 1000);
         let interval = setInterval(() => {
-            if(matriceTerz[4][4] != false){
+            if(matriceTerz[4][4] == false){
                 let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
                 setTimeout(() => {
                                 vignetta.style.opacity = '1';
@@ -1078,6 +1074,10 @@ function creaPersonaggio(e, stato, i) {
                 clearInterval(interval);
             }
         }, 5000);
+        setInterval(() => {
+            animazionePassivaSolo(personaggioContainer, i, e, vignetta);
+            }, 1000);
+        
 
         }
 }
@@ -1094,10 +1094,13 @@ function creaVignetta(sr, posX, posY, e){
         e.world.appendChild(vignetta);
         return vignetta;
 }
-function animazionePassivaGruppo(personaggio, i, e) {
+function animazionePassivaGruppo(personaggio, i, e, posX = 0, posY = 0) {
     personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
-    let posX = parseFloat(matriceTerz[i][0]) + 13;
-    let posY = parseFloat(matriceTerz[i][1]) - 5;
+    if(posX == 0){
+        posX = parseFloat(matriceTerz[i][0]) + 13;
+        posY = parseFloat(matriceTerz[i][1]) - 5;
+    }
+
     const vignetta = creaVignetta('vignetta_dialogo.png', posX, posY, e);
     let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
     let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
@@ -1168,8 +1171,9 @@ async function animazionePassivaSolo(personaggio, i, e, vignetta){
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
         if(matriceTerz[i][4] == true){
+            console.log("si")
             vignetta.style.opacity = '0';
-            docuement.getElementById('tasto_e'+4).style.display = 'none';
+            document.getElementById('tasto_e'+4).style.display = 'none';
             return;
         }
         else{
@@ -1207,40 +1211,107 @@ async function sobbalzo(personaggio, e) {
     await step(1.5, 2, 100);
     await step(2, 2, 90);
     await step(3, 1, 90);
+    await sleep(1500);
+    await ritornoOggetto(personaggio, oggettiImportanti[0][2], oggettiImportanti[0][3]);
+
 }
 
-async function passivaTerziario1(personaggio){
-    let stepX = (parseFloat(oggettiImportanti[0][0]) - parseFloat(personaggio.style.left)) / 8;
-    let stepY = (parseFloat(oggettiImportanti[0][1]) - parseFloat(personaggio.style.top) + parseFloat(oggettiImportanti[0][3])) / 5;
-    stepX = Math.round(stepX);
-    stepY = Math.round(stepY);
+async function ritornoOggetto(personaggio, x, y, e = inizializzaElementi()){
+
+    let stepX = (parseFloat(x) - parseFloat(personaggio.style.left)) / 8;
+    let stepY = (parseFloat(y) - parseFloat(personaggio.style.top)) / 5;
+    console.log(stepX, stepY)
+    let diffStepX = Math.abs(stepX - Math.trunc(stepX));
+    stepX -= diffStepX;
+    let mezzostepX = false;
+    if (diffStepX > 0.5) {
+        mezzostepX = true;
+    }
+    console.log(diffStepX)
+    diffStepX = Math.abs(stepX - Math.trunc(stepX));
+    console.log(diffStepX)
+    let unQuartoStepX = false;
+    if(diffStepX > 0.25){
+        mezzostepX = false;
+        unQuartoStepX = true;
+    }
+
+    let diffStepY = Math.abs(stepY - Math.trunc(stepY));
+    stepY -= diffStepY;
+    let mezzostepY = false;
+    if (diffStepY > 0.5) {
+        mezzostepY = true;
+    }
+    console.log(diffStepY)
+    diffStepY = Math.abs(stepY - Math.trunc(stepY));
+    let unQuartoStepY = false;
+    if(diffStepY > 0.25){
+        mezzostepX = false;
+        unQuartoStepY = true;
+    }
+    console.log(diffStepY)
+
+    stepX = Math.trunc(stepX);
+    stepY = Math.trunc(stepY);
 
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
-    const step = async (action, delay = 500) => {
+    const step = async (action, delay, parametro = false, parametro2 = false) => {
         if (typeof window[action] === 'function') {
-            window[action](personaggio, false);
+            window[action](personaggio, parametro);
         }
         await sleep(delay);
     };
     if(stepX < 0) {
         for(let i=0;i>stepX;i--){
-            await step("saltaSinistra");
+            await step("saltaSinistra", 500);
+        }
+        if(mezzostepX){
+            parametro = true;
+            await step("saltaSinistra", 500, parametro);
+        }
+        if(unQuartoStepX){
+            parametro2 = true;
+            await step("saltaSinistra", 500, false, parametro2);
         }
     } else{
         for(let i=0;i<stepX;i++){
-            await step("saltaDestra");
+            await step("saltaDestra", 500);
+        }
+        if(mezzostepX){
+            parametro = true;
+            await step("saltaDestra", 500, parametro);
+        }
+        if(unQuartoStepX){
+            parametro2 = true;
+            await step("saltaDestra", 500, false, parametro2);
         }
     }
     if(stepY < 0) {
         for(let i=0;i>stepY;i--){
-        await step("saltaSopra");
+            await step("saltaSopra", 500);
+        }
+        if(mezzostepY){
+            parametro = true;
+            await step("saltaSopra", 500, parametro);
+        }
+        if(unQuartoStepY){
+            parametro2 = true;
+            await step("saltaSopra", 500, false, parametro2);
         }
     } else{
         for(let i=0;i<stepY;i++){
-        await step("saltaSotto");
+            await step("saltaSotto", 500);
+        }
+        if(mezzostepY){
+            parametro = true;
+            await step("saltaSotto", 500, parametro);
+        }
+        if(unQuartoStepY){
+            parametro2 = true;
+            await step("saltaSotto", 500, false, parametro2);
         }
     }
-    
+    animazionePassivaGruppo(personaggio, 3, e, parseFloat(personaggio.style.left) + 12, parseFloat(personaggio.style.top) - 8);
 }
     
 function centralizzazionePreside(e, stato) {
@@ -1276,7 +1347,7 @@ async function saltaDestraP(personaggio) {
     await step(2, 1, 100);
 }
 
-async function saltaDestra(personaggio, dimezzato) {
+async function saltaDestra(personaggio, dimezzato, unquarto) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
 
@@ -1285,7 +1356,14 @@ async function saltaDestra(personaggio, dimezzato) {
         personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
         personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
     };
-
+    if (unquarto) {
+        await step(-0.375, 0.375, 0);
+        await step(-0.375, 0.375, 60);
+        await step(-0.25, 0.5, 60);
+        await step(0.25, 0.5, 60);
+        await step(0.375, 0.375, 60);
+        await step(0.375, 0.375, 60);
+    }
     if(dimezzato){
         await step(-0.75, 0.75, 0);
         await step(-0.75, 0.75, 60);
@@ -1295,15 +1373,15 @@ async function saltaDestra(personaggio, dimezzato) {
         await step(0.75, 0.75, 60);
     }
     else{
-    await step(-1.5, 1.5, 0);
-    await step(-1.5, 1.5, 60);
-    await step(-0.5, 1, 60);
-    await step(0.5, 1, 60);
-    await step(1.5, 1.5, 60);
-    await step(1.5, 1.5, 60);
+        await step(-1.5, 1.5, 0);
+        await step(-1.5, 1.5, 60);
+        await step(-0.5, 1, 60);
+        await step(0.5, 1, 60);
+        await step(1.5, 1.5, 60);
+        await step(1.5, 1.5, 60);
     }
 }
-async function saltaSopra(personaggio, dimezzato) {
+async function saltaSopra(personaggio, dimezzato, unquarto) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
 
@@ -1311,7 +1389,12 @@ async function saltaSopra(personaggio, dimezzato) {
         await sleep(delay);
         personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
     };
-
+    if (unquarto) {
+        await step(-0.375, 0);
+        await step(-0.375, 60);
+        await step(-0.25, 60);
+        await step(0.25, 60);
+    }
     if(dimezzato){
         await step(-0.75, 0);
         await step(-0.75, 60);
@@ -1325,7 +1408,7 @@ async function saltaSopra(personaggio, dimezzato) {
     await step(1.5, 60);
     }
 }
-async function saltaSinistra(personaggio, dimezzato) {
+async function saltaSinistra(personaggio, dimezzato, unquarto) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
 
@@ -1334,7 +1417,14 @@ async function saltaSinistra(personaggio, dimezzato) {
         personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
         personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
     };
-
+    if (unquarto) {
+        await step(-0.375, -0.375, 0);
+        await step(-0.375, -0.375, 60);
+        await step(-0.25, -0.5, 60);
+        await step(0.25, -0.5, 60);
+        await step(0.375, -0.375, 60);
+        await step(0.375, -0.375, 60);
+    }
     if(dimezzato){
         await step(-0.75, -0.75, 0);
         await step(-0.75, -0.75, 60);
@@ -1350,6 +1440,34 @@ async function saltaSinistra(personaggio, dimezzato) {
         await step(0.5, -1, 60);
         await step(1.5, -1.5, 60);
         await step(1.5, -1.5, 60);
+    }
+}
+
+async function saltaSotto(personaggio, dimezzato, unquarto) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+    };
+    if (unquarto) {
+        await step(0.375, 0);
+        await step(0.375, 60);
+        await step(0.25, 60);
+        await step(-0.25, 60);
+    }
+    if(dimezzato){
+        await step(0.75, 0);
+        await step(0.75, 60);
+        await step(0.5, 60);
+        await step(-0.5, 60);
+    }
+    else{
+    await step(2.5, 0);
+    await step(2.5, 60);
+    await step(1.5, 60);
+    await step(-1.5, 60);
     }
 }
 
@@ -1536,7 +1654,7 @@ function diaologoB_P1(e, stato) {
             await saltaDestra(t, false); 
             await sleep(500);
             await muoviBob();
-            await passivaTerziario1(t); 
+            await ritornoOggetto(t, oggettiImportanti[0][0], oggettiImportanti[0][1]); 
         }
         
         function muoviBob() {
