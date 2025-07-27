@@ -1217,39 +1217,33 @@ async function sobbalzo(personaggio, e) {
 }
 
 async function ritornoOggetto(personaggio, x, y, e = inizializzaElementi()){
-
     let stepX = (parseFloat(x) - parseFloat(personaggio.style.left)) / 8;
+    console.log(parseFloat(x) + " " + personaggio.style.left)
     let stepY = (parseFloat(y) - parseFloat(personaggio.style.top)) / 5;
-    console.log(stepX, stepY)
     let diffStepX = Math.abs(stepX - Math.trunc(stepX));
     stepX -= diffStepX;
     let mezzostepX = false;
     if (diffStepX > 0.5) {
         mezzostepX = true;
     }
-    console.log(diffStepX)
     diffStepX = Math.abs(stepX - Math.trunc(stepX));
-    console.log(diffStepX)
     let unQuartoStepX = false;
     if(diffStepX > 0.25){
         mezzostepX = false;
         unQuartoStepX = true;
     }
-
     let diffStepY = Math.abs(stepY - Math.trunc(stepY));
     stepY -= diffStepY;
     let mezzostepY = false;
     if (diffStepY > 0.5) {
         mezzostepY = true;
     }
-    console.log(diffStepY)
     diffStepY = Math.abs(stepY - Math.trunc(stepY));
     let unQuartoStepY = false;
     if(diffStepY > 0.25){
         mezzostepX = false;
         unQuartoStepY = true;
     }
-    console.log(diffStepY)
 
     stepX = Math.trunc(stepX);
     stepY = Math.trunc(stepY);
