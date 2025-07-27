@@ -424,26 +424,28 @@
     </div>
   <div id="world">
     <div id="Edificio_scolastico" style="z-index: -1;">
-    <div id="canvas" class="scuola-img" style="top: -690vh; left: -320vw;">
-        <img   src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 250vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 500vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; left: 750vw;">
+    <div id="canvas" class="scuola-img" style="top: -550vh; left: -200vw;">
 
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh; left: 250vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh; left: 500vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 300vh; left: 750vw;">
+<img src="giardino_bordo_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed;">
+<img src="giardino_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 210vw;">
+<img src="giardino_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 420vw;">
+<img src="giardino_bordo_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 630vw;">
 
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh; left: 250vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh; left: 500vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 600vh; left: 750vw;">
+<img src="giardino_bordo_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh;">
+<img src="giardino_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 210vw;">
+<img src="giardino_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 420vw;">
+<img src="giardino_bordo_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 630vw;">
 
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh; left: 250vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh; left: 500vw;">
-        <img  src="map-small.jpg" style="width: 250vw; height: 300vh; display: block; position: fixed; top: 900vh; left: 750vw;">
+<img src="giardino_bordo_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh;">
+<img src="giardino_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 210vw;">
+<img src="giardino_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 420vw;">
+<img src="giardino_bordo_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 630vw;">
+
+<img src="strada_bordo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh;">
+<img src="strada_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 210vw;">
+<img src="strada_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 420vw;">
+<img src="strada_bordo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 630vw;">
+
 
     </div>
         
@@ -642,19 +644,29 @@ function scala(condizione, elementi = inizializzaElementi(), stato = inizializza
 }
 function scalaMondo(e) {
   let scale = 0.07;
-  let speed = 0.006;
+  const target = 0.9;
+  const speed = 0.006;
+
+  
+  if (e.world.dataset.scaling === "true") return;
+  e.world.dataset.scaling = "true";
+
   function animate() {
     scale += speed;
-    if (scale >= 0.9) {
-      scale = 0.9;
-      e.world.style.transform = `scale(0.9)`;
-    } else {
-      e.world.style.transform = `scale(${scale})`;
-      requestAnimationFrame(animate);
+    if (scale >= target) {
+      scale = target;
+      e.world.style.transform = `scale(${target})`;
+      e.world.dataset.scaling = "false"; 
+      return; 
     }
+
+    e.world.style.transform = `scale(${scale})`;
+    requestAnimationFrame(animate);
   }
+
   requestAnimationFrame(animate);
 }
+
 
 function creaTastiInteragibili(e, stato) {
     const tasti_pos = [
@@ -1079,20 +1091,22 @@ function creaPersonaggio(e, stato, i) {
     const personaggioContainer = document.createElement('div');
     personaggioContainer.style.left = matriceTerz[i][0];
     personaggioContainer.style.top = matriceTerz[i][1];
+    personaggioContainer.id = 'personaggio' + i;
+    personaggioContainer.className = 'scuola-img';
+    personaggioContainer.style.position = 'fixed';
+    personaggioContainer.style.zIndex = matriceTerz[i][4];
+    personaggioContainer.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    const personaggioImg = document.createElement('img');
+    personaggioImg.src = 'Personaggio_anonimo.png';
+    personaggioImg.style.width = '28vw';
+    personaggioImg.style.height = '20vh';
 
     if(matriceTerz[i][3] == 1) {
         personaggioContainer.style.transform = 'scaleX(1)';
     } else if (matriceTerz[i][3] == -1) {
         personaggioContainer.style.transform = 'scaleX(-1)';
     } 
-    personaggioContainer.id = 'personaggio' + i;
-    personaggioContainer.className = 'scuola-img';
-    personaggioContainer.style.position = 'fixed';
-    personaggioContainer.style.zIndex = matriceTerz[i][4];
-    const personaggioImg = document.createElement('img');
-    personaggioImg.src = 'Personaggio_anonimo.png';
-    personaggioImg.style.width = '28vw';
-    personaggioImg.style.height = '20vh';
+
     personaggioContainer.appendChild(personaggioImg);
     e.world.appendChild(personaggioContainer);
     e.world.appendChild(document.getElementById("personaggio"+i))
@@ -1109,7 +1123,7 @@ function creaPersonaggio(e, stato, i) {
         let posY = parseFloat(matriceTerz[i][1]) - 10;
         const vignetta = creaVignetta('vignetta_musica.png', posX, posY, e);
         let interval = setInterval(() => {
-            if(matriceTerz[4][4] == false){
+            if(matriceTerz[i][4] == false){
                 let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
                 setTimeout(() => {
                                 vignetta.style.opacity = '1';
@@ -1454,6 +1468,7 @@ async function saltaDestra(personaggio, dimezzato, unquarto) {
         await sleep(delay);
         personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
         personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+        
     };
     if (unquarto) {
         await step(-0.375, 0.375, 0);
@@ -1462,6 +1477,7 @@ async function saltaDestra(personaggio, dimezzato, unquarto) {
         await step(0.25, 0.5, 60);
         await step(0.375, 0.375, 60);
         await step(0.375, 0.375, 60);
+        await ripristinaTransition(personaggio);
     }
     if(dimezzato){
         await step(-0.75, 0.75, 0);
@@ -1470,6 +1486,7 @@ async function saltaDestra(personaggio, dimezzato, unquarto) {
         await step(0.5, 1, 60);
         await step(0.75, 0.75, 60);
         await step(0.75, 0.75, 60);
+        await ripristinaTransition(personaggio);
     }
     else{
         await step(-1.5, 1.5, 0);
@@ -1478,8 +1495,11 @@ async function saltaDestra(personaggio, dimezzato, unquarto) {
         await step(0.5, 1, 60);
         await step(1.5, 1.5, 60);
         await step(1.5, 1.5, 60);
+        await ripristinaTransition(personaggio);
     }
+    
 }
+
 async function saltaSopra(personaggio, dimezzato, unquarto) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
@@ -1487,24 +1507,28 @@ async function saltaSopra(personaggio, dimezzato, unquarto) {
     const step = async (topDelta, delay) => {
         await sleep(delay);
         personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     };
     if (unquarto) {
         await step(-0.375, 0);
         await step(-0.375, 60);
         await step(-0.25, 60);
         await step(0.25, 60);
+        await ripristinaTransition(personaggio);
     }
     if(dimezzato){
         await step(-0.75, 0);
         await step(-0.75, 60);
         await step(-0.5, 60);
         await step(0.5, 60);
+        await ripristinaTransition(personaggio);
     }
     else{
-    await step(-2.5, 0);
-    await step(-2.5, 60);
-    await step(-1.5, 60);
-    await step(1.5, 60);
+        await step(-2.5, 0);
+        await step(-2.5, 60);
+        await step(-1.5, 60);
+        await step(1.5, 60);
+        await ripristinaTransition(personaggio);
     }
 }
 async function saltaSinistra(personaggio, dimezzato, unquarto) {
@@ -1515,6 +1539,7 @@ async function saltaSinistra(personaggio, dimezzato, unquarto) {
         await sleep(delay);
         personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
         personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+        personaggio.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     };
     if (unquarto) {
         await step(-0.375, -0.375, 0);
@@ -1523,6 +1548,7 @@ async function saltaSinistra(personaggio, dimezzato, unquarto) {
         await step(0.25, -0.5, 60);
         await step(0.375, -0.375, 60);
         await step(0.375, -0.375, 60);
+        await ripristinaTransition(personaggio);
     }
     if(dimezzato){
         await step(-0.75, -0.75, 0);
@@ -1531,6 +1557,7 @@ async function saltaSinistra(personaggio, dimezzato, unquarto) {
         await step(0.5, -1, 60);
         await step(0.75, -0.75, 60);
         await step(0.75, -0.75, 60);
+        await ripristinaTransition(personaggio);
     }
     else{
         await step(-1.5, -1.5, 0);
@@ -1539,6 +1566,7 @@ async function saltaSinistra(personaggio, dimezzato, unquarto) {
         await step(0.5, -1, 60);
         await step(1.5, -1.5, 60);
         await step(1.5, -1.5, 60);
+        await ripristinaTransition(personaggio);
     }
 }
 
@@ -1555,19 +1583,25 @@ async function saltaSotto(personaggio, dimezzato, unquarto) {
         await step(0.375, 60);
         await step(0.25, 60);
         await step(-0.25, 60);
+        await ripristinaTransition(personaggio);
     }
     if(dimezzato){
         await step(0.75, 0);
         await step(0.75, 60);
         await step(0.5, 60);
         await step(-0.5, 60);
+        await ripristinaTransition(personaggio);
     }
     else{
-    await step(2.5, 0);
-    await step(2.5, 60);
-    await step(1.5, 60);
-    await step(-1.5, 60);
+        await step(2.5, 0);
+        await step(2.5, 60);
+        await step(1.5, 60);
+        await step(-1.5, 60);
+        await ripristinaTransition(personaggio);
     }
+}
+function ripristinaTransition(personaggio){
+    personaggio.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
 }
 
 
