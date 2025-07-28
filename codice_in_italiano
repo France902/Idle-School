@@ -1,1 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  user-scalable=no,">
+    <title>Idle School</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: rgb(186, 240, 254);
+            user-select: none;
+            pointer-events: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        h1 {
+            position: fixed;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 1.2vw;
+            text-align: center;
+
+        }
+
+       
+        img {
+        image-rendering: crisp-edges; 
+        }
+
+        #world {
+            transform: scale(0.07);
+            transform-origin: center center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            margin-left: -5vw;
+            margin-top: 5vh;
+            will-change: transform;
+        }
+
+        #piattaforma_1 {
+            width: 10vw;
+            height: 12vh;
+            position: fixed;
+            background-color: rgb(168, 108, 3);
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            z-index: -1;
+        }
+
+        #piattaforma_2 {
+            width: 23.44vw;        
+            height: 33.33vh;      
+            position: fixed;
+            background-color: rgb(124, 3, 168);
+            margin-top: 28.5vh;    
+            margin-left: 39.65vw;  
+            display: none; 
+            z-index: -1;
+        }
+
+        #preside_container {
+            position: fixed;
+            top: 50%;
+            left: 30%;
+            transform: translate(-110%, -120%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 10vw;
+            height: 10vw;
+            border-radius: 1vw;
+        }
+
+        #piattaforme_container {
+            position: fixed;
+            transform: translate(-510%, 250%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 10vw;
+            height: 10vw;
+            border-radius: 1vw;
+            opacity: 0;
+        }
+
+
+        #bob_container{
+            position: fixed;
+            left: 70vw;
+            top: 39vh;
+        }
+        #bob_personaggio{
+            transform: scaleX(-1);
+            width: 28vw;
+            height: 20vh;
+        }
+
+        #terziario_container{
+            position: fixed;
+            left: 80vw;
+            top: 39vh;
+        }
+        #terziario_personaggio{
+            width: 28vw;
+            height: 20vh;
+        }
+
+        #preside {
+            width: 30vw;
+            height: 30vh;
+            position: fixed;
+            top: 0vh;
+            left: 0vw;
+            transition: left 0.1s, top 0.1s;
+        }
+
+        #cattedra {
+            width: 7.81vw;         
+            height: 4.17vh;        
+            background-color: rgb(255, 0, 0);
+            position: fixed;
+            transform: rotate(90deg);
+        }
+
+        #studente {
+            width: 3.3vw;          
+            height: 5vh;       
+            background-color: red;
+            position: fixed;
+            top: 39vh;   
+            left: 72.7vw;
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
+
+        #entrata_scuola {
+            width: 51vw; 
+            height: 100vh; 
+            position: fixed;
+            z-index: -3; 
+            transform: scale(2); 
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
+
+        #progressCircle {
+            position: fixed; 
+            top: -13.5vh; 
+            left: 26.23vw; 
+            background: transparent; 
+            display: none; 
+            width: 15vw; 
+            height: 15vh;
+        }
+        #missioni {
+            position: fixed; 
+            left: 80vw; 
+            top: 14vh; 
+            width: 17vw;
+        }
+        #immagine_preside_dialoghi {
+            position: fixed;
+            z-index: -1;
+            height: 120vh;
+            top: -30vh;
+            margin-left: -45vw;
+            object-fit: cover;
+            pointer-events: none;
+            transform: scale(0.8); 
+            transform-origin: center center;
+            transition: all 0.3s ease-in-out;
+        }
+        #personaggio_anonimo_dialoghi {
+            position: fixed;
+            z-index: -1;
+            height: 80vh;
+            top: 5vh;
+            margin-left: 60vw;
+            object-fit: cover;
+            pointer-events: none; 
+            transform: scale(0.8); 
+            transform-origin: center center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #container-dialogo {
+            position: fixed;
+            top: 0;
+            left: 0vw;
+            width: 100vw;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #dialogo {
+            background-color: rgba(255, 255, 255);
+            border-radius: 1.5vw;
+            padding-left: 2vw;
+            padding-right: 2vw;
+            margin: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 80vw;
+            height: 33vh;
+            font-size: 2.2vw;
+            color: black;
+            text-align: left;
+            font-family: "Comic Neue", cursive;
+            font-weight: 400;
+            position: fixed;
+            z-index: 0;
+        }
+
+        #dialogo-testo {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            margin-top: 7.5vh;
+            margin-left: 1.5vw;
+        }
+
+        #nome-personaggio {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            margin-top: 1.8vh;
+        }
+
+        #box-nome{
+            background-color: rgba(255, 255, 255);
+            border-radius: 0.5vw;
+            padding-left: 0.5vw;
+            padding-right: 0.5vw;
+            margin: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            width: 14vw;
+            height: 7vh;
+            top: 54vh;
+            font-size: 1.5vw;
+            margin-left: 5vw;
+            color: black;
+            text-align: center;
+            font-family: "Comic Neue", cursive;
+            font-weight: 800;
+            position: fixed;
+            z-index: 1;
+        }
+
+        #canvas {
+            position: fixed;
+            width: 1001vw;  
+            height: 1200vh;
+            overflow: hidden; 
+        }
+        #vignetta_bob, #vignetta_terziario {
+            position: fixed;
+            width: 10vw;
+            height: 15vh;
+            top: 32vh;
+            left: 82.8vw;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.1s ease-in-out, left 0.25s ease-in-out, top 0.25s ease-in-out;
+        }
+
+        .banco {
+            width: 5.21vw;         
+            height: 4.17vh;       
+            background-color: brown;
+            position: fixed;
+            transform: rotate(90deg);
+        }
+
+        .blocco_pulizia {
+            height: 8.33vh;        
+            width: 3.13vw;         
+            position: fixed;
+            background-color: red;
+            animation: fadeOpacity 1s infinite alternate;
+        }
+
+        .hud-container {
+            position: fixed;
+            top: 1.5vh;
+            right: 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1vh;
+            z-index: 5;
+        }
+
+        .hud-box {
+            background-color: rgba(0, 0, 0, 0.6); 
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 1.2vw;
+            padding: 0.6vh 1vw;
+            border: 0.15vw solid white;
+            border-radius: 0.6vw;
+            min-width: 8vw;
+            text-align: right;
+            position: fixed;
+        }
+
+        .hud_missioni {
+            position: absolute;
+            top: 14.5vh;
+            right: 5vw;
+            width: 17vw;
+            background-color: rgba(50, 50, 50, 0.6);
+            opacity: 1;
+            border: 0.15vw solid white;
+            border-radius: 0.6vw;
+            padding: 0.6vh 0 0.6vh 1vw; 
+            color: white;
+            box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            pointer-events: auto;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            top: 0.6vh;
+            right: 0.4vw;
+            width: 2vw;
+            height: 3vh;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .missione_1, .missione_2, .missione_3 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 3.3vh 0;
+            cursor: pointer;
+        }
+
+        .missione_1 h1, .missione_2 h1, .missione_3 h1 {
+            font-size: 1.7vw;
+            margin: 0;
+            padding-left: 4vw;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .missione_1 img, .missione_2 img, .missione_3 img {
+            width: 3vw;
+            height: 5vh;
+        }
+
+        .missione_2, .missione_3 {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            
+        }
+
+        .hud_missioni.open .missione_1, .hud_missioni.open .missione_2, .hud_missioni.open .missione_3 {
+            opacity: 1;
+            cursor: auto;
+        }
+
+        .hud_missioni.closed .missione_1 {
+            cursor: pointer;
+        }
+
+        .hud_missioni.closed {
+            max-height: 10vh;
+            cursor: pointer;
+        }
+
+        .hud_missioni.open {
+            max-height: 30vh;
+            cursor: auto;
+        }
+        .scuola-img {
+            position: fixed;
+            z-index: 0;
+            transform: scale(1);
+            transition: left 0.35s ease-in-out, top 0.35s ease-in-out;
+            will-change: transform, left, top;
+        }
+
+        @keyframes fadeOpacity {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="loader-container" >
+         <div id="loader-bar"></div>
+    </div>
+  <div id="world">
+    <div id="Edificio_scolastico" style="z-index: -1;">
+    <div id="canvas" class="scuola-img" style="top: -550vh; left: -200vw;">
+
+<img src="giardino_bordo_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed;">
+<img src="giardino_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 210vw;">
+<img src="giardino_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 420vw;">
+<img src="giardino_bordo_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 630vw;">
+
+<img src="giardino_bordo_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh;">
+<img src="giardino_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 210vw;">
+<img src="giardino_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 420vw;">
+<img src="giardino_bordo_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 630vw;">
+
+<img src="giardino_bordo_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh;">
+<img src="giardino_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 210vw;">
+<img src="giardino_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 420vw;">
+<img src="giardino_bordo_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 630vw;">
+
+<img src="strada_bordo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh;">
+<img src="strada_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 210vw;">
+<img src="strada_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 420vw;">
+<img src="strada_bordo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 630vw;">
+
+
+    </div>
+        
+    </div>
+
+    <div id="piattaforme_container">
+            <img class="scuola-img" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
+        </div>
+    
+    <div id="preside_container">
+        <img src="Preside.png" id="preside">
+    </div>
+    </div>
+    <div id="container-dialogo">
+        <div id="box-nome">
+            <p id="nome-personaggio">nome personaggio</p>
+        </div>
+        <div id="dialogo">
+            <p id="dialogo-testo">Prova-dialogo</p>
+        </div>
+        <img src="Preside.png" alt="" id="immagine_preside_dialoghi">
+
+        <img src="Personaggio_anonimo.png" alt="" id="personaggio_anonimo_dialoghi">
+        
+    </div>
+    
+
+    
+    <div class="hud-container">
+        <img src="icona_zoom.png" onclick=" scala(true)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
+        <br>
+        <img src="icona_casa.png" onclick="scala('predefinito')" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
+        <br>
+        <img src="icona_dezoom.png" onclick="scala(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
+        <!--
+        <div id="soldi" class="hud-box">0 🪙</div>
+        <div id="classi" class="hud-box" style="top: 8vh;">0 🏫</div>
+        <div id="missioni" class="hud_missioni closed" >
+        <img class="toggle-icon" src="icona_menu_missioni.png" alt="Icona Toggle" onclick="menu_missioni()">
+        <div class="missione_1" onclick="toggleMenu()">
+            <img src="icona_punto_interrogativo.png" alt="Icona Missione 1">
+            <h1>missione 1</h1>
+        </div>
+        <div class="missione_2" onclick="toggleMenu()">
+            <img src="icona_punto_interrogativo.png" alt="Icona Missione 2">
+            <h1>missione 2</h1>
+        </div>
+        <div class="missione_3" onclick="toggleMenu()">
+            <img src="icona_punto_interrogativo.png" alt="Icona Missione 3">
+            <h1>missione 3</h1>
+        </div>
+        -->
+    </div>
+    <!--
+
+    <div id="cartello-orizzontale" class="scuola-img" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
+        <p id="testo_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
+    </div>
+
+
+    <div id="piattaforma_2">
+        <div class="banco" id="banco1" style="margin-top: 4.17vh; margin-left: 14.58vw;"><p>Banco1</p></div>
+        <div class="banco" id="banco2" style="margin-top: 20.83vh; margin-left: 14.58vw;"><p>Banco2</p></div>
+        <div id="cattedra" style="margin-top: 12.5vh; margin-left: 1.56vw;"><p>Cattedra</p></div>
+    </div>
+
+    <div id="blocco_pulizia_1" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 31vh; display: none;"></div>
+
+    <div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 47vh; display: none;"></div>
+-->
+        
+    </div>
+    
+<script>
+window.onload = iniziaGioco;
+
+function iniziaGioco() {
+  const elementi = inizializzaElementi();
+  const stato = inizializzaStato();
+  creaTastiInteragibili(elementi, stato);
+  setupDialoghi(elementi,  stato);
+  controlloSkip(elementi, stato);
+  setTimeout(() => scalaMondo(elementi), 1000);
+  scriptGioco(elementi, stato);
+  creazionePersonaggiT(elementi, stato)
+  setupMenuToggle(elementi);
+}
+
+function inizializzaElementi() {
+  return {
+    // Core del gioco
+    canvas: document.getElementById('progressCircle'),
+    world: document.getElementById('world'),
+    soldiText: document.getElementById('soldi'),
+    menu: document.getElementById('missioni'),
+    
+    // Giocatore e interazioni
+    studente: document.querySelector('.studente'),
+    toggle_icon: document.querySelector('.toggle-icon'),
+    piattaforma_1: document.getElementById('piattaforma_1'),
+    piattaforma_2: document.getElementById('piattaforma_2'),
+    banco1: document.getElementById('banco1'),
+    banco2: document.getElementById('banco2'),
+    blocco_pulizia_1: document.getElementById('blocco_pulizia_1'),
+    blocco_pulizia_2: document.getElementById('blocco_pulizia_2'),
+    tastoE: document.getElementById('tasto_e'),
+    
+    // Dialoghi e narrativa
+    dialogo: document.getElementById('dialogo'),
+    dialogoTesto: document.getElementById('dialogo-testo'),
+    container_dialogo: document.getElementById('container-dialogo'),
+    immaginePreside: document.getElementById('immagine_preside_dialoghi'),
+    personaggioAnonimo: document.getElementById('personaggio_anonimo_dialoghi'),
+    nomePersonaggio: document.getElementById('nome-personaggio'),
+    boxNome: document.getElementById('box-nome'),
+    preside: document.getElementById('preside'),
+    preside_container: document.getElementById('preside_container'),
+    
+    // Decorazioni
+    scuolaImgs: document.querySelectorAll('.scuola-img'),
+    imgsArray: Array.from(document.querySelectorAll('.scuola-img')),
+
+    // Notifiche / sbloccabili
+    unlockedText: document.getElementById('unlocked')
+  };
+}
+
+
+function inizializzaStato() {
+  return {
+    // Stato principale
+    soldi: 0,
+    classi: 0,
+    fila_studenti: 10,
+
+    // Interazioni e click
+    condizione_click: false,
+    cond_movimento: false,
+    cond_saltoB: true,
+    cond_saltoT: false,
+    cond_ripetizione: false,
+    cond_skip: true,
+    cond_dialogo: false,
+    cond_testo: true,
+
+    // Posizioni
+    posX: 0,
+    posY: 0,
+    pos_student: 0,
+    posBX: 70,
+    posBY: 39,
+
+    // Condizioni ambientali
+    condizione_posizione: false,
+    cond_piattaforma_1: false,
+    cond_stanza1: false,
+    cond_stanza2: false,
+
+    // Stato generico
+    cond: false
+  };
+}
+
+const matriceTerz = [
+        [ '175vw', '-15vh', "gruppo", 1, 1 ],
+        [ '163vw', '-3vh', "gruppo", 2, 1 ],
+        [ '163vw', '-27vh', "gruppo", -2, 0 ],
+        [ '13vw', '-27vh', "solo-lavoro", 1, 1 ],
+        [ '90vw', '110vh', "solo", -1, false ],
+    ];
+const oggettiImportanti = [
+    [ '158vw', '-3vh', '158vw', '-27vh', 'tavolo']
+];
+
+
+let zoom = 0.9;
+function scala(condizione, elementi = inizializzaElementi(), stato = inizializzaStato()) {
+    elementi.world.style.transition = "transform 0.3s ease-in-out";
+    if(condizione === 'predefinito') {
+        zoom = 0.9;
+        elementi.world.style.transform = `scale(${zoom})`;
+        return;
+    }
+    if (condizione) {
+        if (zoom <= 1.5) {
+            zoom += 0.07;
+            elementi.world.style.transform = `scale(${zoom})`;
+        }
+    }
+    else{
+        if (zoom >= 0.5) {
+            zoom -= 0.07;
+            elementi.world.style.transform = `scale(${zoom})`;
+        }
+    }
+}
+function scalaMondo(e) {
+  let scale = 0.07;
+  const target = 0.9;
+  const speed = 0.006;
+
+  
+  if (e.world.dataset.scaling === "true") return;
+  e.world.dataset.scaling = "true";
+
+  function animate() {
+    scale += speed;
+    if (scale >= target) {
+      scale = target;
+      e.world.style.transform = `scale(${target})`;
+      e.world.dataset.scaling = "false"; 
+      return; 
+    }
+
+    e.world.style.transform = `scale(${scale})`;
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+
+function creaTastiInteragibili(e, stato) {
+    const tasti_pos = [
+        [false],
+        [false],
+        [false],
+        [false],
+        ['90vw', '110vh'],
+    ]
+    for(let i=0;i<tasti_pos.length;i++){
+        if(tasti_pos[i][0] != false){
+            const tasto = document.createElement('img');
+            tasto.src = 'tasto_e.png';
+            tasto.id = 'tasto_e' + i;
+            tasto.className = 'scuola-img';
+            tasto.style.width = '4vw';
+            tasto.style.height = '4vw';
+            tasto.style.opacity = '0';
+            tasto.style.left = parseFloat(tasti_pos[i][0]) + 8 + 'vw';
+            tasto.style.top = parseFloat(tasti_pos[i][1]) - 7 + 'vh';
+            e.world.appendChild(tasto);
+        }
+    }
+}
+
+function setupDialoghi(e, stato) {
+  const righe = [
+    ["Ciao! Sono Bob, della Building & Co!", "Bob", 2, false],
+    ["Questo posto è proprio enorme!", "Bob", 2, false],
+    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1, false],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2, false],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2, false],
+    ["", "", 2, true],
+  ];
+  let index = 0;
+
+  function mostraTesto(testo, velocita = 15) {
+    e.dialogoTesto.textContent = "";
+    let i = 0;
+    stato.cond_skip = true;
+    let scrivi = function () {
+      if (!stato.cond_testo) {
+        e.dialogoTesto.textContent = testo;
+        stato.cond_testo = true;
+        stato.cond_skip = false;
+        return;
+      }
+      if (i < testo.length) {
+        e.dialogoTesto.textContent += testo[i++];
+        setTimeout(scrivi, velocita);
+      } else {
+        stato.cond_skip = false;
+      }
+    };
+    scrivi();
+  }
+
+  function cambiaNome(nome) {
+    e.nomePersonaggio.textContent = nome;
+  }
+
+  function cambiaboxNome(pos) {
+    const sinistra = pos === 1;
+    e.boxNome.style.left = sinistra ? "11vw" : "65vw";
+    e.immaginePreside.style.transform = sinistra ? "scale(0.9)" : "scale(0.8)";
+    e.personaggioAnonimo.style.transform = sinistra ? "scale(0.8)" : "scale(0.9)";
+    e.immaginePreside.style.opacity = sinistra ? "1" : "0.8";
+    e.personaggioAnonimo.style.opacity = sinistra ? "0.8" : "1";
+  }
+
+  function mostraProssimaRiga() {
+    if(righe[index][3] == true){
+        stato.cond_testo = false;
+        stato.cond_skip = false;
+        e.container_dialogo.style.opacity = 0;
+        stato.cond_movimento = true;
+        setupMovimentoPreside(e, stato);
+    }
+    if (index < righe.length) {
+      mostraTesto(righe[index][0]);
+      cambiaNome(righe[index][1]);
+      cambiaboxNome(righe[index][2]);
+      index++;
+    }
+  }
+
+  mostraTesto("Prova dialogo animato");
+  cambiaNome("nome preside");
+  cambiaboxNome(1);
+
+  window.mostraProssimaRiga = mostraProssimaRiga;
+}
+
+function controlloSkip(elementi, stato) {
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (stato.cond_skip && stato.cond_dialogo) stato.cond_testo = false;
+      else if (stato.cond_dialogo) window.mostraProssimaRiga();
+    }
+  });
+
+  window.addEventListener('mousedown', e => {
+    if (e.button === 0) {
+      if (stato.cond_skip && stato.cond_dialogo) stato.cond_testo = false;
+      else if (stato.cond_dialogo) window.mostraProssimaRiga();
+    }
+  });
+}
+
+function setupMovimentoPreside(e, stato) {
+  const p = e.preside;
+  p.style.top = '0vh';
+  p.style.left = '0vw';
+    let isCharging = false;
+    let jumpStartTime = 0;
+    let currentDir = { x: 0, y: 0 };
+    let keys = {};
+
+   let movimentoInterval;
+
+if(stato.cond_movimento){
+    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('keyup', handleKeyup);
+
+    movimentoInterval = setInterval(() => {
+        if (isCharging) return;
+        currentDir = getDirection();
+        if (currentDir.x !== 0 || currentDir.y !== 0) {
+            isCharging = true;
+            jumpStartTime = performance.now();
+        }
+    }, 16);
+} else {
+    window.removeEventListener('keyup', handleKeyup);
+    window.removeEventListener('keydown', handleKeydown);
+    clearInterval(movimentoInterval);
+}
+
+function handleKeydown(event) {
+e.imgsArray = Array.from(document.querySelectorAll('.scuola-img'));
+keys[event.code] = true;
+if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
+    currentDir = getDirection();
+    if (currentDir.x === 0 && currentDir.y === 0) return;
+        if(!isCharging && !event.repeat){
+            isCharging = true;
+            jumpStartTime = performance.now();
+            
+        }
+    }
+}
+function handleKeyup(event){
+    keys[event.code] = false;
+    if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
+        if(isCharging){
+            isCharging = false;
+            let heldFor = performance.now() - jumpStartTime;
+            if(heldFor > 270){
+                heldFor = 270;
+            } 
+            let distance = heldFor / 30;
+            direzioneSalto(distance, currentDir);
+        }
+    }
+}
+function getDirection(){
+    let dir = { x: 0, y: 0 };
+    if (keys["KeyW"]) dir.y -= 1;
+    if (keys["KeyS"]) dir.y += 1;
+    if (keys["KeyA"]) dir.x -= 1;
+    if (keys["KeyD"]) dir.x += 1;
+
+    const magnitude = Math.hypot(dir.x, dir.y);
+    if (magnitude > 0) {
+        dir.x /= magnitude;
+        dir.y /= magnitude;
+    } else {
+        dir.x = 0;
+        dir.y = 0;
+    }
+    
+        return dir;
+}
+
+function direzioneSalto(distance, dir){
+    dir.x = parseFloat((dir.x).toFixed(1));
+    dir.y = parseFloat((dir.y).toFixed(1));
+    if(dir.x == -1 && dir.y == 0) sinistra(distance);
+    else if(dir.x == 1 && dir.y == 0) destra(distance);
+    if(dir.y == 1 && dir.x == 0) sotto(distance);
+    else if(dir.y == -1 && dir.x == 0) sopra(distance);
+    else if (dir.x == 0.7 && dir.y == -0.7) diagonaleAltoDestra(distance);
+    else if (dir.x == -0.7 && dir.y == -0.7) diagonaleAltoSinistra(distance);
+    else if (dir.x == 0.7 && dir.y == 0.7) diagonaleBassoDestra(distance);
+    else if (dir.x == -0.7 && dir.y == 0.7) diagonaleBassoSinistra(distance);
+    control_position(stato, e);
+}
+
+function sinistra(distance){
+    stato.posX -= distance;
+    e.imgsArray.forEach(img => {
+        img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
+    });
+    for(let i=0;i<oggettiImportanti.length;i++){
+        for(let j=0;j<oggettiImportanti[i].length-1;j+=2){
+            oggettiImportanti[i][j] = (parseFloat(oggettiImportanti[i][j]) + distance) + 'vw';
+        }
+    }
+    animazioneSaltoSinistra(distance);
+}
+
+async function animazioneSaltoSinistra(distance){
+    p.style.transform = "scaleX(-1)";
+    p.src = "Preside.png";
+    const step = [60, 120, 180, 240, 300];
+    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+        step.forEach((ms, i) => {
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+            }, ms);
+        });
+}
+
+function destra(distance){
+    stato.posX += distance;
+    e.imgsArray.forEach(img => {
+        img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
+    });
+    for(let i=0;i<oggettiImportanti.length;i++){
+        for(let j=0;j<oggettiImportanti[i].length-1;j+=2){
+            oggettiImportanti[i][j] = (parseFloat(oggettiImportanti[i][j]) - distance) + 'vw';
+        }
+    }
+    animazioneSaltoDestra(distance);
+}
+
+async function animazioneSaltoDestra(distance){
+    p.style.transform = "scaleX(1)";
+    p.src = "Preside.png";
+    const step = [60, 120, 180, 240, 300];
+    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+        step.forEach((ms, i) => {
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+            }, ms);
+        });
+}
+
+function sotto(distance){
+    stato.posY += distance;
+    e.imgsArray.forEach(img => {
+        img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
+    });
+    for(let i=0;i<oggettiImportanti.length;i++){
+        for(let j=0;j<oggettiImportanti[i].length-1;j+=2){
+            oggettiImportanti[i][j+1] = (parseFloat(oggettiImportanti[i][j+1]) - distance) + 'vh';
+        }
+    }
+    animazioneSaltoSotto(distance);
+}
+
+async function animazioneSaltoSotto(distance){
+    p.src = "Preside_davanti.png";
+    const step = [60, 120, 180, 240, 300];
+    const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
+        step.forEach((ms, i) => {
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+            }, ms);
+        });
+}
+
+function sopra(distance){
+    stato.posY -= distance;
+    e.imgsArray.forEach(img => {
+        img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
+    });
+    for(let i=0;i<oggettiImportanti.length;i++){
+        for(let j=0;j<oggettiImportanti[i].length-1;j+=2){
+            oggettiImportanti[i][j+1] = (parseFloat(oggettiImportanti[i][j+1]) + distance) + 'vh';
+        }
+    }
+    animazioneSaltoSopra(distance);
+}
+
+async function animazioneSaltoSopra(distance){
+    p.src = "Preside_dietro.png";
+    const step = [60, 120, 180, 240, 300];
+    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+        step.forEach((ms, i) => {
+            setTimeout(() => {
+                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+            }, ms);
+        });
+}
+
+function diagonaleAltoDestra(distance) {
+    stato.posX += distance;
+    stato.posY -= distance;
+    e.imgsArray.forEach(img => {
+        img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
+        img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
+    });
+    for (let i = 0; i < oggettiImportanti.length; i++) {
+        for (let j = 0; j < oggettiImportanti[i].length - 1; j += 2) {
+            oggettiImportanti[i][j] = (parseFloat(oggettiImportanti[i][j]) - distance) + 'vw';
+            oggettiImportanti[i][j + 1] = (parseFloat(oggettiImportanti[i][j + 1]) + distance) + 'vh';
+        }
+    }
+    animazioneSaltoDiagonale(distance);
+}
+
+function diagonaleAltoSinistra(distance) {
+    stato.posX -= distance;
+    stato.posY -= distance;
+    e.imgsArray.forEach(img => {
+        img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
+        img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
+    });
+    for (let i = 0; i < oggettiImportanti.length; i++) {
+        for (let j = 0; j < oggettiImportanti[i].length - 1; j += 2) {
+            oggettiImportanti[i][j] = (parseFloat(oggettiImportanti[i][j]) + distance) + 'vw';
+            oggettiImportanti[i][j + 1] = (parseFloat(oggettiImportanti[i][j + 1]) + distance) + 'vh';
+        }
+    }
+    animazioneSaltoDiagonale(distance);
+}
+
+function diagonaleBassoDestra(distance) {
+    stato.posX += distance;
+    stato.posY += distance;
+    e.imgsArray.forEach(img => {
+        img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
+        img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
+    });
+    for (let i = 0; i < oggettiImportanti.length; i++) {
+        for (let j = 0; j < oggettiImportanti[i].length - 1; j += 2) {
+            oggettiImportanti[i][j] = (parseFloat(oggettiImportanti[i][j]) - distance) + 'vw';
+            oggettiImportanti[i][j + 1] = (parseFloat(oggettiImportanti[i][j + 1]) - distance) + 'vh';
+        }
+    }
+    animazioneSaltoDiagonale(distance);
+}
+
+function diagonaleBassoSinistra(distance) {
+    stato.posX -= distance;
+    stato.posY += distance;
+    e.imgsArray.forEach(img => {
+        img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
+        img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
+    });
+    for (let i = 0; i < oggettiImportanti.length; i++) {
+        for (let j = 0; j < oggettiImportanti[i].length - 1; j += 2) {
+            oggettiImportanti[i][j] = (parseFloat(oggettiImportanti[i][j]) + distance) + 'vw';
+            oggettiImportanti[i][j + 1] = (parseFloat(oggettiImportanti[i][j + 1]) - distance) + 'vh';
+        }
+    }
+    animazioneSaltoDiagonale(distance);
+}
+
+async function animazioneSaltoDiagonale(distance) {
+    p.src = "Preside_dietro.png"; 
+    const step = [60, 120, 180, 240, 300];
+    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+    step.forEach((ms, i) => {
+        setTimeout(() => {
+            p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+        }, ms);
+    });
+}
+
+
+window.addEventListener('keydown', handleKeydown);
+window.addEventListener('keyup', handleKeyup);
+  }
+  
+  function control_position(stato, e) {
+    stato.posX = Math.round(stato.posX);
+    stato.posY = Math.round(stato.posY);
+    if((stato.posX >= 44 && stato.posX <= 50) && (stato.posY >= 66 && stato.posY <= 79)){
+        document.getElementById('tasto_e'+4).style.opacity = '1';
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'e' || event.key === 'E') {
+                interazione(4, e);
+            }
+        });
+    }
+    else{
+        document.getElementById('tasto_e'+4).style.opacity = '0';
+    }
+}
+
+
+function setupMenuToggle(e) {
+  e.toggle_icon.addEventListener('mouseenter', () => e.toggle_icon.style.opacity = '0.7');
+  e.toggle_icon.addEventListener('mouseleave', () => e.toggle_icon.style.opacity = '1');
+  e.toggle_icon.addEventListener('click', () => {
+    e.menu.classList.toggle('open');
+    e.menu.classList.toggle('closed');
+  });
+}
+function interazione(indice, e){
+    if(indice == 4){
+        matriceTerz[indice][4] = true;
+        e.preside.style.transform = 'scaleX(1)';
+        const personaggio = document.getElementById('personaggio4');
+        personaggio.style.transform = 'scaleX(1)';
+        document.getElementById('tasto_e' + indice).style.display = 'none';
+        sobbalzo(personaggio, e);
+    }
+}
+
+
+    function scriptGioco(e, stato) {
+        centralizzazionePreside(e, stato);
+        creazioneBob(e, stato);
+        diaologoB_P1(e, stato);
+    }
+    
+function creazionePersonaggiT(e, stato) {
+    let i, N=5;
+    let cond_gruppo, scaleX;
+    
+    for(i=0;i<N;i++){
+        creaPersonaggio(e, stato, i);
+    }
+}
+function creaPersonaggio(e, stato, i) {
+    const personaggioContainer = document.createElement('div');
+    personaggioContainer.style.left = matriceTerz[i][0];
+    personaggioContainer.style.top = matriceTerz[i][1];
+    personaggioContainer.id = 'personaggio' + i;
+    personaggioContainer.className = 'scuola-img';
+    personaggioContainer.style.position = 'fixed';
+    personaggioContainer.style.zIndex = matriceTerz[i][4];
+    personaggioContainer.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    const personaggioImg = document.createElement('img');
+    personaggioImg.src = 'Personaggio_anonimo.png';
+    personaggioImg.style.width = '28vw';
+    personaggioImg.style.height = '20vh';
+
+    if(matriceTerz[i][3] == 1) {
+        personaggioContainer.style.transform = 'scaleX(1)';
+    } else if (matriceTerz[i][3] == -1) {
+        personaggioContainer.style.transform = 'scaleX(-1)';
+    } 
+
+    personaggioContainer.appendChild(personaggioImg);
+    e.world.appendChild(personaggioContainer);
+    e.world.appendChild(document.getElementById("personaggio"+i))
+    
+    if(matriceTerz[i][2] == "gruppo") animazionePassivaGruppo(personaggioContainer, i, e);
+    else if(matriceTerz[i][2] == "solo-lavoro") {
+        animazionePassivaSoloL(personaggioContainer, i, e);
+        setInterval(() => {
+            animazionePassivaSoloL(personaggioContainer, i, e);
+        }, 8000);
+    }
+    else if(matriceTerz[i][2] == "solo"){
+        let posX = parseFloat(matriceTerz[i][0]) + 13;
+        let posY = parseFloat(matriceTerz[i][1]) - 10;
+        const vignetta = creaVignetta('vignetta_musica.png', posX, posY, e);
+        let interval = setInterval(() => {
+            if(matriceTerz[i][4] == false){
+                let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+                setTimeout(() => {
+                                vignetta.style.opacity = '1';
+                            setTimeout(() => {
+                                vignetta.style.opacity = '0';
+                            }, 2000);
+                }, tempo_vignetta);
+            }
+            else{
+                clearInterval(interval);
+            }
+        }, 5000);
+        setInterval(() => {
+            animazionePassivaSolo(personaggioContainer, i, e, vignetta);
+            }, 1000);
+        
+
+        }
+}
+function creaVignetta(sr, posX, posY, e){
+        const vignetta = document.createElement('img');
+        vignetta.src = sr;
+        vignetta.style.opacity = '0';
+        vignetta.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.35s ease-in-out';
+        vignetta.style.width = '10vw';
+        vignetta.style.height = '15vh';
+        vignetta.style.left = `${posX}vw`;
+        vignetta.style.top = `${posY}vh`;
+        vignetta.className = 'scuola-img';
+        e.world.appendChild(vignetta);
+        return vignetta;
+}
+function animazionePassivaGruppo(personaggio, i, e, posX = 0, posY = 0) {
+    personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
+    if(posX == 0){
+        posX = parseFloat(matriceTerz[i][0]) + 13;
+        posY = parseFloat(matriceTerz[i][1]) - 5;
+    }
+
+    const vignetta = creaVignetta('vignetta_dialogo.png', posX, posY, e);
+    let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+    setTimeout(() => {
+                    vignetta.style.opacity = '1';
+                setTimeout(() => {
+                        vignetta.style.opacity = '0';
+                }, 3000);
+    }, tempo_vignetta);
+            setTimeout(() => {
+                posY = parseFloat(personaggio.style.top);
+                posY = parseFloat(posY) - 3;
+                    personaggio.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(personaggio.style.top) + 3;
+                        personaggio.style.top = `${posY}vh`;
+                    }, 300);
+            }, tempo);
+    
+    setInterval(() => {
+            let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                    posY = parseFloat(personaggio.style.top);
+                    posY = parseFloat(posY) - 3;
+                    personaggio.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(personaggio.style.top) + 3;
+                        personaggio.style.top = `${posY}vh`;
+                    }, 300);
+            }, tempo);
+            let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                            vignetta.style.opacity = '1';
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+    }, 5000);
+}
+async function animazionePassivaSoloL(personaggio, i, e){
+    personaggio.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
+    const sleep =  ms => new Promise(r => setTimeout(r, ms));
+    
+    const step = async (action, delay, scaleX) => {
+        await sleep(delay);
+        if(scaleX) {
+            personaggio.style.transform = 'scaleX(1)';
+        } else {
+            personaggio.style.transform = 'scaleX(-1)';
+        }
+        if (typeof window[action] === 'function') {
+            window[action](personaggio, false);
+        }
+    };
+
+    await step("saltaDestra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
+    await step("saltaDestra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
+    await step("saltaSinistra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
+    await step("saltaSinistra", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
+}
+
+async function animazionePassivaSolo(personaggio, i, e, vignetta){
+    personaggio.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    vignetta.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+
+        
+    const sleep =  ms => new Promise(r => setTimeout(r, ms));
+    const step = async (delay) => {
+        if(matriceTerz[i][4] == true){
+            vignetta.style.opacity = '0';
+            vignetta.style.display = 'none';
+            document.getElementById('tasto_e'+4).style.display = 'none';
+            return;
+        }
+        else{
+            let dec = (Math.floor(Math.random() * 1) + 2);
+            personaggio.style.top = parseFloat(personaggio.style.top) - dec + 'vh';
+            vignetta.style.top = parseFloat(vignetta.style.top) - dec + 'vh';
+            setTimeout(() => {
+                personaggio.style.top = parseFloat(personaggio.style.top) + dec + 'vh';
+                vignetta.style.top = parseFloat(vignetta.style.top) + dec + 'vh';
+            }, 350);
+            await sleep(delay);
+        }
+        
+    };
+
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
+
+}
+
+async function sobbalzo(personaggio, e) {
+    personaggio.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+    };
+
+    await step(-3, 2, 0);
+    await step(-2, 2, 90);
+    await step(-1.5, 2, 90);
+    await step(1.5, 2, 100);
+    await step(2, 2, 90);
+    await step(3, 1, 90);
+    await sleep(1500);
+    await ritornoOggetto(personaggio, oggettiImportanti[0][2], oggettiImportanti[0][3], true);
+
+}
+
+async function ritornoOggetto(personaggio, x, y, ordine = false, e = inizializzaElementi()){
+    let stepX = (parseFloat(x) - parseFloat(personaggio.style.left)) / 8;
+    let stepY = (parseFloat(y) - parseFloat(personaggio.style.top)) / 5;
+    let diffStepX = Math.abs(stepX - Math.trunc(stepX));
+    stepX -= diffStepX;
+    let mezzostepX = false;
+    if (diffStepX > 0.5) {
+        mezzostepX = true;
+    }
+    diffStepX = Math.abs(stepX - Math.trunc(stepX));
+    let unQuartoStepX = false;
+    if(diffStepX > 0.25){
+        mezzostepX = false;
+        unQuartoStepX = true;
+    }
+    let diffStepY = Math.abs(stepY - Math.trunc(stepY));
+    stepY -= diffStepY;
+    let mezzostepY = false;
+    if (diffStepY > 0.5) {
+        mezzostepY = true;
+    }
+    diffStepY = Math.abs(stepY - Math.trunc(stepY));
+    let unQuartoStepY = false;
+    if(diffStepY > 0.25){
+        mezzostepX = false;
+        unQuartoStepY = true;
+    }
+
+    stepX = Math.trunc(stepX);
+    stepY = Math.trunc(stepY);
+
+    const sleep =  ms => new Promise(r => setTimeout(r, ms));
+    const step = async (action, delay, parametro = false, parametro2 = false) => {
+        if (typeof window[action] === 'function') {
+            window[action](personaggio, parametro);
+        }
+        await sleep(delay);
+    };
+    if (!ordine) {
+    if(stepX < 0) {
+        for(let i = 0; i > stepX; i--) {
+            await step("saltaSinistra", 500);
+        }
+        if(mezzostepX){
+            parametro = true;
+            await step("saltaSinistra", 500, parametro);
+        }
+        if(unQuartoStepX){
+            parametro2 = true;
+            await step("saltaSinistra", 500, false, parametro2);
+        }
+    } else {
+        for(let i = 0; i < stepX; i++) {
+            await step("saltaDestra", 500);
+        }
+        if(mezzostepX){
+            parametro = true;
+            await step("saltaDestra", 500, parametro);
+        }
+        if(unQuartoStepX){
+            parametro2 = true;
+            await step("saltaDestra", 500, false, parametro2);
+        }
+    }
+
+    if(stepY < 0) {
+        for(let i = 0; i > stepY; i--) {
+            await step("saltaSopra", 500);
+        }
+        if(mezzostepY){
+            parametro = true;
+            await step("saltaSopra", 500, parametro);
+        }
+        if(unQuartoStepY){
+            parametro2 = true;
+            await step("saltaSopra", 500, false, parametro2);
+        }
+    } else {
+        for(let i = 0; i < stepY; i++) {
+            await step("saltaSotto", 500);
+        }
+        if(mezzostepY){
+            parametro = true;
+            await step("saltaSotto", 500, parametro);
+        }
+        if(unQuartoStepY){
+            parametro2 = true;
+            await step("saltaSotto", 500, false, parametro2);
+        }
+    }
+
+} else {
+    if(stepY < 0) {
+        for(let i = 0; i > stepY; i--) {
+            await step("saltaSopra", 500);
+        }
+        if(mezzostepY){
+            parametro = true;
+            await step("saltaSopra", 500, parametro);
+        }
+        if(unQuartoStepY){
+            parametro2 = true;
+            await step("saltaSopra", 500, false, parametro2);
+        }
+    } else {
+        for(let i = 0; i < stepY; i++) {
+            await step("saltaSotto", 500);
+        }
+        if(mezzostepY){
+            parametro = true;
+            await step("saltaSotto", 500, parametro);
+        }
+        if(unQuartoStepY){
+            parametro2 = true;
+            await step("saltaSotto", 500, false, parametro2);
+        }
+    }
+
+    if(stepX < 0) {
+        for(let i = 0; i > stepX; i--) {
+            await step("saltaSinistra", 500);
+        }
+        if(mezzostepX){
+            parametro = true;
+            await step("saltaSinistra", 500, parametro);
+        }
+        if(unQuartoStepX){
+            parametro2 = true;
+            await step("saltaSinistra", 500, false, parametro2);
+        }
+    } else {
+        for(let i = 0; i < stepX; i++) {
+            await step("saltaDestra", 500);
+        }
+        if(mezzostepX){
+            parametro = true;
+            await step("saltaDestra", 500, parametro);
+        }
+        if(unQuartoStepX){
+            parametro2 = true;
+            await step("saltaDestra", 500, false, parametro2);
+        }
+    }
+}
+
+    animazionePassivaGruppo(personaggio, 3, e, parseFloat(personaggio.style.left) + 12, parseFloat(personaggio.style.top) - 8);
+}
+    
+function centralizzazionePreside(e, stato) {
+    const p = e.preside_container;
+    p.style.top = "50%";
+    p.style.left = "30%";
+    doppioSalto(p);
+}
+async function doppioSalto(p) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    await sleep(2000); 
+    await saltaDestraP(p);
+    await sleep(500); 
+    await saltaDestraP(p); 
+}
+
+async function saltaDestraP(personaggio) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.1s ease-out, left 0.1s ease-out";
+
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + '%';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + '%';
+    };
+
+
+    await step(-2, 1, 0);
+    await step(-2, 2, 100);
+    await step(-0.5, 2, 100);
+    await step(0.5, 2, 100);
+    await step(2, 2, 100);
+    await step(2, 1, 100);
+}
+
+async function saltaDestra(personaggio, dimezzato, unquarto) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+        
+    };
+    if (unquarto) {
+        await step(-0.375, 0.375, 0);
+        await step(-0.375, 0.375, 60);
+        await step(-0.25, 0.5, 60);
+        await step(0.25, 0.5, 60);
+        await step(0.375, 0.375, 60);
+        await step(0.375, 0.375, 60);
+        await ripristinaTransition(personaggio);
+    }
+    if(dimezzato){
+        await step(-0.75, 0.75, 0);
+        await step(-0.75, 0.75, 60);
+        await step(-0.5, 1, 60);
+        await step(0.5, 1, 60);
+        await step(0.75, 0.75, 60);
+        await step(0.75, 0.75, 60);
+        await ripristinaTransition(personaggio);
+    }
+    else{
+        await step(-1.5, 1.5, 0);
+        await step(-1.5, 1.5, 60);
+        await step(-0.5, 1, 60);
+        await step(0.5, 1, 60);
+        await step(1.5, 1.5, 60);
+        await step(1.5, 1.5, 60);
+        await ripristinaTransition(personaggio);
+    }
+    
+}
+
+async function saltaSopra(personaggio, dimezzato, unquarto) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
+    };
+    if (unquarto) {
+        await step(-0.375, 0);
+        await step(-0.375, 60);
+        await step(-0.25, 60);
+        await step(0.25, 60);
+        await ripristinaTransition(personaggio);
+    }
+    if(dimezzato){
+        await step(-0.75, 0);
+        await step(-0.75, 60);
+        await step(-0.5, 60);
+        await step(0.5, 60);
+        await ripristinaTransition(personaggio);
+    }
+    else{
+        await step(-2.5, 0);
+        await step(-2.5, 60);
+        await step(-1.5, 60);
+        await step(1.5, 60);
+        await ripristinaTransition(personaggio);
+    }
+}
+async function saltaSinistra(personaggio, dimezzato, unquarto) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, leftDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+        personaggio.style.left = (parseFloat(personaggio.style.left) + leftDelta) + 'vw';
+        personaggio.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
+    };
+    if (unquarto) {
+        await step(-0.375, -0.375, 0);
+        await step(-0.375, -0.375, 60);
+        await step(-0.25, -0.5, 60);
+        await step(0.25, -0.5, 60);
+        await step(0.375, -0.375, 60);
+        await step(0.375, -0.375, 60);
+        await ripristinaTransition(personaggio);
+    }
+    if(dimezzato){
+        await step(-0.75, -0.75, 0);
+        await step(-0.75, -0.75, 60);
+        await step(-0.5, -1, 60);
+        await step(0.5, -1, 60);
+        await step(0.75, -0.75, 60);
+        await step(0.75, -0.75, 60);
+        await ripristinaTransition(personaggio);
+    }
+    else{
+        await step(-1.5, -1.5, 0);
+        await step(-1.5, -1.5, 60);
+        await step(-0.5, -1, 60);
+        await step(0.5, -1, 60);
+        await step(1.5, -1.5, 60);
+        await step(1.5, -1.5, 60);
+        await ripristinaTransition(personaggio);
+    }
+}
+
+async function saltaSotto(personaggio, dimezzato, unquarto) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    personaggio.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+
+    const step = async (topDelta, delay) => {
+        await sleep(delay);
+        personaggio.style.top = (parseFloat(personaggio.style.top) + topDelta) + 'vh';
+    };
+    if (unquarto) {
+        await step(0.375, 0);
+        await step(0.375, 60);
+        await step(0.25, 60);
+        await step(-0.25, 60);
+        await ripristinaTransition(personaggio);
+    }
+    if(dimezzato){
+        await step(0.75, 0);
+        await step(0.75, 60);
+        await step(0.5, 60);
+        await step(-0.5, 60);
+        await ripristinaTransition(personaggio);
+    }
+    else{
+        await step(2.5, 0);
+        await step(2.5, 60);
+        await step(1.5, 60);
+        await step(-1.5, 60);
+        await ripristinaTransition(personaggio);
+    }
+}
+function ripristinaTransition(personaggio){
+    personaggio.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
+}
+
+
+function creazioneBob(e, stato) {
+    //Bob
+    const bobContainer = document.createElement('div');
+    bobContainer.id = 'bob_container';
+    const bobImg = document.createElement('img');
+    bobImg.id = 'bob_personaggio';
+    bobImg.src = 'Personaggio_anonimo.png'; 
+    bobContainer.className = 'scuola-img';
+    bobContainer.appendChild(bobImg);
+    e.world.appendChild(bobContainer);
+    stato.posBX = bobContainer.style.left = '70vw';
+    stato.posBY = bobContainer.style.top = '39vh';
+    e.bob_container = bobContainer;
+    e.bob_personaggio = bobImg;
+
+    animazioneBobInizio(e, stato);
+
+    //Terziario
+    
+    const pTerziario = document.createElement('div');
+    pTerziario.id = 'terziario_container'
+    const terziarioImg = document.createElement('img');
+    terziarioImg.id = 'terziario_personaggio';
+    terziarioImg.src = 'Personaggio_anonimo.png'; 
+    pTerziario.className = 'scuola-img';
+    pTerziario.appendChild(terziarioImg);
+    e.world.appendChild(pTerziario);
+    pTerziario.style.left = '80vw';
+    pTerziario.style.top = '39vh';
+    e.terziario_container = pTerziario;
+    e.terziario_personaggio = terziarioImg;
+
+    animazioneTerziarioInizio(e, stato);
+}
+
+function animazioneBobInizio(e, stato) {
+    e.bob_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    let posX = stato.posBX;
+    let posY = stato.posBY;
+    const vignetta = document.createElement('img');
+    vignetta.id = 'vignetta_bob';
+    vignetta.src = 'vignetta_dialogo.png';
+    vignetta.style.left = '82.8vw';
+    vignetta.style.top = '32vh';
+    vignetta.className = 'scuola-img';
+    e.world.appendChild(vignetta);
+    e.vignetta_bob = vignetta;
+
+    let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+    setTimeout(() => {
+                if (!stato.cond_movimento) {
+                    vignetta.style.opacity = '1';
+                }
+                setTimeout(() => {
+                        vignetta.style.opacity = '0';
+                }, 3000);
+    }, tempo_vignetta);
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoT) {
+                    stato.cond_saltoB = false;
+                    stato.cond_saltoT = true;
+                    posY = parseFloat(e.bob_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.bob_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.bob_container.style.top) + 3;
+                        e.bob_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+    
+    setInterval(() => {
+            let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoT) {
+                    stato.cond_saltoB = false;
+                    stato.cond_saltoT = true;
+                    posY = parseFloat(e.bob_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.bob_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.bob_container.style.top) + 3;
+                        e.bob_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+            let tempo_vignetta = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                        if (!stato.cond_movimento) {
+                            vignetta.style.opacity = '1';
+                        }
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+    }, 5000);
+}
+
+function animazioneTerziarioInizio(e, stato) {
+    e.terziario_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    let posX = 80;
+    let posY = 39;
+    const vignetta = document.createElement('img');
+    vignetta.id = 'vignetta_terziario';
+    vignetta.style.left = '93vw';
+    vignetta.style.top = '32vh';
+    vignetta.src = 'vignetta_dialogo.png';
+    vignetta.className = 'scuola-img';
+    e.world.appendChild(vignetta);
+    e.vignetta_terziario = vignetta;
+    let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let tempo_vignetta = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                        if (!stato.cond_movimento) {
+                            vignetta.style.opacity = '1';
+                            posX = parseFloat(e.terziario_container.style.left);
+                            vignetta.style.left = `${posX + 13}vw`;
+                        }
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoB) {
+                    stato.cond_saltoT = false;
+                    stato.cond_saltoB = true;
+                    posY = parseFloat(e.terziario_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.terziario_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.terziario_container.style.top) + 3;
+                        e.terziario_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+    
+    setInterval(() => {
+            let tempo = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                if (!stato.cond_movimento && !stato.cond_saltoB) {
+                    stato.cond_saltoT = false;
+                    stato.cond_saltoB = true;
+                    posY = parseFloat(e.terziario_container.style.top);
+                    posY = parseFloat(posY) - 3;
+                    e.terziario_container.style.top = `${posY}vh`;
+                    setTimeout(() => {
+                        posY = parseFloat(e.terziario_container.style.top) + 3;
+                        e.terziario_container.style.top = `${posY}vh`;
+                    }, 300);
+                }
+            }, tempo);
+            let tempo_vignetta = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
+            setTimeout(() => {
+                        if (!stato.cond_movimento) {
+                            vignetta.style.opacity = '1';
+                            posX = parseFloat(e.terziario_container.style.left);
+                            vignetta.style.left = `${posX+13}vw`;
+                        }
+                        setTimeout(() => {
+                            vignetta.style.opacity = '0';
+                        }, 3000);
+            }, tempo_vignetta);
+    }, 5000);
+}
+function diaologoB_P1(e, stato) {
+    setTimeout(() => {
+        stato.cond_movimento = true;
+        const t = e.terziario_container;
+        t.style.left = '80vw';
+        t.style.top = '39vh';
+        t.style.transform = "scaleX(-1)";
+        e.vignetta_bob.style.opacity = '0';
+        e.vignetta_terziario.style.opacity = '0';
+
+        async function uscita(t) {
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            await saltaDestra(t, false);
+            await sleep(200); 
+            await saltaDestra(t, false); 
+            await sleep(500);
+            await muoviBob();
+            await ritornoOggetto(t, oggettiImportanti[0][0], oggettiImportanti[0][1]); 
+        }
+        
+        function muoviBob() {
+            e.bob_container.style.transform = "scaleX(-1)";
+            e.vignetta_bob.style.opacity = '1';
+            e.vignetta_bob.src = 'vignetta_esclamazione.png';
+            async function saltaBob(b) {
+                const sleep = ms => new Promise(r => setTimeout(r, ms));
+                await sleep(700);
+                await togliVignetta();
+                await sleep(300);
+                await saltaSinistra(b);
+                await sleep(400); 
+                await saltaSinistra(b); 
+                await sleep(300);
+                await saltaSinistra(b, true);
+                await sleep(500);
+                await dialogo();
+            }
+            saltaBob(e.bob_container);
+        }
+        function togliVignetta() {
+            return new Promise(resolve => {
+                e.vignetta_bob.style.opacity = '0';
+                setTimeout(() => {
+                    resolve();
+                }, 200);
+            });
+        }
+        function dialogo(){
+            e.bob_container.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
+            e.terziario_container.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
+            e.container_dialogo.style.opacity = '1';
+            stato.cond_skip = true;
+            stato.cond_dialogo = true;
+            mostraProssimaRiga();
+        }
+        uscita(t);
+
+    }, 5000);
+}
+
+</script>
