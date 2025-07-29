@@ -47,7 +47,7 @@
             display: flex;
             justify-content: flex-end;
             align-items: flex-start;
-            margin-left: -5vw;
+            margin-left: -3vw;
             margin-top: 5vh;
             will-change: transform;
         }
@@ -481,7 +481,7 @@ function startGame() {
   setTimeout(() => scaleWorld(elements), 1000);
   gameScripts(elements, state);
   creationTertiaryCharacters(elements, state)
-  setupMenuToggle(elements);
+  // setupMenuToggle(elements);
 }
 
 function initialiseElements() {
@@ -570,13 +570,13 @@ function scale(condition, elements = initialiseElements(), state = initialiseSta
         return;
     }
     if (condition) {
-        if (zoom <= 1.5) {
+        if (zoom <= 1.46) {
             zoom += 0.07;
             elements.world.style.transform = `scale(${zoom})`;
         }
     }
     else{
-        if (zoom >= 0.5) {
+        if (zoom >= 0.48) {
             zoom -= 0.07;
             elements.world.style.transform = `scale(${zoom})`;
         }
@@ -634,12 +634,12 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state) {
   const lines = [
-    ["Ciao! Sono Bob, della Building & Co!", "Bob", 2, false],
-    ["Questo posto è proprio enorme!", "Bob", 2, false],
-    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1, false],
-    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2, false],
-    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2, false],
-    ["", "", 2, true],
+    ["Ciao! Sono Bob, della Building & Co!", "Bob", 2],
+    ["Questo posto è proprio enorme!", "Bob", 2],
+    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2],
+    [true],
   ];
   let index = 0;
 
@@ -678,12 +678,14 @@ function setupDialogue(e, state) {
   }
 
   function showNextLine() {
-    if(lines[index][3] == true){
+    if(lines[index][0] == true){
         state.cond_text = false;
         state.cond_skip = false;
         e.container_dialogue.style.opacity = 0;
         state.cond_movement = true;
+        state.cond_dialogue = false;
         setUpPresideMovement(e, state);
+        return;
     }
     if (index < lines.length) {
       showText(lines[index][0]);
@@ -744,6 +746,123 @@ if(state.cond_movement){
     window.removeEventListener('keydown', handleKeydown);
     clearInterval(intervalMovement);
 }
+
+function pointClickMovement(){
+
+    let clickTimer;
+    document.addEventListener('mousedown', (event) => {
+    clickTimer = setTimeout(() => {
+        ClickMovement(event);
+    }, 1000); 
+    });
+
+    document.addEventListener('mouseup', () => {
+        clearTimeout(clickTimer); 
+    });
+    function ClickMovement(event){
+        let rect = e.world.getBoundingClientRect();
+        let xInWorld = (event.clientX - rect.left) / zoom;
+        let yInWorld = (event.clientY - rect.top) / zoom;
+
+        let xInVW = (xInWorld / window.innerWidth) * 100;
+        let yInVH = (yInWorld / window.innerHeight) * 100;
+        xInVW += state.posX;
+        yInVH += state.posY;
+
+        xInVW = xInVW.toFixed(2);
+        yInVH = yInVH.toFixed(2);
+        xInVW -= 50;
+        yInVH -= 50;
+        returnToObjectPreside(xInVW, yInVH);
+    }
+}
+
+pointClickMovement();
+
+function returnToObjectPreside(xInVW, yInVH){
+    let maxTime = 270;
+    let maxDistance = 9;
+    let msForVw = maxTime / maxDistance;
+    xInVW -= state.posX;
+    yInVH -= state.posY;
+    let stepX = xInVW / maxDistance;
+    stepX = Math.trunc(stepX);
+    let differenceX = xInVW - (stepX * maxDistance);
+    console.log(xInVW + " " + yInVH);
+    
+    let stepY = yInVH / maxDistance;
+    stepY = Math.trunc(stepY);
+    let differenceY = yInVH - stepY;
+
+    console.log(stepX + " " + stepY)
+    let time = 0;
+
+    selectKeysX(stepX, time, maxTime);
+    selectKeysY(stepY, time, maxTime);
+    console.log(Math.max(stepX, stepY)*maxTime)
+    setTimeout(() => {
+        time = 0;
+    if(differenceX > 0){
+        maxTime2 = differenceX * msForVw;
+        selectKeysX(1, time, maxTime2);
+    }
+    if(differenceY > 0){
+        maxTime3 = differenceY * msForVw;
+        selectKeysY(1, time, maxTime3);
+    }
+    }, Math.max(stepX, stepY)*maxTime);
+    
+}
+
+function selectKeysX(stepX, time, maxTime){
+    
+    if(stepX > 0){
+        for(i=0;i<stepX;i++){
+                setTimeout(() => {
+                    simulateKey('KeyD', maxTime);
+                }, time);
+                time += maxTime + 300;
+        }
+    } else if(stepX < 0){
+        for(i=0;i>stepX;i--){
+                setTimeout(() => {
+                    simulateKey('KeyA', maxTime);
+                }, time);
+                time += maxTime + 300;
+        }
+    }
+}
+
+function selectKeysY(stepY, time, maxTime){
+    time = 0;
+    if(stepY > 0){
+        for(i=0;i<stepY;i++){
+                setTimeout(() => {
+                    simulateKey('KeyS', maxTime);
+                }, time);
+                time += maxTime + 300;
+        }
+    } else if(stepY < 0){
+        for(i=0;i>stepY;i--){
+                setTimeout(() => {
+                    simulateKey('KeyW', maxTime);
+                }, time);
+                time += maxTime + 300;
+        }
+    }
+}
+
+function simulateKey(code, duration){
+    console.log(code)
+    keys[code] = true;
+    handleKeydown({ code }); 
+
+    setTimeout(() => {
+        keys[code] = false;
+        handleKeyup({ code }); 
+    }, duration);
+}
+
 
 function handleKeydown(event) {
 e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
