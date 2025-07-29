@@ -105,7 +105,7 @@
         #bob_character{
             transform: scaleX(-1);
             width: 28vw;
-            height: 20vh;
+            height: 27vh;
         }
 
         #tertiary_container{
@@ -225,7 +225,7 @@
             padding-right: 0.5vw;
             margin: 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            width: 12vw;
+            width: 14vw;
             height: 10vh;
             top: 54vh;
             font-size: 2vw;
@@ -1676,12 +1676,13 @@ function bobCreation(e, state) {
     bobContainer.id = 'bob_container';
     const bobImg = document.createElement('img');
     bobImg.id = 'bob_character';
-    bobImg.src = 'personaggio_anonimo.png'; 
+    bobImg.src = 'bob.png'; 
     bobContainer.className = 'school_imgs';
     bobContainer.appendChild(bobImg);
+    bobContainer.style.transform = 'scaleX(-1)';
     e.world.appendChild(bobContainer);
     state.posBX = bobContainer.style.left = '70vw';
-    state.posBY = bobContainer.style.top = '39vh';
+    state.posBY = bobContainer.style.top = '33vh';
     e.bob_container = bobContainer;
     e.bob_character = bobImg;
 
@@ -1856,7 +1857,7 @@ function diaologueB_P1(e, state) {
         }
         
         function moveBob() {
-            e.bob_container.style.transform = "scaleX(-1)";
+            e.bob_container.style.transform = "scaleX(1)";
             e.bob_illustration.style.opacity = '1';
             e.bob_illustration.src = 'vignetta_esclamazione.png';
             async function jumpBob(b) {
@@ -1896,4 +1897,3 @@ function diaologueB_P1(e, state) {
 }
 
 </script>
-
