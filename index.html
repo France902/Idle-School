@@ -788,18 +788,15 @@ function returnToObjectPreside(xInVW, yInVH){
     let stepX = xInVW / maxDistance;
     stepX = Math.trunc(stepX);
     let differenceX = xInVW - (stepX * maxDistance);
-    console.log(xInVW + " " + yInVH);
     
     let stepY = yInVH / maxDistance;
     stepY = Math.trunc(stepY);
     let differenceY = yInVH - stepY;
 
-    console.log(stepX + " " + stepY)
     let time = 0;
 
     selectKeysX(stepX, time, maxTime);
     selectKeysY(stepY, time, maxTime);
-    console.log(Math.max(stepX, stepY)*maxTime)
     setTimeout(() => {
         time = 0;
     if(differenceX > 0){
@@ -853,7 +850,6 @@ function selectKeysY(stepY, time, maxTime){
 }
 
 function simulateKey(code, duration){
-    console.log(code)
     keys[code] = true;
     handleKeydown({ code }); 
 
