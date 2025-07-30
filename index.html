@@ -163,9 +163,9 @@
             margin-left: 60vw;
             object-fit: cover;
             pointer-events: none; 
-            transform: scale(0.8); 
+            transform: scale(0.9); 
             transform-origin: center center;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out;
         }
 
         #dialogues_container {
@@ -570,13 +570,13 @@ function scale(condition, elements = initialiseElements(), state = initialiseSta
         return;
     }
     if (condition) {
-        if (zoom <= 1.46) {
+        if (zoom <= 1.32) {
             zoom += 0.07;
             elements.world.style.transform = `scale(${zoom})`;
         }
     }
     else{
-        if (zoom >= 0.48) {
+        if (zoom >= 0.63) {
             zoom -= 0.07;
             elements.world.style.transform = `scale(${zoom})`;
         }
@@ -614,7 +614,7 @@ function createInteractableKeys(e, state) {
         [false],
         [false],
         [false],
-        ['90vw', '110vh'],
+        ['90vw', '105vh'],
     ]
     for(let i=0;i<pos_keys.length;i++){
         if(pos_keys[i][0] != false){
@@ -672,7 +672,7 @@ function setupDialogue(e, state) {
     const left = pos === 1;
     e.boxname.style.left = left ? "11vw" : "65vw";
     e.imgPreside.style.transform = left ? "scale(0.9)" : "scale(0.8)";
-    e.anonymousCharacter.style.transform = left ? "scale(0.8)" : "scale(0.9)";
+    e.anonymousCharacter.style.transform = left ? "scale(0.9) scaleX(-1)" : "scale(1) scaleX(-1)";
     e.imgPreside.style.opacity = left ? "1" : "0.8";
     e.anonymousCharacter.style.opacity = left ? "0.8" : "1";
   }
@@ -691,6 +691,7 @@ function setupDialogue(e, state) {
       showText(lines[index][0]);
       changeName(lines[index][1]);
       changeBoxName(lines[index][2]);
+      changeCharacters(lines[index][1]);
       index++;
     }
   }
@@ -700,6 +701,14 @@ function setupDialogue(e, state) {
   changeBoxName(1);
 
   window.showNextLine = showNextLine;
+
+  function changeCharacters(name){
+        if(name != 'preside'){
+            e.anonymousCharacter.src = name + ".png"; 
+            e.anonymousCharacter.style.transition = '';
+            e.anonymousCharacter.style.transform = 'scaleX(-1)';
+        }
+    }
 }
 
 function controlSkip(elements, state) {
@@ -717,6 +726,8 @@ function controlSkip(elements, state) {
     }
   });
 }
+
+
 
 function setUpPresideMovement(e, state) {
   const p = e.preside;
@@ -921,6 +932,7 @@ function jumpDirection(distance, dir){
 }
 
 function left(distance){
+    
     state.posX -= distance;
     e.imgsArray.forEach(img => {
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
@@ -930,10 +942,14 @@ function left(distance){
             importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + 'vw';
         }
     }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
+    }
     animationJumpLeft(distance);
 }
 
 async function animationJumpLeft(distance){
+    
     p.style.transform = "scaleX(-1)";
     p.src = "Preside.png";
     const step = [60, 120, 180, 240, 300];
@@ -946,6 +962,7 @@ async function animationJumpLeft(distance){
 }
 
 function right(distance){
+    
     state.posX += distance;
     e.imgsArray.forEach(img => {
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
@@ -954,6 +971,9 @@ function right(distance){
         for(let j=0;j<importantObjects[i].length-1;j+=2){
             importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + 'vw';
         }
+    }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
     }
     animationJumpRight(distance);
 }
@@ -980,6 +1000,9 @@ function down(distance){
             importantObjects[i][j+1] = (parseFloat(importantObjects[i][j+1]) - distance) + 'vh';
         }
     }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
+    }
     animationJumpDown(distance);
 }
 
@@ -1003,6 +1026,9 @@ function top(distance){
         for(let j=0;j<importantObjects[i].length-1;j+=2){
             importantObjects[i][j+1] = (parseFloat(importantObjects[i][j+1]) + distance) + 'vh';
         }
+    }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
     }
     animationJumpTop(distance);
 }
@@ -1031,10 +1057,15 @@ function diagonalTopRight(distance) {
             importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) + distance) + 'vh';
         }
     }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
+        matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
+    }
     animationJumpDiagonal(distance);
 }
 
 function diagonalTopLeft(distance) {
+    
     state.posX -= distance;
     state.posY -= distance;
     e.imgsArray.forEach(img => {
@@ -1047,10 +1078,15 @@ function diagonalTopLeft(distance) {
             importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) + distance) + 'vh';
         }
     }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
+        matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
+    }
     animationJumpDiagonal(distance);
 }
 
 function diagonalLowRight(distance) {
+    
     state.posX += distance;
     state.posY += distance;
     e.imgsArray.forEach(img => {
@@ -1063,10 +1099,15 @@ function diagonalLowRight(distance) {
             importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) - distance) + 'vh';
         }
     }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
+        matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
+    }
     animationJumpDiagonal(distance);
 }
 
 function diagonalBottomLeft(distance) {
+    
     state.posX -= distance;
     state.posY += distance;
     e.imgsArray.forEach(img => {
@@ -1078,6 +1119,10 @@ function diagonalBottomLeft(distance) {
             importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + 'vw';
             importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) - distance) + 'vh';
         }
+    }
+    for(i=0;i<matTert.length;i++){
+        matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
+        matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
     }
     animationJumpDiagonal(distance);
 }
@@ -1105,7 +1150,7 @@ window.addEventListener('keyup', handleKeyup);
         document.getElementById('key_e'+4).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-                interaction(4, e);
+                if(matTert[4][4] == false) interaction(4, e);
             }
         });
     }
@@ -1129,7 +1174,7 @@ function interaction(index, e){
         e.preside.style.transform = 'scaleX(1)';
         const character = document.getElementById('character4');
         character.style.transform = 'scaleX(1)';
-        document.getElementById('key_e' + index).style.display = 'none';
+        document.getElementById('key_e' + index).style.display = 'none';        
         jolt(character, e);
     }
 }
@@ -1201,10 +1246,10 @@ function createCharacter(e, state, i) {
         setInterval(() => {
             passiveAnimationAlone(character_container, i, e, illustration);
             }, 1000);
-        
 
         }
 }
+let i_illustration = 0;
 function createIllustration(sr, posX, posY, e){
         const illustration = document.createElement('img');
         illustration.src = sr;
@@ -1215,6 +1260,8 @@ function createIllustration(sr, posX, posY, e){
         illustration.style.left = `${posX}vw`;
         illustration.style.top = `${posY}vh`;
         illustration.className = 'school_imgs';
+        illustration.id = 'illustration'+i_illustration;
+        i_illustration++;
         e.world.appendChild(illustration);
         return illustration;
 }
@@ -1320,24 +1367,28 @@ async function passiveAnimationAlone(character, i, e, illustration){
 }
 
 async function jolt(character, e) {
-    character.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    
+    character.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
     const step = async (topDelta, leftDelta, delay) => {
+        if(topDelta == true) matTert[4][4] = true;
+        else{
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
+        }
     };
 
+    await step('true', 0, 0)
     await step(-3, 2, 0);
     await step(-2, 2, 90);
+    await step(-2, 2, 90);
     await step(-1.5, 2, 90);
-    await step(1.5, 2, 100);
+    await step(1.5, 2, 90);
+    await step(2, 2, 90);
     await step(2, 2, 90);
     await step(3, 1, 90);
     await sleep(1500);
     await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true);
-
 }
 
 async function returnToObject(character, x, y, order = false, e = initialiseElements()){
