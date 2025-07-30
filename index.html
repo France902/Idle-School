@@ -153,7 +153,7 @@
             pointer-events: none;
             transform: scale(0.8); 
             transform-origin: center center;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out;
         }
         #anonymous_character_dialogues {
             position: fixed;
@@ -533,6 +533,7 @@ function initialiseStates() {
     cond_skip: true,
     cond_dialogue: false,
     cond_text: true,
+    condBP1: false,
 
     // Posizioni
     posX: 0,
@@ -550,12 +551,15 @@ function initialiseStates() {
 }
 
 const matTert = [
-        [ '175vw', '-15vh', "group", 1, 1 ],
-        [ '163vw', '-3vh', "group", 2, 1 ],
-        [ '163vw', '-27vh', "group", -2, 0 ],
-        [ '13vw', '-27vh', "work-alone", 1, 1 ],
-        [ '90vw', '110vh', "alone", -1, false ],
+        [ '175vw', '-15vh', "group", 1, 1, 'personaggio_anonimo.png'],
+        [ '163vw', '-3vh', "group", 2, 1, 'personaggio_anonimo.png' ],
+        [ '163vw', '-27vh', "group", -2, 0, 'personaggio_anonimo.png'],
+        [ '13vw', '-27vh', "work-alone", 1, 1, 'personaggio_anonimo.png'],
+        [ '90vw', '110vh', "alone", -1, false, 'personaggio_anonimo.png'],
+        [ '70vw', '33vh', "group", 1, 1, 'bob.png'],
+        [ '80vw', '39vh', "group", 1, 1, 'personaggio_anonimo.png'],
     ];
+    
 const importantObjects = [
     [ '158vw', '-3vh', '158vw', '-27vh', 'tavolo']
 ];
@@ -672,7 +676,7 @@ function setupDialogue(e, state) {
     const left = pos === 1;
     e.boxname.style.left = left ? "11vw" : "65vw";
     e.imgPreside.style.transform = left ? "scale(0.9)" : "scale(0.8)";
-    e.anonymousCharacter.style.transform = left ? "scale(0.9) scaleX(-1)" : "scale(1) scaleX(-1)";
+    e.anonymousCharacter.style.transform = left ? "scaleX(-1) scale(0.9)" : "scaleX(-1) scale(1)";
     e.imgPreside.style.opacity = left ? "1" : "0.8";
     e.anonymousCharacter.style.opacity = left ? "0.8" : "1";
   }
@@ -802,28 +806,27 @@ function returnToObjectPreside(xInVW, yInVH){
     
     let stepY = yInVH / maxDistance;
     stepY = Math.trunc(stepY);
-    let differenceY = yInVH - stepY;
+    let differenceY = yInVH - (stepY * maxDistance);
 
     let time = 0;
-
+    console.log(stepX + " "+ stepY + "\n" + differenceX + " " + differenceY) 
     selectKeysX(stepX, time, maxTime);
     selectKeysY(stepY, time, maxTime);
     setTimeout(() => {
         time = 0;
-    if(differenceX > 0){
-        maxTime2 = differenceX * msForVw;
-        selectKeysX(1, time, maxTime2);
-    }
-    if(differenceY > 0){
-        maxTime3 = differenceY * msForVw;
-        selectKeysY(1, time, maxTime3);
-    }
-    }, Math.max(stepX, stepY)*maxTime);
+    maxTime2 = Math.abs(differenceX) * msForVw;
+    maxTime3 = Math.abs(differenceY) * msForVw;
+    if(differenceX > 0) selectKeysX(1, time, maxTime2);
+    else if(differenceX < 0) selectKeysX(-1, time, maxTime2)
+    time = 0;
+    if(differenceY > 0) selectKeysY(1, time, maxTime3);
+    else if(differenceY) selectKeysY(-1, time, maxTime3);
+    }, (Math.abs(stepX) * (maxTime + 50))+(Math.abs(stepY) * (maxTime + 50)));
     
 }
 
 function selectKeysX(stepX, time, maxTime){
-    
+    time = 0;
     if(stepX > 0){
         for(i=0;i<stepX;i++){
                 setTimeout(() => {
@@ -861,6 +864,7 @@ function selectKeysY(stepY, time, maxTime){
 }
 
 function simulateKey(code, duration){
+    console.log(code, duration)
     keys[code] = true;
     handleKeydown({ code }); 
 
@@ -1182,12 +1186,11 @@ function interaction(index, e){
 
     function gameScripts(e, state) {
         centralizationPreside(e, state);
-        bobCreation(e, state);
         diaologueB_P1(e, state);
     }
     
 function creationTertiaryCharacters(e, state) {
-    let i, N=5;
+    let i, N=7;
     let scaleX;
     
     for(i=0;i<N;i++){
@@ -1198,15 +1201,16 @@ function createCharacter(e, state, i) {
     const character_container = document.createElement('div');
     character_container.style.left = matTert[i][0];
     character_container.style.top = matTert[i][1];
+    character_container.style.zIndex = matTert[i][4];
     character_container.id = 'character' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
-    character_container.style.zIndex = matTert[i][4];
     character_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
     const character_img = document.createElement('img');
-    character_img.src = 'personaggio_anonimo.png';
+    character_img.src = matTert[i][5];
     character_img.style.width = '28vw';
-    character_img.style.height = '20vh';
+    if(matTert[i][5] == 'bob.png') character_img.style.height = '27vh';
+    else character_img.style.height = '20vh';
 
     if(matTert[i][3] == 1) {
         character_container.style.transform = 'scaleX(1)';
@@ -1218,7 +1222,7 @@ function createCharacter(e, state, i) {
     e.world.appendChild(character_container);
     e.world.appendChild(document.getElementById("character"+i))
     
-    if(matTert[i][2] == "group") passiveAnimationGroup(character_container, i, e);
+    if(matTert[i][2] == "group") passiveAnimationGroup(character_container, i, e, state);
     else if(matTert[i][2] == "work-alone") {
         passiveAnimationWorkAlone(character_container, i, e);
         setInterval(() => {
@@ -1265,13 +1269,18 @@ function createIllustration(sr, posX, posY, e){
         e.world.appendChild(illustration);
         return illustration;
 }
-function passiveAnimationGroup(character, i, e, posX = 0, posY = 0) {
+
+let interval = [];
+function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
     character.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
     if(posX == 0){
         posX = parseFloat(matTert[i][0]) + 13;
         posY = parseFloat(matTert[i][1]) - 5;
+        console.log(posX)
     }
-
+    else{
+        console.log(posX)
+    }
     const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
     let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
@@ -1291,8 +1300,13 @@ function passiveAnimationGroup(character, i, e, posX = 0, posY = 0) {
                     }, 300);
             }, time);
     
-    setInterval(() => {
+    interval[i] = setInterval(() => {
             let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            if(state.condBP1 == true) {
+                clearInterval(interval[5]);
+                clearInterval(interval[6]);
+                state.condBP1 = false;
+            }
             setTimeout(() => {
                     posY = parseFloat(character.style.top);
                     posY = parseFloat(posY) - 3;
@@ -1391,7 +1405,7 @@ async function jolt(character, e) {
     await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true);
 }
 
-async function returnToObject(character, x, y, order = false, e = initialiseElements()){
+async function returnToObject(character, x, y, order = false, e = initialiseElements(), state = initialiseStates()){
     let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
     let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 5;
     let diffStepX = Math.abs(stepX - Math.trunc(stepX));
@@ -1535,8 +1549,8 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
         }
     }
 }
-
-    passiveAnimationGroup(character, 3, e, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
+    console.log(parseFloat(character.style.left) + 12)
+    await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
 }
     
 function centralizationPreside(e, state) {
@@ -1716,182 +1730,18 @@ function ripristineTransition(character){
     character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
 }
 
-
-function bobCreation(e, state) {
-    //Bob
-    const bobContainer = document.createElement('div');
-    bobContainer.id = 'bob_container';
-    const bobImg = document.createElement('img');
-    bobImg.id = 'bob_character';
-    bobImg.src = 'bob.png'; 
-    bobContainer.className = 'school_imgs';
-    bobContainer.appendChild(bobImg);
-    bobContainer.style.transform = 'scaleX(-1)';
-    e.world.appendChild(bobContainer);
-    state.posBX = bobContainer.style.left = '70vw';
-    state.posBY = bobContainer.style.top = '33vh';
-    e.bob_container = bobContainer;
-    e.bob_character = bobImg;
-
-    startBobAnimation(e, state);
-
-    //Terziario
-    
-    const pTertiary = document.createElement('div');
-    pTertiary.id = 'tertiary_container'
-    const tertiaryImg = document.createElement('img');
-    tertiaryImg.id = 'tertiary_character';
-    tertiaryImg.src = 'personaggio_anonimo.png'; 
-    pTertiary.className = 'school_imgs';
-    pTertiary.appendChild(tertiaryImg);
-    e.world.appendChild(pTertiary);
-    pTertiary.style.left = '80vw';
-    pTertiary.style.top = '39vh';
-    e.tertiary_container = pTertiary;
-    e.tertiary_character = tertiaryImg;
-
-    startTertiaryAnimation(e, state);
-}
-
-function startBobAnimation(e, state) {
-    e.bob_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
-    let posX = state.posBX;
-    let posY = state.posBY;
-    const illustration = document.createElement('img');
-    illustration.id = 'bob_illustration';
-    illustration.src = 'vignetta_dialogo.png';
-    illustration.style.left = '82.8vw';
-    illustration.style.top = '32vh';
-    illustration.className = 'school_imgs';
-    e.world.appendChild(illustration);
-    e.bob_illustration = illustration;
-
-    let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
-    let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-    setTimeout(() => {
-                if (!state.cond_movement) {
-                    illustration.style.opacity = '1';
-                }
-                setTimeout(() => {
-                        illustration.style.opacity = '0';
-                }, 3000);
-    }, illustration_time);
-            setTimeout(() => {
-                if (!state.cond_movement && !state.cond_jumpT) {
-                    state.cond_jumpB = false;
-                    state.cond_jumpT = true;
-                    posY = parseFloat(e.bob_container.style.top);
-                    posY = parseFloat(posY) - 3;
-                    e.bob_container.style.top = `${posY}vh`;
-                    setTimeout(() => {
-                        posY = parseFloat(e.bob_container.style.top) + 3;
-                        e.bob_container.style.top = `${posY}vh`;
-                    }, 300);
-                }
-            }, time);
-    
-    setInterval(() => {
-            let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
-            setTimeout(() => {
-                if (!state.cond_movement && !state.cond_jumpT) {
-                    state.cond_jumpB = false;
-                    state.cond_jumpT = true;
-                    posY = parseFloat(e.bob_container.style.top);
-                    posY = parseFloat(posY) - 3;
-                    e.bob_container.style.top = `${posY}vh`;
-                    setTimeout(() => {
-                        posY = parseFloat(e.bob_container.style.top) + 3;
-                        e.bob_container.style.top = `${posY}vh`;
-                    }, 300);
-                }
-            }, time);
-            let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-            setTimeout(() => {
-                        if (!state.cond_movement) {
-                            illustration.style.opacity = '1';
-                        }
-                        setTimeout(() => {
-                            illustration.style.opacity = '0';
-                        }, 3000);
-            }, illustration_time);
-    }, 5000);
-}
-
-function startTertiaryAnimation(e, state) {
-    e.tertiary_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
-    let posX = 80;
-    let posY = 39;
-    const illustration = document.createElement('img');
-    illustration.id = 'tertiary_illustration';
-    illustration.style.left = '93vw';
-    illustration.style.top = '32vh';
-    illustration.src = 'vignetta_dialogo.png';
-    illustration.className = 'school_imgs';
-    e.world.appendChild(illustration);
-    e.tertiary_illustration = illustration;
-    let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
-    let illustration_time = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
-            setTimeout(() => {
-                        if (!state.cond_movement) {
-                            illustration.style.opacity = '1';
-                            posX = parseFloat(e.tertiary_container.style.left);
-                            illustration.style.left = `${posX + 13}vw`;
-                        }
-                        setTimeout(() => {
-                            illustration.style.opacity = '0';
-                        }, 3000);
-            }, illustration_time);
-            setTimeout(() => {
-                if (!state.cond_movement && !state.cond_jumpB) {
-                    state.cond_jumpT = false;
-                    state.cond_jumpB = true;
-                    posY = parseFloat(e.tertiary_container.style.top);
-                    posY = parseFloat(posY) - 3;
-                    e.tertiary_container.style.top = `${posY}vh`;
-                    setTimeout(() => {
-                        posY = parseFloat(e.tertiary_container.style.top) + 3;
-                        e.tertiary_container.style.top = `${posY}vh`;
-                    }, 300);
-                }
-            }, time);
-    
-    setInterval(() => {
-            let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
-            setTimeout(() => {
-                if (!state.cond_movement && !state.cond_jumpB) {
-                    state.cond_jumpT = false;
-                    state.cond_jumpB = true;
-                    posY = parseFloat(e.tertiary_container.style.top);
-                    posY = parseFloat(posY) - 3;
-                    e.tertiary_container.style.top = `${posY}vh`;
-                    setTimeout(() => {
-                        posY = parseFloat(e.tertiary_container.style.top) + 3;
-                        e.tertiary_container.style.top = `${posY}vh`;
-                    }, 300);
-                }
-            }, time);
-            let illustration_time = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
-            setTimeout(() => {
-                        if (!state.cond_movement) {
-                            illustration.style.opacity = '1';
-                            posX = parseFloat(e.tertiary_container.style.left);
-                            illustration.style.left = `${posX+13}vw`;
-                        }
-                        setTimeout(() => {
-                            illustration.style.opacity = '0';
-                        }, 3000);
-            }, illustration_time);
-    }, 5000);
-}
 function diaologueB_P1(e, state) {
     setTimeout(() => {
         state.cond_movement = true;
-        const t = e.tertiary_container;
+        const t = document.getElementById('character6');
+        const t_illustration = document.getElementById('illustration3');
+        const bob_illustration = document.getElementById('illustration4');
         t.style.left = '80vw';
         t.style.top = '39vh';
         t.style.transform = "scaleX(-1)";
-        e.bob_illustration.style.opacity = '0';
-        e.tertiary_illustration.style.opacity = '0';
+        bob_illustration.style.opacity = '0';
+        t_illustration.style.opacity = '0';
+        state.condBP1 = true;
 
         async function exit(t) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -1899,18 +1749,19 @@ function diaologueB_P1(e, state) {
             await sleep(200); 
             await rightJump(t, false); 
             await sleep(500);
-            await moveBob();
+            await moveBob(t);
             await returnToObject(t, importantObjects[0][0], importantObjects[0][1]); 
         }
         
-        function moveBob() {
-            e.bob_container.style.transform = "scaleX(1)";
-            e.bob_illustration.style.opacity = '1';
-            e.bob_illustration.src = 'vignetta_esclamazione.png';
-            async function jumpBob(b) {
+        function moveBob(t) {
+            const bob = document.getElementById('character5');
+            bob.style.transform = "scaleX(-1)";
+            bob_illustration.style.opacity = '1';
+            bob_illustration.src = 'vignetta_esclamazione.png';
+            async function jumpBob(b, t) {
                 const sleep = ms => new Promise(r => setTimeout(r, ms));
                 await sleep(700);
-                await removeIllustration();
+                await removeIllustration(bob_illustration);
                 await sleep(300);
                 await leftJump(b);
                 await sleep(400); 
@@ -1918,21 +1769,21 @@ function diaologueB_P1(e, state) {
                 await sleep(300);
                 await leftJump(b, true);
                 await sleep(500);
-                await dialogue();
+                await dialogue(b, t);
             }
-            jumpBob(e.bob_container);
+            jumpBob(bob, t);
         }
-        function removeIllustration() {
+        function removeIllustration(b) {
             return new Promise(resolve => {
-                e.bob_illustration.style.opacity = '0';
+                b.style.opacity = '0';
                 setTimeout(() => {
                     resolve();
                 }, 200);
             });
         }
-        function dialogue(){
-            e.bob_container.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
-            e.tertiary_container.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
+        function dialogue(b, t){
+            b.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
+            t.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
             e.container_dialogue.style.opacity = '1';
             state.cond_skip = true;
             state.cond_dialogue = true;
