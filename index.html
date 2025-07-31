@@ -558,6 +558,8 @@ const matTert = [
         [ '90vw', '110vh', "alone", -1, false, 'personaggio_anonimo.png'],
         [ '70vw', '33vh', "group", 1, 1, 'bob.png'],
         [ '80vw', '39vh', "group", 1, 1, 'personaggio_anonimo.png'],
+        ['180vw', '100vh', "group", -1, 1, 'personaggio_anonimo.png'],
+        ['190vw', '100vh', "group", 1, 1, 'personaggio_anonimo.png'],
     ];
     
 const importantObjects = [
@@ -1190,7 +1192,7 @@ function interaction(index, e){
     }
     
 function creationTertiaryCharacters(e, state) {
-    let i, N=7;
+    let i, N=9;
     let scaleX;
     
     for(i=0;i<N;i++){
@@ -1274,12 +1276,14 @@ let interval = [];
 function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
     character.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
     if(posX == 0){
-        posX = parseFloat(matTert[i][0]) + 13;
-        posY = parseFloat(matTert[i][1]) - 5;
-        console.log(posX)
-    }
-    else{
-        console.log(posX)
+        if(matTert[i][5] == 'bob.png'){
+            posX = parseFloat(matTert[i][0]) + 13;
+            posY = parseFloat(matTert[i][1]) - 2;
+        }
+        else{
+            posX = parseFloat(matTert[i][0]) + 13;
+            posY = parseFloat(matTert[i][1]) - 5;
+        }
     }
     const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
     let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
@@ -1734,7 +1738,7 @@ function diaologueB_P1(e, state) {
     setTimeout(() => {
         state.cond_movement = true;
         const t = document.getElementById('character6');
-        const t_illustration = document.getElementById('illustration3');
+        const t_illustration = document.getElementById('illustration5');
         const bob_illustration = document.getElementById('illustration4');
         t.style.left = '80vw';
         t.style.top = '39vh';
@@ -1742,6 +1746,7 @@ function diaologueB_P1(e, state) {
         bob_illustration.style.opacity = '0';
         t_illustration.style.opacity = '0';
         state.condBP1 = true;
+        removeIllustration(bob_illustration, t_illustration);
 
         async function exit(t) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -1761,7 +1766,7 @@ function diaologueB_P1(e, state) {
             async function jumpBob(b, t) {
                 const sleep = ms => new Promise(r => setTimeout(r, ms));
                 await sleep(700);
-                await removeIllustration(bob_illustration);
+                await removeIllustration(bob_illustration, t)
                 await sleep(300);
                 await leftJump(b);
                 await sleep(400); 
@@ -1773,9 +1778,10 @@ function diaologueB_P1(e, state) {
             }
             jumpBob(bob, t);
         }
-        function removeIllustration(b) {
+        function removeIllustration(b, t) {
             return new Promise(resolve => {
                 b.style.opacity = '0';
+                t.style.opacity = '0';
                 setTimeout(() => {
                     resolve();
                 }, 200);
