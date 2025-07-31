@@ -551,15 +551,16 @@ function initialiseStates() {
 }
 
 const matTert = [
-        [ '175vw', '-15vh', "group", 1, 1, 'personaggio_anonimo.png'],
-        [ '163vw', '-3vh', "group", 2, 1, 'personaggio_anonimo.png' ],
-        [ '163vw', '-27vh', "group", -2, 0, 'personaggio_anonimo.png'],
-        [ '13vw', '-27vh', "work-alone", 1, 1, 'personaggio_anonimo.png'],
+        [ '175vw', '-15vh', "group", 1, false, 'personaggio_anonimo.png'],
+        [ '163vw', '-3vh', "group", 2, false, 'personaggio_anonimo.png' ],
+        [ '163vw', '-27vh', "group", -2, false, 'personaggio_anonimo.png'],
+        [ '13vw', '-27vh', "work-alone", 1, false, 'personaggio_anonimo.png'],
         [ '90vw', '110vh', "alone", -1, false, 'personaggio_anonimo.png'],
-        [ '70vw', '33vh', "group", 1, 1, 'bob.png'],
-        [ '80vw', '39vh', "group", 1, 1, 'personaggio_anonimo.png'],
-        ['180vw', '100vh', "group", -1, 1, 'personaggio_anonimo.png'],
-        ['190vw', '100vh', "group", 1, 1, 'personaggio_anonimo.png'],
+        [ '70vw', '33vh', "group", 1, false, 'bob.png'],
+        [ '80vw', '39vh', "group", 1, false, 'personaggio_anonimo.png'],
+        ['180vw', '100vh', "group", -1, false, 'personaggio_anonimo.png'],
+        ['190vw', '100vh', "group", 1, false, 'personaggio_anonimo.png'],
+        [ '13vw', '100vh', "walk-casually", -1, false, 'personaggio_anonimo.png'],
     ];
     
 const importantObjects = [
@@ -811,7 +812,6 @@ function returnToObjectPreside(xInVW, yInVH){
     let differenceY = yInVH - (stepY * maxDistance);
 
     let time = 0;
-    console.log(stepX + " "+ stepY + "\n" + differenceX + " " + differenceY) 
     selectKeysX(stepX, time, maxTime);
     selectKeysY(stepY, time, maxTime);
     setTimeout(() => {
@@ -866,7 +866,6 @@ function selectKeysY(stepY, time, maxTime){
 }
 
 function simulateKey(code, duration){
-    console.log(code, duration)
     keys[code] = true;
     handleKeydown({ code }); 
 
@@ -1192,7 +1191,7 @@ function interaction(index, e){
     }
     
 function creationTertiaryCharacters(e, state) {
-    let i, N=9;
+    let i, N=10;
     let scaleX;
     
     for(i=0;i<N;i++){
@@ -1223,19 +1222,37 @@ function createCharacter(e, state, i) {
     character_container.appendChild(character_img);
     e.world.appendChild(character_container);
     e.world.appendChild(document.getElementById("character"+i))
-    
-    if(matTert[i][2] == "group") passiveAnimationGroup(character_container, i, e, state);
-    else if(matTert[i][2] == "work-alone") {
-        passiveAnimationWorkAlone(character_container, i, e);
+    switch (matTert[i][2]){
+        case 'group':
+            passiveAnimationGroup(character_container, i, e, state);
+            break;
+        case 'work-alone':
+             passiveAnimationWorkAlone(character_container, i, e);
+            setInterval(() => {
+                passiveAnimationWorkAlone(character_container, i, e);
+            }, 8000);
+            break;
+        case 'alone':
+            let posX = parseFloat(matTert[i][0]) + 13;
+            let posY = parseFloat(matTert[i][1]) - 10;
+            const illustration = createIllustration('vignetta_musica.png', posX, posY, e);
+        animateIllustration(illustration, i);
         setInterval(() => {
-            passiveAnimationWorkAlone(character_container, i, e);
-        }, 8000);
+            passiveAnimationAlone(character_container, i, e, illustration);
+            }, 1000);
+            break;
+        case 'walk-casually':
+            let posX2 = parseFloat(matTert[i][0]) + 13;
+            let posY2 = parseFloat(matTert[i][1]) - 10;
+            const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e);
+            animateIllustration(illustration2, i);
+            passiveAnimationWalking(character_container, i, e, illustration2);
+           
+            break;
     }
-    else if(matTert[i][2] == "alone"){
-        let posX = parseFloat(matTert[i][0]) + 13;
-        let posY = parseFloat(matTert[i][1]) - 10;
-        const illustration = createIllustration('vignetta_musica.png', posX, posY, e);
-        let interval = setInterval(() => {
+}
+function animateIllustration(illustration, i){
+    let interval = setInterval(() => {
             if(matTert[i][4] == false){
                 let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
                 setTimeout(() => {
@@ -1249,11 +1266,6 @@ function createCharacter(e, state, i) {
                 clearInterval(interval);
             }
         }, 5000);
-        setInterval(() => {
-            passiveAnimationAlone(character_container, i, e, illustration);
-            }, 1000);
-
-        }
 }
 let i_illustration = 0;
 function createIllustration(sr, posX, posY, e){
@@ -1355,8 +1367,6 @@ async function passiveAnimationAlone(character, i, e, illustration){
     character.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
     illustration.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-
-        
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
         if(matTert[i][4] == true){
@@ -1384,6 +1394,15 @@ async function passiveAnimationAlone(character, i, e, illustration){
 
 }
 
+function passiveAnimationWalking(character, i, e, illustration){
+    let stepX = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
+    let stepY = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
+    returnToObject(character, false, false, false, e, stepX, stepY, illustration);
+    setTimeout(() => {
+        passiveAnimationWalking(character, i, e, illustration);
+    }, Math.abs(stepX) * 750 + Math.abs(stepY) * 750); 
+}
+
 async function jolt(character, e) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
@@ -1409,152 +1428,168 @@ async function jolt(character, e) {
     await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true);
 }
 
-async function returnToObject(character, x, y, order = false, e = initialiseElements(), state = initialiseStates()){
-    let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
-    let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 5;
-    let diffStepX = Math.abs(stepX - Math.trunc(stepX));
-    stepX -= diffStepX;
+async function returnToObject(character, x, y, order = false, e = initialiseElements(), stepx, stepy, illustration, state = initialiseStates()){
     let halfStepX = false;
-    if (diffStepX > 0.5) {
-        halfStepX = true;
-    }
-    diffStepX = Math.abs(stepX - Math.trunc(stepX));
-    let aQuarterStepX = false;
-    if(diffStepX > 0.25){
-        halfStepX = false;
-        aQuarterStepX = true;
-    }
-    let diffStepY = Math.abs(stepY - Math.trunc(stepY));
-    stepY -= diffStepY;
     let halfStepY = false;
-    if (diffStepY > 0.5) {
-        halfStepY = true;
-    }
-    diffStepY = Math.abs(stepY - Math.trunc(stepY));
+    let aQuarterStepX = false;
     let aQuarterStepY = false;
-    if(diffStepY > 0.25){
-        halfStepX = false;
-        aQuarterStepY = true;
+    if(x != false){
+        let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
+        console.log(stepX)
+        let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 5;
+        let diffStepX = Math.abs(stepX - Math.trunc(stepX));
+        stepX -= diffStepX;
+
+        if (diffStepX > 0.5) {
+            halfStepX = true;
+        }
+        diffStepX = Math.abs(stepX - Math.trunc(stepX));
+        if(diffStepX > 0.25){
+            halfStepX = false;
+            aQuarterStepX = true;
+        }
+        let diffStepY = Math.abs(stepY - Math.trunc(stepY));
+        stepY -= diffStepY;
+        if (diffStepY > 0.5) {
+            halfStepY = true;
+        }
+        diffStepY = Math.abs(stepY - Math.trunc(stepY));
+        if(diffStepY > 0.25){
+            halfStepX = false;
+            aQuarterStepY = true;
+        }
+
+        stepX = Math.trunc(stepX);
+        stepY = Math.trunc(stepY);
+        move(character, order, stepX, stepY);
     }
+    else{
+        let stepX = stepx;
+        let stepY = stepy;
+        move(character, order, stepX, stepY, x);
+    }
+    async function move(character, order, stepX, stepY, cond){
+        const sleep =  ms => new Promise(r => setTimeout(r, ms));
+        const step = async (action, delay, parameter = false, parameter2 = false) => {
+            if (typeof window[action] === 'function') {
+                window[action](character, parameter);
+                if(!cond) window[action](illustration, parameter);
+            }
+            await sleep(delay);
+        };
+        if (!order) {
+        if(stepX < 0) {
+            for(let i = 0; i > stepX; i--) {
+                await step("leftJump", 500);
+            }
+            if(halfStepX){
+                parameter = true;
+                await step("leftJump", 500, parameter);
+            }
+            if(aQuarterStepX){
+                parameter2 = true;
+                await step("leftJump", 500, false, parameter2);
+            }
+        } else {
+            for(let i = 0; i < stepX; i++) {
+                await step("rightJump", 500);
+            }
+            if(halfStepX){
+                parameter = true;
+                await step("rightJump", 500, parameter);
+            }
+            if(aQuarterStepX){
+                parameter2 = true;
+                await step("rightJump", 500, false, parameter2);
+            }
+        }
 
-    stepX = Math.trunc(stepX);
-    stepY = Math.trunc(stepY);
+        if(stepY < 0) {
+            for(let i = 0; i > stepY; i--) {
+                await step("topJump", 500);
+            }
+            if(halfStepY){
+                parameter = true;
+                await step("topJump", 500, parameter);
+            }
+            if(aQuarterStepY){
+                parameter2 = true;
+                await step("topJump", 500, false, parameter2);
+            }
+        } else {
+            for(let i = 0; i < stepY; i++) {
+                await step("downJump", 500);
+            }
+            if(halfStepY){
+                parameter = true;
+                await step("downJump", 500, parameter);
+            }
+            if(aQuarterStepY){
+                parameter2 = true;
+                await step("downJump", 500, false, parameter2);
+            }
+        }
 
-    const sleep =  ms => new Promise(r => setTimeout(r, ms));
-    const step = async (action, delay, parameter = false, parameter2 = false) => {
-        if (typeof window[action] === 'function') {
-            window[action](character, parameter);
-        }
-        await sleep(delay);
-    };
-    if (!order) {
-    if(stepX < 0) {
-        for(let i = 0; i > stepX; i--) {
-            await step("leftJump", 500);
-        }
-        if(halfStepX){
-            parameter = true;
-            await step("leftJump", 500, parameter);
-        }
-        if(aQuarterStepX){
-            parameter2 = true;
-            await step("leftJump", 500, false, parameter2);
-        }
     } else {
-        for(let i = 0; i < stepX; i++) {
-            await step("rightJump", 500);
+        if(stepY < 0) {
+            for(let i = 0; i > stepY; i--) {
+                await step("topJump", 500);
+            }
+            if(halfStepY){
+                parameter = true;
+                await step("topJump", 500, parameter);
+            }
+            if(aQuarterStepY){
+                parameter2 = true;
+                await step("topJump", 500, false, parameter2);
+            }
+        } else {
+            for(let i = 0; i < stepY; i++) {
+                await step("downJump", 500);
+            }
+            if(halfStepY){
+                parameter = true;
+                await step("downJump", 500, parameter);
+            }
+            if(aQuarterStepY){
+                parameter2 = true;
+                await step("downJump", 500, false, parameter2);
+            }
         }
-        if(halfStepX){
-            parameter = true;
-            await step("rightJump", 500, parameter);
-        }
-        if(aQuarterStepX){
-            parameter2 = true;
-            await step("rightJump", 500, false, parameter2);
-        }
-    }
 
-    if(stepY < 0) {
-        for(let i = 0; i > stepY; i--) {
-            await step("topJump", 500);
+        if(stepX < 0) {
+            for(let i = 0; i > stepX; i--) {
+                await step("leftJump", 500);
+            }
+            if(halfStepX){
+                parameter = true;
+                await step("leftJump", 500, parameter);
+            }
+            if(aQuarterStepX){
+                parameter2 = true;
+                await step("leftJump", 500, false, parameter2);
+            }
+        } else {
+            for(let i = 0; i < stepX; i++) {
+                await step("rightJump", 500);
+            }
+            if(halfStepX){
+                parameter = true;
+                await step("rightJump", 500, parameter);
+            }
+            if(aQuarterStepX){
+                parameter2 = true;
+                await step("rightJump", 500, false, parameter2);
+            }
         }
-        if(halfStepY){
-            parameter = true;
-            await step("topJump", 500, parameter);
-        }
-        if(aQuarterStepY){
-            parameter2 = true;
-            await step("topJump", 500, false, parameter2);
-        }
-    } else {
-        for(let i = 0; i < stepY; i++) {
-            await step("downJump", 500);
-        }
-        if(halfStepY){
-            parameter = true;
-            await step("downJump", 500, parameter);
-        }
-        if(aQuarterStepY){
-            parameter2 = true;
-            await step("downJump", 500, false, parameter2);
-        }
-    }
-
-} else {
-    if(stepY < 0) {
-        for(let i = 0; i > stepY; i--) {
-            await step("topJump", 500);
-        }
-        if(halfStepY){
-            parameter = true;
-            await step("topJump", 500, parameter);
-        }
-        if(aQuarterStepY){
-            parameter2 = true;
-            await step("topJump", 500, false, parameter2);
-        }
-    } else {
-        for(let i = 0; i < stepY; i++) {
-            await step("downJump", 500);
-        }
-        if(halfStepY){
-            parameter = true;
-            await step("downJump", 500, parameter);
-        }
-        if(aQuarterStepY){
-            parameter2 = true;
-            await step("downJump", 500, false, parameter2);
-        }
-    }
-
-    if(stepX < 0) {
-        for(let i = 0; i > stepX; i--) {
-            await step("leftJump", 500);
-        }
-        if(halfStepX){
-            parameter = true;
-            await step("leftJump", 500, parameter);
-        }
-        if(aQuarterStepX){
-            parameter2 = true;
-            await step("leftJump", 500, false, parameter2);
-        }
-    } else {
-        for(let i = 0; i < stepX; i++) {
-            await step("rightJump", 500);
-        }
-        if(halfStepX){
-            parameter = true;
-            await step("rightJump", 500, parameter);
-        }
-        if(aQuarterStepX){
-            parameter2 = true;
-            await step("rightJump", 500, false, parameter2);
-        }
-    }
 }
-    console.log(parseFloat(character.style.left) + 12)
-    await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
+    if(!cond){
+        return;
+    }
+    else{
+        await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
+    }
+    }
 }
     
 function centralizationPreside(e, state) {
@@ -1766,7 +1801,7 @@ function diaologueB_P1(e, state) {
             async function jumpBob(b, t) {
                 const sleep = ms => new Promise(r => setTimeout(r, ms));
                 await sleep(700);
-                await removeIllustration(bob_illustration, t)
+                await removeIllustration(bob_illustration, t_illustration)
                 await sleep(300);
                 await leftJump(b);
                 await sleep(400); 
