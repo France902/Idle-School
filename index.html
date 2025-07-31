@@ -629,8 +629,8 @@ function createInteractableKeys(e, state) {
             key.src = 'tasto_e.png';
             key.id = 'key_e' + i;
             key.className = 'school_imgs';
-            key.style.width = '4vw';
-            key.style.height = '4vw';
+            key.style.width = '5vw';
+            key.style.height = '5vw';
             key.style.opacity = '0';
             key.style.left = parseFloat(pos_keys[i][0]) + 8 + 'vw';
             key.style.top = parseFloat(pos_keys[i][1]) - 7 + 'vh';
@@ -1206,10 +1206,11 @@ function createCharacter(e, state, i) {
     character_container.id = 'character' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
-    character_container.style.transition = 'left 0.25s ease-in-out, top 0.25s ease-in-out';
+    character_container.style.transition = 'left 0.3s ease-in-out, top 0.25s ease-in-out';
     const character_img = document.createElement('img');
     character_img.src = matTert[i][5];
     character_img.style.width = '28vw';
+    character_img.id = 'characterImg' + i;
     if(matTert[i][5] == 'bob.png') character_img.style.height = '27vh';
     else character_img.style.height = '20vh';
 
@@ -1272,7 +1273,7 @@ function createIllustration(sr, posX, posY, e){
         const illustration = document.createElement('img');
         illustration.src = sr;
         illustration.style.opacity = '0';
-        illustration.style.transition = 'opacity 0.1s ease-out, left 0.25s ease-in-out, top 0.35s ease-in-out';
+        illustration.style.transition = 'opacity 0.1s ease-out, left 0.3s ease-in-out, top 0.35s ease-in-out';
         illustration.style.width = '10vw';
         illustration.style.height = '15vh';
         illustration.style.left = `${posX}vw`;
@@ -1286,7 +1287,7 @@ function createIllustration(sr, posX, posY, e){
 
 let interval = [];
 function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
-    character.style.transition = "left 0.25s ease-in-out, top 0.25s ease-in-out";
+    character.style.transition = "left 0.3s ease-in-out, top 0.25s ease-in-out";
     if(posX == 0){
         if(matTert[i][5] == 'bob.png'){
             posX = parseFloat(matTert[i][0]) + 13;
@@ -1342,7 +1343,7 @@ function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
     }, 5000);
 }
 async function passiveAnimationWorkAlone(character, i, e){
-    character.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     
     const step = async (action, delay, scaleX) => {
@@ -1364,8 +1365,8 @@ async function passiveAnimationWorkAlone(character, i, e){
 }
 
 async function passiveAnimationAlone(character, i, e, illustration){
-    character.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
-    illustration.style.transition = "left 0.25s ease-in-out, top 0.35s ease-in-out";
+    character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
+    illustration.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
@@ -1468,7 +1469,7 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
         let stepY = stepy;
         move(character, order, stepX, stepY, x);
     }
-    async function move(character, order, stepX, stepY, cond){
+    async function move(character, order, stepX, stepY, cond = true){
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
         const step = async (action, delay, parameter = false, parameter2 = false) => {
             if (typeof window[action] === 'function') {
@@ -1587,6 +1588,7 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
         return;
     }
     else{
+        console.log("si")
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
     }
     }
