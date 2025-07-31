@@ -1436,7 +1436,6 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
     let aQuarterStepY = false;
     if(x != false){
         let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
-        console.log(stepX)
         let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 5;
         let diffStepX = Math.abs(stepX - Math.trunc(stepX));
         stepX -= diffStepX;
@@ -1588,7 +1587,6 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
         return;
     }
     else{
-        console.log("si")
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
     }
     }
