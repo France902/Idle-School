@@ -36,7 +36,8 @@
         }
        
         img {
-        image-rendering: crisp-edges; 
+            image-rendering: crisp-edges; 
+            transform: translateZ(0); 
         }
 
         #world {
@@ -50,6 +51,7 @@
             margin-left: -3vw;
             margin-top: 5vh;
             will-change: transform;
+            transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out;
         }
 
         #platform_1 {
@@ -248,6 +250,42 @@
             opacity: 0;
             transition: opacity 0.1s ease-in-out, left 0.25s ease-in-out, top 0.25s ease-in-out;
         }
+        #cinematic-bars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .bar {
+            position: absolute;
+            height: 6vh;
+            width: 100%;
+            background-color: black;
+            transition: transform 0.5s ease;
+            z-index: 9999;
+        }
+
+        .top {
+            top: 0;
+            transform: translateY(-100%);
+        }
+
+        .bottom {
+            bottom: 0;
+            transform: translateY(100%);
+        }
+
+        .cinematic .top {
+            transform: translateY(0);
+        }
+
+        .cinematic .bottom {
+            transform: translateY(0);
+        }
 
         .hud-container {
             position: fixed;
@@ -352,6 +390,10 @@
             transition: left 0.35s ease-in-out, top 0.35s ease-in-out;
             will-change: transform, left, top;
         }
+        .sprite {
+            backface-visibility: hidden;
+        }
+
 
         @keyframes fadeOpacity {
             0% {
@@ -373,8 +415,7 @@
          <div id="loader-bar"></div>
     </div>
   <div id="world">
-    <div id="school_building" style="z-index: -1;">
-    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw;">
+    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw;" class="sprite">
 
     <img src="giardino_bordo_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed;">
     <img src="giardino_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 210vw;">
@@ -399,7 +440,6 @@
 
     </div>
         
-    </div>
 
     <div id="platform_container">
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
@@ -421,10 +461,16 @@
         <img src="personaggio_anonimo.png" alt="" id="anonymous_character_dialogues">
         
     </div>
+
+    <div id="cinematic-bars" class="cinematic">
+        <div class="bar top"></div>
+        <div class="bar bottom"></div>
+    </div>
+
     
 
     
-    <div class="hud-container">
+    <div class="hud-container" id="hud" style="display: none;">
         <img src="icona_zoom.png" onclick=" scale(true)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
         <br>
         <img src="icona_casa.png" onclick="scale('predefinito')" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
@@ -478,10 +524,17 @@ function startGame() {
   createInteractableKeys(elements, state);
   setupDialogue(elements, state);
   controlSkip(elements, state);
-  setTimeout(() => scaleWorld(elements), 1000);
+  waitForImagesToLoad(document.getElementById("world"), () => {
+    setTimeout(() => scaleWorld(elements), 1000);
+  });
   gameScripts(elements, state);
-  creationTertiaryCharacters(elements, state)
+  creationTertiaryCharacters(elements, state);
   // setupMenuToggle(elements);
+}
+
+function gameScripts(e, state) {
+    centralizationPreside(e, state);
+    diaologueB_P1(e, state);
 }
 
 function initialiseElements() {
@@ -491,6 +544,7 @@ function initialiseElements() {
     world: document.getElementById('world'),
     moneyText: document.getElementById('money'),
     menu: document.getElementById('missions'),
+    hud: document.getElementById('hud'),
     
     // Giocatore e interazioni
     student: document.querySelector('.student'),
@@ -570,7 +624,7 @@ const importantObjects = [
 
 let zoom = 0.9;
 function scale(condition, elements = initialiseElements(), state = initialiseStates()) {
-    elements.world.style.transition = "transform 0.3s ease-in-out";
+    elements.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
     if(condition === 'predefinito') {
         zoom = 0.9;
         elements.world.style.transform = `scale(${zoom})`;
@@ -589,6 +643,29 @@ function scale(condition, elements = initialiseElements(), state = initialiseSta
         }
     }
 }
+
+function waitForImagesToLoad(container, callback) {
+  const images = container.querySelectorAll('img');
+  let loaded = 0;
+
+  if (images.length === 0) {
+    callback();
+    return;
+  }
+
+  images.forEach(img => {
+    if (img.complete) {
+      loaded++;
+      if (loaded === images.length) callback();
+    } else {
+      img.onload = img.onerror = () => {
+        loaded++;
+        if (loaded === images.length) callback();
+      };
+    }
+  });
+}
+
 function scaleWorld(e) {
   let scale = 0.07;
   const target = 0.9;
@@ -641,11 +718,11 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state) {
   const lines = [
-    ["Ciao! Sono Bob, della Building & Co!", "Bob", 2],
-    ["Questo posto è proprio enorme!", "Bob", 2],
-    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1],
-    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2],
-    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2],
+    ["Ciao! Sono Bob, della Building & Co!", "Bob", 2, 0, true],
+    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
+    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1, 0, false],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2, true, false, -100, 35],
     [true],
   ];
   let index = 0;
@@ -691,14 +768,25 @@ function setupDialogue(e, state) {
         e.container_dialogue.style.opacity = 0;
         state.cond_movement = true;
         state.cond_dialogue = false;
+        resetMoveWorld(e, -3, 5)
+        activateHud(e);
         setUpPresideMovement(e, state);
         return;
     }
     if (index < lines.length) {
+        if(lines[index][3] == true){
+        state.cond_dialogue = false;
+        moveWorld(e, lines[index][5], lines[index][6]);
+        setTimeout(() => {
+            state.cond_dialogue = true;
+        }, 2000);
+      } 
+      if(lines[index][4] == true) deactivateCinematicMode(e);
       showText(lines[index][0]);
       changeName(lines[index][1]);
       changeBoxName(lines[index][2]);
       changeCharacters(lines[index][1]);
+
       index++;
     }
   }
@@ -734,6 +822,26 @@ function controlSkip(elements, state) {
   });
 }
 
+function activateHud(e){
+    e.hud.style.display = '';
+}
+
+function moveWorld(e, distanceX, distanceY){
+    e.world.style.marginLeft = '-3vw';
+    e.world.style.marginTop = '5vh';
+    e.world.style.marginLeft = parseFloat(e.world.style.marginLeft) + distanceX + "vw";
+    e.world.style.marginTop = parseFloat(e.world.style.marginTop) + distanceY + "vh";
+}
+
+function resetMoveWorld(e, distanceX, distanceY){
+    e.world.style.transition = '';
+    e.world.style.marginLeft = distanceX + "vw";
+    e.world.style.marginTop = distanceY + "vh";
+
+setTimeout(() => {
+    e.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+}, 1600);
+}
 
 
 function setUpPresideMovement(e, state) {
@@ -1183,12 +1291,6 @@ function interaction(index, e){
         jolt(character, e);
     }
 }
-
-
-    function gameScripts(e, state) {
-        centralizationPreside(e, state);
-        diaologueB_P1(e, state);
-    }
     
 function creationTertiaryCharacters(e, state) {
     let i, N=10;
@@ -1337,7 +1439,7 @@ function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
             setTimeout(() => {
                             illustration.style.opacity = '1';
                         setTimeout(() => {
-                            illustration.style.opacity = '0';
+                                illustration.style.opacity = '0';
                         }, 3000);
             }, illustration_time);
     }, 5000);
@@ -1796,6 +1898,7 @@ function diaologueB_P1(e, state) {
         function moveBob(t) {
             const bob = document.getElementById('character5');
             bob.style.transform = "scaleX(-1)";
+            clearInterval(interval[5]);
             bob_illustration.style.opacity = '1';
             bob_illustration.src = 'vignetta_esclamazione.png';
             async function jumpBob(b, t) {
@@ -1834,5 +1937,14 @@ function diaologueB_P1(e, state) {
 
     }, 5000);
 }
+
+function activateCinematicMode() {
+  document.getElementById('cinematic-bars').classList.add('cinematic');
+}
+
+function deactivateCinematicMode() {
+  document.getElementById('cinematic-bars').classList.remove('cinematic');
+}
+
 
 </script>
