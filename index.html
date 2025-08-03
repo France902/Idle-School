@@ -54,6 +54,29 @@
             transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out;
         }
 
+        #table_costruction{
+            position: fixed;
+            width: 20vw;
+            height: 15vh;
+            z-index: 0;
+            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            object-fit: cover;
+        }
+
+        #costruction_menu{
+            position: fixed;
+            width: 70vw;
+            height: 85vh;
+            object-fit: cover;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            top: 0vh;
+            left: 15vw;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
         #platform_1 {
             width: 10vw;
             height: 12vh;
@@ -259,6 +282,7 @@
             pointer-events: none;
             z-index: 9999;
         }
+        
 
         .bar {
             position: absolute;
@@ -443,7 +467,10 @@
 
     <div id="platform_container">
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
-        </div>
+    </div>
+    <div id="table_costruction" class="school_imgs" style="background-color: aqua; left: 165vw; top: -10vh;">
+        
+    </div>
     
     <div id="preside_container">
         <img src="Preside.png" id="preside">
@@ -476,6 +503,7 @@
         <img src="icona_casa.png" onclick="scale('predefinito')" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
         <br>
         <img src="icona_dezoom.png" onclick="scale(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
+        <div id="costruction_menu" style="background-color: white;"></div>
         <!--
         <div id="money" class="hud-box">0 🪙</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
@@ -545,6 +573,7 @@ function initialiseElements() {
     moneyText: document.getElementById('money'),
     menu: document.getElementById('missions'),
     hud: document.getElementById('hud'),
+    costruction_menu: document.getElementById('costruction_menu'),
     
     // Giocatore e interazioni
     student: document.querySelector('.student'),
@@ -599,6 +628,7 @@ function initialiseStates() {
 
     // Condizioni ambientali
     cond_platform_1: false,
+    cond_deactivate_movement: false,
 
     // state generico
     maxTimeAnimationGroup: [N],
@@ -697,11 +727,8 @@ function scaleWorld(e) {
 
 function createInteractableKeys(e, state) {
     const pos_keys = [
-        [false],
-        [false],
-        [false],
-        [false],
         ['90vw', '105vh'],
+        ['152vw', '-25vh'],
     ]
     for(let i=0;i<pos_keys.length;i++){
         if(pos_keys[i][0] != false){
@@ -846,6 +873,7 @@ setTimeout(() => {
 }, 1600);
 }
 
+let intervalMovement;
 
 function setUpPresideMovement(e, state) {
   const p = e.preside;
@@ -856,25 +884,23 @@ function setUpPresideMovement(e, state) {
     let currentDir = { x: 0, y: 0 };
     let keys = {};
 
-   let intervalMovement;
+    if(state.cond_movement){
+        window.addEventListener('keydown', handleKeydown);
+        window.addEventListener('keyup', handleKeyup);
 
-if(state.cond_movement){
-    window.addEventListener('keydown', handleKeydown);
-    window.addEventListener('keyup', handleKeyup);
-
-    intervalMovement = setInterval(() => {
-        if (isCharging) return;
-        currentDir = getDirection();
-        if (currentDir.x !== 0 || currentDir.y !== 0) {
-            isCharging = true;
-            jumpStartTime = performance.now();
-        }
-    }, 16);
-} else {
-    window.removeEventListener('keyup', handleKeyup);
-    window.removeEventListener('keydown', handleKeydown);
-    clearInterval(intervalMovement);
-}
+        intervalMovement = setInterval(() => {
+            if (isCharging) return;
+            currentDir = getDirection();
+            if (currentDir.x !== 0 || currentDir.y !== 0) {
+                isCharging = true;
+                jumpStartTime = performance.now();
+            }
+        }, 16);
+    } else {
+        window.removeEventListener('keyup', handleKeyup);
+        window.removeEventListener('keydown', handleKeydown);
+        clearInterval(intervalMovement);
+    }
 
 function pointClickMovement(){
 
@@ -988,29 +1014,34 @@ function simulateKey(code, duration){
 
 
 function handleKeydown(event) {
-e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
-keys[event.code] = true;
-if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
-    currentDir = getDirection();
-    if (currentDir.x === 0 && currentDir.y === 0) return;
-        if(!isCharging && !event.repeat){
-            isCharging = true;
-            jumpStartTime = performance.now();
-            
+if(!state.cond_deactivate_movement){
+    e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
+    keys[event.code] = true;
+    if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
+        currentDir = getDirection();
+        if (currentDir.x === 0 && currentDir.y === 0) return;
+            if(!isCharging && !event.repeat){
+                isCharging = true;
+                jumpStartTime = performance.now();
+                
+            }
         }
     }
 }
+
 function handleKeyup(event){
-    keys[event.code] = false;
-    if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
-        if(isCharging){
-            isCharging = false;
-            let heldFor = performance.now() - jumpStartTime;
-            if(heldFor > 270){
-                heldFor = 270;
-            } 
-            let distance = heldFor / 30;
-            jumpDirection(distance, currentDir);
+    if(!state.cond_deactivate_movement){
+        keys[event.code] = false;
+        if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
+            if(isCharging){
+                isCharging = false;
+                let heldFor = performance.now() - jumpStartTime;
+                if(heldFor > 270){
+                    heldFor = 270;
+                } 
+                let distance = heldFor / 30;
+                jumpDirection(distance, currentDir);
+            }
         }
     }
 }
@@ -1257,22 +1288,49 @@ async function animationJumpDiagonal(distance) {
 
 window.addEventListener('keydown', handleKeydown);
 window.addEventListener('keyup', handleKeyup);
+
+    
+    
   }
   
   function control_position(state, e) {
     state.posX = Math.round(state.posX);
     state.posY = Math.round(state.posY);
     if((state.posX >= 44 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)){
-        document.getElementById('key_e'+4).style.opacity = '1';
+        document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-                if(matTert[4][4] == false) interaction(4, e, state);
+                if(matTert[4][4] == false) interaction(0, e, state);
             }
         });
     }
     else{
-        document.getElementById('key_e'+4).style.opacity = '0';
+        document.getElementById('key_e'+0).style.opacity = '0';
+        if((state.posX >= 107 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -51)){
+            document.getElementById('key_e'+1).style.opacity = '1';
+            window.addEventListener('keydown', function(event) {
+                if (event.key === 'e' || event.key === 'E') {
+                    interaction(1, e, state);
+                }
+            });
+        }
     }
+}
+
+function openConstructionMenu(e, state){
+        state.cond_deactivate_movement = true;
+        clearInterval(intervalMovement);
+        e.costruction_menu.style.opacity = '1';
+        document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+                state.cond_deactivate_movement = false;
+                closeCostructionMenu(e, state);
+            }
+        });
+}
+
+function closeCostructionMenu(e, state){
+    e.costruction_menu.style.opacity = '0';
 }
 
 
@@ -1285,15 +1343,22 @@ function setupMenuToggle(e) {
   });
 }
 function interaction(index, e, state){
-    if(index == 4){
-        matTert[index][4] = true;
-        e.preside.style.transform = 'scaleX(1)';
-        const character = document.getElementById('character4');
-        character.style.transform = 'scaleX(1)';
-        document.getElementById('key_e' + index).style.display = 'none';        
-        jolt(character, e, state);
+    switch(index){
+        case 0:
+            matTert[index][4] = true;
+            e.preside.style.transform = 'scaleX(1)';
+            const character = document.getElementById('character4');
+            character.style.transform = 'scaleX(1)';
+            document.getElementById('key_e' + index).style.display = 'none';        
+            jolt(character, e, state);
+            break;
+        case 1:
+            state.cond_table = true;
+            openConstructionMenu(e, state);
     }
 }
+
+
 
 let N = 10;
 function creationTertiaryCharacters(e, state) {
