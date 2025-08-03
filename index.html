@@ -26,6 +26,8 @@
             -ms-user-select: none;
             pointer-events: none;
             position: fixed;
+            top: 0;
+            left: 0;
         }
 
         h1 {
@@ -54,6 +56,8 @@
             margin-top: 5vh;
             will-change: transform;
             transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out;
+            top: 0;
+            left: 0;
         }
 
         #table_costruction{
@@ -193,6 +197,7 @@
             transform: scale(0.9); 
             transform-origin: center center;
             transition: transform 0.3s ease-in-out;
+            border: 2px solid red;
         }
 
         #dialogues_container {
@@ -2081,6 +2086,10 @@ function mobileAdaptation(e, state){
     document.body.addEventListener('touchmove', function(e) {
         e.preventDefault();
     }, { passive: false });
+
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
 }
 
 </script>
