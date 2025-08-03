@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,  user-scaleble=no,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Idle School</title>
     
     <style>
@@ -15,15 +15,17 @@
             margin: 0;
             padding: 0;
             width: 100vw;
-            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             background-color: rgb(186, 240, 254);
+            touch-action: none;
             user-select: none;
             pointer-events: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             pointer-events: none;
+            position: fixed;
         }
 
         h1 {
@@ -546,6 +548,7 @@
 <script>
 window.onload = startGame;
 
+
 function startGame() {
   const elements = initialiseElements();
   const state = initialiseStates();
@@ -557,6 +560,7 @@ function startGame() {
   });
   gameScripts(elements, state);
   creationTertiaryCharacters(elements, state);
+  mobileAdaptation(elements, state);
   // setupMenuToggle(elements);
 }
 
@@ -2073,5 +2077,10 @@ function deactivateCinematicMode() {
   document.getElementById('cinematic-bars').classList.remove('cinematic');
 }
 
+function mobileAdaptation(e, state){
+    document.body.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+    }, { passive: false });
+}
 
 </script>
