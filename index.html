@@ -262,7 +262,7 @@
 
         .bar {
             position: absolute;
-            height: 6vh;
+            height: 7vh;
             width: 100%;
             background-color: black;
             transition: transform 0.5s ease;
@@ -595,12 +595,15 @@ function initialiseStates() {
     pos_student: 0,
     posBX: 70,
     posBY: 39,
+    ids: [],
 
     // Condizioni ambientali
     cond_platform_1: false,
 
     // state generico
-    cond: false
+    maxTimeAnimationGroup: [N],
+    maxTimeAnimationWorkAlone: [N],
+    maxTimeAnimationAlone: [N],
   };
 }
 
@@ -614,7 +617,7 @@ const matTert = [
         [ '80vw', '39vh', "group", 1, false, 'personaggio_anonimo.png'],
         ['180vw', '100vh', "group", -1, false, 'personaggio_anonimo.png'],
         ['190vw', '100vh', "group", 1, false, 'personaggio_anonimo.png'],
-        [ '13vw', '100vh', "walk-casually", -1, false, 'personaggio_anonimo.png'],
+        [ '103vw', '50vh', "walk-casually", -1, false, 'personaggio_anonimo.png'],
     ];
     
 const importantObjects = [
@@ -1263,7 +1266,7 @@ window.addEventListener('keyup', handleKeyup);
         document.getElementById('key_e'+4).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-                if(matTert[4][4] == false) interaction(4, e);
+                if(matTert[4][4] == false) interaction(4, e, state);
             }
         });
     }
@@ -1281,19 +1284,20 @@ function setupMenuToggle(e) {
     e.menu.classList.toggle('closed');
   });
 }
-function interaction(index, e){
+function interaction(index, e, state){
     if(index == 4){
         matTert[index][4] = true;
         e.preside.style.transform = 'scaleX(1)';
         const character = document.getElementById('character4');
         character.style.transform = 'scaleX(1)';
         document.getElementById('key_e' + index).style.display = 'none';        
-        jolt(character, e);
+        jolt(character, e, state);
     }
 }
-    
+
+let N = 10;
 function creationTertiaryCharacters(e, state) {
-    let i, N=10;
+    let i;
     let scaleX;
     
     for(i=0;i<N;i++){
@@ -1349,7 +1353,7 @@ function createCharacter(e, state, i) {
             let posY2 = parseFloat(matTert[i][1]) - 10;
             const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e);
             animateIllustration(illustration2, i);
-            passiveAnimationWalking(character_container, i, e, illustration2);
+            passiveAnimationWalking(character_container, i, e, illustration2, state);
            
             break;
     }
@@ -1388,7 +1392,8 @@ function createIllustration(sr, posX, posY, e){
 }
 
 let interval = [];
-function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
+function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0) {
+    state.maxTimeAnimationGroup[i] = 4000;
     character.style.transition = "left 0.3s ease-in-out, top 0.25s ease-in-out";
     if(posX == 0){
         if(matTert[i][5] == 'bob.png'){
@@ -1401,7 +1406,7 @@ function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
         }
     }
     const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
-    let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    let time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
     setTimeout(() => {
                     illustration.style.opacity = '1';
@@ -1420,7 +1425,7 @@ function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
             }, time);
     
     interval[i] = setInterval(() => {
-            let time = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+            let time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
             if(state.condBP1 == true) {
                 clearInterval(interval[5]);
                 clearInterval(interval[6]);
@@ -1444,7 +1449,7 @@ function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0, ) {
             }, illustration_time);
     }, 5000);
 }
-async function passiveAnimationWorkAlone(character, i, e){
+async function passiveAnimationWorkAlone(character, i, e, state){
     character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     
@@ -1459,14 +1464,15 @@ async function passiveAnimationWorkAlone(character, i, e){
             window[action](character, false);
         }
     };
-
-    await step("rightJump", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
-    await step("rightJump", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, true);
-    await step("leftJump", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
-    await step("leftJump", Math.floor(Math.random() * (2000 - 500 + 1)) + 500, false);
+    /*
+    await step("rightJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, true);
+    await step("rightJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, true);
+    await step("leftJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, false);
+    await step("leftJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, false);
+    */
 }
 
-async function passiveAnimationAlone(character, i, e, illustration){
+async function passiveAnimationAlone(character, i, e, illustration, state){
     character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
     illustration.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
@@ -1490,23 +1496,38 @@ async function passiveAnimationAlone(character, i, e, illustration){
         }
         
     };
-
-    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
-    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
-    step(Math.floor(Math.random() * (500 - 200 + 1)) + 400);
-
+    /*
+    step(Math.floor(Math.random() * (state.maxTimeAnimationAlone - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (state.maxTimeAnimationAlone - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (state.maxTimeAnimationAlone - 200 + 1)) + 400);
+    */
 }
 
-function passiveAnimationWalking(character, i, e, illustration){
+let sommaX = 0;
+let sommaY = 0;
+function passiveAnimationWalking(character, i, e, illustration, state){
     let stepX = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
-    let stepY = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
-    returnToObject(character, false, false, false, e, stepX, stepY, illustration);
+    sommaX+=(stepX*9);
+    while(sommaX < -50 || sommaX > 150){
+        sommaX -= (stepX*9);
+        stepX = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
+        sommaX+=(stepX*9);
+    }
+    let stepY = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);    
+    sommaY+=(stepY*9);
+    while(sommaY < -150 || sommaY > 50){
+        sommaY -= (stepY*9);
+        stepY = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
+        sommaY+=(stepY*9);
+    }
+    
+    returnToObject(character, false, false, false, state, e, stepX, stepY, illustration);
     setTimeout(() => {
-        passiveAnimationWalking(character, i, e, illustration);
+        passiveAnimationWalking(character, i, e, illustration, state);
     }, Math.abs(stepX) * 750 + Math.abs(stepY) * 750); 
 }
 
-async function jolt(character, e) {
+async function jolt(character, e, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
     const step = async (topDelta, leftDelta, delay) => {
@@ -1528,10 +1549,10 @@ async function jolt(character, e) {
     await step(2, 2, 90);
     await step(3, 1, 90);
     await sleep(1500);
-    await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true);
+    await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true, state);
 }
 
-async function returnToObject(character, x, y, order = false, e = initialiseElements(), stepx, stepy, illustration, state = initialiseStates()){
+async function returnToObject(character, x, y, order = false, state, e = initialiseElements(), stepx, stepy, illustration){
     let halfStepX = false;
     let halfStepY = false;
     let aQuarterStepX = false;
@@ -1575,7 +1596,13 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
         const step = async (action, delay, parameter = false, parameter2 = false) => {
             if (typeof window[action] === 'function') {
                 window[action](character, parameter);
-                if(!cond) window[action](illustration, parameter);
+                if(!cond){
+                    window[action](illustration, parameter);
+                    typeAnimation = controlClose(character, state);
+                    if(typeAnimation != null){
+                        fastAnimations(state.ids, state);
+                } 
+        }
             }
             await sleep(delay);
         };
@@ -1692,6 +1719,41 @@ async function returnToObject(character, x, y, order = false, e = initialiseElem
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
     }
     }
+}
+
+function controlClose(character, state){
+    let cont = 0;
+    for(i=0;i<N;i++){
+        if(Math.abs(parseFloat(character.style.left) - parseFloat(matTert[i][0])) <= 50 && Math.abs(parseFloat(character.style.top) - parseFloat(matTert[i][1]) <= 50)){
+            state.ids[cont] = i;
+            cont++;
+        }
+    }
+    if(cont == 0) return null;
+    else return 0;
+}
+let cond_ripeti_controllo = true;
+function fastAnimations(ids, state){
+    let i;
+    if(cond_ripeti_controllo){
+        for(i=0;i<ids.length-1;i++){
+            if(matTert[ids[i]][2] == 'group'){
+                cond_ripeti_controllo = false;
+                state.maxTimeAnimationGroup[ids[i]] /= 10;
+            } 
+            
+        }
+        
+        for (let j = 0; j < ids.length - 1; j++) {
+            if (matTert[ids[j]][2] == 'group') {
+                setTimeout(() => {
+                    state.maxTimeAnimationGroup[ids[j]] *= 10;
+                    cond_ripeti_controllo = true;
+                }, 2000);
+            }
+        }
+    }
+    
 }
     
 function centralizationPreside(e, state) {
@@ -1892,7 +1954,7 @@ function diaologueB_P1(e, state) {
             await rightJump(t, false); 
             await sleep(500);
             await moveBob(t);
-            await returnToObject(t, importantObjects[0][0], importantObjects[0][1]); 
+            await returnToObject(t, importantObjects[0][0], importantObjects[0][1], false, state); 
         }
         
         function moveBob(t) {
