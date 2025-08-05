@@ -289,7 +289,20 @@
             pointer-events: none;
             z-index: 9999;
         }
-        
+
+        #click_circle {
+            width: 5vw;
+            height: 8vh;
+            position: fixed;
+            border-radius: 50%;
+            background-color: green; 
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 2s ease-out, opacity 0.3s;
+        }
+
 
         .bar {
             position: absolute;
@@ -448,25 +461,25 @@
   <div id="world">
     <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw;" class="sprite">
 
-    <img src="giardino_bordo_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed;">
-    <img src="giardino_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 210vw;">
-    <img src="giardino_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 420vw;">
-    <img src="giardino_bordo_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 630vw;">
+    <img src="giardino_bordo_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="giardino_bordo_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh;">
-    <img src="giardino_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 210vw;">
-    <img src="giardino_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 420vw;">
-    <img src="giardino_bordo_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 630vw;">
+    <img src="giardino_bordo_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="giardino_bordo_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh;">
-    <img src="giardino_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 210vw;">
-    <img src="giardino_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 420vw;">
-    <img src="giardino_bordo_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 630vw;">
+    <img src="giardino_bordo_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="strada_bordo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh;">
-    <img src="strada_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 210vw;">
-    <img src="strada_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 420vw;">
-    <img src="strada_bordo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 630vw;">
+    <img src="strada_bordo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_bordo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
 
     </div>
@@ -500,8 +513,7 @@
         <div class="bar top"></div>
         <div class="bar bottom"></div>
     </div>
-
-    
+    <div id="click_circle" style="left: 0; top: 0;"></div>
 
     
     <div class="hud-container" id="hud" style="display: none;">
@@ -511,6 +523,7 @@
         <br>
         <img src="icona_dezoom.png" onclick="scale(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
         <div id="costruction_menu" style="background-color: white;"></div>
+        
         <!--
         <div id="money" class="hud-box">0 🪙</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
@@ -590,6 +603,7 @@ function initialiseElements() {
     platform_1: document.getElementById('platform_1'),
     platform_2: document.getElementById('platform_2'),
     keyE: document.getElementById('key_e'),
+    click_circle: document.getElementById('click_circle'),
     
     // Dialoghi e narrativa
     dialogues: document.getElementById('dialogues'),
@@ -912,17 +926,21 @@ function setUpPresideMovement(e, state) {
     }
 
 function pointClickMovement(){
+    e.click_circle.style.transform = 'translate(-50%, -50%) scale(0)';
+    e.click_circle.style.opacity = '0';
 
-    let clickTimer;
+    let clickTimer, clickTimer2;
     document.addEventListener('mousedown', (event) => {
-    clickTimer = setTimeout(() => {
         ClickMovement(event);
-    }, 1000); 
     });
 
     document.addEventListener('mouseup', () => {
         clearTimeout(clickTimer); 
+        clearTimeout(clickTimer2);
+        e.click_circle.style.opacity = '0';
+        e.click_circle.style.transform = 'translate(-50%, -50%) scale(0)';
     });
+    
     function ClickMovement(event){
         let rect = e.world.getBoundingClientRect();
         let xInWorld = (event.clientX - rect.left) / zoom;
@@ -937,11 +955,52 @@ function pointClickMovement(){
         yInVH = yInVH.toFixed(2);
         xInVW -= 50;
         yInVH -= 50;
-        returnToObjectPreside(xInVW, yInVH);
+
+
+
+        if(zoom == 0.9){
+            clickTimer2 = setTimeout(() => {
+                moveBar(e, state, xInVW, yInVH);
+            }, 500);
+        }
+        
+        clickTimer = setTimeout(() => {
+            returnToObjectPreside(xInVW, yInVH);
+            e.click_circle.style.opacity = '0';
+            e.click_circle.style.transform = 'translate(-50%, -50%) scale(0)';
+        }, 2000); 
+        function controlClick(){
+        let i;
+        x = xInVW + 40;
+        y = yInVH + 40;
+        x -= state.posX;
+        y -= state.posY;
+            for(i=0;i<matTert.length;i++){
+                if(Math.abs(parseFloat(matTert[i][0]) - x) < 4 && Math.abs(parseFloat(matTert[i][1]) - y) < 4){
+                    
+                    alert("Hai cliccato il personaggio e in futuro succederà qls")
+            }
+            }   
+        }
+        controlClick();
     }
 }
 
 pointClickMovement();
+
+
+
+
+function moveBar(e, state, x, y){
+    x += 45;
+    y += 55;
+    x -= state.posX;
+    y -= state.posY;
+    e.click_circle.style.left = `${x}vw`;
+    e.click_circle.style.top = `${y}vh`;
+    e.click_circle.style.opacity = '1';
+    e.click_circle.style.transform = 'translate(-50%, -50%) scale(4)';
+}
 
 function returnToObjectPreside(xInVW, yInVH){
     let maxTime = 270;
@@ -1322,6 +1381,8 @@ window.addEventListener('keyup', handleKeyup);
                     interaction(1, e, state);
                 }
             });
+        } else{
+            document.getElementById('key_e'+1).style.opacity = '0';
         }
     }
 }
@@ -1937,12 +1998,25 @@ async function topJump(character, half, a_quarter) {
 async function leftJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-
+    let i = character.id;
+    i = i[i.length - 1];
+    
+    
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
+        if(i==5 && delay == 0){
+            if(a_quarter){
+                matTert[i][0] = (parseFloat(matTert[i][0]) - 2.5) + "vw";
+            }
+            else if(half){
+                matTert[i][0] = (parseFloat(matTert[i][0]) - 5) + "vw";
+            } else{
+                matTert[i][0] = (parseFloat(matTert[i][0]) - 8) + "vw";
+            }
+        }
     };
     if (a_quarter) {
         await step(-0.375, -0.375, 0);
