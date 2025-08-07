@@ -867,7 +867,8 @@ function setupDialogue(e, state) {
         e.container_dialogue.style.opacity = 0;
         state.cond_movement = true;
         state.cond_dialogue = false;
-        resetMoveWorld(e, -3, 5)
+        resetMoveWorld(e, -3, 5);
+        passiveAnimationBob(document.getElementById('character5'), 5 );
         activateHud(e);
         setUpPresideMovement(e, state);
         return;
@@ -1681,12 +1682,10 @@ async function passiveAnimationWorkAlone(character, i, e, state){
             window[action](character, false);
         }
     };
-    /*
-    await step("rightJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, true);
-    await step("rightJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, true);
-    await step("leftJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, false);
-    await step("leftJump", Math.floor(Math.random() * (state.maxTimeAnimationWorkAlone - 500 + 1)) + 500, false);
-    */
+    await step("rightJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, true);
+    await step("rightJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, true);
+    await step("leftJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, false);
+    await step("leftJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, false);
 }
 
 async function passiveAnimationAlone(character, i, e, illustration, state){
@@ -1713,11 +1712,9 @@ async function passiveAnimationAlone(character, i, e, illustration, state){
         }
         
     };
-    /*
-    step(Math.floor(Math.random() * (state.maxTimeAnimationAlone - 200 + 1)) + 400);
-    step(Math.floor(Math.random() * (state.maxTimeAnimationAlone - 200 + 1)) + 400);
-    step(Math.floor(Math.random() * (state.maxTimeAnimationAlone - 200 + 1)) + 400);
-    */
+    step(Math.floor(Math.random() * (1000 - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (1000 - 200 + 1)) + 400);
+    step(Math.floor(Math.random() * (1000 - 200 + 1)) + 400);
 }
 
 let sommaX = 0;
@@ -1742,6 +1739,36 @@ function passiveAnimationWalking(character, i, e, illustration, state){
     setTimeout(() => {
         passiveAnimationWalking(character, i, e, illustration, state);
     }, Math.abs(stepX) * 750 + Math.abs(stepY) * 750); 
+}
+
+async function passiveAnimationBob(character, i, e, illustration, state){
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const step = async () => {
+        let num;
+        let list_removed = [3, 4, 5, 9];
+        let cond = false;
+        let cont = 0;
+        while(!cond){
+            cont = 0;
+            num = Math.floor(Math.random() * 10);
+            for(let i=0;i<list_removed.length;i++){
+                if(num == list_removed[i]){
+                    cont++;
+                    cond = false;
+                } 
+            }
+            if(cont == 0) cond = true;
+        }
+        let x = (parseFloat(matTert[num][0]) - 5) + 'vw';
+        let y = (parseFloat(matTert[num][1]) - 5) + 'vh';
+        let delay = (Math.abs(parseFloat(character.style.left) - parseFloat(x)) / 8 * 1000) + (Math.abs(parseFloat(character.style.top) - parseFloat(y)) / 5 * 1000);
+        console.log(num)
+        await returnToObject(character, x, y, false);
+        await sleep(delay);
+    };
+    while(true){
+        await step();
+    } 
 }
 
 async function jolt(character, e, state) {
@@ -1775,6 +1802,7 @@ async function returnToObject(character, x, y, order = false, state, e = initial
     let aQuarterStepX = false;
     let aQuarterStepY = false;
     if(x != false){
+        console.log(x + " " + y);
         let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
         let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 5;
         let diffStepX = Math.abs(stepX - Math.trunc(stepX));
@@ -1929,7 +1957,7 @@ async function returnToObject(character, x, y, order = false, state, e = initial
             }
         }
 }
-    if(!cond){
+    if(!cond || character.id == 'character5'){
         return;
     }
     else{
