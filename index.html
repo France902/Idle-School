@@ -60,7 +60,7 @@
             left: 0;
         }
 
-        #table_costruction{
+        #table_construction{
             position: fixed;
             width: 20vw;
             height: 15vh;
@@ -69,7 +69,7 @@
             object-fit: cover;
         }
 
-        #costruction_menu{
+        #construction_menu{
             position: fixed;
             width: 70vw;
             height: 85vh;
@@ -81,6 +81,17 @@
             left: 15vw;
             opacity: 0;
             transition: opacity 0.3s ease-out;
+            z-index: 9999;
+        }
+
+        #lateral_arrow{
+            position: fixed;
+            width: 3vw;
+            height: 8vh;
+            left: 95vw;
+            z-index: 9999;
+            display: none;
+            pointer-events: all;
         }
 
         #platform_1 {
@@ -438,18 +449,51 @@
             backface-visibility: hidden;
         }
 
-
-        @keyframes fadeOpacity {
+        @keyframes constructionLayoutAnimation {
             0% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
+                top: -80vh;
             }
             100% {
-                opacity: 1;
+                top: 0vh;
             }
         }
+
+        @keyframes swipeLeft{
+            0% {
+                left: 15vw;
+            }
+            100% {
+                left: -100vw;
+            }
+        }
+
+        @keyframes swipeRight{
+            0% {
+                left: 15vw;
+            }
+            100% {
+                left: 100vw;
+            }
+        }
+
+        @keyframes changeMenuRight {
+            0%{
+                left: 100vw;
+            }
+            100% {
+                left: 15vw;
+            }
+        }
+
+        @keyframes changeMenuLeft {
+            0%{
+                left: -100vw;
+            }
+            100% {
+                left: 15vw;
+            }
+        }
+        
     </style>
 </head>
 
@@ -488,7 +532,7 @@
     <div id="platform_container">
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
-    <div id="table_costruction" class="school_imgs" style="background-color: aqua; left: 165vw; top: -10vh;">
+    <div id="table_construction" class="school_imgs" style="background-color: aqua; left: 165vw; top: -10vh;">
         
     </div>
     
@@ -522,8 +566,9 @@
         <img src="icona_casa.png" onclick="scale('predefinito')" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
         <br>
         <img src="icona_dezoom.png" onclick="scale(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
-        <div id="costruction_menu" style="background-color: white;"></div>
-        
+        <div id="construction_menu" style="background-color: white;">
+            <img onclick="changeMenu()" id="lateral_arrow" src="lateral_arrow.png" >
+        </div>
         <!--
         <div id="money" class="hud-box">0 🪙</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
@@ -595,7 +640,8 @@ function initialiseElements() {
     moneyText: document.getElementById('money'),
     menu: document.getElementById('missions'),
     hud: document.getElementById('hud'),
-    costruction_menu: document.getElementById('costruction_menu'),
+    construction_menu: document.getElementById('construction_menu'),
+    lateral_arrow: document.getElementById('lateral_arrow'),
     
     // Giocatore e interazioni
     student: document.querySelector('.student'),
@@ -1390,17 +1436,53 @@ window.addEventListener('keyup', handleKeyup);
 function openConstructionMenu(e, state){
         state.cond_deactivate_movement = true;
         clearInterval(intervalMovement);
-        e.costruction_menu.style.opacity = '1';
+        e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
+        e.construction_menu.style.opacity = '1';
+        e.lateral_arrow.style.display = 'block';
         document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
                 state.cond_deactivate_movement = false;
-                closeCostructionMenu(e, state);
+                closeConstructionMenu(e, state);
             }
         });
 }
 
-function closeCostructionMenu(e, state){
-    e.costruction_menu.style.opacity = '0';
+function closeConstructionMenu(e, state){
+    e.construction_menu.style.opacity = '0';
+}
+
+let layout_menu = "construction";
+function changeMenu(e = initialiseElements()){
+    if(layout_menu == "construction") {
+        layout_menu = "material_shop";
+        changeMaterialShop(e);
+        setTimeout(() => {
+            e.lateral_arrow.style.left = '5vw';
+            e.lateral_arrow.style.transform = 'scaleX(-1)';
+        }, 1000);
+    }
+    else if(layout_menu == "material_shop"){
+        layout_menu = "construction";
+        changeConstructionMenu(e);
+         setTimeout(() => {
+            e.lateral_arrow.style.left = '95vw';
+            e.lateral_arrow.style.transform = 'scaleX(1)';
+        }, 1000);
+    }
+}
+
+function changeMaterialShop(e){
+    e.construction_menu.style.animation = "swipeLeft 1.5s ease-out";
+    setTimeout(() => {
+            e.construction_menu.style.animation = "changeMenuRight 1s ease-out";
+    }, 1500);
+}
+
+function changeConstructionMenu(e){
+    e.construction_menu.style.animation = "swipeRight 1.5s ease-out";
+    setTimeout(() => {
+            e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
+    }, 1500);
 }
 
 
