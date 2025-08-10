@@ -561,13 +561,13 @@
 
     
     <div class="hud-container" id="hud" style="display: none;">
-        <img src="icona_zoom.png" onclick=" scale(true)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
+        <img src="icona_zoom.png" id="zoom" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
         <br>
-        <img src="icona_casa.png" onclick="scale('predefinito')" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
+        <img src="icona_casa.png" id="standard" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
         <br>
-        <img src="icona_dezoom.png" onclick="scale(false)" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
+        <img src="icona_dezoom.png" id="dezoom" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
         <div id="construction_menu" style="background-color: white;">
-            <img onclick="changeMenu()" id="lateral_arrow" src="lateral_arrow.png" >
+            <img id="lateral_arrow" src="lateral_arrow.png" >
         </div>
         <!--
         <div id="money" class="hud-box">0 🪙</div>
@@ -609,66 +609,106 @@
     </div>
     
 <script>
-window.onload = startGame;
 
 
-function startGame() {
-  const elements = initialiseElements();
-  const state = initialiseStates();
-  createInteractableKeys(elements, state);
-  setupDialogue(elements, state);
-  controlSkip(elements, state);
-  waitForImagesToLoad(document.getElementById("world"), () => {
-    setTimeout(() => scaleWorld(elements), 1000);
-  });
-  gameScripts(elements, state);
-  creationTertiaryCharacters(elements, state);
-  mobileAdaptation(elements, state);
-  // setupMenuToggle(elements);
-}
+
+function startGame(e = null, state = null) {
+    if(localStorage.getItem("saved") && e == null){
+        getSave();
+    }
+    else{
+        if(e == null){
+            e = writeElements();
+            elements = initialiseElements(e);
+            state = initialiseStates();
+        }
+        else elements = initialiseElements(e);
+        saveStatesElements(e, state);
+        createInteractableKeys(elements, state);
+        setupDialogue(elements, state, e);
+        controlSkip(elements, state);
+        gameScripts(elements, state);
+        creationTertiaryCharacters(elements, state);
+        mobileAdaptation(elements, state);
+        createOnClicks(elements, state);
+
+        // setupMenuToggle(elements);
+    }  
+    }
+
 
 function gameScripts(e, state) {
-    centralizationPreside(e, state);
-    diaologueB_P1(e, state);
+    if(state.index == 5){
+        e.world.style.transition = '';
+        e.world.style.transform = 'scale(0.9)'
+        e.world.style.transition = 'transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out';
+        e.preside_container.style.left = '50%';
+        document.getElementById('cinematic-bars').classList.remove('cinematic');
+    }
+    else{
+        waitForImagesToLoad(document.getElementById("world"), () => {
+        setTimeout(() => scaleWorld(e), 1000);
+        });
+        centralizationPreside(e, state);
+        diaologueB_P1(e, state);
+    }
+    
+}
+function getSave(){
+    const elements = JSON.parse(localStorage.getItem("elements"));
+    const state = JSON.parse(localStorage.getItem("state"));
+    startGame(elements, state);
 }
 
-function initialiseElements() {
+function writeElements() {
   return {
     // Core del gioco
-    canvas: document.getElementById('progressCircle'),
-    world: document.getElementById('world'),
-    moneyText: document.getElementById('money'),
-    menu: document.getElementById('missions'),
-    hud: document.getElementById('hud'),
-    construction_menu: document.getElementById('construction_menu'),
-    lateral_arrow: document.getElementById('lateral_arrow'),
-    
+    canvas: "document.getElementById('progressCircle')",
+    world: "document.getElementById('world')",
+    moneyText: "document.getElementById('money')",
+    menu: "document.getElementById('missions')",
+    hud: "document.getElementById('hud')",
+    construction_menu: "document.getElementById('construction_menu')",
+    lateral_arrow: "document.getElementById('lateral_arrow')",
+    zoom: "document.getElementById('zoom')",
+    standard: "document.getElementById('standard')",
+    dezoom: "document.getElementById('dezoom')",
+
     // Giocatore e interazioni
-    student: document.querySelector('.student'),
-    toggle_icon: document.querySelector('.toggle-icon'),
-    platform_1: document.getElementById('platform_1'),
-    platform_2: document.getElementById('platform_2'),
-    keyE: document.getElementById('key_e'),
-    click_circle: document.getElementById('click_circle'),
-    
+    student: "document.querySelector('.student')",
+    toggle_icon: "document.querySelector('.toggle-icon')",
+    platform_1: "document.getElementById('platform_1')",
+    platform_2: "document.getElementById('platform_2')",
+    keyE: "document.getElementById('key_e')",
+    click_circle: "document.getElementById('click_circle')",
+
     // Dialoghi e narrativa
-    dialogues: document.getElementById('dialogues'),
-    text_dialogue: document.getElementById('dialogues_text'),
-    container_dialogue: document.getElementById('dialogues_container'),
-    imgPreside: document.getElementById('img_preside_dialogues'),
-    anonymousCharacter: document.getElementById('anonymous_character_dialogues'),
-    characterName: document.getElementById('character_name'),
-    boxname: document.getElementById('name_box'),
-    preside: document.getElementById('preside'),
-    preside_container: document.getElementById('preside_container'),
-    
+    dialogues: "document.getElementById('dialogues')",
+    text_dialogue: "document.getElementById('dialogues_text')",
+    container_dialogue: "document.getElementById('dialogues_container')",
+    imgPreside: "document.getElementById('img_preside_dialogues')",
+    anonymousCharacter: "document.getElementById('anonymous_character_dialogues')",
+    characterName: "document.getElementById('character_name')",
+    boxname: "document.getElementById('name_box')",
+    preside: "document.getElementById('preside')",
+    preside_container: "document.getElementById('preside_container')",
+
     // Decorazioni
-    scuolaImgs: document.querySelectorAll('.school_imgs'),
-    imgsArray: Array.from(document.querySelectorAll('.school_imgs')),
+    scuolaImgs: "document.querySelectorAll('.school_imgs')",
+    imgsArray: "Array.from(document.querySelectorAll('.school_imgs'))",
 
     // Notifiche / sbloccabili
-    unlockedText: document.getElementById('unlocked')
+    unlockedText: "document.getElementById('unlocked')"
   };
+}
+
+
+function initialiseElements(e) {
+  let out = {};
+  for (let key in e) {
+    out[key] = eval(e[key]);
+  }
+  return out;
 }
 
 
@@ -694,6 +734,7 @@ function initialiseStates() {
     posBX: 70,
     posBY: 39,
     ids: [],
+    index: 0,
 
     // Condizioni ambientali
     cond_platform_1: false,
@@ -725,23 +766,23 @@ const importantObjects = [
 
 
 let zoom = 0.9;
-function scale(condition, elements = initialiseElements(), state = initialiseStates()) {
-    elements.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
-    if(condition === 'predefinito') {
+function scale(condition, e) {
+    e.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    if(condition === 'standard') {
         zoom = 0.9;
-        elements.world.style.transform = `scale(${zoom})`;
+        e.world.style.transform = `scale(${zoom})`;
         return;
     }
     if (condition) {
         if (zoom <= 1.32) {
             zoom += 0.07;
-            elements.world.style.transform = `scale(${zoom})`;
+            e.world.style.transform = `scale(${zoom})`;
         }
     }
     else{
-        if (zoom >= 0.63) {
+        if (zoom >= 0.55) {
             zoom -= 0.07;
-            elements.world.style.transform = `scale(${zoom})`;
+            e.world.style.transform = `scale(${zoom})`;
         }
     }
 }
@@ -776,6 +817,8 @@ function scaleWorld(e) {
   
   if (e.world.dataset.scaling === "true") return;
   e.world.dataset.scaling = "true";
+
+
 
   function animate() {
     scale += speed;
@@ -815,7 +858,7 @@ function createInteractableKeys(e, state) {
     }
 }
 
-function setupDialogue(e, state) {
+function setupDialogue(e, state, saved_e) {
   const lines = [
     ["Ciao! Sono Bob, della Building & Co!", "bob", 2, 0, true],
     ["Questo posto è proprio enorme!", "bob", 2, 0, false],
@@ -824,8 +867,6 @@ function setupDialogue(e, state) {
     ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
     [true],
   ];
-  let index = 0;
-
   function showText(text, velocity = 15) {
     e.text_dialogue.textContent = "";
     let i = 0;
@@ -861,41 +902,51 @@ function setupDialogue(e, state) {
   }
 
   function showNextLine() {
-    if(lines[index][0] == true){
+    if(state.index == -1) {
+        showText("Prova dialogo animato");
+        changeName("name preside");
+        changeBoxName(1);
+    }
+    else{
+    if(lines[state.index][0] == true){
         state.cond_text = false;
         state.cond_skip = false;
         e.container_dialogue.style.opacity = 0;
         state.cond_movement = true;
         state.cond_dialogue = false;
         resetMoveWorld(e, -3, 5);
-        passiveAnimationBob(document.getElementById('character5'), 5 );
+        setTimeout(() => {
+            passiveAnimationBob(document.getElementById('character5'), 5 );
+        }, 2000);
         activateHud(e);
         setUpPresideMovement(e, state);
+        saveStatesElements(saved_e, state);
         return;
     }
-    if (index < lines.length) {
-        if(lines[index][3] == true){
+    if (state.index < lines.length) {
+        if(lines[state.index][3] == true){
         state.cond_dialogue = false;
-        moveWorld(e, lines[index][5], lines[index][6]);
+        moveWorld(e, lines[state.index][5], lines[state.index][6]);
         setTimeout(() => {
             state.cond_dialogue = true;
         }, 2000);
       } 
-      if(lines[index][4] == true) deactivateCinematicMode(e);
-      showText(lines[index][0]);
-      changeName(lines[index][1]);
-      changeBoxName(lines[index][2]);
-      changeCharacters(lines[index][1]);
-
-      index++;
+      if(lines[state.index][4] == true) deactivateCinematicMode(e);
+      showText(lines[state.index][0]);
+      changeName(lines[state.index][1]);
+      changeBoxName(lines[state.index][2]);
+      changeCharacters(lines[state.index][1]);
     }
+    
+    }
+    state.index++;
   }
 
-  showText("Prova dialogo animato");
-  changeName("name preside");
-  changeBoxName(1);
+
 
   window.showNextLine = showNextLine;
+
+  showNextLine()
 
   function changeCharacters(name){
         if(name != 'preside'){
@@ -941,6 +992,14 @@ function resetMoveWorld(e, distanceX, distanceY){
 setTimeout(() => {
     e.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }, 1600);
+}
+
+function saveStatesElements(e, state){
+    if(localStorage.getItem("saved") == null) {
+        localStorage.setItem("saved", true);
+    }
+    localStorage.setItem("state", JSON.stringify(state));
+    localStorage.setItem("elements", JSON.stringify(e));
 }
 
 let intervalMovement;
@@ -1024,8 +1083,7 @@ function pointClickMovement(){
         y -= state.posY;
             for(i=0;i<matTert.length;i++){
                 if(Math.abs(parseFloat(matTert[i][0]) - x) < 4 && Math.abs(parseFloat(matTert[i][1]) - y) < 4){
-                    
-                    alert("Hai cliccato il personaggio e in futuro succederà qls")
+                    console.log("Hai cliccato il personaggio e in futuro succederà qls");
             }
             }   
         }
@@ -1453,7 +1511,7 @@ function closeConstructionMenu(e, state){
 }
 
 let layout_menu = "construction";
-function changeMenu(e = initialiseElements()){
+function changeMenu(e){
     if(layout_menu == "construction") {
         layout_menu = "material_shop";
         changeMaterialShop(e);
@@ -1513,7 +1571,7 @@ function interaction(index, e, state){
 
 
 
-let N = 10;
+const N = 10;
 function creationTertiaryCharacters(e, state) {
     let i;
     let scaleX;
@@ -1762,8 +1820,7 @@ async function passiveAnimationBob(character, i, e, illustration, state){
         let x = (parseFloat(matTert[num][0]) - 5) + 'vw';
         let y = (parseFloat(matTert[num][1]) - 5) + 'vh';
         let delay = (Math.abs(parseFloat(character.style.left) - parseFloat(x)) / 8 * 1000) + (Math.abs(parseFloat(character.style.top) - parseFloat(y)) / 5 * 1000);
-        console.log(num)
-        await returnToObject(character, x, y, false);
+        await returnToObject(character, x, y, false, state, e);
         await sleep(delay);
     };
     while(true){
@@ -1793,16 +1850,15 @@ async function jolt(character, e, state) {
     await step(2, 2, 90);
     await step(3, 1, 90);
     await sleep(1500);
-    await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true, state);
+    await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true, state, e);
 }
 
-async function returnToObject(character, x, y, order = false, state, e = initialiseElements(), stepx, stepy, illustration){
+async function returnToObject(character, x, y, order = false, state, e, stepx, stepy, illustration){
     let halfStepX = false;
     let halfStepY = false;
     let aQuarterStepX = false;
     let aQuarterStepY = false;
     if(x != false){
-        console.log(x + " " + y);
         let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
         let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 5;
         let diffStepX = Math.abs(stepX - Math.trunc(stepX));
@@ -1961,6 +2017,9 @@ async function returnToObject(character, x, y, order = false, state, e = initial
         return;
     }
     else{
+        let posId = character.id[character.id.length - 1];
+        matTert[posId][0] = parseFloat(character.style.left) + 'vw';
+        matTert[posId][1] = parseFloat(character.style.top) + 'vh';
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
     }
     }
@@ -2212,7 +2271,7 @@ function diaologueB_P1(e, state) {
             await rightJump(t, false); 
             await sleep(500);
             await moveBob(t);
-            await returnToObject(t, importantObjects[0][0], importantObjects[0][1], false, state); 
+            await returnToObject(t, importantObjects[0][0], importantObjects[0][1], false, state, e); 
         }
         
         function moveBob(t) {
@@ -2276,4 +2335,21 @@ function mobileAdaptation(e, state){
     });
 }
 
+function createOnClicks(e, state){
+    e.lateral_arrow.onclick = function() {
+        changeMenu(e);
+    }
+    e.zoom.onclick = function() {
+        scale(true, e);
+    }
+    e.standard.onclick = function() {
+        scale('standard', e);
+    }
+    e.dezoom.onclick = function() {
+        scale(false, e);
+    }
+
+}
+
+window.onload = startGame();
 </script>
