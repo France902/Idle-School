@@ -493,7 +493,13 @@
                 left: 15vw;
             }
         }
-        
+        .tile {
+  position: absolute;
+  width: 2100px;
+  height: 2400px;
+  display: block;
+  border: 1px solid rgb(1, 207, 1);
+}
     </style>
 </head>
 
@@ -503,27 +509,27 @@
          <div id="loader-bar"></div>
     </div>
   <div id="world">
-    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw;" class="sprite">
+    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw;" >
 
-    <img src="giardino_bordo_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_alto1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 210vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 420vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_bordo_alto2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; left: 630vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_alto1.png" class="tile" style="width: 210vw; height: 240vh; display: block; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_alto1.png" class="tile" style="width: 210vw; height: 240vh; display: block; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_alto2.png" class="tile" style="width: 210vw; height: 240vh; display: block; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_alto2.png" class="tile" style="width: 210vw; height: 240vh; display: block; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="giardino_bordo_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_bordo_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 240vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_mezzo1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 240vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_mezzo1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 240vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_mezzo2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 240vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_mezzo2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 240vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="giardino_bordo_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_basso1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="giardino_bordo_basso2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 480vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_basso1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 480vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_basso1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 480vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_basso2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 480vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="giardino_bordo_basso2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 480vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="strada_bordo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; border: 1px solid rgb(1, 207, 1);">
-    <img src="strada_mezzo1.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="strada_mezzo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="strada_bordo2.png" style="width: 210vw; height: 240vh; display: block; position: fixed; top: 720vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_bordo1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_mezzo1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_mezzo2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_bordo2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
 
     </div>
@@ -532,9 +538,9 @@
     <div id="platform_container">
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
-    <div id="table_construction" class="school_imgs" style="background-color: aqua; left: 165vw; top: -10vh;">
+    <img src="tavolo_costruzione.png" id="table_construction" class="school_imgs" style="left: 165vw; top: -10vh;">
         
-    </div>
+   
     
     <div id="preside_container">
         <img src="Preside.png" id="preside">
@@ -569,6 +575,7 @@
         <div id="construction_menu" style="background-color: white;">
             <img id="lateral_arrow" src="lateral_arrow.png" >
         </div>
+        <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
         <!--
         <div id="money" class="hud-box">0 🪙</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
@@ -608,11 +615,77 @@
         
     </div>
     
-<script>
+<script defer>
 
+    function reset(){
+        localStorage.clear();
+        location.reload();
+    }
+const matTert = initialiseMatTert();
 
+const importantObjects = initialiseImportantObjects();
+
+const importantStates = initialiseimportantStates();
+
+function initialiseMatTert(){
+    if(localStorage.getItem("saved") == null){
+    const matTert = [
+        [ '175vw', '-15vh', "group", 1, false, 'personaggio_anonimo.png'],
+        [ '163vw', '-3vh', "group", 2, false, 'personaggio_anonimo.png' ],
+        [ '163vw', '-27vh', "group", -2, false, 'personaggio_anonimo.png'],
+        [ '13vw', '-27vh', "work-alone", 1, false, 'personaggio_anonimo.png'],
+        [ '90vw', '110vh', "alone", -1, false, 'personaggio_anonimo.png'],
+        [ '70vw', '33vh', "group", 1, false, 'bob.png'],
+        [ '80vw', '39vh', "group", 1, false, 'personaggio_anonimo.png'],
+        ['180vw', '100vh', "group", -1, false, 'personaggio_anonimo.png'],
+        ['190vw', '100vh', "group", 1, false, 'personaggio_anonimo.png'],
+        [ '103vw', '50vh', "walk-casually", -1, false, 'personaggio_anonimo.png'],
+        ];
+        return matTert;
+    } else{
+        const matTert = JSON.parse(localStorage.getItem("matTert"));
+        return matTert;
+    }   
+}
+
+function initialiseImportantObjects(){
+    if(localStorage.getItem("saved") == null){
+        const importantObjects = [
+            [ '158vw', '-3vh', '158vw', '-27vh', 'tavolo']
+        ];
+        return importantObjects;
+    } else{
+        const importantObjects= JSON.parse(localStorage.getItem("importantObjects"));
+        return importantObjects;
+    }
+}
+
+function initialiseimportantStates(){
+    if(localStorage.getItem("saved") == null){
+        return {
+            posCanvasX: -200,
+            posCanvasY: -550,
+        }
+    } else{
+        return JSON.parse(localStorage.getItem("importantStates"));
+    }
+    
+}
+function saveMats_ImportantStates(){
+    localStorage.setItem("matTert", JSON.stringify(matTert));
+    localStorage.setItem("importantObjects", JSON.stringify(importantObjects));
+    localStorage.setItem("importantStates", JSON.stringify(importantStates));
+}
+
+saveMats_ImportantStates();
+
+function moveWorldStart(e, importantStates){
+    e.canvas.style.left = importantStates.posCanvasX + "vw";
+    e.canvas.style.top = importantStates.posCanvasY + "vh";
+}
 
 function startGame(e = null, state = null) {
+   
     if(localStorage.getItem("saved") && e == null){
         getSave();
     }
@@ -631,6 +704,7 @@ function startGame(e = null, state = null) {
         creationTertiaryCharacters(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
+        moveWorldStart(elements, importantStates);
 
         // setupMenuToggle(elements);
     }  
@@ -639,6 +713,8 @@ function startGame(e = null, state = null) {
 
 function gameScripts(e, state) {
     if(state.index == 5){
+        waitForImagesToLoad(document.getElementById("world"), () => {
+        });
         e.world.style.transition = '';
         e.world.style.transform = 'scale(0.9)'
         e.world.style.transition = 'transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out';
@@ -646,6 +722,7 @@ function gameScripts(e, state) {
         document.getElementById('cinematic-bars').classList.remove('cinematic');
     }
     else{
+        activateCinematicMode(e);
         waitForImagesToLoad(document.getElementById("world"), () => {
         setTimeout(() => scaleWorld(e), 1000);
         });
@@ -663,7 +740,7 @@ function getSave(){
 function writeElements() {
   return {
     // Core del gioco
-    canvas: "document.getElementById('progressCircle')",
+    canvas: "document.getElementById('canvas')",
     world: "document.getElementById('world')",
     moneyText: "document.getElementById('money')",
     menu: "document.getElementById('missions')",
@@ -673,6 +750,7 @@ function writeElements() {
     zoom: "document.getElementById('zoom')",
     standard: "document.getElementById('standard')",
     dezoom: "document.getElementById('dezoom')",
+    table_construction: "document.getElementById('table_construction')",
 
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
@@ -747,22 +825,6 @@ function initialiseStates() {
   };
 }
 
-const matTert = [
-        [ '175vw', '-15vh', "group", 1, false, 'personaggio_anonimo.png'],
-        [ '163vw', '-3vh', "group", 2, false, 'personaggio_anonimo.png' ],
-        [ '163vw', '-27vh', "group", -2, false, 'personaggio_anonimo.png'],
-        [ '13vw', '-27vh', "work-alone", 1, false, 'personaggio_anonimo.png'],
-        [ '90vw', '110vh', "alone", -1, false, 'personaggio_anonimo.png'],
-        [ '70vw', '33vh', "group", 1, false, 'bob.png'],
-        [ '80vw', '39vh', "group", 1, false, 'personaggio_anonimo.png'],
-        ['180vw', '100vh', "group", -1, false, 'personaggio_anonimo.png'],
-        ['190vw', '100vh', "group", 1, false, 'personaggio_anonimo.png'],
-        [ '103vw', '50vh', "walk-casually", -1, false, 'personaggio_anonimo.png'],
-    ];
-    
-const importantObjects = [
-    [ '158vw', '-3vh', '158vw', '-27vh', 'tavolo']
-];
 
 
 let zoom = 0.9;
@@ -780,7 +842,7 @@ function scale(condition, e) {
         }
     }
     else{
-        if (zoom >= 0.55) {
+        if (zoom >= 0.65) {
             zoom -= 0.07;
             e.world.style.transform = `scale(${zoom})`;
         }
@@ -908,6 +970,7 @@ function setupDialogue(e, state, saved_e) {
         changeBoxName(1);
     }
     else{
+        deactivateCinematicMode(e);
     if(lines[state.index][0] == true){
         state.cond_text = false;
         state.cond_skip = false;
@@ -1265,6 +1328,7 @@ function left(distance){
     for(i=0;i<matTert.length;i++){
         matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
     }
+    importantStates.posCanvasX += distance;
     animationJumpLeft(distance);
 }
 
@@ -1295,6 +1359,7 @@ function right(distance){
     for(i=0;i<matTert.length;i++){
         matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
     }
+    importantStates.posCanvasX -= distance;
     animationJumpRight(distance);
 }
 
@@ -1323,6 +1388,7 @@ function down(distance){
     for(i=0;i<matTert.length;i++){
         matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
     }
+    importantStates.posCanvasY -= distance;
     animationJumpDown(distance);
 }
 
@@ -1350,6 +1416,7 @@ function top(distance){
     for(i=0;i<matTert.length;i++){
         matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
     }
+    importantStates.posCanvasY += distance;
     animationJumpTop(distance);
 }
 
@@ -1381,6 +1448,7 @@ function diagonalTopRight(distance) {
         matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
         matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
     }
+    
     animationJumpDiagonal(distance);
 }
 
@@ -1402,6 +1470,8 @@ function diagonalTopLeft(distance) {
         matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
         matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
     }
+    importantStates.posCanvasX += distance;
+    importantStates.posCanvasY += distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1423,6 +1493,8 @@ function diagonalLowRight(distance) {
         matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
         matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
     }
+    importantStates.posCanvasX -= distance;
+    importantStates.posCanvasY -= distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1444,6 +1516,8 @@ function diagonalBottomLeft(distance) {
         matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
         matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
     }
+    importantStates.posCanvasX += distance;
+    importantStates.posCanvasY -= distance;
     animationJumpDiagonal(distance);
 }
 
@@ -2351,5 +2425,10 @@ function createOnClicks(e, state){
 
 }
 
-window.onload = startGame();
+window.onload = function(){
+    setInterval(() => {
+        saveMats_ImportantStates()
+    }, 5000);
+    startGame();
+} 
 </script>
