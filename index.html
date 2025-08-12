@@ -314,6 +314,14 @@
             transition: transform 2s ease-out, opacity 0.3s;
         }
 
+        #start_overlay {
+            transform: center center;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            position: fixed;
+            z-index: 9999;
+        }
 
         .bar {
             position: absolute;
@@ -448,6 +456,13 @@
         .sprite {
             backface-visibility: hidden;
         }
+        .tile {
+            position: absolute;
+            width: 2100px;
+            height: 2400px;
+            display: block;
+            border: 1px solid rgb(1, 207, 1);
+        }
 
         @keyframes constructionLayoutAnimation {
             0% {
@@ -493,13 +508,7 @@
                 left: 15vw;
             }
         }
-        .tile {
-  position: absolute;
-  width: 2100px;
-  height: 2400px;
-  display: block;
-  border: 1px solid rgb(1, 207, 1);
-}
+
     </style>
 </head>
 
@@ -508,6 +517,7 @@
     <div id="loader-container" >
          <div id="loader-bar"></div>
     </div>
+    <div id="start_overlay"></div>
   <div id="world">
     <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw;" >
 
@@ -566,6 +576,7 @@
     <div id="click_circle" style="left: 0; top: 0;"></div>
 
     
+    
     <div class="hud-container" id="hud" style="display: none;">
         <img src="icona_zoom.png" id="zoom" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;">
         <br>
@@ -616,6 +627,33 @@
     </div>
     
 <script defer>
+    function startGame(e = null, state = null) {
+   
+    if(localStorage.getItem("saved") && e == null){
+        getSave();
+    }
+    else{
+        if(e == null){
+            e = writeElements();
+            elements = initialiseElements(e);
+            state = initialiseStates();
+        }
+        else elements = initialiseElements(e);
+        moveImportantObjectsStart(elements);
+        moveWorldStart(elements, importantStates);
+        saveStatesElements(e, state);
+        createInteractableKeys(elements, state);
+        setupDialogue(elements, state, e);
+        controlSkip(elements, state);
+        gameScripts(elements, state);
+        creationTertiaryCharacters(elements, state);
+        mobileAdaptation(elements, state);
+        createOnClicks(elements, state);
+
+
+        // setupMenuToggle(elements);
+    }  
+    }
 
     function reset(){
         localStorage.clear();
@@ -624,6 +662,9 @@
 const matTert = initialiseMatTert();
 
 const importantObjects = initialiseImportantObjects();
+
+const seatForObjects = initialiseseatForObjects();
+
 
 const importantStates = initialiseimportantStates();
 
@@ -648,15 +689,15 @@ function initialiseMatTert(){
     }   
 }
 
-function initialiseImportantObjects(){
+function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
-        const importantObjects = [
-            [ '158vw', '-3vh', '158vw', '-27vh', 'tavolo']
+        const seatForObjects = [
+            [ '158vw', '-3vh', '158vw', '-27vh', 'table_construction']
         ];
-        return importantObjects;
+        return seatForObjects;
     } else{
-        const importantObjects= JSON.parse(localStorage.getItem("importantObjects"));
-        return importantObjects;
+        const seatForObjects= JSON.parse(localStorage.getItem("seatForObjects"));
+        return seatForObjects;
     }
 }
 
@@ -671,53 +712,49 @@ function initialiseimportantStates(){
     }
     
 }
+
+function initialiseImportantObjects(){
+    if(localStorage.getItem("saved") == null){
+        const importantObjects = [
+            [ '165vw', '-10vh', 'table_construction']
+        ];
+        return importantObjects;
+    } else{
+        const importantObjects= JSON.parse(localStorage.getItem("importantObjects"));
+        return importantObjects;
+    }
+}
 function saveMats_ImportantStates(){
     localStorage.setItem("matTert", JSON.stringify(matTert));
-    localStorage.setItem("importantObjects", JSON.stringify(importantObjects));
+    localStorage.setItem("seatForObjects", JSON.stringify(seatForObjects));
     localStorage.setItem("importantStates", JSON.stringify(importantStates));
+    localStorage.setItem("importantObjects", JSON.stringify(importantObjects));
 }
 
 saveMats_ImportantStates();
 
 function moveWorldStart(e, importantStates){
+    e.canvas.style.transition = '';
     e.canvas.style.left = importantStates.posCanvasX + "vw";
     e.canvas.style.top = importantStates.posCanvasY + "vh";
+    e.canvas.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }
 
-function startGame(e = null, state = null) {
-   
-    if(localStorage.getItem("saved") && e == null){
-        getSave();
+function moveImportantObjectsStart(e){
+    for(i=0;i<importantObjects.length;i++){
+        element = document.getElementById(importantObjects[i][2]);
+        element.style.transition = '';
+        element.style.left = importantObjects[i][0];
+        element.style.top = importantObjects[i][1];
+        element.style.transition = "top 0.25s ease-out, left 0.3s ease-out";
     }
-    else{
-        if(e == null){
-            e = writeElements();
-            elements = initialiseElements(e);
-            state = initialiseStates();
-        }
-        else elements = initialiseElements(e);
-        saveStatesElements(e, state);
-        createInteractableKeys(elements, state);
-        setupDialogue(elements, state, e);
-        controlSkip(elements, state);
-        gameScripts(elements, state);
-        creationTertiaryCharacters(elements, state);
-        mobileAdaptation(elements, state);
-        createOnClicks(elements, state);
-        moveWorldStart(elements, importantStates);
-
-        // setupMenuToggle(elements);
-    }  
-    }
-
+}
 
 function gameScripts(e, state) {
     if(state.index == 5){
         waitForImagesToLoad(document.getElementById("world"), () => {
+        setTimeout(() => scaleWorld(e), 1000);
         });
-        e.world.style.transition = '';
-        e.world.style.transform = 'scale(0.9)'
-        e.world.style.transition = 'transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out';
         e.preside_container.style.left = '50%';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
     }
@@ -876,18 +913,12 @@ function scaleWorld(e) {
   const target = 0.9;
   const speed = 0.006;
 
-  
-  if (e.world.dataset.scaling === "true") return;
-  e.world.dataset.scaling = "true";
-
-
 
   function animate() {
     scale += speed;
     if (scale >= target) {
       scale = target;
       e.world.style.transform = `scale(${target})`;
-      e.world.dataset.scaling = "false"; 
       return; 
     }
 
@@ -979,6 +1010,7 @@ function setupDialogue(e, state, saved_e) {
         state.cond_dialogue = false;
         resetMoveWorld(e, -3, 5);
         setTimeout(() => {
+            matTert[5][2] = '';
             passiveAnimationBob(document.getElementById('character5'), 5 );
         }, 2000);
         activateHud(e);
@@ -1315,19 +1347,16 @@ function jumpDirection(distance, dir){
 }
 
 function left(distance){
-    
     state.posX -= distance;
     e.imgsArray.forEach(img => {
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
     });
-    for(let i=0;i<importantObjects.length;i++){
-        for(let j=0;j<importantObjects[i].length-1;j+=2){
-            importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + 'vw';
+    for(let i=0;i<seatForObjects.length;i++){
+        for(let j=0;j<seatForObjects[i].length-1;j+=2){
+            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
-    }
+    addParameters(distance, 0, "add") 
     importantStates.posCanvasX += distance;
     animationJumpLeft(distance);
 }
@@ -1351,14 +1380,13 @@ function right(distance){
     e.imgsArray.forEach(img => {
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
     });
-    for(let i=0;i<importantObjects.length;i++){
-        for(let j=0;j<importantObjects[i].length-1;j+=2){
-            importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + 'vw';
+    for(let i=0;i<seatForObjects.length;i++){
+        for(let j=0;j<seatForObjects[i].length-1;j+=2){
+            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
-    }
+    addParameters(distance, 0, "subtract");
+    
     importantStates.posCanvasX -= distance;
     animationJumpRight(distance);
 }
@@ -1380,14 +1408,12 @@ function down(distance){
     e.imgsArray.forEach(img => {
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
-    for(let i=0;i<importantObjects.length;i++){
-        for(let j=0;j<importantObjects[i].length-1;j+=2){
-            importantObjects[i][j+1] = (parseFloat(importantObjects[i][j+1]) - distance) + 'vh';
+    for(let i=0;i<seatForObjects.length;i++){
+        for(let j=0;j<seatForObjects[i].length-1;j+=2){
+            seatForObjects[i][j+1] = (parseFloat(seatForObjects[i][j+1]) - distance) + 'vh';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
-    }
+    addParameters(distance, 1, "subtract");
     importantStates.posCanvasY -= distance;
     animationJumpDown(distance);
 }
@@ -1408,14 +1434,12 @@ function top(distance){
     e.imgsArray.forEach(img => {
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
-    for(let i=0;i<importantObjects.length;i++){
-        for(let j=0;j<importantObjects[i].length-1;j+=2){
-            importantObjects[i][j+1] = (parseFloat(importantObjects[i][j+1]) + distance) + 'vh';
+    for(let i=0;i<seatForObjects.length;i++){
+        for(let j=0;j<seatForObjects[i].length-1;j+=2){
+            seatForObjects[i][j+1] = (parseFloat(seatForObjects[i][j+1]) + distance) + 'vh';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
-    }
+    addParameters(distance, 1, "add")
     importantStates.posCanvasY += distance;
     animationJumpTop(distance);
 }
@@ -1431,6 +1455,29 @@ async function animationJumpTop(distance){
         });
 }
 
+function addParameters(distance, j, operation){
+    if(j==0) unit = 'vw';
+    else unit = 'vh';
+    switch(operation) {
+        case "add":
+            for(i=0;i<matTert.length;i++){
+            matTert[i][j] = (parseFloat(matTert[i][j]) + distance) + unit;
+            }
+            for(i=0;i<importantObjects.length;i++){
+                importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + unit;
+            }
+            break;
+        case "subtract": 
+            for(i=0;i<matTert.length;i++){
+            matTert[i][j] = (parseFloat(matTert[i][j]) - distance) + unit;
+            }
+            for(i=0;i<importantObjects.length;i++){
+                importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + unit;
+            }
+            break;
+    }
+}
+
 function diagonalTopRight(distance) {
     state.posX += distance;
     state.posY -= distance;
@@ -1438,17 +1485,16 @@ function diagonalTopRight(distance) {
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
-    for (let i = 0; i < importantObjects.length; i++) {
-        for (let j = 0; j < importantObjects[i].length - 1; j += 2) {
-            importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + 'vw';
-            importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) + distance) + 'vh';
+    for (let i = 0; i < seatForObjects.length; i++) {
+        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
+            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
+            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) + distance) + 'vh';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
-        matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
-    }
-    
+    addParameters(distance, 0, "subtract");
+    addParameters(distance, 1, "add");
+    importantStates.posCanvasX -= distance;
+    importantStates.posCanvasY += distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1460,16 +1506,14 @@ function diagonalTopLeft(distance) {
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
-    for (let i = 0; i < importantObjects.length; i++) {
-        for (let j = 0; j < importantObjects[i].length - 1; j += 2) {
-            importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + 'vw';
-            importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) + distance) + 'vh';
+    for (let i = 0; i < seatForObjects.length; i++) {
+        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
+            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
+            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) + distance) + 'vh';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
-        matTert[i][1] = (parseFloat(matTert[i][1]) + distance) + 'vh';
-    }
+    addParameters(distance, 0, "add");
+    addParameters(distance, 1, "add");
     importantStates.posCanvasX += distance;
     importantStates.posCanvasY += distance;
     animationJumpDiagonal(distance);
@@ -1483,16 +1527,14 @@ function diagonalLowRight(distance) {
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
-    for (let i = 0; i < importantObjects.length; i++) {
-        for (let j = 0; j < importantObjects[i].length - 1; j += 2) {
-            importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + 'vw';
-            importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) - distance) + 'vh';
+    for (let i = 0; i < seatForObjects.length; i++) {
+        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
+            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
+            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) - distance) + 'vh';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][0] = (parseFloat(matTert[i][0]) - distance) + 'vw';
-        matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
-    }
+    addParameters(distance, 0, "subtract");
+    addParameters(distance, 1, "subtract");
     importantStates.posCanvasX -= distance;
     importantStates.posCanvasY -= distance;
     animationJumpDiagonal(distance);
@@ -1506,16 +1548,14 @@ function diagonalBottomLeft(distance) {
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
-    for (let i = 0; i < importantObjects.length; i++) {
-        for (let j = 0; j < importantObjects[i].length - 1; j += 2) {
-            importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + 'vw';
-            importantObjects[i][j + 1] = (parseFloat(importantObjects[i][j + 1]) - distance) + 'vh';
+    for (let i = 0; i < seatForObjects.length; i++) {
+        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
+            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
+            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) - distance) + 'vh';
         }
     }
-    for(i=0;i<matTert.length;i++){
-        matTert[i][0] = (parseFloat(matTert[i][0]) + distance) + 'vw';
-        matTert[i][1] = (parseFloat(matTert[i][1]) - distance) + 'vh';
-    }
+    addParameters(distance, 0, "add");
+    addParameters(distance, 1, "subtract");
     importantStates.posCanvasX += distance;
     importantStates.posCanvasY -= distance;
     animationJumpDiagonal(distance);
@@ -1924,7 +1964,7 @@ async function jolt(character, e, state) {
     await step(2, 2, 90);
     await step(3, 1, 90);
     await sleep(1500);
-    await returnToObject(character, importantObjects[0][2], importantObjects[0][3], true, state, e);
+    await returnToObject(character, seatForObjects[0][2], seatForObjects[0][3], true, state, e);
 }
 
 async function returnToObject(character, x, y, order = false, state, e, stepx, stepy, illustration){
@@ -2345,7 +2385,7 @@ function diaologueB_P1(e, state) {
             await rightJump(t, false); 
             await sleep(500);
             await moveBob(t);
-            await returnToObject(t, importantObjects[0][0], importantObjects[0][1], false, state, e); 
+            await returnToObject(t, seatForObjects[0][0], seatForObjects[0][1], false, state, e); 
         }
         
         function moveBob(t) {
@@ -2426,8 +2466,9 @@ function createOnClicks(e, state){
 }
 
 window.onload = function(){
+    document.getElementById('start_overlay').style.display = 'none';
     setInterval(() => {
-        saveMats_ImportantStates()
+        saveMats_ImportantStates();
     }, 5000);
     startGame();
 } 
