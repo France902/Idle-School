@@ -195,7 +195,7 @@
             pointer-events: none;
             transform: scale(0.8); 
             transform-origin: center center;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s linear;
         }
         #anonymous_character_dialogues {
             position: fixed;
@@ -208,7 +208,7 @@
             pointer-events: none; 
             transform: scale(0.9); 
             transform-origin: center center;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s linear;
         }
 
         #dialogues_container {
@@ -321,6 +321,14 @@
             background-color: black;
             position: fixed;
             z-index: 9999;
+        }
+
+        #menu1 {
+            transform-origin: center center;
+            object-fit: contain;
+            width: 80vw;
+            height: 80vh;
+            margin-top: 10vh;
         }
 
         .bar {
@@ -487,13 +495,13 @@
                 left: 15vw;
             }
             100% {
-                left: 100vw;
+                left: 120vw;
             }
         }
 
         @keyframes changeMenuRight {
             0%{
-                left: 100vw;
+                left: 120vw;
             }
             100% {
                 left: 15vw;
@@ -583,8 +591,9 @@
         <img src="icona_casa.png" id="standard" style="width: 3vw; height: 3vw; transform: translate(-95.2vw); cursor: pointer; pointer-events: auto;" >
         <br>
         <img src="icona_dezoom.png" id="dezoom" style="width: 3vw; height: 3vw; transform: translate(-95vw); cursor: pointer; pointer-events: auto;" >
-        <div id="construction_menu" style="background-color: white;">
+        <div id="construction_menu">
             <img id="lateral_arrow" src="lateral_arrow.png" >
+            <img id="menu1" src="menù_costruzione.png">
         </div>
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
         <!--
@@ -737,7 +746,7 @@ function moveWorldStart(e, importantStates){
     e.canvas.style.transition = '';
     e.canvas.style.left = importantStates.posCanvasX + "vw";
     e.canvas.style.top = importantStates.posCanvasY + "vh";
-    e.canvas.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.canvas.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }
 
 function moveImportantObjectsStart(e){
@@ -841,6 +850,7 @@ function initialiseStates() {
     cond_dialogue: false,
     cond_text: true,
     condBP1: false,
+    condFreeRoam: true,
 
     // Posizioni
     posX: 0,
@@ -866,7 +876,7 @@ function initialiseStates() {
 
 let zoom = 0.9;
 function scale(condition, e) {
-    e.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
     if(condition === 'standard') {
         zoom = 0.9;
         e.world.style.transform = `scale(${zoom})`;
@@ -1015,6 +1025,7 @@ function setupDialogue(e, state, saved_e) {
         }, 2000);
         activateHud(e);
         setUpPresideMovement(e, state);
+        setUpFreeCamRoam(e, state);
         saveStatesElements(saved_e, state);
         return;
     }
@@ -1085,7 +1096,7 @@ function resetMoveWorld(e, distanceX, distanceY){
     e.world.style.marginTop = distanceY + "vh";
 
 setTimeout(() => {
-    e.world.style.transition = "transform 0.3s ease-in-out, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }, 1600);
 }
 
@@ -1605,6 +1616,111 @@ window.addEventListener('keyup', handleKeyup);
         }
     }
 }
+
+function setUpFreeCamRoam(e, state){
+    state.condFreeRoam = true;
+    let keys = {}
+    document.addEventListener('keydown', function(event){
+        if(event.key === 'f'){
+            if(state.condFreeRoam){
+                freeRoam(e, state, true);
+                state.condFreeRoam = false;
+            } 
+        }
+        if(event.key === 'Escape'){
+            if(!state.condFreeRoam){
+                freeRoam(e, state, false);
+                state.condFreeRoam = true;
+            }
+        }
+    })
+    function freeRoam(e, state, cond){
+        if(cond){
+            state.cond_deactivate_movement = true;
+            e.hud.style.display = 'none';
+            e.world.style.transition = 'transform 0.3s linear';
+            e.world.style.transform = 'scale(0.5)';
+            setCamMovement(e, state);
+        }
+        else {
+            state.cond_deactivate_movement = false;
+            e.hud.style.display = '';
+            removeCamMovement(e, state);
+        }
+    }
+    function setCamMovement(e, state){
+        window.addEventListener('keydown', movement);
+        window.addEventListener('keyup', movementUp);
+    }
+    function removeCamMovement(e, state){
+        e.world.style.marginLeft = '-3vw';
+        e.world.style.marginTop = '5vh';
+        e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+        e.world.style.transform = 'scale(0.9)';
+        window.removeEventListener('keydown', movement);
+    }
+
+    function movement(event){
+        e.world.style.transition = 'margin-left 0.3s linear, margin-top 0.3s linear';
+        keys[event.code] = true;
+        if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
+            dir = direction();
+            if(dir == false) return;
+            if(dir.x == -1 && dir.y == 0) l(e);
+            else if(dir.x == 1 && dir.y == 0) r();
+            else if(dir.y == 1 && dir.x == 0) d();
+            else if(dir.y == -1 && dir.x == 0) t();
+            else if (dir.x == 1 && dir.y == -1) dTR();
+            else if (dir.x == -1 && dir.y == -1) dTL();
+            else if (dir.x == 1 && dir.y == 1) dBR();
+            else if (dir.x == -1 && dir.y == 1) dBL();
+        }
+        function l(e){
+            e.world.style.marginLeft = (parseFloat(e.world.style.marginLeft) + 3) + 'vw';
+        }
+        function r(){
+            e.world.style.marginLeft = (parseFloat(e.world.style.marginLeft) - 3) + 'vw';
+        }
+        function d(){
+            e.world.style.marginTop = (parseFloat(e.world.style.marginTop) - 3) + 'vh';
+        }
+        function t(){
+            e.world.style.marginTop = (parseFloat(e.world.style.marginTop) + 3) + 'vh';
+        }
+        function dTR(){
+            e.world.style.marginTop = (parseFloat(e.world.style.marginTop) + 3) + 'vh';
+            e.world.style.marginLeft = (parseFloat(e.world.style.marginLeft) - 3) + 'vw';
+        }
+        function dTL(){
+            e.world.style.marginTop = (parseFloat(e.world.style.marginTop) + 3) + 'vh';
+            e.world.style.marginLeft = (parseFloat(e.world.style.marginLeft) + 3) + 'vw';
+        }
+        function dBR(){
+            e.world.style.marginTop = (parseFloat(e.world.style.marginTop) - 3) + 'vh';
+            e.world.style.marginLeft = (parseFloat(e.world.style.marginLeft) - 3) + 'vw';
+        }
+        function dBL(){
+            e.world.style.marginTop = (parseFloat(e.world.style.marginTop) - 3) + 'vh';
+            e.world.style.marginLeft = (parseFloat(e.world.style.marginLeft) + 3) + 'vw';
+        }
+    }
+    function direction(){
+        let dir = {x: 0, y: 0};
+        if (keys["KeyW"]) dir.y -= 1;
+        if (keys["KeyS"]) dir.y += 1;
+        if (keys["KeyA"]) dir.x -= 1;
+        if (keys["KeyD"]) dir.x += 1;
+        if(dir.x == 0 && dir.y == 0) {
+            return false;
+        }
+        return dir;
+    }
+
+    function movementUp(event){
+        keys = {};
+    }
+}
+
 
 function openConstructionMenu(e, state){
         state.cond_deactivate_movement = true;
