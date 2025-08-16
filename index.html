@@ -877,22 +877,29 @@ function initialiseStates() {
 let zoom = 0.9;
 function scale(condition, e) {
     e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
-    if(condition === 'standard') {
-        zoom = 0.9;
-        e.world.style.transform = `scale(${zoom})`;
-        return;
-    }
-    if (condition) {
-        if (zoom <= 1.32) {
-            zoom += 0.07;
+    switch (condition){
+        case true:
+            if (zoom <= 1.32) {
+                zoom += 0.07;
+                e.world.style.transform = `scale(${zoom})`;
+            }
+            break;
+        case false:
+            if (zoom >= 0.65) {
+                zoom -= 0.07;
+                e.world.style.transform = `scale(${zoom})`;
+            }
+            break;
+        case 'standard':
+            zoom = 0.9;
             e.world.style.transform = `scale(${zoom})`;
-        }
-    }
-    else{
-        if (zoom >= 0.65) {
-            zoom -= 0.07;
+            return;
+            break;
+        case 'wide': 
+            zoom = 0.5;
             e.world.style.transform = `scale(${zoom})`;
-        }
+            return;
+            break;
     }
 }
 
@@ -969,6 +976,11 @@ function setupDialogue(e, state, saved_e) {
     ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
     ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
     [true],
+    ["Sembra che non abbia abbastanza materiali per costruire qualcosa...", "preside", 1, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
+    ["Saremo a tua disposizione fin quando vorrai, o fin quando non appassiremo!", "bob", 2, 0, false],
+    [true],
+    ["Potrei vendere alcuni dei libri che ho portato con me, ma non so se ne vale la pena...", "preside", 1, 0, false],
   ];
   function showText(text, velocity = 15) {
     e.text_dialogue.textContent = "";
@@ -1013,20 +1025,33 @@ function setupDialogue(e, state, saved_e) {
     else{
         deactivateCinematicMode(e);
     if(lines[state.index][0] == true){
-        state.cond_text = false;
-        state.cond_skip = false;
-        e.container_dialogue.style.opacity = 0;
-        state.cond_movement = true;
-        state.cond_dialogue = false;
-        resetMoveWorld(e, -3, 5);
-        setTimeout(() => {
-            matTert[5][2] = '';
-            passiveAnimationBob(document.getElementById('character5'), 5 );
-        }, 2000);
-        activateHud(e);
-        setUpPresideMovement(e, state);
-        setUpFreeCamRoam(e, state);
-        saveStatesElements(saved_e, state);
+        switch (state.index) {
+            case 5:
+                state.cond_text = false;
+                state.cond_skip = false;
+                e.container_dialogue.style.opacity = 0;
+                state.cond_movement = true;
+                state.cond_dialogue = false;
+                resetMoveWorld(e, -3, 5);
+                setTimeout(() => {
+                    matTert[5][2] = '';
+                    passiveAnimationBob(document.getElementById('character5'), 5 );
+                }, 2000);
+                activateHud(e);
+                setUpPresideMovement(e, state);
+                setUpFreeCamRoam(e, state);
+                saveStatesElements(saved_e, state);
+                break;
+            case 9:
+                state.cond_text = false;
+                state.cond_skip = false;
+                e.container_dialogue.style.opacity = 0;
+                state.cond_movement = true;
+                state.cond_dialogue = false;
+                scale('wide', e);
+                moveWorld(e, 40, -100);
+        }
+        
         return;
     }
     if (state.index < lines.length) {
@@ -1721,7 +1746,7 @@ function setUpFreeCamRoam(e, state){
     }
 }
 
-
+let cont_menu = 0;
 function openConstructionMenu(e, state){
         state.cond_deactivate_movement = true;
         clearInterval(intervalMovement);
@@ -1731,7 +1756,17 @@ function openConstructionMenu(e, state){
         document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
                 state.cond_deactivate_movement = false;
+                state.cond_skip = true;
+                state.cond_dialogue = true;
                 closeConstructionMenu(e, state);
+                if(cont_menu == 0){
+                    state.cond_skip = true;
+                    state.cond_dialogue = true;
+                    e.container_dialogue.style.opacity = '1';
+                    state.index++;
+                    showNextLine();
+                }
+                cont_menu++;
             }
         });
 }
