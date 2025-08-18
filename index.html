@@ -544,10 +544,10 @@
     <img src="giardino_basso2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 480vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
     <img src="giardino_bordo_basso2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 480vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
-    <img src="strada_bordo1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; border: 1px solid rgb(1, 207, 1);">
-    <img src="strada_mezzo1.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="strada_mezzo2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
-    <img src="strada_bordo2.png" class="tile" style="width: 210vw; height: 240vh; display: block; top: 720vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_bordo1.png" class="tile" style="width: 210vw; height: 180vh; display: block; top: 720vh; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_mezzo1.png" class="tile" style="width: 210vw; height: 180vh; display: block; top: 720vh; left: 210vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_mezzo2.png" class="tile" style="width: 210vw; height: 180vh; display: block; top: 720vh; left: 420vw; border: 1px solid rgb(1, 207, 1);">
+    <img src="strada_bordo2.png" class="tile" style="width: 210vw; height: 180vh; display: block; top: 720vh; left: 630vw; border: 1px solid rgb(1, 207, 1);">
 
 
     </div>
@@ -874,7 +874,7 @@ function initialiseStates() {
 
 
 
-let zoom = 0.9;
+let zoom = 0.8;
 function scale(condition, e) {
     e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
     switch (condition){
@@ -891,7 +891,7 @@ function scale(condition, e) {
             }
             break;
         case 'standard':
-            zoom = 0.9;
+            zoom = 0.8;
             e.world.style.transform = `scale(${zoom})`;
             return;
             break;
@@ -927,7 +927,7 @@ function waitForImagesToLoad(container, callback) {
 
 function scaleWorld(e) {
   let scale = 0.07;
-  const target = 0.9;
+  const target = 0.8;
   const speed = 0.006;
 
 
@@ -1049,7 +1049,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_movement = true;
                 state.cond_dialogue = false;
                 scale('wide', e);
-                moveWorld(e, 20, -100, 0, 60, 6);
+                moveWorld(e, 40, -100, -50, 0, 4);
         }
         
         return;
@@ -1772,6 +1772,7 @@ function openConstructionMenu(e, state){
                 if(cont_menu == 0){
                     state.cond_skip = true;
                     state.cond_dialogue = true;
+                    state.cond_text = true;
                     e.container_dialogue.style.opacity = '1';
                     state.index++;
                     showNextLine();
@@ -1943,63 +1944,100 @@ function createIllustration(sr, posX, posY, e){
 }
 
 let interval = [];
-function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0) {
-    state.maxTimeAnimationGroup[i] = 4000;
-    character.style.transition = "left 0.3s ease-in-out, top 0.25s ease-in-out";
-    if(posX == 0){
-        if(matTert[i][5] == 'bob.png'){
-            posX = parseFloat(matTert[i][0]) + 13;
-            posY = parseFloat(matTert[i][1]) - 2;
-        }
-        else{
-            posX = parseFloat(matTert[i][0]) + 13;
-            posY = parseFloat(matTert[i][1]) - 5;
-        }
+    function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0) {
+        state.maxTimeAnimationGroup[i] = 4000;
+        passiveMovementGroup(character, i, e, state);
+        passiveIllustrationGroup(posX, posY, i, e, state);
     }
-    const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
-    let time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
-    let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-    setTimeout(() => {
-                    illustration.style.opacity = '1';
-                setTimeout(() => {
-                        illustration.style.opacity = '0';
-                }, 3000);
-    }, illustration_time);
-            setTimeout(() => {
-                posY = parseFloat(character.style.top);
-                posY = parseFloat(posY) - 3;
-                    character.style.top = `${posY}vh`;
-                    setTimeout(() => {
-                        posY = parseFloat(character.style.top) + 3;
-                        character.style.top = `${posY}vh`;
-                    }, 300);
-            }, time);
-    
-    interval[i] = setInterval(() => {
-            let time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
-            if(state.condBP1 == true) {
-                clearInterval(interval[5]);
-                clearInterval(interval[6]);
-                state.condBP1 = false;
+
+    async function passiveMovementGroup(character, i, e, state){
+        character.style.transition = "left 0.3s ease-in-out, top 0.25s ease-in-out";
+
+        switch (i){
+            case 5:
+                if(state.condBP1 == true){
+                    return
+                }
+                break;
+            case 6: 
+                if(state.condBP1 == true){
+                    return
+                }
+                break;
+        }
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
+        await sleep(time);
+        switch (i){
+            case 5:
+                if(state.condBP1 == true){
+                    return
+                }
+                break;
+            case 6: 
+                if(state.condBP1 == true){
+                    return
+                }
+                break;
+        }
+        character.style.top = (parseFloat(character.style.top) - 3) + 'vh';
+        await sleep(300);
+        character.style.top = (parseFloat(character.style.top) + 3) + 'vh';
+        await passiveMovementGroup(character, i, e, state);
+    }
+
+    function passiveIllustrationGroup(posX, posY, i, e, state){
+        if(posX == 0){
+            if(matTert[i][5] == 'bob.png'){
+                posX = parseFloat(matTert[i][0]) + 13;
+                posY = parseFloat(matTert[i][1]) - 2;
             }
-            setTimeout(() => {
-                    posY = parseFloat(character.style.top);
-                    posY = parseFloat(posY) - 3;
-                    character.style.top = `${posY}vh`;
-                    setTimeout(() => {
-                        posY = parseFloat(character.style.top) + 3;
-                        character.style.top = `${posY}vh`;
-                    }, 300);
-            }, time);
-            let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-            setTimeout(() => {
-                            illustration.style.opacity = '1';
-                        setTimeout(() => {
-                                illustration.style.opacity = '0';
-                        }, 3000);
-            }, illustration_time);
-    }, 5000);
-}
+            else{
+                posX = parseFloat(matTert[i][0]) + 13;
+                posY = parseFloat(matTert[i][1]) - 5;
+            }
+        }
+        const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
+        moveIllustrationGroup(illustration, i, state);
+    }
+
+    async function moveIllustrationGroup(illustration, i, state){
+        const sleep =  ms => new Promise(r => setTimeout(r, ms));
+        switch (i){
+            case 5:
+                if(state.condBP1 == true){
+                    illustration.style.opacity = '0';
+                    return
+                }
+                break;
+            case 6: 
+                if(state.condBP1 == true){
+                    illustration.style.opacity = '0';
+                    return
+                }
+                break;
+        }
+        await sleep(Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000);
+        switch (i){
+            case 5:
+                if(state.condBP1 == true){
+                    illustration.style.opacity = '0';
+                    return
+                }
+                break;
+            case 6: 
+                if(state.condBP1 == true){
+                    illustration.style.opacity = '0';
+                    return
+                }
+                break;
+        }
+        illustration.style.opacity = '1';
+        await sleep(3000);
+        illustration.style.opacity = '0';
+        await moveIllustrationGroup(illustration, i, state);
+    }
+
 async function passiveAnimationWorkAlone(character, i, e, state){
     character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
@@ -2163,9 +2201,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         move(character, order, stepX, stepY);
     }
     else{
-        let stepX = stepx;
-        let stepY = stepy;
-        move(character, order, stepX, stepY, x);
+        move(character, order, stepx, stepy, x);
     }
     async function move(character, order, stepX, stepY, cond = true){
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
@@ -2295,6 +2331,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         let posId = character.id[character.id.length - 1];
         matTert[posId][0] = parseFloat(character.style.left) + 'vw';
         matTert[posId][1] = parseFloat(character.style.top) + 'vh';
+        state.condBP1 = false;
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
     }
     }
