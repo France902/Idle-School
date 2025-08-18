@@ -1049,7 +1049,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_movement = true;
                 state.cond_dialogue = false;
                 scale('wide', e);
-                moveWorld(e, 40, -100);
+                moveWorld(e, 20, -100, 0, 60, 6);
         }
         
         return;
@@ -1108,11 +1108,15 @@ function activateHud(e){
     e.hud.style.display = '';
 }
 
-function moveWorld(e, distanceX, distanceY){
+function moveWorld(e, distanceX, distanceY, arriveDistanceX = null, arriveDistanceY = null, time = null){
     e.world.style.marginLeft = '-3vw';
     e.world.style.marginTop = '5vh';
     e.world.style.marginLeft = parseFloat(e.world.style.marginLeft) + distanceX + "vw";
     e.world.style.marginTop = parseFloat(e.world.style.marginTop) + distanceY + "vh";
+    setTimeout(() => {
+        if(arriveDistanceX != null) followObject(e, arriveDistanceX, arriveDistanceY, time);
+    }, 1600);
+    
 }
 
 function resetMoveWorld(e, distanceX, distanceY){
@@ -1123,6 +1127,12 @@ function resetMoveWorld(e, distanceX, distanceY){
 setTimeout(() => {
     e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }, 1600);
+}
+
+function followObject(e, x, y, time){
+    e.world.style.transition = `transform 0.3s linear, margin-top ${time}s linear, margin-left ${time}s linear`;
+    e.world.style.marginLeft = parseFloat(e.world.style.marginLeft) + x + "vw";
+    e.world.style.marginTop = parseFloat(e.world.style.marginTop) + y + "vh";
 }
 
 function saveStatesElements(e, state){
