@@ -55,7 +55,7 @@
             margin-left: -3vw;
             margin-top: 5vh;
             will-change: transform;
-            transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out;
+            transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear;
             top: 0;
             left: 0;
         }
@@ -471,6 +471,7 @@
             border: 1px solid rgb(1, 207, 1);
             width: 210vw; 
             height: 240vh;
+            transition: left 0.25s linear, top 0.25s linear;
         }
 
         @keyframes constructionLayoutAnimation {
@@ -528,7 +529,7 @@
     </div>
     <div id="start_overlay"></div>
   <div id="world">
-    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw; z-index: -9999;" >
+    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw; z-index: -9999; transition: left 0.25s linear, top 0.25s linear;" >
 
     <img src="giardino_bordo_alto1.png" class="tile">
     <img src="giardino_alto1.png" class="tile" style="left: 210vw;">
@@ -850,6 +851,7 @@ function initialiseStates() {
     cond_skip: true,
     cond_dialogue: false,
     cond_text: true,
+    cond_other_character: true,
     condBP1: false,
     condFreeRoam: true,
 
@@ -877,7 +879,7 @@ function initialiseStates() {
 
 let zoom = 0.8;
 function scale(condition, e) {
-    e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
     switch (condition){
         case true:
             if (zoom <= 1.32) {
@@ -982,6 +984,7 @@ function setupDialogue(e, state, saved_e) {
     ["Saremo a tua disposizione fin quando vorrai, o fin quando non appassiremo!", "bob", 2, 0, false],
     [true],
     ["Potrei vendere alcuni dei libri che ho portato con me, ma non so se ne vale la pena...", "preside", 1, 0, false],
+    [true],
   ];
   function showText(text, velocity = 15) {
     e.text_dialogue.textContent = "";
@@ -1051,6 +1054,25 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_dialogue = false;
                 scale('wide', e);
                 moveWorld(e, 40, -100, -50, 0, 4);
+                setTimeout(() => {
+                    state.index++;
+                    state.cond_text = true;
+                    state.cond_skip = true;
+                    e.container_dialogue.style.opacity = 1;
+                    state.cond_dialogue = true;
+                    state.cond_other_character = false;
+                    showNextLine();
+                }, 5500);
+                break;
+            case 11:
+                state.cond_text = false;
+                state.cond_skip = false;
+                e.container_dialogue.style.opacity = 0;
+                state.cond_movement = true;
+                state.cond_dialogue = false;
+                resetMoveWorld(e, -3, 5);
+                scale('standard', e)
+                break;
         }
         
         return;
@@ -1063,6 +1085,10 @@ function setupDialogue(e, state, saved_e) {
             state.cond_dialogue = true;
         }, 2000);
       } 
+      if(!state.cond_other_character){
+        e.anonymousCharacter.style.display = 'none';
+      } 
+      else e.anonymousCharacter.style.display = 'block';
       if(lines[state.index][4] == true) deactivateCinematicMode(e);
       showText(lines[state.index][0]);
       changeName(lines[state.index][1]);
@@ -1126,12 +1152,12 @@ function resetMoveWorld(e, distanceX, distanceY){
     e.world.style.marginTop = distanceY + "vh";
 
 setTimeout(() => {
-    e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
 }, 1600);
 }
 
 function followObject(e, x, y, time){
-    e.world.style.transition = `transform 0.25s linear, margin-top ${time}s linear, margin-left ${time}s linear`;
+    e.world.style.transition = `transform 0.25s linear, margin-top ${time}s linear, margin-left ${time}s linear, left 0.25s linear, top 0.25s linear`;
     e.world.style.marginLeft = parseFloat(e.world.style.marginLeft) + x + "vw";
     e.world.style.marginTop = parseFloat(e.world.style.marginTop) + y + "vh";
 }
@@ -1397,6 +1423,7 @@ function jumpDirection(distance, dir){
 function left(distance){
     state.posX -= distance;
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
     });
     for(let i=0;i<seatForObjects.length;i++){
@@ -1426,6 +1453,7 @@ function right(distance){
     
     state.posX += distance;
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
     });
     for(let i=0;i<seatForObjects.length;i++){
@@ -1454,8 +1482,8 @@ async function animationJumpRight(distance){
 function down(distance){
     state.posY += distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
-    console.log("z:" + p.style.zIndex + " " + document.getElementById('character2').style.zIndex);
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
     for(let i=0;i<seatForObjects.length;i++){
@@ -1482,8 +1510,8 @@ async function animationJumpDown(distance){
 function top(distance){
     state.posY -= distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
-    console.log("z:" + p.style.zIndex);
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
     for(let i=0;i<seatForObjects.length;i++){
@@ -1535,6 +1563,7 @@ function diagonalTopRight(distance) {
     state.posY -= distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
@@ -1556,6 +1585,7 @@ function diagonalTopLeft(distance) {
     state.posY -= distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
@@ -1577,6 +1607,7 @@ function diagonalLowRight(distance) {
     state.posY += distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
@@ -1598,6 +1629,7 @@ function diagonalBottomLeft(distance) {
     state.posY += distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     e.imgsArray.forEach(img => {
+        img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
@@ -1697,7 +1729,7 @@ function setUpFreeCamRoam(e, state){
     function removeCamMovement(e, state){
         e.world.style.marginLeft = '-3vw';
         e.world.style.marginTop = '5vh';
-        e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+        e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
         e.world.style.transform = 'scale(0.8)';
         zoom = 0.8;
         window.removeEventListener('keydown', movement);
@@ -1922,7 +1954,6 @@ function createCharacter(e, state, i) {
 function assignIndex(e, state, i){
     let Y = parseFloat(matTert[i][1]);
     document.getElementById('character'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
-    console.log("i: " + i + " " + document.getElementById('character'+ i).style.zIndex)
 }
 
 function animateIllustration(illustration, i){
@@ -2597,7 +2628,7 @@ function diaologueB_P1(e, state) {
             await rightJump(t, false);
             await sleep(200); 
             await rightJump(t, false); 
-            await sleep(500);
+            await sleep(200);
             await moveBob(t);
             await returnToObject(t, seatForObjects[0][0], seatForObjects[0][1], false, state, e); 
         }
