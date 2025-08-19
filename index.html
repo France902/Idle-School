@@ -65,7 +65,7 @@
             width: 20vw;
             height: 15vh;
             z-index: 0;
-            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            transition: left 0.25s linear, top 0.25s linear;
             object-fit: cover;
         }
 
@@ -99,7 +99,7 @@
             height: 12vh;
             position: fixed;
             background-color: rgb(168, 108, 3);
-            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            transition: left 0.25s linear, top 0.25s linear;
             z-index: -1;
         }
 
@@ -176,7 +176,7 @@
             position: fixed;
             top: 39vh;   
             left: 72.7vw;
-            transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+            transition: left 0.25s linear, top 0.25s linear;
         }
 
         #missions {
@@ -221,7 +221,7 @@
             justify-content: center;
             align-items: end;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.3s linear;
         }
 
         #dialogues {
@@ -289,7 +289,7 @@
             left: 82.8vw;
             z-index: 1;
             opacity: 0;
-            transition: opacity 0.1s ease-in-out, left 0.25s ease-in-out, top 0.25s ease-in-out;
+            transition: opacity 0.1s linear, left 0.25s linear, top 0.25s linear;
         }
         #cinematic-bars {
             position: fixed;
@@ -395,7 +395,7 @@
             color: white;
             box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
+            transition: max-height 0.3s linear;
             pointer-events: auto;
         }
 
@@ -406,7 +406,7 @@
             width: 2vw;
             height: 3vh;
             opacity: 1;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.3s linear;
         }
 
         .mission_1, .mission_2, .mission_3 {
@@ -432,7 +432,7 @@
 
         .mission_2, .mission_3 {
             opacity: 0;
-            transition: opacity 0.4s ease-in-out;
+            transition: opacity 0.4s linear;
             
         }
 
@@ -457,7 +457,7 @@
         .school_imgs {
             position: fixed;
             transform: scale(1);
-            transition: left 0.35s ease-in-out, top 0.35s ease-in-out;
+            transition: left 0.25s linear, top 0.25 linear;
             will-change: transform, left, top;
         }
         .sprite {
@@ -618,7 +618,7 @@
     </div>
     <!--
 
-    <div id="cartello-orizzontale" class="school_imgs" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.3s ease-in-out, top 0.3s ease-in-out;">
+    <div id="cartello-orizzontale" class="school_imgs" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.25s linear, top 0.25s linear;">
         <p id="text_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
     </div>
 
@@ -747,7 +747,7 @@ function moveWorldStart(e, importantStates){
     e.canvas.style.transition = '';
     e.canvas.style.left = importantStates.posCanvasX + "vw";
     e.canvas.style.top = importantStates.posCanvasY + "vh";
-    e.canvas.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.canvas.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }
 
 function moveImportantObjectsStart(e){
@@ -756,7 +756,7 @@ function moveImportantObjectsStart(e){
         element.style.transition = '';
         element.style.left = importantObjects[i][0];
         element.style.top = importantObjects[i][1];
-        element.style.transition = "top 0.25s ease-out, left 0.3s ease-out";
+        element.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     }
 }
 
@@ -877,7 +877,7 @@ function initialiseStates() {
 
 let zoom = 0.8;
 function scale(condition, e) {
-    e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
     switch (condition){
         case true:
             if (zoom <= 1.32) {
@@ -1126,12 +1126,12 @@ function resetMoveWorld(e, distanceX, distanceY){
     e.world.style.marginTop = distanceY + "vh";
 
 setTimeout(() => {
-    e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
 }, 1600);
 }
 
 function followObject(e, x, y, time){
-    e.world.style.transition = `transform 0.3s linear, margin-top ${time}s linear, margin-left ${time}s linear`;
+    e.world.style.transition = `transform 0.25s linear, margin-top ${time}s linear, margin-left ${time}s linear`;
     e.world.style.marginLeft = parseFloat(e.world.style.marginLeft) + x + "vw";
     e.world.style.marginTop = parseFloat(e.world.style.marginTop) + y + "vh";
 }
@@ -1680,7 +1680,7 @@ function setUpFreeCamRoam(e, state){
         if(cond){
             state.cond_deactivate_movement = true;
             e.hud.style.display = 'none';
-            e.world.style.transition = 'transform 0.3s linear';
+            e.world.style.transition = 'transform 0.25s linear';
             e.world.style.transform = 'scale(0.5)';
             setCamMovement(e, state);
         }
@@ -1697,14 +1697,14 @@ function setUpFreeCamRoam(e, state){
     function removeCamMovement(e, state){
         e.world.style.marginLeft = '-3vw';
         e.world.style.marginTop = '5vh';
-        e.world.style.transition = "transform 0.3s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+        e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
         e.world.style.transform = 'scale(0.8)';
         zoom = 0.8;
         window.removeEventListener('keydown', movement);
     }
 
     function movement(event){
-        e.world.style.transition = 'margin-left 0.3s linear, margin-top 0.3s linear';
+        e.world.style.transition = 'margin-left 0.25s linear, margin-top 0.25s linear';
         keys[event.code] = true;
         if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
             dir = direction();
@@ -1872,7 +1872,7 @@ function createCharacter(e, state, i) {
     character_container.id = 'character' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
-    character_container.style.transition = 'left 0.3s ease-in-out, top 0.25s ease-in-out';
+    character_container.style.transition = 'left 0.25s linear, top 0.25s linear';
     const character_img = document.createElement('img');
     character_img.src = matTert[i][5];
     character_img.style.width = '28vw';
@@ -1946,7 +1946,7 @@ function createIllustration(sr, posX, posY, e){
         const illustration = document.createElement('img');
         illustration.src = sr;
         illustration.style.opacity = '0';
-        illustration.style.transition = 'opacity 0.1s ease-out, left 0.3s ease-in-out, top 0.35s ease-in-out';
+        illustration.style.transition = 'opacity 0.1s ease-out, left 0.25s linear, top 0.25s linear';
         illustration.style.width = '10vw';
         illustration.style.height = '15vh';
         illustration.style.left = `${posX}vw`;
@@ -1966,7 +1966,7 @@ let interval = [];
     }
 
     async function passiveMovementGroup(character, i, e, state){
-        character.style.transition = "left 0.3s ease-in-out, top 0.25s ease-in-out";
+        character.style.transition = "left 0.25s linear, top 0.25s linear";
 
         switch (i){
             case 5:
@@ -2054,7 +2054,7 @@ let interval = [];
     }
 
 async function passiveAnimationWorkAlone(character, i, e, state){
-    character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
+    character.style.transition = "left 0.25s linear, top 0.25s linear";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     
     const step = async (action, delay, scaleX) => {
@@ -2075,8 +2075,8 @@ async function passiveAnimationWorkAlone(character, i, e, state){
 }
 
 async function passiveAnimationAlone(character, i, e, illustration, state){
-    character.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
-    illustration.style.transition = "left 0.3s ease-in-out, top 0.35s ease-in-out";
+    character.style.transition = "left 0.25s linear, top 0.25s linear";
+    illustration.style.transition = "left 0.25s linear, top 0.25s linear";
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
@@ -2633,8 +2633,8 @@ function diaologueB_P1(e, state) {
             });
         }
         function dialogue(b, t){
-            b.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
-            t.style.transition = "left 0.3s ease-in-out, top 0.3s ease-in-out";
+            b.style.transition = "left 0.25s linear, top 0.25s linear";
+            t.style.transition = "left 0.25s linear, top 0.25s linear";
             e.container_dialogue.style.opacity = '1';
             state.cond_skip = true;
             state.cond_dialogue = true;
