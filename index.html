@@ -638,7 +638,7 @@
     </div>
     
 <script defer>
-    localStorage.clear();
+    
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -1191,8 +1191,8 @@ function saveStatesElements(e, state){
 
 let intervalMovement;
 
+
 function setUpPresideMovement(e, state) {
-    console.log("si")
   const p = e.preside;
   p.style.top = '0vh';
   p.style.left = '0vw';
@@ -2740,6 +2740,3 @@ window.onload = function(){
     startGame();
 } 
 </script>
-
-
-
