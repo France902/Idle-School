@@ -1984,7 +1984,7 @@ function interaction(index, e, state){
             e.preside.style.transform = 'scaleX(1)';
             const character = document.getElementById('character4');
             character.style.transform = 'scaleX(1)';
-            document.getElementById('key_e' + 4).style.display = 'none';        
+            document.getElementById('key_e' + index).style.display = 'none';        
             jolt(character, e, state);
             break;
         case 1:
@@ -2222,7 +2222,7 @@ async function passiveAnimationAlone(character, i, e, illustration, state){
         if(matTert[i][4] == true){
             illustration.style.opacity = '0';
             illustration.style.display = 'none';
-            document.getElementById('key_e'+4).style.display = 'none';
+            document.getElementById('key_e'+0).style.display = 'none';
             return;
         }
         else{
@@ -2510,7 +2510,7 @@ function fastAnimations(ids, state){
             if(matTert[ids[i]][2] == 'group'){
                 cond_ripeti_controllo = false;
                 state.maxTimeAnimationGroup[ids[i]] /= 10;
-            } 
+            }
             
         }
         
