@@ -1339,7 +1339,7 @@ function pointClickMovement(){
 
 
 
-        if(zoom == 0.9){
+        if(zoom == 0.8){
             clickTimer2 = setTimeout(() => {
                 moveBar(e, state, xInVW, yInVH);
             }, 500);
@@ -1980,11 +1980,11 @@ function setupMenuToggle(e) {
 function interaction(index, e, state){
     switch(index){
         case 0:
-            matTert[index][4] = true;
+            matTert[4][4] = true;
             e.preside.style.transform = 'scaleX(1)';
             const character = document.getElementById('character4');
             character.style.transform = 'scaleX(1)';
-            document.getElementById('key_e' + index).style.display = 'none';        
+            document.getElementById('key_e' + 4).style.display = 'none';        
             jolt(character, e, state);
             break;
         case 1:
