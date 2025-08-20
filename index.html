@@ -57,7 +57,7 @@
             will-change: transform;
             transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear;
             top: 0;
-            left: 0;
+            left: 0; 
         }
 
         #table_construction{
@@ -638,7 +638,6 @@
     </div>
     
 <script defer>
-    
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -772,6 +771,7 @@ function gameScripts(e, state) {
         });
         e.preside_container.style.left = '50%';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
+        activateHud(e)
         activateHudStart(e, state);
     }
     else{
@@ -848,6 +848,7 @@ function initialiseStates() {
     // state principale
     money: 0,
     classes: 0,
+    language: navigator.language || navigator.userLanguage,
 
     // Interazioni e click
     cond_movement: false,
@@ -990,19 +991,104 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e) {
   const lines = [
-    ["Ciao! Sono Bob, della Building & Co!", "bob", 2, 0, true],
-    ["Questo posto è proprio enorme!", "bob", 2, 0, false],
-    ["Spero che ne sia valsa la pena comprarlo...", "preside", 1, 0, false],
-    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
+    ["Ciao! Sono Bob, della Bob & Company!", "Bob", 2, 0, true],
+    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
+    ["Spero che sia valsa la pena comprarlo...", "preside", 1, 0, false],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "Bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "Bob", 2, true, false, -100, 35],
     [true],
     ["Sembra che non abbia abbastanza materiali per costruire qualcosa...", "preside", 1, 0, false],
-    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
-    ["Saremo a tua disposizione fin quando vorrai, o fin quando non appassiremo!", "bob", 2, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "Bob", 2, 0, false],
+    ["Saremo a tua disposizione fin quando vorrai, o fin quando non appassiremo!", "Bob", 2, 0, false],
     [true],
     ["Potrei vendere alcuni dei libri che ho portato con me, ma non so se ne vale la pena...", "preside", 1, 0, false],
     [true],
   ];
+  if(state.language != 'it-IT'){
+    changeLinesLanguage();
+  }
+  function changeLinesLanguage(){
+    const lines_en = [
+        "Hi! I'm Bob, from Bob & Company!",
+        "This place is really huge!",
+        "I hope it was worth buying...",
+        "Don't worry! When you're with us, you can count on the best hands in town!",
+        "We're almost ready, come to the construction table whenever you want to start!",
+        true,
+        "It seems I don't have enough materials to build something...",
+        "Don't worry! As my father used to say: 'build to sustain yourself, or sustain yourself to build!'",
+        "We'll be at your service as long as you want, or until we wither!",
+        true,
+        "I could sell some of the books I brought with me, but I'm not sure it's worth it...",
+        true,
+    ];
+    const lines_fr = [
+        "Salut ! Je suis Bob, de la Bob & Company !",
+        "Cet endroit est vraiment immense !",
+        "J'espère que ça valait le coup de l'acheter...",
+        "Ne t'inquiète pas ! Avec nous, tu peux compter sur les meilleures mains de la ville !",
+        "Nous sommes presque prêts, viens à la table de construction quand tu veux commencer !",
+        true,
+        "On dirait que je n’ai pas assez de matériaux pour construire quoi que ce soit...",
+        "Ne t'inquiète pas ! Comme disait mon père : « construis pour vivre, ou vis pour construire ! »",
+        "Nous serons à ta disposition aussi longtemps que tu le voudras, ou jusqu’à ce que nous fanions !",
+        true,
+        "Je pourrais vendre certains livres que j'ai apportés, mais je ne sais pas si ça en vaut la peine...",
+        true,
+    ];
+    const lines_es = [
+        "¡Hola! ¡Soy Bob, de Bob & Company!",
+        "¡Este lugar es realmente enorme!",
+        "Espero que haya valido la pena comprarlo...",
+        "¡No te preocupes! ¡Cuando estás con nosotros puedes contar con las mejores manos de la ciudad!",
+        "Estamos casi listos, ¡ven a la mesa de construcción cuando quieras comenzar!",
+        true,
+        "Parece que no tengo suficientes materiales para construir algo...",
+        "¡No te preocupes! Como decía mi padre: «¡construye para vivir, o vive para construir!»",
+        "Estaremos a tu disposición mientras quieras, ¡o hasta que nos marchitemos!",
+        true,
+        "Podría vender algunos de los libros que traje conmigo, pero no sé si vale la pena...",
+        true,
+    ];
+    const lines_pt = [
+        "Olá! Sou o Bob, da Bob & Company!",
+        "Este lugar é realmente enorme!",
+        "Espero que tenha valido a pena comprá-lo...",
+        "Não se preocupe! Quando estiver conosco, pode contar com as melhores mãos da cidade!",
+        "Estamos quase prontos, venha à mesa de construção quando quiser começar!",
+        true,
+        "Parece que não tenho materiais suficientes para construir algo...",
+        "Não se preocupe! Como dizia meu pai: «construa para se sustentar, ou sustente-se para construir!»",
+        "Estaremos à sua disposição enquanto quiser, ou até murcharmos!",
+        true,
+        "Poderia vender alguns dos livros que trouxe comigo, mas não sei se vale a pena...",
+        true,
+    ];
+    const langCode = state.language[0] + state.language[1];
+    switch (langCode){
+        case 'en':
+            for(i=0;i<lines.length;i++){
+                lines[i][0] = lines_en[i];
+            }
+            break;
+        case 'fr':
+            for(i=0;i<lines.length;i++){
+                lines[i][0] = lines_fr[i];
+            }
+            break;
+        case 'es':
+            for(i=0;i<lines.length;i++){
+                lines[i][0] = lines_es[i];
+            }
+            break;
+        case 'pt':
+            for(i=0;i<lines.length;i++){
+                lines[i][0] = lines_pt[i];
+            }
+            break;
+    }
+    
+  }
   function showText(text, velocity = 15) {
     e.text_dialogue.textContent = "";
     let i = 0;
