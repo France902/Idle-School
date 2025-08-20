@@ -867,7 +867,7 @@ function initialiseStates() {
     posBX: 70,
     posBY: 39,
     ids: [],
-    index: 0,
+    index: -1,
 
     // Condizioni ambientali
     cond_platform_1: false,
@@ -1005,6 +1005,7 @@ function setupDialogue(e, state, saved_e) {
   if(state.language != 'it-IT'){
     changeLinesLanguage();
   }
+
   function changeLinesLanguage(){
     const lines_en = [
         "Hi! I'm Bob, from Bob & Company!",
@@ -1062,6 +1063,7 @@ function setupDialogue(e, state, saved_e) {
         "Poderia vender alguns dos livros que trouxe comigo, mas não sei se vale a pena...",
         true,
     ];
+
     const langCode = state.language[0] + state.language[1];
     switch (langCode){
         case 'en':
@@ -1084,9 +1086,15 @@ function setupDialogue(e, state, saved_e) {
                 lines[i][0] = lines_pt[i];
             }
             break;
+        default:
+            for(i=0;i<lines.length;i++){
+                lines[i][0] = lines_en[i];
+            }
+            break;
     }
     
   }
+
   function showText(text, velocity = 15) {
     e.text_dialogue.textContent = "";
     let i = 0;
