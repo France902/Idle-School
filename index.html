@@ -518,6 +518,34 @@
                 left: 15vw;
             }
         }
+        #structure_barrow{
+            width: 12vw;
+            height: 12vh;
+            position: fixed;
+            z-index: -5;
+        }
+        #structure_wheel{
+            width: 3vw;
+            height: 5vh;
+            margin-left: 6.9vw;
+            margin-top: 9vh;
+            position: fixed;
+            z-index: -6;
+        }
+        @keyframes animation_wheel {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        #barrow{
+            transition: margin-left 0.3s linear;
+            transform: scaleX(-1);
+            width: 15vw;
+            height: 15vh;
+        }
 
     </style>
 </head>
@@ -559,7 +587,10 @@
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
     <img src="tavolo_costruzione.png" id="table_construction" class="school_imgs" style="left: 165vw; top: -10vh;">
-        
+    <div id="barrow" class="school_imgs" style="left: 14vw; top: -20vh; z-index: -5; transform-origin: center;">
+        <img src="cariola.png" id="structure_barrow">
+        <img src="ruota_cariola.png" alt="" id="structure_wheel">
+    </div>
    
     
     <div id="preside_container">
@@ -725,7 +756,8 @@ function initialiseimportantStates(){
 function initialiseImportantObjects(){
     if(localStorage.getItem("saved") == null){
         const importantObjects = [
-            [ '165vw', '-10vh', 'table_construction']
+            [ '165vw', '-10vh', 'table_construction'],
+            ['14vw', '-20vh', 'barrow'],
         ];
         return importantObjects;
     } else{
@@ -802,6 +834,7 @@ function writeElements() {
     standard: "document.getElementById('standard')",
     dezoom: "document.getElementById('dezoom')",
     table_construction: "document.getElementById('table_construction')",
+    barrow: "document.getElementById('barrow')",
 
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
@@ -969,7 +1002,7 @@ function scaleWorld(e) {
 function createInteractableKeys(e, state) {
     const pos_keys = [
         ['90vw', '105vh'],
-        ['152vw', '-25vh'],
+        ['152vw', '-20vh'],
     ]
     for(let i=0;i<pos_keys.length;i++){
         if(pos_keys[i][0] != false){
@@ -2041,9 +2074,6 @@ function createCharacter(e, state, i) {
             break;
         case 'work-alone':
              passiveAnimationWorkAlone(character_container, i, e);
-            setInterval(() => {
-                passiveAnimationWorkAlone(character_container, i, e);
-            }, 8000);
             break;
         case 'alone':
             let posX = parseFloat(matTert[i][0]) + 13;
@@ -2197,26 +2227,54 @@ let interval = [];
         illustration.style.opacity = '0';
         await moveIllustrationGroup(illustration, i, state);
     }
-
+let cont_work_alone = 0;
 async function passiveAnimationWorkAlone(character, i, e, state){
-    character.style.transition = "left 0.25s linear, top 0.25s linear";
+    character.style.transition = "left 0.35s linear, top 0.35s linear";
+    e.barrow.style.transition = "left 0.35s linear, top 0.35s linear, transform 0.35s linear";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
-    
     const step = async (action, delay, scaleX) => {
         await sleep(delay);
         if(scaleX) {
             character.style.transform = 'scaleX(1)';
+            e.barrow.style.transform = 'scaleX(1)';
+            cont_work_alone++;
+            
+            if(cont_work_alone == 1) e.barrow.style.left = (parseFloat(e.barrow.style.left) + 17.5) + "vw";
+            else {
+                setTimeout(() => {
+                    cont_work_alone = 0;
+                    e.barrow.style.left = (parseFloat(e.barrow.style.left) + 8.3) + "vw";
+                    document.getElementById('structure_wheel').style.animation = 'animation_wheel 0.2s linear';
+                    setTimeout(() => {
+                        document.getElementById('structure_wheel').style.animation = '';
+                    }, 500);
+                }, 100);
+            }
         } else {
             character.style.transform = 'scaleX(-1)';
+            e.barrow.style.transform = 'scaleX(-1)';
+            cont_work_alone++;
+            if(cont_work_alone == 1) e.barrow.style.left = (parseFloat(e.barrow.style.left) - 17.5) + "vw";
+            else {
+                setTimeout(() => {
+                    cont_work_alone = 0;
+                    e.barrow.style.left = (parseFloat(e.barrow.style.left) - 8.3) + "vw";
+                    document.getElementById('structure_wheel').style.animation = 'animation_wheel 0.2s linear';
+                    setTimeout(() => {
+                        document.getElementById('structure_wheel').style.animation = '';
+                    }, 500);
+                }, 100);
+            }
         }
         if (typeof window[action] === 'function') {
             window[action](character, false);
         }
     };
-    await step("rightJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, true);
-    await step("rightJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, true);
-    await step("leftJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, false);
-    await step("leftJump", Math.floor(Math.random() * (4000 - 500 + 1)) + 500, false);
+    await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true);
+    await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true);
+    await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false);
+    await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false);
+    await passiveAnimationWorkAlone(character, i, e, state);
 }
 
 async function passiveAnimationAlone(character, i, e, illustration, state){
