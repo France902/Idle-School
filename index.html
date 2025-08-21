@@ -522,7 +522,7 @@
             width: 12vw;
             height: 12vh;
             position: fixed;
-            z-index: -5;
+            z-index: 5;
         }
         #structure_wheel{
             width: 3vw;
@@ -530,7 +530,7 @@
             margin-left: 6.9vw;
             margin-top: 9vh;
             position: fixed;
-            z-index: -6;
+            z-index: 4;
         }
         @keyframes animation_wheel {
             from {
@@ -587,7 +587,7 @@
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
     <img src="tavolo_costruzione.png" id="table_construction" class="school_imgs" style="left: 165vw; top: -10vh;">
-    <div id="barrow" class="school_imgs" style="left: 14vw; top: -20vh; z-index: -5; transform-origin: center;">
+    <div id="barrow" class="school_imgs" style="left: 14vw; top: -20vh; z-index: 5; transform-origin: center;">
         <img src="cariola.png" id="structure_barrow">
         <img src="ruota_cariola.png" alt="" id="structure_wheel">
     </div>
@@ -2229,7 +2229,7 @@ let interval = [];
     }
 let cont_work_alone = 0;
 async function passiveAnimationWorkAlone(character, i, e, state){
-    character.style.transition = "left 0.35s linear, top 0.35s linear";
+    character.style.transition = "left 0.5s linear, top 0.5s linear";
     e.barrow.style.transition = "left 0.35s linear, top 0.35s linear, transform 0.35s linear";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (action, delay, scaleX) => {
@@ -2244,7 +2244,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
                 setTimeout(() => {
                     cont_work_alone = 0;
                     e.barrow.style.left = (parseFloat(e.barrow.style.left) + 8.3) + "vw";
-                    document.getElementById('structure_wheel').style.animation = 'animation_wheel 0.2s linear';
+                    document.getElementById('structure_wheel').style.animation = 'animation_wheel 0.1s linear';
                     setTimeout(() => {
                         document.getElementById('structure_wheel').style.animation = '';
                     }, 500);
@@ -2259,7 +2259,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
                 setTimeout(() => {
                     cont_work_alone = 0;
                     e.barrow.style.left = (parseFloat(e.barrow.style.left) - 8.3) + "vw";
-                    document.getElementById('structure_wheel').style.animation = 'animation_wheel 0.2s linear';
+                    document.getElementById('structure_wheel').style.animation = 'animation_wheel 0.1s linear';
                     setTimeout(() => {
                         document.getElementById('structure_wheel').style.animation = '';
                     }, 500);
