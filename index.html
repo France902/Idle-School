@@ -347,6 +347,20 @@
             z-index: 4;
         }
 
+        #structure_camion {
+            width: 150vw;
+            height: 130vh;
+            position: fixed;
+            z-index: 5;
+        }
+
+        #structure_wheel_camion{
+            width: 8vw;
+            height: 15vh;
+            position: fixed;
+            z-index: 4;
+        }
+
         .bar {
             position: absolute;
             height: 7vh;
@@ -553,6 +567,7 @@
             }
         }
 
+
     </style>
 </head>
 
@@ -593,9 +608,16 @@
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
     <img src="tavolo_costruzione.png" id="table_construction" class="school_imgs" style="left: 165vw; top: -10vh;">
+
     <div id="barrow" class="school_imgs" style="left: 14vw; top: -20vh; z-index: 5; transform-origin: center;">
         <img src="cariola.png" id="structure_barrow">
         <img src="ruota_cariola.png" alt="" id="structure_wheel">
+    </div>
+
+    <div id="camionBob" class="school_imgs" style="left: -30vw; top: 10vh; z-index: 5; transform-origin: center;">
+        <img src="CamionBOB.png" id="structure_camion">
+        <img src="ruota_camion.png" id="structure_wheel_camion" style="margin-left: 38.5vw; margin-top: 86vh;">
+        <img src="ruota_camion.png" id="structure_wheel_camion" style="margin-left: 94.5vw; margin-top: 86vh;">
     </div>
    
     
@@ -634,8 +656,8 @@
         </div>
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
         <div id="money" class="hud-box" style="opacity: 0;">0 🪙</div>
-        <div id="punti_prestigio" class="hud-box" style="opacity: 0;">0 🪙</div>
         <!--
+        <div id="punti_prestigio" class="hud-box" style="opacity: 0;">0</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
         <div id="missions" class="hud_missions closed" >
         <img class="toggle-icon" src="icona_menu_missions.png" alt="Icona Toggle" onclick="menu_missions()">
@@ -2897,6 +2919,4 @@ window.onload = function(){
     startGame();
 } 
 </script>
-
-
 
