@@ -119,13 +119,15 @@
             position: fixed;
             top: 50%;
             left: 30%;
-            transform: translate(-110%, -120%);
+            transform: translate(10%, -60%);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 10vw;
+            width: 5vw;
             height: 10vw;
             border-radius: 1vw;
+            object-fit: cover;
+            backface-visibility: hidden;
         }
 
         #platform_container {
@@ -140,17 +142,6 @@
             opacity: 0;
         }
 
-        #bob_container{
-            position: fixed;
-            left: 70vw;
-            top: 39vh;
-        }
-        #bob_character{
-            transform: scaleX(-1);
-            width: 28vw;
-            height: 27vh;
-        }
-
         #tertiary_container{
             position: fixed;
             left: 80vw;
@@ -162,8 +153,8 @@
         }
 
         #preside {
-            width: 30vw;
-            height: 30vh;
+            width: 5vw;
+            height: 19vh;
             position: fixed;
             top: 0vh;
             left: 0vw;
@@ -189,9 +180,9 @@
         #img_preside_dialogues {
             position: fixed;
             z-index: -1;
-            height: 120vh;
-            top: -30vh;
-            margin-left: -45vw;
+            height: 60vh;
+            top: 18vh;
+            margin-left: -55vw;
             object-fit: cover;
             pointer-events: none;
             transform: scale(0.8); 
@@ -201,9 +192,9 @@
         #anonymous_character_dialogues {
             position: fixed;
             z-index: -1;
-            width: 30vw;
-            height: 80vh;
-            top: 5vh;
+            width: 15vw;
+            height: 40vh;
+            top: 30vh;
             margin-left: 60vw;
             object-fit: cover;
             pointer-events: none; 
@@ -619,7 +610,8 @@
         <img src="ruota_camion.png" id="structure_wheel_camion" style="margin-left: 38.5vw; margin-top: 86vh;">
         <img src="ruota_camion.png" id="structure_wheel_camion" style="margin-left: 94.5vw; margin-top: 86vh;">
     </div>
-   
+
+    
     
     <div id="preside_container">
         <img src="Preside.png" id="preside">
@@ -634,7 +626,7 @@
         </div>
         <img src="Preside.png" alt="" id="img_preside_dialogues">
 
-        <img src="personaggio_anonimo.png" alt="" id="anonymous_character_dialogues">
+        <img src="Personaggio_anonimo.png" alt="" id="anonymous_character_dialogues">
         
     </div>
 
@@ -677,7 +669,7 @@
     </div>
     <!--
 
-    <div id="cartello-orizzontale" class="school_imgs" style="position: fixed; width: 20vw; height: 7.87vh; left: 93vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.25s linear, top 0.25s linear;">
+    <div id="cartello-orizzontale" class="school_imgs" style="position: fixed; width: 20vw; height: 7.87vh; left: 90vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.25s linear, top 0.25s linear;">
         <p id="text_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
     </div>
 
@@ -710,12 +702,12 @@
         else elements = initialiseElements(e);
         moveImportantObjectsStart(elements);
         moveWorldStart(elements, importantStates);
+        creationTertiaryCharacters(elements, state, e);
         saveStatesElements(e, state);
         createInteractableKeys(elements, state);
         setupDialogue(elements, state, e);
         controlSkip(elements, state);
         gameScripts(elements, state);
-        creationTertiaryCharacters(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
 
@@ -740,16 +732,17 @@ const importantStates = initialiseimportantStates();
 function initialiseMatTert(){
     if(localStorage.getItem("saved") == null){
     const matTert = [
-        [ '175vw', '-15vh', "group", 1, false, 'personaggio_anonimo.png'],
-        [ '163vw', '-3vh', "group", 2, false, 'personaggio_anonimo.png' ],
-        [ '163vw', '-27vh', "group", -2, false, 'personaggio_anonimo.png'],
-        [ '13vw', '-27vh', "work-alone", 1, false, 'personaggio_anonimo.png'],
-        [ '90vw', '110vh', "alone", -1, false, 'personaggio_anonimo.png'],
-        [ '70vw', '33vh', "group", 1, false, 'bob.png'],
-        [ '80vw', '39vh', "group", 1, false, 'personaggio_anonimo.png'],
-        ['180vw', '100vh', "group", -1, false, 'personaggio_anonimo.png'],
-        ['190vw', '100vh', "group", 1, false, 'personaggio_anonimo.png'],
-        [ '103vw', '50vh', "walk-casually", -1, false, 'personaggio_anonimo.png'],
+        [ '185vw', '-14vh', "group", 1, false, 'operaio'],
+        [ '175vw', '-2vh', "group", 2, false, 'operaio' ],
+        [ '175vw', '-26vh', "group", -2, false, 'operaio'],
+        [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
+        [ '100vw', '111vh', "alone", -1, false, 'operaio'],
+        [ '80vw', '41vh', "group", 1, false, 'bob.png'],
+        [ '90vw', '42vh', "group", 1, false, 'operaio'],
+        [ '190vw', '101vh', "group", -1, false, 'operaio'],
+        [ '200vw', '101vh', "group", 1, false, 'operaio'],
+        [ '113vw', '51vh', "walk-casually", -1, false, 'operaio'],
+
         ];
         return matTert;
     } else{
@@ -761,7 +754,7 @@ function initialiseMatTert(){
 function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
         const seatForObjects = [
-            [ '158vw', '-3vh', '158vw', '-27vh', 'table_construction']
+            [ '165vw', '0vh', '164vw', '-27vh', 'table_construction']
         ];
         return seatForObjects;
     } else{
@@ -2064,7 +2057,7 @@ function interaction(index, e, state){
 
 
 const N = 10;
-function creationTertiaryCharacters(e, state) {
+function creationTertiaryCharacters(e, state, saved_e) {
     let i;
     let scaleX;
     
@@ -2072,8 +2065,10 @@ function creationTertiaryCharacters(e, state) {
         createCharacter(e, state, i);
         assignIndex(e, state, i)
     }
+    saveStatesElements(saved_e, state);
 }
 function createCharacter(e, state, i) {
+    let source;
     const character_container = document.createElement('div');
     character_container.style.left = matTert[i][0];
     character_container.style.top = matTert[i][1];
@@ -2081,18 +2076,21 @@ function createCharacter(e, state, i) {
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
     character_container.style.transition = 'left 0.25s linear, top 0.25s linear';
-    const character_img = document.createElement('img');
-    character_img.src = matTert[i][5];
-    character_img.style.width = '28vw';
-    character_img.id = 'characterImg' + i;
-    if(matTert[i][5] == 'bob.png') character_img.style.height = '27vh';
-    else character_img.style.height = '20vh';
-
     if(matTert[i][3] == 1) {
         character_container.style.transform = 'scaleX(1)';
     } else if (matTert[i][3] == -1) {
         character_container.style.transform = 'scaleX(-1)';
     } 
+
+    const character_img = document.createElement('img');
+    character_img.style.width = '6vw';
+    character_img.id = 'characterImg' + i;
+    character_img.style.height = '18vh';
+
+    if(localStorage.getItem("saved") == null) {
+        if(matTert[i][5] == "operaio") chooseSrc(i);
+    }
+    character_img.src = matTert[i][5];
 
     character_container.appendChild(character_img);
     e.world.appendChild(character_container);
@@ -2105,7 +2103,7 @@ function createCharacter(e, state, i) {
              passiveAnimationWorkAlone(character_container, i, e);
             break;
         case 'alone':
-            let posX = parseFloat(matTert[i][0]) + 13;
+            let posX = parseFloat(matTert[i][0]) + 2;
             let posY = parseFloat(matTert[i][1]) - 10;
             const illustration = createIllustration('vignetta_musica.png', posX, posY, e);
         animateIllustration(illustration, i);
@@ -2114,13 +2112,18 @@ function createCharacter(e, state, i) {
             }, 1000);
             break;
         case 'walk-casually':
-            let posX2 = parseFloat(matTert[i][0]) + 13;
+            let posX2 = parseFloat(matTert[i][0]) + 2;
             let posY2 = parseFloat(matTert[i][1]) - 10;
             const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e);
             animateIllustration(illustration2, i);
             passiveAnimationWalking(character_container, i, e, illustration2, state);
            
             break;
+    }
+    function chooseSrc(i){
+        let num = Math.floor(Math.random() * 3) + 1;
+        src = `operaio${num}.png`;
+        matTert[i][5] = src;
     }
 }
 
@@ -2208,12 +2211,12 @@ let interval = [];
     function passiveIllustrationGroup(posX, posY, i, e, state){
         if(posX == 0){
             if(matTert[i][5] == 'bob.png'){
-                posX = parseFloat(matTert[i][0]) + 13;
-                posY = parseFloat(matTert[i][1]) - 2;
+                posX = parseFloat(matTert[i][0]) + 2;
+                posY = parseFloat(matTert[i][1]) - 10;
             }
             else{
-                posX = parseFloat(matTert[i][0]) + 13;
-                posY = parseFloat(matTert[i][1]) - 5;
+                posX = parseFloat(matTert[i][0]) + 2;
+                posY = parseFloat(matTert[i][1]) - 10;
             }
         }
         const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
@@ -2264,7 +2267,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
     const step = async (action, delay, scaleX) => {
         await sleep(delay);
         if(scaleX) {
-            character.style.transform = 'scaleX(1)';
+            character.style.transform = 'scaleX(-1)';
             e.barrow.style.transform = 'scaleX(1)';
             cont_work_alone++;
             
@@ -2280,7 +2283,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
                 }, 100);
             }
         } else {
-            character.style.transform = 'scaleX(-1)';
+            character.style.transform = 'scaleX(1)';
             e.barrow.style.transform = 'scaleX(-1)';
             cont_work_alone++;
             if(cont_work_alone == 1) e.barrow.style.left = (parseFloat(e.barrow.style.left) - 17.5) + "vw";
@@ -2579,7 +2582,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         matTert[posId][0] = parseFloat(character.style.left) + 'vw';
         matTert[posId][1] = parseFloat(character.style.top) + 'vh';
         state.condBP1 = false;
-        await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 12, parseFloat(character.style.top) - 8);
+        await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 2, parseFloat(character.style.top) - 10);
     }
     }
 }
@@ -2816,8 +2819,8 @@ function diaologueB_P1(e, state) {
         const t = document.getElementById('character6');
         const t_illustration = document.getElementById('illustration5');
         const bob_illustration = document.getElementById('illustration4');
-        t.style.left = '80vw';
-        t.style.top = '39vh';
+        t.style.left = '90vw';
+        t.style.top = '42vh';
         t.style.transform = "scaleX(-1)";
         bob_illustration.style.opacity = '0';
         t_illustration.style.opacity = '0';
