@@ -118,8 +118,8 @@
 
         #preside_container {
             position: fixed;
-            top: 50%;
-            left: 30%;
+            top: 50vh;
+            left: 30vw;
             transform: translate(10%, -60%);
             display: flex;
             align-items: center;
@@ -193,7 +193,7 @@
         #anonymous_character_dialogues {
             position: fixed;
             z-index: -1;
-            width: 15vw;
+            width: 18vw;
             height: 55vh;
             top: 8vh;
             margin-left: 52vw;
@@ -847,7 +847,7 @@ function gameScripts(e, state) {
         waitForImagesToLoad(document.getElementById("world"), () => {
         setTimeout(() => scaleWorld(e), 1000);
         });
-        e.preside_container.style.left = '50%';
+        e.preside_container.style.left = '50vw';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
         activateHud(e)
         activateHudStart(e, state);
@@ -2690,8 +2690,8 @@ function fastAnimations(ids, state){
     
 function centralizationPreside(e, state) {
     const p = e.preside_container;
-    p.style.top = "50%";
-    p.style.left = "30%";
+    p.style.top = "50vh";
+    p.style.left = "30vw";
     doubleJump(p);
 }
 async function doubleJump(p) {
@@ -2708,8 +2708,8 @@ async function rightJumpP(character) {
 
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
-        character.style.top = (parseFloat(character.style.top) + topDelta) + '%';
-        character.style.left = (parseFloat(character.style.left) + leftDelta) + '%';
+        character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
+        character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
     };
 
 
