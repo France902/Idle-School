@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Idle School</title>
-    
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+        
 
         body {
             margin: 0;
@@ -181,8 +182,8 @@
             position: fixed;
             z-index: -1;
             height: 60vh;
-            top: 18vh;
-            margin-left: -55vw;
+            top: 3vh;
+            margin-left: -45vw;
             object-fit: cover;
             pointer-events: none;
             transform: scale(0.8); 
@@ -193,9 +194,9 @@
             position: fixed;
             z-index: -1;
             width: 15vw;
-            height: 40vh;
-            top: 30vh;
-            margin-left: 60vw;
+            height: 55vh;
+            top: 8vh;
+            margin-left: 52vw;
             object-fit: cover;
             pointer-events: none; 
             transform: scale(0.9); 
@@ -217,21 +218,19 @@
         }
 
         #dialogues {
-            background-color: rgba(255, 255, 255);
             border-radius: 1.5vw;
-            padding-left: 2vw;
-            padding-right: 2vw;
+            padding-left: 4vw;
+            padding-right: 4vw;
             margin: 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             width: 80vw;
             height: 33vh;
-            font-size: 2.2vw;
+            font-size: 5.2vh;
             color: black;
             text-align: left;
             font-family: "Comic Neue", cursive;
-            font-weight: 400;
+            font-weight: 700;
             position: fixed;
-            z-index: 0;
+            z-index: 1;
         }
 
         #dialogues_text {
@@ -240,8 +239,21 @@
             white-space: pre-wrap; 
             word-wrap: break-word; 
             overflow-wrap: break-word; 
-            margin-top: 7.5vh;
-            margin-left: 1.5vw;
+            margin-top: -4vh;
+            margin-left: 10vw;
+            z-index: 0;
+            opacity: 1;
+        }
+
+        #text_box_dialogues {
+            position: absolute;
+            width: 85vw;
+            height: 43vh; 
+            border-radius: 1.5vw;
+            z-index: -10;
+            opacity: 1;
+            margin-left: -2vw;
+            margin-top: -12.5vh;
         }
 
         #character_name {
@@ -250,27 +262,27 @@
             white-space: pre-wrap; 
             word-wrap: break-word; 
             overflow-wrap: break-word; 
-            margin-top: 1.8vh;
+            margin-top: 2vh;
         }
 
         #name_box{
             background-color: rgba(255, 255, 255);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             border-radius: 5vw;
             padding-left: 0.5vw;
             padding-right: 0.5vw;
             margin: 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            width: 14vw;
+            width: 10vw;
             height: 10vh;
-            top: 54vh;
-            font-size: 2vw;
-            margin-left: 5vw;
+            top: 46vh;
+            font-size: 5vh;
+            margin-left: 6.5vw;
             color: black;
             text-align: center;
-            font-family: "Comic Neue", cursive;
+             font-family: "Comic Neue", cursive;
             font-weight: 800;
             position: fixed;
-            z-index: 1;
+            z-index: 10;
         }
 
         #bob_illustration, #tertiary_illustration {
@@ -342,14 +354,15 @@
             width: 150vw;
             height: 130vh;
             position: fixed;
-            z-index: 5;
+            z-index: 4;
         }
 
-        #structure_wheel_camion{
-            width: 8vw;
-            height: 15vh;
+        .structure_wheel_camion{
+            width: 12vw;
+            height: 20vh;
             position: fixed;
-            z-index: 4;
+            z-index: 5;
+            transition: transform 1s linear;
         }
 
         .bar {
@@ -387,7 +400,7 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 1vh;
-            z-index: 9999;
+            z-index: 9998;
         }
 
         .hud-box {
@@ -558,6 +571,17 @@
             }
         }
 
+        @keyframes animationCamionCutscene {
+            0% {
+                top: 200vh;
+            }
+            50% {
+                top: 199vh;
+            }
+            100% {
+                top: 200vh;
+            }
+        }
 
     </style>
 </head>
@@ -605,10 +629,10 @@
         <img src="ruota_cariola.png" alt="" id="structure_wheel">
     </div>
 
-    <div id="camionBob" class="school_imgs" style="left: -30vw; top: 10vh; z-index: 5; transform-origin: center;">
+    <div id="camionBob" class="school_imgs" style="left: -30vw; top: 10vh; z-index: 5; transform-origin: center; opacity: 0;">
         <img src="CamionBOB.png" id="structure_camion">
-        <img src="ruota_camion.png" id="structure_wheel_camion" style="margin-left: 38.5vw; margin-top: 86vh;">
-        <img src="ruota_camion.png" id="structure_wheel_camion" style="margin-left: 94.5vw; margin-top: 86vh;">
+        <img src="ruota_camion2.png" class="structure_wheel_camion" id="wheel_camion1" style="margin-left: 35.5vw; margin-top: 86vh;">
+        <img src="ruota_camion2.png" class="structure_wheel_camion" id="wheel_camion2" style="margin-left: 91.5vw; margin-top: 86vh;">
     </div>
 
     
@@ -622,6 +646,7 @@
             <p id="character_name">name personaggio</p>
         </div>
         <div id="dialogues">
+            <img src="text-box1 (1).png" id="text_box_dialogues">
             <p id="dialogues_text">Prova-dialogo</p>
         </div>
         <img src="Preside.png" alt="" id="img_preside_dialogues">
@@ -688,7 +713,6 @@
     </div>
     
 <script defer>
-    localStorage.clear();
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -781,6 +805,7 @@ function initialiseImportantObjects(){
         const importantObjects = [
             [ '165vw', '-10vh', 'table_construction'],
             ['14vw', '-20vh', 'barrow'],
+            ['-30vw', '10vh', 'camionBob'],
         ];
         return importantObjects;
     } else{
@@ -858,6 +883,7 @@ function writeElements() {
     dezoom: "document.getElementById('dezoom')",
     table_construction: "document.getElementById('table_construction')",
     barrow: "document.getElementById('barrow')",
+    camionBob: "document.getElementById('camionBob')",
 
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
@@ -1178,7 +1204,7 @@ function setupDialogue(e, state, saved_e) {
 
   function changeBoxName(pos) {
     const left = pos === 1;
-    e.boxname.style.left = left ? "11vw" : "65vw";
+    e.boxname.style.left = left ? "16vw" : "65vw";
     e.imgPreside.style.transform = left ? "scale(0.9)" : "scale(0.8)";
     e.anonymousCharacter.style.transform = left ? "scaleX(-1) scale(0.9)" : "scaleX(-1) scale(1)";
     e.imgPreside.style.opacity = left ? "1" : "0.8";
@@ -1219,6 +1245,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_dialogue = false;
                 scale('wide', e);
                 moveWorld(e, 40, -100, -50, 0, 4);
+                animationCamionCutscene(e, state);
                 setTimeout(() => {
                     state.index++;
                     state.cond_text = true;
@@ -1227,7 +1254,8 @@ function setupDialogue(e, state, saved_e) {
                     state.cond_dialogue = true;
                     state.cond_other_character = false;
                     showNextLine();
-                }, 5500);
+
+                }, 6700);
                 break;
             case 11:
                 state.cond_text = false;
@@ -1730,6 +1758,7 @@ function diagonalTopRight(distance) {
     state.posX += distance;
     state.posY -= distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
+    p.style.transform = 'scaleX(1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
@@ -1752,6 +1781,7 @@ function diagonalTopLeft(distance) {
     state.posX -= distance;
     state.posY -= distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
+    p.style.transform = 'scaleX(-1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
@@ -1774,6 +1804,7 @@ function diagonalLowRight(distance) {
     state.posX += distance;
     state.posY += distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
+    p.style.transform = 'scaleX(1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
@@ -1796,6 +1827,7 @@ function diagonalBottomLeft(distance) {
     state.posX -= distance;
     state.posY += distance;
     p.style.zIndex = `${Math.trunc(state.posY/5)}`;
+    p.style.transform = 'scaleX(-1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
@@ -1815,7 +1847,7 @@ function diagonalBottomLeft(distance) {
 }
 
 async function animationJumpDiagonal(distance) {
-    p.src = "Preside_dietro.png"; 
+    p.src = "Preside_obliquo.png"; 
     const step = [60, 120, 180, 240, 300];
     const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
     step.forEach((ms, i) => {
@@ -1963,6 +1995,7 @@ function setUpFreeCamRoam(e, state){
         keys = {};
     }
 }
+
 
 let cont_menu = 0;
 function openConstructionMenu(e, state){
@@ -2391,6 +2424,37 @@ async function passiveAnimationBob(character, i, e, illustration, state){
     while(true){
         await step();
     } 
+}
+
+function animationCamionCutscene(e, state){
+    e.camionBob.style.animation = 'animationCamionCutscene 0.5s linear infinite';
+    e.camionBob.style.left = '-120vw';
+    e.camionBob.style.opacity = '1';
+    e.camionBob.style.transition = 'left 5.5s linear, top 0.25s linear';
+    e.camionBob.style.left = '20vw';
+    document.getElementById('wheel_camion1').style.animation = 'animation_wheel 1s linear infinite';
+    document.getElementById('wheel_camion2').style.animation = 'animation_wheel 1s linear infinite';
+    setTimeout(() => {
+        e.camionBob.style.top = '200vh';
+        e.camionBob.style.animation = '';
+    }, 5000);
+    setTimeout(() => {
+            document.getElementById('wheel_camion1').style.animation = '';
+            document.getElementById('wheel_camion2').style.animation = '';
+            document.getElementById('start_overlay').style.display = 'block';
+            document.getElementById('start_overlay').style.opacity = '0';
+            document.getElementById('start_overlay').style.transition = 'opacity 0.8s ease-out';
+            setTimeout(() => {
+                document.getElementById('start_overlay').style.opacity = '1';
+                setTimeout(() => {
+                    document.getElementById('start_overlay').style.opacity = '0';
+                }, 2000);
+            }, 100);
+            setTimeout(() => {
+                e.camionBob.style.display = 'none';
+            }, 1500);
+            
+    }, 6000);
 }
 
 async function jolt(character, e, state) {
@@ -2924,5 +2988,4 @@ window.onload = function(){
     startGame();
 } 
 </script>
-
 
