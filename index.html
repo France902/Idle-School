@@ -424,7 +424,6 @@
             width: 17vw;
             background-color: rgba(50, 50, 50, 0.6);
             opacity: 1;
-            border: 0.15vw solid white;
             border-radius: 0.6vw;
             padding: 0.6vh 0 0.6vh 1vw; 
             color: white;
@@ -2993,6 +2992,11 @@ function mobileAdaptation(e, state){
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        alert("mobile");
+    } else {
+        alert("desktop");
+    }
 }
 
 function createOnClicks(e, state){
