@@ -174,9 +174,9 @@
 
         #missions {
             position: fixed; 
-            left: 80vw; 
-            top: 14vh; 
-            width: 17vw;
+            left: 55vw; 
+            top: 20vh; 
+            width: 20vw;
         }
         #img_preside_dialogues {
             position: fixed;
@@ -224,8 +224,9 @@
             margin: 0;
             width: 80vw;
             height: 33vh;
-            font-size: 5.2vh;
-            color: black;
+            font-size: 5vh;
+            color: white;
+            -webkit-text-stroke: 0.2px black;
             text-align: left;
             font-family: "Comic Neue", cursive;
             font-weight: 700;
@@ -449,6 +450,7 @@
             width: 100%;
             margin: 3.3vh 0;
             cursor: pointer;
+            position: relative;
         }
 
         .mission_1 h1, .mission_2 h1, .mission_3 h1 {
@@ -670,26 +672,30 @@
         <div id="construction_menu">
             <img id="lateral_arrow" src="lateral_arrow.png" >
             <img id="menu1" src="menù_costruzione.png">
+            <div id="missions" class="hud_missions closed">
+            <div class="mission_1" id="mission1">
+                <img src="icona_punto_interrogativo.png">
+                <h1>Construction 1</h1>
+            </div>
+            <div class="mission_2" id="mission2">
+                <img src="icona_punto_interrogativo.png">
+                <h1>Next Construction</h1>
+            </div>
+            <div class="mission_3" id="mission3">
+                <img src="icona_punto_interrogativo.png">
+                <h1>Next Construction</h1>
+            </div>
+            </div>
         </div>
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
         <div id="money" class="hud-box" style="opacity: 0;">0 🪙</div>
+        
         <!--
         <div id="punti_prestigio" class="hud-box" style="opacity: 0;">0</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
-        <div id="missions" class="hud_missions closed" >
-        <img class="toggle-icon" src="icona_menu_missions.png" alt="Icona Toggle" onclick="menu_missions()">
-        <div class="mission_1" onclick="toggleMenu()">
-            <img src="icona_punto_interrogativo.png" alt="Icona Missione 1">
-            <h1>missione 1</h1>
-        </div>
-        <div class="mission_2" onclick="toggleMenu()">
-            <img src="icona_punto_interrogativo.png" alt="Icona Missione 2">
-            <h1>missione 2</h1>
-        </div>
-        <div class="mission_3" onclick="toggleMenu()">
-            <img src="icona_punto_interrogativo.png" alt="Icona Missione 3">
-            <h1>missione 3</h1>
-        </div>
+        
+        
+        
         -->
     </div>
     <!--
@@ -884,6 +890,9 @@ function writeElements() {
     table_construction: "document.getElementById('table_construction')",
     barrow: "document.getElementById('barrow')",
     camionBob: "document.getElementById('camionBob')",
+    mission1: "document.getElementById('mission1')",
+    mission2: "document.getElementById('mission2')",
+    mission3: "document.getElementById('mission3')",
 
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
@@ -941,6 +950,7 @@ function initialiseStates() {
     condBP1: false,
     condFreeRoam: true,
     elementsHud: [],
+    other_mission_opened: false,
 
     // Posizioni
     posX: 0,
@@ -2010,7 +2020,14 @@ function setUpFreeCamRoam(e, state){
     }
 }
 
-
+function toggleMenu() {
+    const menu = document.getElementById('missions');
+    menu.classList.toggle('open');
+    menu.classList.toggle('closed');
+}
+        
+    
+        
 let cont_menu = 0;
 function openConstructionMenu(e, state){
         state.cond_deactivate_movement = true;
@@ -2991,7 +3008,15 @@ function createOnClicks(e, state){
     e.dezoom.onclick = function() {
         scale(false, e);
     }
-
+    e.mission1.onclick = function() {
+        toggleMenu(e, state);
+    }
+    e.mission2.onclick = function() {
+        toggleMenu(e, state);
+    }
+    e.mission3.onclick = function() {
+        toggleMenu(e, state);
+    }
 }
 
 window.onload = function(){
