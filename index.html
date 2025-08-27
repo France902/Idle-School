@@ -225,8 +225,7 @@
             width: 80vw;
             height: 33vh;
             font-size: 5vh;
-            color: white;
-            -webkit-text-stroke: 0.2px black;
+            color: black;
             text-align: left;
             font-family: "Comic Neue", cursive;
             font-weight: 700;
@@ -534,9 +533,9 @@
             position: fixed;
             width: 20vw;
             height: 20vh;
-            display: block;
+            display: none;
             transform-origin: center center;
-            top: 70vh;
+            top: 60vh;
             left: 20vw;
             pointer-events: all;
         }
@@ -670,7 +669,7 @@
             <p id="character_name">name personaggio</p>
         </div>
         <div id="dialogues">
-            <img src="text-box1 (1).png" id="text_box_dialogues">
+            <img src="text-box.png" id="text_box_dialogues">
             <p id="dialogues_text">Prova-dialogo</p>
         </div>
         <img src="Preside.png" alt="" id="img_preside_dialogues">
@@ -3102,8 +3101,7 @@ function mobileAdaptation(e, state){
         e.preventDefault();
     });
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        alert("mobile");
-    } else {
+        document.querySelector(".mobile_movement").style.display = 'block';
     }
 }
 
