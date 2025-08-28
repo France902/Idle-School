@@ -711,7 +711,7 @@
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
         <div id="money" class="hud-box" style="opacity: 0;">0 🪙</div>
         <div class="mobile_movement" id="arrows_movement">
-            <img src="freccia_dritta.png" class="arrow" id="right_arrow" style="cursor: pointer;">
+            <img src="freccia_dritta.png" class="arrow" id="right_arrow">
             <img src="freccia_dritta.png" class="arrow" id="left_arrow" style="margin-left: -10vw; transform: scaleX(-1);">
             <img src="freccia_dritta.png" class="arrow" id="top_arrow" style="margin-left: -5vw; margin-top: -10vh; transform: rotate(270deg);">
             <img src="freccia_dritta.png" class="arrow" id="bottom_arrow" style="margin-left: -5vw; margin-top: 10vh; transform: rotate(90deg);">
@@ -1618,7 +1618,6 @@ function simulateKey(code, duration){
 
 function handleKeydown(event) {
 if(!state.cond_deactivate_movement){
-    console.log("si")
     e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
@@ -1635,7 +1634,6 @@ if(!state.cond_deactivate_movement){
 
 function handleKeyup(event){
     if(!state.cond_deactivate_movement){
-        console.log("si2")
         keys[event.code] = false;
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
             if(isCharging){
@@ -1670,7 +1668,6 @@ function getDirection(){
 }
 
 function jumpDirection(distance, dir){
-    console.log("yes")
     dir.x = parseFloat((dir.x).toFixed(1));
     dir.y = parseFloat((dir.y).toFixed(1));
     if(dir.x == -1 && dir.y == 0) left(distance);
@@ -1925,22 +1922,37 @@ async function animationJumpDiagonal(distance) {
     });
 }
 
-async function mobileMove(direction, e, state) {
+async function mobileMove(direction, e, state, direction2 = null) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    const step = async (action, delay, direction) => {
-        if(action == "simulate") simulateKey(direction, 270);
-        else await sleep(delay);
+    const step = async (action, delay, direction, direction2 = null) => {
+        if(direction2 == null) {
+            if(action == "simulate") simulateKey(direction, 270);
+            else {
+                await sleep(delay);
+            }
+        }
+        else {
+            if(action == "simulate") {
+                simulateKey(direction, 270);
+                simulateKey(direction2, 270);
+            }
+            else {
+                await sleep(delay);
+            }
+        }
+        
     }
     if(state.condMobileMovement){
-        await step("simulate", 0, direction);
-        await step("wait", 350, direction);
-        await mobileMove(direction, e, state)
-    }
+        await step("simulate", 0, direction, direction2);
+        await step("wait", 350, direction, direction2);
+        await mobileMove(direction, e, state, direction2);
+    } else return;
 }
 
-function start(dir) {
-   state.condMobileMovement = true;
-   mobileMove(dir, e, state); 
+function start(dir, dir2 = null) {
+    state.condMobileMovement = true;
+    if(dir2 == null) mobileMove(dir, e, state, dir2); 
+    else mobileMove(dir, e, state, dir2); 
 }
 
 function stop() {
@@ -1967,24 +1979,24 @@ e.bottom_arrow.addEventListener("mouseup", stop);
 e.bottom_arrow.addEventListener("touchstart", () => start("KeyS"));
 e.bottom_arrow.addEventListener("touchend", stop);
 
-e.rightTop_arrow.addEventListener("mousedown", start);
+e.rightTop_arrow.addEventListener("mousedown", () => start("KeyD", "KeyW"));
 e.rightTop_arrow.addEventListener("mouseup", stop);
-e.rightTop_arrow.addEventListener("touchstart", start);
+e.rightTop_arrow.addEventListener("touchstart", () => start("KeyD", "KeyW"));
 e.rightTop_arrow.addEventListener("touchend", stop);
 
-e.rightBottom_arrow.addEventListener("mousedown", start);
+e.rightBottom_arrow.addEventListener("mousedown", () => start("KeyD", "KeyS"));
 e.rightBottom_arrow.addEventListener("mouseup", stop);
-e.rightBottom_arrow.addEventListener("touchstart", start);
+e.rightBottom_arrow.addEventListener("touchstart", () => start("KeyD", "KeyS"));
 e.rightBottom_arrow.addEventListener("touchend", stop);
 
-e.leftTop_arrow.addEventListener("mousedown", start);
+e.leftTop_arrow.addEventListener("mousedown", () => start("KeyA", "KeyW"));
 e.leftTop_arrow.addEventListener("mouseup", stop);
-e.leftTop_arrow.addEventListener("touchstart", start);
+e.leftTop_arrow.addEventListener("touchstart", () => start("KeyA", "KeyW"));
 e.leftTop_arrow.addEventListener("touchend", stop);
 
-e.leftBottom_arrow.addEventListener("mousedown", start);
+e.leftBottom_arrow.addEventListener("mousedown", () => start("KeyA", "KeyS"));
 e.leftBottom_arrow.addEventListener("mouseup", stop);
-e.leftBottom_arrow.addEventListener("touchstart", start);
+e.leftBottom_arrow.addEventListener("touchstart", () => start("KeyA", "KeyS"));
 e.leftBottom_arrow.addEventListener("touchend", stop);
 
 window.addEventListener('keydown', handleKeydown);
@@ -3137,5 +3149,4 @@ window.onload = function(){
     startGame();
 } 
 </script>
-
 
