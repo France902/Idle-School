@@ -29,7 +29,6 @@
             position: fixed;
             top: 0;
             left: 0;
-            
         }
 
         h1 {
@@ -251,11 +250,12 @@
             position: absolute;
             width: 85vw;
             height: 43vh; 
-            border-radius: 1.5vw;
+            border-radius: 3.3vw;
             z-index: -10;
             opacity: 1;
             margin-left: -2vw;
             margin-top: -12.5vh;
+            border: 20px solid black;
         }
 
         #character_name {
@@ -645,7 +645,6 @@
 </head>
 
 <body>
-    
     <div id="loader-container" >
          <div id="loader-bar"></div>
     </div>
@@ -708,11 +707,11 @@
             <p id="dialogues_text">Prova-dialogo</p>
         </div>
         <div id="choices">
-            <div class="box_choise">
+            <div class="box_choise1">
                 <img src="grey_arrow_choices.png" class="arrow_choice" id="arrow_choice1" style="left: -19vw; top: -17vh; opacity: 0; cursor: pointer; pointer-events: all;">
                 <h1 class="text_choice" id="choice1" style="left: -16vw; top: -16.5vh; cursor: pointer; pointer-events: all;">Testo scelta 1</h1>
             </div>
-            <div class="box_choise">
+            <div class="box_choise1">
                 <img src="grey_arrow_choices.png" class="arrow_choice" id="arrow_choice2" style="left: 16vw; top: -17vh; opacity: 0; cursor: pointer; pointer-events: all;">
                 <h1 class="text_choice" id="choice2" style="left: 19vw; top: -16.5vh; cursor: pointer; pointer-events: all;">Testo scelta 2</h1>
             </div>
@@ -793,7 +792,6 @@
 -->
         
     </div>
-    
 <script defer>
     function startGame(e = null, state = null) {
    
@@ -1171,7 +1169,7 @@ function setupDialogue(e, state, saved_e) {
   const lines = [
     ["Ciao! Sono Bob, della Bob & Company!", "bob", 2, 0, true],
     ["Questo posto è proprio enorme!", "bob", 2, 0, false],
-    [["Spero che sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare"], "preside", 1, 0, false],
+    [["Spero che sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
     ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
     ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
     [true],
@@ -1179,7 +1177,7 @@ function setupDialogue(e, state, saved_e) {
     ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
     ["Saremo a tua disposizione fin quando vorrai, o fin quando non appassiremo!", "bob", 2, 0, false],
     [true],
-    ["Potrei vendere alcuni dei libri che ho portato con me, ma non so se ne vale la pena...", "preside", 1, 0, false],
+    ["Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -1399,6 +1397,8 @@ function setupDialogue(e, state, saved_e) {
       } 
       if(!state.cond_other_character){
         e.anonymousCharacter.style.display = 'none';
+        e.imgPreside.style.display = 'none';
+        e.boxname.style.display = 'none';
       } 
       else e.anonymousCharacter.style.display = 'block';
       if(lines[state.index][4] == true) deactivateCinematicMode(e);
@@ -3313,6 +3313,20 @@ function mobileAdaptation(e, state){
         e.container_dialogue.style.transform = 'translateY(-5vh)';
         e.world.style.height = '80%';
     }
+
+    function checkOrientation(){
+        if (window.matchMedia("(orientation: portrait)").matches) {
+             document.body.style.transform = 'rotate(90deg)';
+        } else {
+            document.body.style.transform = 'rotate(0deg)';
+        }
+       
+    }
+
+    checkOrientation();
+
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
 }
 
 function createOnClicks(e, state){
