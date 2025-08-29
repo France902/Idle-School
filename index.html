@@ -1459,6 +1459,8 @@ function setupDialogue(e, state, saved_e) {
 
     choice1.innerHTML = alternatives[0];
     choice2.innerHTML = alternatives[1];
+    choice1.style.color = 'yellow';
+    choice2.style.color = 'black';
     arrow_choice1.style.opacity = '1';
     arrow_choice1.style.pointerEvents = 'all';
     arrow_choice2.style.opacity = '0';
@@ -1478,6 +1480,8 @@ function setupDialogue(e, state, saved_e) {
         arrow_choice1.style.pointerEvents = 'all';
         arrow_choice2.style.opacity = '0';
         arrow_choice2.style.pointerEvents = 'none';
+        choice1.style.color = 'yellow';
+        choice2.style.color = 'black';
     }
 
     function changeToChoice2(){
@@ -1486,11 +1490,13 @@ function setupDialogue(e, state, saved_e) {
         arrow_choice1.style.pointerEvents = 'none';
         arrow_choice2.style.opacity = '1';
         arrow_choice2.style.pointerEvents = 'all';
+        choice2.style.color = 'yellow';
+        choice1.style.color = 'black';
     }
 
     document.addEventListener("keydown", changeChoice);
 
-    document.addEventListener("keydown", (event) => chosedWithKey(event, choice_for_key));
+    document.addEventListener("keydown", chosedWithKey);
 
     function changeChoice(event) {
         if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
@@ -1507,7 +1513,7 @@ function setupDialogue(e, state, saved_e) {
     choice2.addEventListener("mousedown", () => chosed(2));
     choice2.addEventListener("touchstart", () => chosed(2));
 
-    function chosedWithKey(event, choice_for_key) {
+    function chosedWithKey(event) {
         if(event.key === "Enter") chosed(choice_for_key);
     }
 
@@ -1524,11 +1530,11 @@ function setupDialogue(e, state, saved_e) {
             state.cond_skip = true;
         }, 1);
         document.removeEventListener("keydown", changeChoice);
-        document.removeEventListener("keydown", (event) => chosedWithKey(event, choice_for_key));
-        choice1.removeEventListener("mousedown", () => chosed(1));
-        choice1.removeEventListener("touchstart", () => chosed(1));
-        choice2.removeEventListener("mousedown", () => chosed(2));
-        choice2.removeEventListener("touchstart", () => chosed(2));
+        document.removeEventListener("keydown", chosedWithKey);
+        choice1.removeEventListener("mousedown", chosed);
+        choice1.removeEventListener("touchstart", chosed);
+        choice2.removeEventListener("mousedown", chosed);
+        choice2.removeEventListener("touchstart", chosed);
         window.showNextLine();
     }
 
@@ -1557,14 +1563,13 @@ function controlSkip(elements, state) {
       else if (state.cond_dialogue) window.showNextLine();
     }
   });
-  /*
   window.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
       if (state.cond_skip && state.cond_dialogue) state.cond_text = false;
       else if (state.cond_dialogue) window.showNextLine();
     }
   });
-  */
+  
 }
 
 function activateHud(e){
