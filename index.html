@@ -836,6 +836,8 @@ const seatForObjects = initialiseseatForObjects();
 
 const importantStates = initialiseimportantStates();
 
+const N = 10;
+
 function initialiseMatTert(){
     if(localStorage.getItem("saved") == null){
     const matTert = [
@@ -849,7 +851,6 @@ function initialiseMatTert(){
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
         [ '113vw', '51vh', "walk-casually", -1, false, 'operaio'],
-
         ];
         return matTert;
     } else{
@@ -2439,7 +2440,7 @@ function interaction(index, e, state){
 
 
 
-const N = 10;
+
 function creationTertiaryCharacters(e, state, saved_e) {
     let i;
     let scaleX;
