@@ -82,7 +82,7 @@
             top: 0vh;
             left: 15vw;
             opacity: 0;
-            transition: opacity 0.3s ease-out;
+            transition: opacity 0.3s ease-out, top 1s ease-out;
             z-index: 9999;
         }
 
@@ -177,6 +177,7 @@
             left: 55vw; 
             top: 20vh; 
             width: 20vw;
+            z-index: 3;
         }
         #img_preside_dialogues {
             position: fixed;
@@ -194,7 +195,7 @@
             position: fixed;
             z-index: -1;
             width: 18vw;
-            height: 55vh;
+            height: 60vh;
             top: 8vh;
             margin-left: 52vw;
             object-fit: cover;
@@ -215,6 +216,7 @@
             align-items: end;
             opacity: 0;
             transition: opacity 0.3s linear;
+            
         }
 
         #dialogues {
@@ -457,7 +459,6 @@
             box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.3);
             overflow: hidden;
             transition: max-height 0.3s linear;
-            pointer-events: auto;
         }
 
         .toggle-icon {
@@ -735,8 +736,6 @@
         <img src="zoom_reimposta.png" id="standard" style="width: 7.5vw; height: 5vw; transform: translate(-91vw, -2vh); cursor: pointer; pointer-events: auto;" >
         <img src="zoom_indietro.png" id="dezoom" style="width: 7.5vw; height: 5vw; transform: translate(-91vw, -4vh); cursor: pointer; pointer-events: auto;" >
         <div id="construction_menu">
-            <img id="lateral_arrow" src="lateral_arrow.png" >
-            <img id="menu1" src="menù_costruzione.png">
             <div id="missions" class="hud_missions closed">
             <div class="mission_1" id="mission1">
                 <img src="missione_main_costruzioni.png">
@@ -751,6 +750,9 @@
                 <h1>Next Construction</h1>
             </div>
             </div>
+            <img id="lateral_arrow" src="lateral_arrow.png" >
+            <img id="menu1" src="menù_costruzione.png">
+            
         </div>
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
         <div id="money" class="hud-box" style="opacity: 0;">0 🪙</div>
@@ -2327,6 +2329,12 @@ function openConstructionMenu(e, state){
         clearInterval(intervalMovement);
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
         e.construction_menu.style.opacity = '1';
+        e.menu.style.opacity = '0';
+         setTimeout(() => {
+            e.menu.style.transition = 'opacity 0.3s linear';
+            e.menu.style.pointerEvents = 'all';
+            e.menu.style.opacity = '1';
+        }, 1000);
         e.lateral_arrow.style.display = 'block';
         document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
@@ -2351,12 +2359,16 @@ function openConstructionMenu(e, state){
 
 function closeConstructionMenu(e, state){
     e.construction_menu.style.opacity = '0';
+    e.menu.style.pointerEvents = 'none';
+    e.menu.style.opacity = '0';
 }
 
 let layout_menu = "construction";
 function changeMenu(e){
     if(layout_menu == "construction") {
         layout_menu = "material_shop";
+        e.menu.style.opacity = '0';
+        e.menu.style.pointerEvents = 'none';
         changeMaterialShop(e);
         setTimeout(() => {
             e.lateral_arrow.style.left = '5vw';
@@ -2369,7 +2381,13 @@ function changeMenu(e){
          setTimeout(() => {
             e.lateral_arrow.style.left = '95vw';
             e.lateral_arrow.style.transform = 'scaleX(1)';
+            
         }, 1000);
+        setTimeout(() => {
+            e.menu.style.pointerEvents = 'all';
+            e.menu.style.opacity = '1';
+        }, 2500);
+        
     }
 }
 
@@ -3287,6 +3305,8 @@ function mobileAdaptation(e, state){
     });
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         document.querySelector(".mobile_movement").style.display = 'block';
+        e.container_dialogue.style.transform = 'translateY(-5vh)';
+        e.world.style.height = '80%';
     }
 }
 
