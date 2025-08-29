@@ -364,6 +364,15 @@
             height: 15vh;
         }
 
+        #choices {
+            width: 20vw;
+            height: 20vh;
+            position: fixed;
+            transform-origin: center center;
+            display: none;
+            z-index: 2;
+        }
+
         .arrow {
             position: absolute;
             width: 6vw;
@@ -540,6 +549,31 @@
             pointer-events: all;
         }
 
+        .arrow_choice {
+            width: 5vw;
+            height: 8vh;
+            position: absolute;
+        }
+
+        .text_choice {
+            text-align: left;
+            width: 25vw;
+            height: 5vh;
+            font-size: 4vh;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            position: absolute;
+            margin-left: 3vw; 
+            margin-top: 1.3vh;
+            color: black;
+        }
+
+        .box_choise1 {
+            position: absolute;
+            width: 30vw;
+        }
+
         @keyframes constructionLayoutAnimation {
             0% {
                 top: -80vh;
@@ -671,6 +705,16 @@
         <div id="dialogues">
             <img src="text-box.png" id="text_box_dialogues">
             <p id="dialogues_text">Prova-dialogo</p>
+        </div>
+        <div id="choices">
+            <div class="box_choise">
+                <img src="grey_arrow_choices.png" class="arrow_choice" id="arrow_choice1" style="left: -19vw; top: -17vh; opacity: 0; cursor: pointer; pointer-events: all;">
+                <h1 class="text_choice" id="choice1" style="left: -16vw; top: -16.5vh; cursor: pointer; pointer-events: all;">Testo scelta 1</h1>
+            </div>
+            <div class="box_choise">
+                <img src="grey_arrow_choices.png" class="arrow_choice" id="arrow_choice2" style="left: 16vw; top: -17vh; opacity: 0; cursor: pointer; pointer-events: all;">
+                <h1 class="text_choice" id="choice2" style="left: 19vw; top: -16.5vh; cursor: pointer; pointer-events: all;">Testo scelta 2</h1>
+            </div>
         </div>
         <img src="Preside.png" alt="" id="img_preside_dialogues">
 
@@ -923,6 +967,7 @@ function writeElements() {
     mission1: "document.getElementById('mission1')",
     mission2: "document.getElementById('mission2')",
     mission3: "document.getElementById('mission3')",
+    choices: "document.getElementById('choices')",
 
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
@@ -1124,7 +1169,7 @@ function setupDialogue(e, state, saved_e) {
   const lines = [
     ["Ciao! Sono Bob, della Bob & Company!", "bob", 2, 0, true],
     ["Questo posto è proprio enorme!", "bob", 2, 0, false],
-    ["Spero che sia valsa la pena comprarlo...", "preside", 1, 0, false],
+    [["Spero che sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare"], "preside", 1, 0, false],
     ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
     ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
     [true],
@@ -1143,7 +1188,7 @@ function setupDialogue(e, state, saved_e) {
     const lines_en = [
         "Hi! I'm Bob, from Bob & Company!",
         "This place is really huge!",
-        "I hope it was worth buying...",
+        ["I hope it was worth buying...", "I even had to give up my wallet to be able to buy it"],
         "Don't worry! When you're with us, you can count on the best hands in town!",
         "We're almost ready, come to the construction table whenever you want to start!",
         true,
@@ -1157,7 +1202,7 @@ function setupDialogue(e, state, saved_e) {
     const lines_fr = [
         "Salut ! Je suis Bob, de la Bob & Company !",
         "Cet endroit est vraiment immense !",
-        "J'espère que ça valait le coup de l'acheter...",
+        ["J'espère que ça valait la peine de l'acheter...", "J'ai même dû donner mon portefeuille pour pouvoir l'acheter"],
         "Ne t'inquiète pas ! Avec nous, tu peux compter sur les meilleures mains de la ville !",
         "Nous sommes presque prêts, viens à la table de construction quand tu veux commencer !",
         true,
@@ -1171,7 +1216,7 @@ function setupDialogue(e, state, saved_e) {
     const lines_es = [
         "¡Hola! ¡Soy Bob, de Bob & Company!",
         "¡Este lugar es realmente enorme!",
-        "Espero que haya valido la pena comprarlo...",
+        ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder comprarlo"],
         "¡No te preocupes! ¡Cuando estás con nosotros puedes contar con las mejores manos de la ciudad!",
         "Estamos casi listos, ¡ven a la mesa de construcción cuando quieras comenzar!",
         true,
@@ -1185,7 +1230,7 @@ function setupDialogue(e, state, saved_e) {
     const lines_pt = [
         "Olá! Sou o Bob, da Bob & Company!",
         "Este lugar é realmente enorme!",
-        "Espero que tenha valido a pena comprá-lo...",
+        ["Espero que tenha valido a pena comprá-lo...", "Tive até que dar a minha carteira para poder comprá-lo"],
         "Não se preocupe! Quando estiver conosco, pode contar com as melhores mãos da cidade!",
         "Estamos quase prontos, venha à mesa de construção quando quiser começar!",
         true,
@@ -1199,13 +1244,13 @@ function setupDialogue(e, state, saved_e) {
     const lines_de = [
         "Hallo! Ich bin Bob, von Bob & Company!",
         "Dieser Ort ist wirklich riesig!",
-        "Ich hoffe, es hat sich gelohnt, ihn zu kaufen...",
+        ["Ich hoffe, es hat sich gelohnt, es zu kaufen...", "Ich musste sogar meine Brieftasche hergeben, um es kaufen zu können"],
         "Keine Sorge! Wenn du mit uns bist, kannst du auf die besten Hände der Stadt zählen!",
         "Wir sind fast bereit, komm einfach zum Bautisch, wann immer du anfangen willst!",
         true,
         "Es scheint, als hätte ich nicht genug Materialien, um etwas zu bauen...",
         'Keine Sorge! Wie mein Vater immer sagte: "Baue, um dich zu erhalten, oder erhalte dich, um zu bauen!"',
-        "Wir stehen dir zur Verfügung, solange du willst – oder bis wir verwelken!",
+        "Wir stehen dir zur Verfügung, solange du willst oder bis wir verwelken!",
         true,
         "Ich könnte einige der Bücher verkaufen, die ich mitgebracht habe, aber ich weiß nicht, ob es das wert ist...",
         true,
@@ -1231,6 +1276,11 @@ function setupDialogue(e, state, saved_e) {
         case 'pt':
             for(i=0;i<lines.length;i++){
                 lines[i][0] = lines_pt[i];
+            }
+            break;
+        case 'de':
+            for(i=0;i<lines.length;i++){
+                lines[i][0] = lines_de[i];
             }
             break;
         default:
@@ -1350,7 +1400,8 @@ function setupDialogue(e, state, saved_e) {
       } 
       else e.anonymousCharacter.style.display = 'block';
       if(lines[state.index][4] == true) deactivateCinematicMode(e);
-      showText(lines[state.index][0]);
+      if(lines[state.index][0].length == 2) activateChoice();
+      else showText(lines[state.index][0]);
       changeName(lines[state.index][1]);
       changeBoxName(lines[state.index][2]);
       changeCharacters(lines[state.index][1]);
@@ -1358,6 +1409,127 @@ function setupDialogue(e, state, saved_e) {
     
     }
     state.index++;
+  }
+
+  function activateChoice(){
+    state.cond_dialogue = false;
+    e.text_dialogue.textContent = "";
+    e.choices.style.display = 'block';
+    const alternatives = lines[state.index][0];
+    const choice1 = document.getElementById('choice1');
+    const choice2 = document.getElementById('choice2');
+    const arrow_choice1 = document.getElementById('arrow_choice1');
+    const arrow_choice2 = document.getElementById('arrow_choice2');
+    let choice_for_key = 1;
+    let answerLines;
+    let answerLines_it = ["Facciamo valere ogni soldo che hai speso allora!"];
+    let answerLines_en = ["Let's make every penny you spent worth it then!"];
+    let answerLines_fr = ["Faisons en sorte que chaque euro dépensé en vaille la peine !"];
+    let answerLines_es = ["¡Hagamos que valga cada centavo que gastaste entonces!"];
+    let answerLines_pt = ["Vamos fazer cada centavo que você gastou valer a pena então!"];
+    let answerLines_de = ["Lass uns dafür sorgen, dass sich jeder ausgegebene Cent lohnt!"];
+
+    const langCode = state.language[0] + state.language[1];
+
+    switch (langCode){
+        case 'it':
+            answerLines = answerLines_it;
+            break;
+        case 'en':
+            answerLines = answerLines_en;
+            break;
+        case 'fr':
+            answerLines = answerLines_fr;
+            break;
+        case 'es':
+            answerLines = answerLines_es;
+            break;
+        case 'pt':
+            answerLines = answerLines_pt;
+            break;
+        case 'de':
+            answerLines = answerLines_de;
+            break;
+        default:
+            answerLines = answerLines_en;
+            break;
+    }
+
+    choice1.innerHTML = alternatives[0];
+    choice2.innerHTML = alternatives[1];
+    arrow_choice1.style.opacity = '1';
+    arrow_choice1.style.pointerEvents = 'all';
+    arrow_choice2.style.opacity = '0';
+    arrow_choice2.style.pointerEvents = 'none';
+
+    choice1.onmouseover = function(){
+        changeToChoice1();
+    }
+
+    choice2.onmouseover = function(){
+        changeToChoice2();
+    }
+
+    function changeToChoice1(){
+        choice_for_key = 1;
+        arrow_choice1.style.opacity = '1';
+        arrow_choice1.style.pointerEvents = 'all';
+        arrow_choice2.style.opacity = '0';
+        arrow_choice2.style.pointerEvents = 'none';
+    }
+
+    function changeToChoice2(){
+        choice_for_key = 2;
+        arrow_choice1.style.opacity = '0';
+        arrow_choice1.style.pointerEvents = 'none';
+        arrow_choice2.style.opacity = '1';
+        arrow_choice2.style.pointerEvents = 'all';
+    }
+
+    document.addEventListener("keydown", changeChoice);
+
+    document.addEventListener("keydown", (event) => chosedWithKey(event, choice_for_key));
+
+    function changeChoice(event) {
+        if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
+            changeToChoice1();
+        }
+        if (event.key === "d" || event.key === "D" || event.key === "ArrowRight") {
+            changeToChoice2();
+        }
+    }
+
+    choice1.addEventListener("mousedown", () => chosed(1));
+    choice1.addEventListener("touchstart", () => chosed(1));
+
+    choice2.addEventListener("mousedown", () => chosed(2));
+    choice2.addEventListener("touchstart", () => chosed(2));
+
+    function chosedWithKey(event, choice_for_key) {
+        if(event.key === "Enter") chosed(choice_for_key);
+    }
+
+
+    function chosed(num) {
+        switch (state.index) {
+            case 3:
+                if(num == 2) lines[state.index][0] = answerLines[0];
+                break;
+        }
+        e.choices.style.display = 'none';
+        setTimeout(() => {
+            state.cond_dialogue = true;
+            state.cond_skip = true;
+        }, 1);
+        document.removeEventListener("keydown", changeChoice);
+        document.removeEventListener("keydown", (event) => chosedWithKey(event, choice_for_key));
+        choice1.removeEventListener("mousedown", () => chosed(1));
+        choice1.removeEventListener("touchstart", () => chosed(1));
+        choice2.removeEventListener("mousedown", () => chosed(2));
+        choice2.removeEventListener("touchstart", () => chosed(2));
+        window.showNextLine();
+    }
+
   }
 
 
@@ -1376,12 +1548,6 @@ function setupDialogue(e, state, saved_e) {
 }
 
 function controlSkip(elements, state) {
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      if (state.cond_skip && state.cond_dialogue) state.cond_text = false;
-      else if (state.cond_dialogue) window.showNextLine();
-    }
-  });
 
   window.addEventListener('mousedown', e => {
     if (e.button === 0) {
@@ -1389,6 +1555,14 @@ function controlSkip(elements, state) {
       else if (state.cond_dialogue) window.showNextLine();
     }
   });
+  /*
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (state.cond_skip && state.cond_dialogue) state.cond_text = false;
+      else if (state.cond_dialogue) window.showNextLine();
+    }
+  });
+  */
 }
 
 function activateHud(e){
