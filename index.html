@@ -815,10 +815,10 @@
         gameScripts(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
-
-
-        // setupMenuToggle(elements);
-    }  
+        setInterval(() => {
+            if(state.cond_movement) saveMats_ImportantStates();
+        }, 2000);
+        }  
     }
 
     function reset(){
@@ -3205,7 +3205,6 @@ function ripristineTransition(character){
 
 function diaologueB_P1(e, state) {
     setTimeout(() => {
-        state.cond_movement = true;
         const t = document.getElementById('character6');
         const t_illustration = document.getElementById('illustration5');
         const bob_illustration = document.getElementById('illustration4');
@@ -3317,9 +3316,6 @@ function createOnClicks(e, state){
 
 window.onload = function(){
     document.getElementById('start_overlay').style.display = 'none';
-    setInterval(() => {
-        saveMats_ImportantStates();
-    }, 5000);
     startGame();
 } 
 </script>
