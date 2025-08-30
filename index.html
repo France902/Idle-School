@@ -81,7 +81,7 @@
             display: flex;
             top: 0vh;
             left: 15vw;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease-out, top 1s ease-out;
             z-index: 9999;
         }
@@ -92,7 +92,7 @@
             height: 8vh;
             left: 95vw;
             z-index: 9999;
-            display: none;
+            display: block;
             pointer-events: all;
         }
 
@@ -174,11 +174,21 @@
 
         #missions {
             position: fixed; 
-            left: 55vw; 
-            top: 20vh; 
-            width: 20vw;
+            left: 50vw; 
+            top: 30vh; 
+            width: 25vw;
             z-index: 3;
         }
+
+        #c_menu_main_text {
+            font-size: 7vh;
+            text-align: center;
+            position: absolute;
+            z-index: 9999;
+            font-family:'Courier New', Courier, monospace;
+            -webkit-text-stroke: 3px black;
+        }
+
         #img_preside_dialogues {
             position: fixed;
             z-index: -1;
@@ -451,7 +461,7 @@
             position: absolute;
             top: 14.5vh;
             right: 5vw;
-            width: 17vw;
+            width: 25vw;
             background-color: rgba(50, 50, 50, 0.6);
             opacity: 1;
             border-radius: 0.6vw;
@@ -482,16 +492,16 @@
         }
 
         .mission_1 h1, .mission_2 h1, .mission_3 h1 {
-            font-size: 1.7vw;
+            font-size: 2vw;
             margin: 0;
-            padding-left: 4vw;
+            padding-left: 5vw;
             word-break: break-word;
             white-space: normal;
         }
 
         .mission_1 img, .mission_2 img, .mission_3 img {
-            width: 3vw;
-            height: 5vh;
+            width: 3.7vw;
+            height: 5.5vh;
         }
 
         .mission_2, .mission_3 {
@@ -510,12 +520,12 @@
         }
 
         .hud_missions.closed {
-            max-height: 10vh;
+            max-height: 12vh;
             cursor: pointer;
         }
 
         .hud_missions.open {
-            max-height: 30vh;
+            max-height: 40vh;
             cursor: auto;
         }
         .school_imgs {
@@ -693,8 +703,6 @@
         <img src="ruota_camion2.png" class="structure_wheel_camion" id="wheel_camion1" style="margin-left: 35.5vw; margin-top: 86vh;">
         <img src="ruota_camion2.png" class="structure_wheel_camion" id="wheel_camion2" style="margin-left: 91.5vw; margin-top: 86vh;">
     </div>
-
-    
     
     <div id="preside_container">
         <img src="Preside.png" id="preside">
@@ -732,7 +740,7 @@
 
     
     
-    <div class="hud-container" id="hud" style="display: none;">
+    <div class="hud-container" id="hud" style="display: block;">
         <img src="zoom_avanti.png" id="zoom" style="width: 7.5vw; height: 5vw; transform: translate(-91vw); cursor: pointer; pointer-events: auto;">
         <img src="zoom_reimposta.png" id="standard" style="width: 7.5vw; height: 5vw; transform: translate(-91vw, -2vh); cursor: pointer; pointer-events: auto;" >
         <img src="zoom_indietro.png" id="dezoom" style="width: 7.5vw; height: 5vw; transform: translate(-91vw, -4vh); cursor: pointer; pointer-events: auto;" >
@@ -740,17 +748,18 @@
             <div id="missions" class="hud_missions closed">
             <div class="mission_1" id="mission1">
                 <img src="missioni_main_costruzioni.png">
-                <h1>Construction 1</h1>
+                <h1 id="first_c_m">Construction 1</h1>
             </div>
             <div class="mission_2" id="mission2">
                 <img src="missioni_secondarie_costruzioni.png">
-                <h1>Next Construction</h1>
+                <h1 id="second_c_m">Next Construction</h1>
             </div>
             <div class="mission_3" id="mission3">
                 <img src="missioni_secondarie_costruzioni.png">
-                <h1>Next Construction</h1>
+                <h1 id="third_c_m">Next Construction</h1>
             </div>
             </div>
+            <h1 id="c_menu_main_text" style="margin-left: 35vw; margin-top: -40vh;">BUILD</h1>
             <img id="lateral_arrow" src="lateral_arrow.png" >
             <img id="menu1" src="menù_costruzione.png">
             
@@ -851,6 +860,7 @@ function initialiseMatTert(){
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
         [ '113vw', '51vh', "walk-casually", -1, false, 'operaio'],
+        
         ];
         return matTert;
     } else{
@@ -970,6 +980,10 @@ function writeElements() {
     mission1: "document.getElementById('mission1')",
     mission2: "document.getElementById('mission2')",
     mission3: "document.getElementById('mission3')",
+    first_c_m: "document.getElementById('first_c_m')",
+    second_c_m: "document.getElementById('second_c_m')",
+    third_c_m: "document.getElementById('third_c_m')",
+    c_menu_main_text: "document.getElementById('c_menu_main_text')",
     choices: "document.getElementById('choices')",
 
     // Giocatore e interazioni
@@ -2338,12 +2352,16 @@ function openConstructionMenu(e, state){
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
         e.construction_menu.style.opacity = '1';
         e.menu.style.opacity = '0';
+        e.c_menu_main_text.style.opacity = '0';
          setTimeout(() => {
-            e.menu.style.transition = 'opacity 0.3s linear';
+            e.menu.style.transition = 'opacity 0.1s linear';
+            e.c_menu_main_text.style.transition = 'opacity 0.1s linear';
             e.menu.style.pointerEvents = 'all';
             e.menu.style.opacity = '1';
+            e.c_menu_main_text.style.opacity = '1';
         }, 1000);
         e.lateral_arrow.style.display = 'block';
+        if(cont_menu == 0) assignLanguage(e, state);
         document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
                 state.cond_deactivate_movement = false;
@@ -2365,35 +2383,68 @@ function openConstructionMenu(e, state){
         });
 }
 
-function closeConstructionMenu(e, state){
+function closeConstructionMenu(e, state) {
     e.construction_menu.style.opacity = '0';
     e.menu.style.pointerEvents = 'none';
     e.menu.style.opacity = '0';
+    e.c_menu_main_text.style.opacity = '0';
+}
+
+function assignLanguage(e, state) {
+    let lines_italian = {
+        c_menu_main_text: ["COSTRUISCI", "COMPRA"], 
+        first_c_m: "Prima costruzione",
+        second_c_m: "Seconda costruzione",
+        third_c_m: "Terza costruzione",
+    }
+    const langCode = state.language[0] + state.language[1];
+    switch (langCode) {
+        case "it":
+            SubstituteLanguage(lines_italian);
+            break;
+        default:
+            return;
+    }
+
+    function SubstituteLanguage(lines_c_menu){
+        e.c_menu_main_text.textContent = lines_c_menu.c_menu_main_text[0];
+        e.first_c_m.textContent = lines_c_menu.first_c_m;
+        e.second_c_m.textContent = lines_c_menu.second_c_m;
+        e.third_c_m.textContent = lines_c_menu.third_c_m;
+        state.lines_c_menu = lines_c_menu;
+    }
 }
 
 let layout_menu = "construction";
-function changeMenu(e){
+function changeMenu(e, state){
     if(layout_menu == "construction") {
         layout_menu = "material_shop";
         e.menu.style.opacity = '0';
         e.menu.style.pointerEvents = 'none';
+        e.c_menu_main_text.style.opacity = '0';
         changeMaterialShop(e);
         setTimeout(() => {
             e.lateral_arrow.style.left = '5vw';
             e.lateral_arrow.style.transform = 'scaleX(-1)';
         }, 1000);
+        setTimeout(() => {
+            e.c_menu_main_text.style.opacity = '1';
+            e.c_menu_main_text.textContent = state.lines_c_menu.c_menu_main_text[1];
+        }, 2500);
     }
     else if(layout_menu == "material_shop"){
         layout_menu = "construction";
+        e.c_menu_main_text.style.opacity = '0';
         changeConstructionMenu(e);
          setTimeout(() => {
             e.lateral_arrow.style.left = '95vw';
             e.lateral_arrow.style.transform = 'scaleX(1)';
-            
         }, 1000);
         setTimeout(() => {
             e.menu.style.pointerEvents = 'all';
             e.menu.style.opacity = '1';
+            e.c_menu_main_text.style.opacity = '1';
+            e.c_menu_main_text.textContent = state.lines_c_menu.c_menu_main_text[1];
         }, 2500);
         
     }
@@ -3334,7 +3385,7 @@ function mobileAdaptation(e, state){
 
 function createOnClicks(e, state){
     e.lateral_arrow.onclick = function() {
-        changeMenu(e);
+        changeMenu(e, state);
     }
     e.zoom.onclick = function() {
         scale(true, e);
