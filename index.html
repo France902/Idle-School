@@ -1362,7 +1362,7 @@ function setupDialogue(e, state, saved_e) {
                 resetMoveWorld(e, -3, 5);
                 setTimeout(() => {
                     matTert[5][2] = '';
-                    passiveAnimationBob(document.getElementById('character5'), 5 );
+                    passiveAnimationBob(document.getElementById('character.5'), 5 );
                 }, 2000);
                 activateHud(e);
                 setUpPresideMovement(e, state);
@@ -1405,7 +1405,7 @@ function setupDialogue(e, state, saved_e) {
                     [300, 400, 300, 300, 300],
                     [[false], [false], [false], [false], [true]],
                 ];
-                moveCharacter(document.getElementById("character"+(matTert.length -1)), 5, jumps);
+                moveCharacter(document.getElementById("character."+(matTert.length -1)), 5, jumps);
                 break;
         }
         
@@ -2485,7 +2485,7 @@ function interaction(index, e, state){
         case 0:
             matTert[4][4] = true;
             e.preside.style.transform = 'scaleX(1)';
-            const character = document.getElementById('character4');
+            const character = document.getElementById('character.4');
             character.style.transform = 'scaleX(1)';
             document.getElementById('key_e' + index).style.display = 'none';        
             jolt(character, e, state);
@@ -2525,7 +2525,7 @@ function createCharacter(e, state, i) {
     const character_container = document.createElement('div');
     character_container.style.left = matTert[i][0];
     character_container.style.top = matTert[i][1];
-    character_container.id = 'character' + i;
+    character_container.id = 'character.' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
     character_container.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -2549,7 +2549,7 @@ function createCharacter(e, state, i) {
 
     const character_img = document.createElement('img');
     character_img.style.width = '6vw';
-    character_img.id = 'characterImg' + i;
+    character_img.id = 'characterImg.' + i;
     character_img.style.height = '18vh';
 
     if(localStorage.getItem("saved") == null) {
@@ -2559,7 +2559,7 @@ function createCharacter(e, state, i) {
 
     character_container.appendChild(character_img);
     e.world.appendChild(character_container);
-    e.world.appendChild(document.getElementById("character"+i))
+    e.world.appendChild(document.getElementById("character."+i))
     switch (matTert[i][2]){
         case 'group':
             passiveAnimationGroup(character_container, i, e, state);
@@ -2594,7 +2594,7 @@ function createCharacter(e, state, i) {
 
 function assignIndex(e, state, i){
     let Y = parseFloat(matTert[i][1]);
-    document.getElementById('character'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+    document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
 }
 
 function animateIllustration(illustration, i){
@@ -2624,7 +2624,7 @@ function createIllustration(sr, posX, posY, e){
         illustration.style.left = `${posX}vw`;
         illustration.style.top = `${posY}vh`;
         illustration.className = 'school_imgs';
-        illustration.id = 'illustration'+i_illustration;
+        illustration.id = 'illustration.'+i_illustration;
         i_illustration++;
         e.world.appendChild(illustration);
         return illustration;
@@ -2916,7 +2916,7 @@ function moveCharacter(character, total_jumps, jumps){
     async function jump(character) {
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         for(let i=-1;i<total_jumps;i++){
-            if(i==-1) await sleep(1000);
+            if(i==-1 && character.id == "character.5") await sleep(1000);
             else {
                 if (typeof window[jumps[0][i]] === 'function') {
                     await window[jumps[0][i]](character, jumps[2][i][0]);
@@ -2963,7 +2963,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         move(character, order, stepX, stepY);
     }
     else{
-        move(character, order, stepx, stepy, x);
+        move(character, order, stepx, stepy, x, state);
     }
     async function move(character, order, stepX, stepY, cond = true){
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
@@ -3086,7 +3086,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
             }
         }
 }
-    if(!cond || character.id == 'character5'){
+    if(!cond || character.id == 'character.5'){
         return;
     }
     else{
@@ -3170,17 +3170,13 @@ async function rightJumpP(character) {
 async function rightJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-    let posId = character.id[character.id.length - 1];
-    const characterImg = document.getElementById("characterImg"+posId);
+    let posId = character.id.split(".")[1];
+    const characterImg = document.getElementById("characterImg."+posId);
     let source = characterImg.src.split("/").pop();
-    let src_character = "";
-    for(let i=0;i<source.length;i++){
-        if(source[i] == "_") return;
-        src_character += source[i];
-    }
+    let src_character = source.split("_")[0];
     src_character = src_character.split('.')[0];
     src_character += ".png";
-    document.getElementById("characterImg"+posId).src = src_character;
+    document.getElementById("characterImg."+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3336,10 +3332,10 @@ function ripristineTransition(character){
 
 function diaologueB_P1(e, state) {
     setTimeout(() => {
-        const b = document.getElementById('character5');
-        const t = document.getElementById('character6');
-        const t_illustration = document.getElementById('illustration5');
-        const bob_illustration = document.getElementById('illustration4');
+        const b = document.getElementById('character.5');
+        const t = document.getElementById('character.6');
+        const t_illustration = document.getElementById('illustration.5');
+        const bob_illustration = document.getElementById('illustration.4');
         const jumps = [
                     ["leftJump","leftJump","leftJump"],
                     [300, 400, 0],
