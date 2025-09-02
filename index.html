@@ -30,7 +30,6 @@
             top: 0;
             left: 0;
             transform-origin: center;
-            transform: scaleY(0.7);
         }
 
         h1 {
@@ -822,6 +821,7 @@
         
     </div>
 <script defer>
+    localStorage.clear();
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -3563,5 +3563,4 @@ window.onload = function(){
     startGame();
 } 
 </script>
-
 
