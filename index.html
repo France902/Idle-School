@@ -873,7 +873,7 @@ function initialiseMatTert(){
 function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
         const seatForObjects = [
-            [ '165vw', '3vh', '164vw', '-27vh', 'table_construction']
+            [ '165vw', '2vh', '166vw', '-24vh', 'table_construction']
         ];
         return seatForObjects;
     } else{
@@ -937,7 +937,6 @@ function gameScripts(e, state) {
     if(state.index >= 5){
         e.world.style.transform = 'scale(0.07)';
         e.world.style.transition = 'margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear';
-        setUpPresideMovement(e, state)
         waitForImagesToLoad(document.getElementById("world"), () => {
         setTimeout(() => scaleWorld(e), 1000);
         });
@@ -1682,15 +1681,6 @@ function setUpPresideMovement(e, state) {
     if(state.cond_movement){
         window.addEventListener('keydown', handleKeydown);
         window.addEventListener('keyup', handleKeyup);
-
-        intervalMovement = setInterval(() => {
-            if (isCharging) return;
-            currentDir = getDirection();
-            if (currentDir.x !== 0 || currentDir.y !== 0) {
-                isCharging = true;
-                jumpStartTime = performance.now();
-            }
-        }, 16);
     } else {
         window.removeEventListener('keyup', handleKeyup);
         window.removeEventListener('keydown', handleKeydown);
@@ -1862,7 +1852,6 @@ if(!state.cond_deactivate_movement){
             if(!isCharging && !event.repeat){
                 isCharging = true;
                 jumpStartTime = performance.now();
-                
             }
         }
     }
@@ -2245,21 +2234,21 @@ window.addEventListener('keyup', handleKeyup);
   function control_position(state, e) {
     state.posX = Math.round(state.posX);
     state.posY = Math.round(state.posY);
-    if((state.posX >= 44 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)){
+    if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)){
         document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-                if(matTert[4][4] == false) interaction(0, e, state);
+               if((state.posX >= 44 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(matTert[4][4] == false) interaction(0, e, state);
             }
         });
     }
     else{
         document.getElementById('key_e'+0).style.opacity = '0';
-        if((state.posX >= 107 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -51)){
+        if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)){
             document.getElementById('key_e'+1).style.opacity = '1';
             window.addEventListener('keydown', function(event) {
                 if (event.key === 'e' || event.key === 'E') {
-                    interaction(1, e, state);
+                    if((state.posX >= 107 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -51)) interaction(1, e, state);
                 }
             });
         } else{
@@ -2515,7 +2504,6 @@ function interaction(index, e, state){
     switch(index){
         case 0:
             matTert[4][4] = true;
-            e.preside.style.transform = 'scaleX(1)';
             const character = document.getElementById('character.4');
             character.style.transform = 'scaleX(1)';
             document.getElementById('key_e' + index).style.display = 'none';        
@@ -2524,6 +2512,7 @@ function interaction(index, e, state){
         case 1:
             state.cond_table = true;
             openConstructionMenu(e, state);
+            break;
     }
 }
 
@@ -2641,6 +2630,7 @@ function animateIllustration(illustration, i){
             }
             else{
                 clearInterval(interval);
+                return;
             }
         }, 5000);
 }
@@ -2678,9 +2668,11 @@ let interval = [];
                 }
                 break;
             case 6: 
-                if(state.condBP1 == true){
-                    return
+            setTimeout(() => {
+                if(state.condBP1 == false){
+                    return;
                 }
+            }, 4900);
                 break;
         }
         const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -2706,14 +2698,8 @@ let interval = [];
 
     function passiveIllustrationGroup(posX, posY, i, e, state){
         if(posX == 0){
-            if(matTert[i][5] == 'bob.png'){
                 posX = parseFloat(matTert[i][0]) + 2;
                 posY = parseFloat(matTert[i][1]) - 10;
-            }
-            else{
-                posX = parseFloat(matTert[i][0]) + 2;
-                posY = parseFloat(matTert[i][1]) - 10;
-            }
         }
         const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
         moveIllustrationGroup(illustration, i, state);
@@ -2752,6 +2738,13 @@ let interval = [];
         }
         illustration.style.opacity = '1';
         await sleep(3000);
+        switch (i){
+            case 5:
+                if(state.condBP1 == true){
+                    return
+                }
+                break;
+        }
         illustration.style.opacity = '0';
         await moveIllustrationGroup(illustration, i, state);
     }
@@ -2898,10 +2891,11 @@ function animationCamionCutscene(e, state){
     setTimeout(() => {
         e.camionBob.style.top = '200vh';
         e.camionBob.style.animation = '';
+        document.getElementById('wheel_camion1').style.animation = '';
+        document.getElementById('wheel_camion2').style.animation = '';
     }, 5000);
     setTimeout(() => {
-            document.getElementById('wheel_camion1').style.animation = '';
-            document.getElementById('wheel_camion2').style.animation = '';
+
             document.getElementById('start_overlay').style.display = 'block';
             document.getElementById('start_overlay').style.opacity = '0';
             document.getElementById('start_overlay').style.transition = 'opacity 0.8s ease-out';
@@ -2931,14 +2925,14 @@ async function jolt(character, e, state) {
     };
 
     await step('true', 0, 0)
-    await step(-3, 2, 0);
-    await step(-2, 2, 90);
-    await step(-2, 2, 90);
-    await step(-1.5, 2, 90);
-    await step(1.5, 2, 90);
-    await step(2, 2, 90);
-    await step(2, 2, 90);
-    await step(3, 1, 90);
+    await step(-3, 1, 0);
+    await step(-2, 1.5, 90);
+    await step(-2, 1.5, 90);
+    await step(-1.5, 1.5, 90);
+    await step(1.5, 1, 60);
+    await step(2, 1, 60);
+    await step(2, 1, 60);
+    await step(2, 0.75, 60);
     await sleep(1500);
     await returnToObject(character, seatForObjects[0][2], seatForObjects[0][3], true, state, e);
 }
