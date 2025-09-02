@@ -387,6 +387,22 @@
             z-index: 2;
         }
 
+        #decoration_container {
+            width: 7vw;
+            height: 7vh;
+            position: fixed;
+            transform-origin: center center;
+            display: block;
+            z-index: 1;
+            transition: left 0.25s linear, top 0.25s linear;
+        }
+
+        .decoration {
+            width: 7vw;
+            height: 7vh;
+            position: absolute;
+        }
+
         .arrow {
             position: absolute;
             width: 6vw;
@@ -687,6 +703,7 @@
 
 
     </div>
+
         
 
     <div id="platform_container">
@@ -805,6 +822,7 @@
         
     </div>
 <script defer>
+    localStorage.clear();
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -820,6 +838,7 @@
         moveImportantObjectsStart(elements);
         moveWorldStart(elements, importantStates);
         creationTertiaryCharacters(elements, state, e);
+        createMapDecorations(elements, state, e);
         saveStatesElements(e, state);
         createInteractableKeys(elements, state);
         setupDialogue(elements, state, e);
@@ -846,6 +865,8 @@ const seatForObjects = initialiseseatForObjects();
 
 const importantStates = initialiseimportantStates();
 
+const posWildNature = initialiseWildNature();
+
 const N = 10;
 
 function initialiseMatTert(){
@@ -861,7 +882,6 @@ function initialiseMatTert(){
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
         [ '113vw', '51vh', "walk-casually", -1, false, 'operaio'],
-        
         ];
         return matTert;
     } else{
@@ -894,6 +914,43 @@ function initialiseimportantStates(){
     
 }
 
+function initialiseWildNature(){
+    if(localStorage.getItem("saved") == null) {
+        let WildNature = [
+            [null, null, "fiore1"],
+            [null, null, "fiore2"],
+            [null, null, "erba1"],
+            [null, null, "erba2"],
+            [null, null, "fiore1"],
+            [null, null, "erba1"],
+            [null, null, "erba2"],
+            [null, null, "erba1"],
+            [null, null, "erba2"],
+            [null, null, "fiore2"],
+        ];
+        WildNature = setPositionWildNature(WildNature);
+        return WildNature;
+    }
+    else return JSON.parse(localStorage.getItem("posWildNature"));
+}
+
+function setPositionWildNature(mat_nature){
+    let cond_while;
+    for(let i=0;i<mat_nature.length;i++) {
+        cond_while = false;
+        while(cond_while == false) {
+            cond_while = true;
+            mat_nature[i][0] = (Math.floor(Math.random() * 101)) + "vw";
+            mat_nature[i][1] = (Math.floor(Math.random() * 101)) + "vh";
+            for(let j=i-1;j>0;j--){
+                if(Math.abs(parseFloat(mat_nature[i][0]) - parseFloat(mat_nature[j][0])) <= 8) cond_while = false;
+                if(Math.abs(parseFloat(mat_nature[i][1]) - parseFloat(mat_nature[j][1])) <= 8) cond_while = false;
+            }
+        }
+    }
+    return mat_nature;
+}
+
 function initialiseImportantObjects(){
     if(localStorage.getItem("saved") == null){
         const importantObjects = [
@@ -912,6 +969,7 @@ function saveMats_ImportantStates(){
     localStorage.setItem("seatForObjects", JSON.stringify(seatForObjects));
     localStorage.setItem("importantStates", JSON.stringify(importantStates));
     localStorage.setItem("importantObjects", JSON.stringify(importantObjects));
+    localStorage.setItem("posWildNature", JSON.stringify(posWildNature));
 }
 
 saveMats_ImportantStates();
@@ -952,6 +1010,7 @@ function gameScripts(e, state) {
         });
         centralizationPreside(e, state);
         diaologueB_P1(e, state);
+        
     }
     
 }
@@ -2525,7 +2584,7 @@ function creationTertiaryCharacters(e, state, saved_e) {
     
     for(i=0;i<N;i++){
         createCharacter(e, state, i);
-        assignIndex(e, state, i);
+        assignZIndex(e, state, i);
     }
     saveStatesElements(saved_e, state);
     saveMats_ImportantStates();
@@ -2539,6 +2598,28 @@ function createNewCharacter(posX, posY, animation, rotation, no_illustration, sr
     }
     createCharacter(e, state, i);
 }
+
+function createMapDecorations(e, state, saved_e) {
+    for(let i=0;i<posWildNature.length;i++){
+        createDecoration(e, state, i);
+    }
+    saveStatesElements(saved_e, state);
+    saveMats_ImportantStates();
+}
+
+function createDecoration(e, state, i) {
+    const decoration_container = document.createElement('div');
+    decoration_container.style.left = posWildNature[i][0];
+    decoration_container.style.top = posWildNature[i][1];
+    decoration_container.id = 'decoration_container';
+    decoration_container.className = 'school_imgs';
+    const decoration_img = document.createElement('img');
+    decoration_img.className = 'decoration';
+    decoration_img.src = posWildNature[i][2] + '.png';
+    decoration_container.appendChild(decoration_img);
+    e.world.appendChild(decoration_container);
+}
+
 function createCharacter(e, state, i) {
     let source;
     let src_added = '';
@@ -2612,7 +2693,7 @@ function createCharacter(e, state, i) {
     }
 }
 
-function assignIndex(e, state, i){
+function assignZIndex(e, state, i){
     let Y = parseFloat(matTert[i][1]);
     document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
 }
