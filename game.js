@@ -1,4 +1,3 @@
-localStorage.clear();
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -20,6 +19,7 @@ localStorage.clear();
         setupDialogue(elements, state, e);
         controlSkip(elements, state);
         gameScripts(elements, state);
+        backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
         setInterval(() => {
@@ -93,16 +93,54 @@ function initialiseimportantStates(){
 function initialiseWildNature(){
     if(localStorage.getItem("saved") == null) {
         let WildNature = [
-            [null, null, "fiore1"],
-            [null, null, "fiore2"],
-            [null, null, "erba1"],
-            [null, null, "erba2"],
-            [null, null, "fiore1"],
-            [null, null, "erba1"],
-            [null, null, "erba2"],
-            [null, null, "erba1"],
-            [null, null, "erba2"],
-            [null, null, "fiore2"],
+            //Centro
+            [null, null, "fiore1", 101, 0, 0],
+            [null, null, "fiore2", 101, 0, 0],
+            [null, null, "erba1", 101, 0, 0],
+            [null, null, "erba2", 101, 0, 0],
+            [null, null, "fiore1", 101, 0, 0],
+            [null, null, "erba1", 101, 0, 0],
+            [null, null, "erba2", 101, 0, 0],
+            //Destra1
+            [null, null, "fiore1", 101, 110, 0],
+            [null, null, "fiore2", 101, 110, 0],
+            [null, null, "erba1", 101, 110, 0],
+            [null, null, "erba2", 101, 110, 0],
+            [null, null, "fiore1", 101, 110, 0],
+            [null, null, "erba1", 101, 110, 0],
+            [null, null, "erba2", 101, 110, 0],
+            //Sinistra1
+            [null, null, "fiore1", 101, -110, -50],
+            [null, null, "fiore2", 101, -110, -50],
+            [null, null, "erba1", 101, -110, -50],
+            [null, null, "erba2", 101, -110, -50],
+            [null, null, "fiore1", 101, -110, -50],
+            [null, null, "erba1", 101, -110, -50],
+            [null, null, "erba2", 101, -110, -50],
+            //Centro-alto1
+            [null, null, "fiore1", 101, 0, -110],
+            [null, null, "fiore2", 101, 0, -110],
+            [null, null, "erba1", 101, 0, -110],
+            [null, null, "erba2", 101, 0, -110],
+            [null, null, "fiore1", 101, 0, -110],
+            [null, null, "erba1", 101, 0, -110],
+            [null, null, "erba2", 101, 0, -110],
+            //Destra-alto1
+            [null, null, "fiore1", 101, 110, -110],
+            [null, null, "fiore2", 101, 110, -110],
+            [null, null, "erba1", 101, 110, -110],
+            [null, null, "erba2", 101, 110, -110],
+            [null, null, "fiore1", 101, 110, -110],
+            [null, null, "erba1", 101, 110, -110],
+            [null, null, "erba2", 101, 110, -110],
+            //Sinistra-alto1
+            [null, null, "fiore1", 101, -110, -140],
+            [null, null, "fiore2", 101, -110, -140],
+            [null, null, "erba1", 101, -110, -140],
+            [null, null, "erba2", 101, -110, -140],
+            [null, null, "fiore1", 101, -110, -140],
+            [null, null, "erba1", 101, -110, -140],
+            [null, null, "erba2", 101, -110, -140],
         ];
         WildNature = setPositionWildNature(WildNature);
         return WildNature;
@@ -116,11 +154,11 @@ function setPositionWildNature(mat_nature){
         cond_while = false;
         while(cond_while == false) {
             cond_while = true;
-            mat_nature[i][0] = (Math.floor(Math.random() * 101)) + "vw";
-            mat_nature[i][1] = (Math.floor(Math.random() * 101)) + "vh";
+            mat_nature[i][0] = (Math.floor(Math.random() * mat_nature[i][3]) + mat_nature[i][4]) + "vw";
+            mat_nature[i][1] = (Math.floor(Math.random() * mat_nature[i][3]) + mat_nature[i][5]) + "vh";
             for(let j=i-1;j>0;j--){
-                if(Math.abs(parseFloat(mat_nature[i][0]) - parseFloat(mat_nature[j][0])) <= 8) cond_while = false;
-                if(Math.abs(parseFloat(mat_nature[i][1]) - parseFloat(mat_nature[j][1])) <= 8) cond_while = false;
+                if(Math.abs(parseFloat(mat_nature[i][0]) - parseFloat(mat_nature[j][0])) <= 3) cond_while = false;
+                if(Math.abs(parseFloat(mat_nature[i][1]) - parseFloat(mat_nature[j][1])) <= 3) cond_while = false;
             }
         }
     }
@@ -2709,6 +2747,20 @@ function mobileAdaptation(e, state){
 
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("orientationchange", checkOrientation);
+}
+
+function backgroundAdaption(e, state) {
+    document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    //pauseGame(e, state);
+    document.getElementById('start_overlay').style.display = 'block';
+  } else {
+    setTimeout(() => {
+        document.getElementById('start_overlay').style.display = 'none';
+    }, 500);
+  }
+});
+
 }
 
 function createOnClicks(e, state){
