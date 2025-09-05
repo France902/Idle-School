@@ -1,3 +1,4 @@
+    localStorage.clear();
     function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -110,13 +111,13 @@ function initialiseWildNature(){
             [null, null, "erba1", 101, 110, 0],
             [null, null, "erba2", 101, 110, 0],
             //Sinistra1
-            [null, null, "fiore1", 101, -110, -50],
-            [null, null, "fiore2", 101, -110, -50],
-            [null, null, "erba1", 101, -110, -50],
-            [null, null, "erba2", 101, -110, -50],
-            [null, null, "fiore1", 101, -110, -50],
-            [null, null, "erba1", 101, -110, -50],
-            [null, null, "erba2", 101, -110, -50],
+            [null, null, "fiore1", 101, -110, -35],
+            [null, null, "fiore2", 101, -110, -35],
+            [null, null, "erba1", 101, -110, -35],
+            [null, null, "erba2", 101, -110, -35],
+            [null, null, "fiore1", 101, -110, -35],
+            [null, null, "erba1", 101, -110, -35],
+            [null, null, "erba2", 101, -110, -35],
             //Centro-alto1
             [null, null, "fiore1", 101, 0, -110],
             [null, null, "fiore2", 101, 0, -110],
@@ -157,8 +158,8 @@ function setPositionWildNature(mat_nature){
             mat_nature[i][0] = (Math.floor(Math.random() * mat_nature[i][3]) + mat_nature[i][4]) + "vw";
             mat_nature[i][1] = (Math.floor(Math.random() * mat_nature[i][3]) + mat_nature[i][5]) + "vh";
             for(let j=i-1;j>0;j--){
-                if(Math.abs(parseFloat(mat_nature[i][0]) - parseFloat(mat_nature[j][0])) <= 3) cond_while = false;
-                if(Math.abs(parseFloat(mat_nature[i][1]) - parseFloat(mat_nature[j][1])) <= 3) cond_while = false;
+                if(Math.abs(parseFloat(mat_nature[i][0]) - parseFloat(mat_nature[j][0])) <= 2) cond_while = false;
+                if(Math.abs(parseFloat(mat_nature[i][1]) - parseFloat(mat_nature[j][1])) <= 2) cond_while = false;
             }
         }
     }
@@ -258,6 +259,9 @@ function writeElements() {
     third_c_m: "document.getElementById('third_c_m')",
     c_menu_main_text: "document.getElementById('c_menu_main_text')",
     choices: "document.getElementById('choices')",
+    display_choice: "document.querySelector('.display_choice')",
+    display_img_choice1: "document.getElementById('display_img_choice1')",
+    display_img_choice2: "document.getElementById('display_img_choice2')",
 
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
@@ -296,6 +300,7 @@ function writeElements() {
     leftBottom_arrow: "document.getElementById('leftBottom_arrow')",
   };
 }
+
 
 
 function initialiseElements(e) {
@@ -700,8 +705,8 @@ function setupDialogue(e, state, saved_e) {
                 e.container_dialogue.style.opacity = 0;
                 state.cond_movement = true;
                 state.cond_dialogue = false;
-                setUpPresideMovement(e, state);
-                saveStatesElements(saved_e, state);
+                choose_in_display(e, state);
+                moveWorld(e, 10, -90)
                 break;
         }
         
@@ -1511,7 +1516,7 @@ window.addEventListener('keyup', handleKeyup);
         document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-               if((state.posX >= 44 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(matTert[4][4] == false) interaction(0, e, state);
+               if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(matTert[4][4] == false) interaction(0, e, state);
             }
         });
     }
@@ -1521,7 +1526,7 @@ window.addEventListener('keyup', handleKeyup);
             document.getElementById('key_e'+1).style.opacity = '1';
             window.addEventListener('keydown', function(event) {
                 if (event.key === 'e' || event.key === 'E') {
-                    if((state.posX >= 107 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -51)) interaction(1, e, state);
+                    if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)) interaction(1, e, state);
                 }
             });
         } else{
@@ -1773,6 +1778,41 @@ function setupMenuToggle(e) {
     e.menu.classList.toggle('closed');
   });
 }
+
+function choose_in_display(e, state){
+    e.display_choice.style.opacity = '1';
+    e.display_img_choice1.style.pointerEvents = 'all';
+    e.display_img_choice2.style.pointerEvents = 'all';
+    e.display_img_choice1.onclick = function(){
+        startFirstCycle(e, state, 1);
+    }
+    e.display_img_choice2.onclick = function(){
+        startFirstCycle(e, state, 2);
+    }
+}
+
+function startFirstCycle(e, state, chosed = null){
+    if(chosed == null) return;
+    else {
+        e.display_choice.style.opacity = '0';
+        e.display_img_choice1.style.pointerEvents = 'none';
+        e.display_img_choice2.style.pointerEvents = 'none';
+        if(chosed == 1){
+            bookCycle(e, state);
+        }
+        else fundraisingCycle(e, state);
+    }
+}
+
+function bookCycle(e, state){
+    console.log("Scelto 1");
+}
+
+function fundraisingCycle(e, state){
+    console.log("Scelto2");
+}
+
+
 function interaction(index, e, state){
     switch(index){
         case 0:
@@ -2188,7 +2228,7 @@ function animationCamionCutscene(e, state){
         e.camionBob.style.animation = '';
         document.getElementById('wheel_camion1').style.animation = '';
         document.getElementById('wheel_camion2').style.animation = '';
-    }, 5000);
+    }, 5500);
     setTimeout(() => {
 
             document.getElementById('start_overlay').style.display = 'block';
