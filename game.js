@@ -661,6 +661,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_dialogue = false;
                 scale('wide', e);
                 moveWorld(e, 40, -100, -50, 0, 4);
+                activateCinematicMode(e);
                 animationCamionCutscene(e, state);
                 setTimeout(() => {
                     state.index++;
@@ -669,6 +670,7 @@ function setupDialogue(e, state, saved_e) {
                     e.container_dialogue.style.opacity = 1;
                     state.cond_dialogue = true;
                     state.cond_other_character = false;
+                    deactivateCinematicMode(e);
                     showNextLine();
                 }, 6700);
                 break;
