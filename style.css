@@ -326,7 +326,8 @@
         #start_overlay {
             transform: center center;
             width: 100vw;
-            height: 100vh;
+            height: 101vh;
+            top: -1vh;
             background-color: black;
             position: fixed;
             z-index: 9999;
@@ -594,6 +595,48 @@
             width: 30vw;
         }
 
+        .display_choice {
+            position: fixed;
+            width: 50vw;
+            height: 40vh;
+            display: block;
+            left: 0;
+            top: 10vh;
+            object-fit: cover;
+            transform-origin: center;
+        }
+
+        .container_img_choice {
+            position: absolute;
+            width: 25vw;
+            height: 35vh;
+            background-color: aqua;
+            margin-left: 22vw;
+            margin-top: 27vh;
+        }
+        .img_choice {
+            background-color: brown; 
+            width: 25vw; 
+            height: 25vh;
+        }
+
+        .text_display_choice {
+            position: absolute;
+            font-size: 5vh;
+            margin-left: 24.5vw;
+            margin-top: 54vh;
+            width: 20vw;
+            text-align: center;
+        }
+
+        .title_display_choice {
+            position: absolute;
+            font-size: 7vh;
+            width: 40vw;
+            text-align: center;
+            margin-left: 30vw;
+            margin-top: 10vh;
+        }
 
         @keyframes constructionLayoutAnimation {
             0% {
