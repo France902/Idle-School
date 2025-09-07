@@ -121,6 +121,7 @@
             border-radius: 1vw;
             object-fit: cover;
             backface-visibility: hidden;
+            z-index: 10;
         }
 
         #platform_container {
@@ -210,7 +211,7 @@
         #dialogues_container {
             position: fixed;
             top: 0;
-            left: 0vw;
+            left: -1vw;
             width: 100vw;
             height: 97vh;
             display: flex;
@@ -379,16 +380,6 @@
             z-index: 2;
         }
 
-        #decoration_container {
-            width: 7vw;
-            height: 7vh;
-            position: fixed;
-            transform-origin: center center;
-            display: block;
-            z-index: 1;
-            transition: left 0.25s linear, top 0.25s linear;
-        }
-
         .decoration {
             width: 7vw;
             height: 7vh;
@@ -551,11 +542,10 @@
             width: 2100px;
             height: 2400px;
             display: block;
-            border: 1px solid rgb(1, 207, 1);
             width: 210vw; 
             height: 240vh;
             transition: left 0.25s linear, top 0.25s linear;
-            left: 3vw;
+            left: 6vw;
             top: 3vh;
         }
 
