@@ -33,6 +33,7 @@
         localStorage.clear();
         location.reload();
     }
+    
 const matTert = initialiseMatTert();
 
 const importantObjects = initialiseImportantObjects();
@@ -950,9 +951,9 @@ let intervalMovement;
 
 function setUpPresideMovement(e, state) {
   const p = e.preside;
+  assignZIndexP();
   p.style.top = '0vh';
   p.style.left = '0vw';
-  p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     let isCharging = false;
     let jumpStartTime = 0;
     let currentDir = { x: 0, y: 0 };
@@ -1184,6 +1185,19 @@ function jumpDirection(distance, dir){
     else if (dir.x == 0.7 && dir.y == 0.7) diagonalLowRight(distance);
     else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance);
     control_position(state, e);
+    assignZIndexP();
+    changeZIndexElements();
+}
+
+function assignZIndexP(){
+    e.preside.style.zIndex = `${Math.trunc(state.posY/5) + 10}`;
+}
+
+function changeZIndexElements(){
+    for(let i=0;i<matTert.length;i++) {
+        let Y = matTert[i][1];
+        document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+    }
 }
 
 function left(distance){
@@ -1247,7 +1261,6 @@ async function animationJumpRight(distance){
 
 function down(distance){
     state.posY += distance;
-    p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
@@ -1256,6 +1269,11 @@ function down(distance){
         for(let j=0;j<seatForObjects[i].length-1;j+=2){
             seatForObjects[i][j+1] = (parseFloat(seatForObjects[i][j+1]) - distance) + 'vh';
         }
+    }
+    for(let i=0;i<posWildNature.length;i++){
+        console.log(posWildNature[i][1] + "\n");
+        posWildNature[i][1] = (parseFloat(posWildNature[i][1])  - distance) + 'vh';
+        console.log(posWildNature[i][1] + "\n\n")
     }
     addParameters(distance, 1, "subtract");
     importantStates.posCanvasY -= distance;
@@ -1275,7 +1293,6 @@ async function animationJumpDown(distance){
 
 function top(distance){
     state.posY -= distance;
-    p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
@@ -1284,6 +1301,9 @@ function top(distance){
         for(let j=0;j<seatForObjects[i].length-1;j+=2){
             seatForObjects[i][j+1] = (parseFloat(seatForObjects[i][j+1]) + distance) + 'vh';
         }
+    }
+    for(let i=0;i<posWildNature.length;i++){
+        posWildNature[i][1] = (parseFloat(posWildNature[i][1]) + distance) + 'vh';
     }
     addParameters(distance, 1, "add")
     importantStates.posCanvasY += distance;
@@ -1327,7 +1347,6 @@ function addParameters(distance, j, operation){
 function diagonalTopRight(distance) {
     state.posX += distance;
     state.posY -= distance;
-    p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     p.style.transform = 'scaleX(1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -1339,6 +1358,9 @@ function diagonalTopRight(distance) {
             seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
             seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) + distance) + 'vh';
         }
+    }
+    for(let i=0;i<posWildNature.length;i++){
+        posWildNature[i][1] = (parseFloat(posWildNature[i][1] + distance)) + 'vh';
     }
     addParameters(distance, 0, "subtract");
     addParameters(distance, 1, "add");
@@ -1350,7 +1372,6 @@ function diagonalTopRight(distance) {
 function diagonalTopLeft(distance) {
     state.posX -= distance;
     state.posY -= distance;
-    p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     p.style.transform = 'scaleX(-1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -1363,6 +1384,9 @@ function diagonalTopLeft(distance) {
             seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) + distance) + 'vh';
         }
     }
+    for(let i=0;i<posWildNature.length;i++){
+        posWildNature[i][1] = (parseFloat(posWildNature[i][1] + distance)) + 'vh';
+    }
     addParameters(distance, 0, "add");
     addParameters(distance, 1, "add");
     importantStates.posCanvasX += distance;
@@ -1373,7 +1397,6 @@ function diagonalTopLeft(distance) {
 function diagonalLowRight(distance) {
     state.posX += distance;
     state.posY += distance;
-    p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     p.style.transform = 'scaleX(1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -1386,6 +1409,9 @@ function diagonalLowRight(distance) {
             seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) - distance) + 'vh';
         }
     }
+    for(let i=0;i<posWildNature.length;i++){
+        posWildNature[i][1] = (parseFloat(posWildNature[i][1]) - distance) + 'vh';
+    }
     addParameters(distance, 0, "subtract");
     addParameters(distance, 1, "subtract");
     importantStates.posCanvasX -= distance;
@@ -1396,7 +1422,6 @@ function diagonalLowRight(distance) {
 function diagonalBottomLeft(distance) {  
     state.posX -= distance;
     state.posY += distance;
-    p.style.zIndex = `${Math.trunc(state.posY/5)}`;
     p.style.transform = 'scaleX(-1)';
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -1408,6 +1433,9 @@ function diagonalBottomLeft(distance) {
             seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
             seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) - distance) + 'vh';
         }
+    }
+    for(let i=0;i<posWildNature.length;i++){
+        posWildNature[i][1] = (parseFloat(posWildNature[i][1]) - distance) + 'vh';
     }
     addParameters(distance, 0, "add");
     addParameters(distance, 1, "subtract");
@@ -1853,6 +1881,7 @@ function createNewCharacter(posX, posY, animation, rotation, no_illustration, sr
         matTert[i][j] = parameters[j];
     }
     createCharacter(e, state, i);
+    assignZIndex(e, state, i);
 }
 
 function createMapDecorations(e, state, saved_e) {
@@ -1867,7 +1896,14 @@ function createDecoration(e, state, i) {
     const decoration_container = document.createElement('div');
     decoration_container.style.left = posWildNature[i][0];
     decoration_container.style.top = posWildNature[i][1];
-    decoration_container.id = 'decoration_container';
+    decoration_container.style.width = '7vw';
+    decoration_container.style.height = '7vw';
+    decoration_container.style.position = 'fixed';
+    decoration_container.style.transformOrigin = 'center center';
+    decoration_container.style.display = 'block';
+    decoration_container.style.transition = 'left 0.25s linear, top 0.25s linear';
+    decoration_container.style.zIndex = '-9998';
+    decoration_container.id = 'decoration_container.'+i;
     decoration_container.className = 'school_imgs';
     const decoration_img = document.createElement('img');
     decoration_img.className = 'decoration';
@@ -1949,9 +1985,18 @@ function createCharacter(e, state, i) {
     }
 }
 
-function assignZIndex(e, state, i){
-    let Y = parseFloat(matTert[i][1]);
-    document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+function assignZIndex(e, state, i, cond = false){
+    let Y;
+    if(!cond) { 
+        Y = parseFloat(matTert[i][1]);
+        document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+    }
+    else {
+        Y = parseFloat(posWildNature[i][1]);
+        document.getElementById('decoration_container.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+    }
+    
+    
 }
 
 function animateIllustration(illustration, i){
