@@ -470,7 +470,7 @@ function setupDialogue(e, state, saved_e) {
     ["Sembra che non abbia abbastanza materiali per costruire qualcosa...", "preside", 1, 0, false],
     ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
     [true],
-    ["Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
+    ["Potrei vendere alcuni libri che ho portato con me.", "preside", 1, 0, false],
     [true],
     ["Ciao zio!", "Matthew", 2, 0, false],
     [["Ma come ti sei vestito?", "Matthew! Giusto in tempo..."], "preside", 1, 0, false],
@@ -500,7 +500,7 @@ function setupDialogue(e, state, saved_e) {
         "It seems I don't have enough materials to build something...",
         "Don't worry! As my father used to say: 'build to sustain yourself, or sustain yourself to build!'",
         true,
-        "I could sell some of the books I brought with me, but I'm not sure it's worth it...",
+        "I could sell some books I brought with me, but I'm not sure it's worth it...",
         true,
     ];
     const lines_fr = [
@@ -513,7 +513,7 @@ function setupDialogue(e, state, saved_e) {
         "On dirait que je n’ai pas assez de matériaux pour construire quoi que ce soit...",
         "Ne t'inquiète pas ! Comme disait mon père : « construis pour vivre, ou vis pour construire ! »",
         true,
-        "Je pourrais vendre certains livres que j'ai apportés, mais je ne sais pas si ça en vaut la peine...",
+        "Je pourrais vendre certains livres que j’ai apportés, mais je ne sais pas si ça en vaut la peine...",
         true,
     ];
     const lines_es = [
@@ -526,7 +526,7 @@ function setupDialogue(e, state, saved_e) {
         "Parece que no tengo suficientes materiales para construir algo...",
         "¡No te preocupes! Como decía mi padre: «¡construye para vivir, o vive para construir!»",
         true,
-        "Podría vender algunos de los libros que traje conmigo, pero no sé si vale la pena...",
+        "Podría vender algunos libros que traje conmigo, pero no sé si vale la pena...",
         true,
     ];
     const lines_pt = [
@@ -539,7 +539,7 @@ function setupDialogue(e, state, saved_e) {
         "Parece que não tenho materiais suficientes para construir algo...",
         "Não se preocupe! Como dizia meu pai: «construa para se sustentar, ou sustente-se para construir!»",
         true,
-        "Poderia vender alguns dos livros que trouxe comigo, mas não sei se vale a pena...",
+        "Poderia vender alguns livros que trouxe comigo, mas não sei se vale a pena...",
         true,
     ];
     const lines_de = [
@@ -552,7 +552,7 @@ function setupDialogue(e, state, saved_e) {
         "Es scheint, als hätte ich nicht genug Materialien, um etwas zu bauen...",
         'Keine Sorge! Wie mein Vater immer sagte: "Baue, um dich zu erhalten, oder erhalte dich, um zu bauen!"',
         true,
-        "Ich könnte einige der Bücher verkaufen, die ich mitgebracht habe, aber ich weiß nicht, ob es das wert ist...",
+        "Ich könnte einige Bücher verkaufen, die ich mitgebracht habe, aber ich weiß nicht, ob es das wert ist...",
         true,
     ];
 
