@@ -11,10 +11,11 @@
             state = initialiseStates();
         }
         else elements = initialiseElements(e);
-        moveImportantObjectsStart(elements);
         moveWorldStart(elements, importantStates);
+        createImportantObjects(elements, state, e);
         creationTertiaryCharacters(elements, state, e);
         createMapDecorations(elements, state, e);
+        moveImportantObjectsStart(elements);
         saveStatesElements(e, state);
         createInteractableKeys(elements, state);
         setupDialogue(elements, state, e);
@@ -39,7 +40,6 @@ const matTert = initialiseMatTert();
 const importantObjects = initialiseImportantObjects();
 
 const seatForObjects = initialiseseatForObjects();
-
 
 const importantStates = initialiseimportantStates();
 
@@ -170,9 +170,8 @@ function setPositionWildNature(mat_nature){
 function initialiseImportantObjects(){
     if(localStorage.getItem("saved") == null){
         const importantObjects = [
-            [ '165vw', '-10vh', 'table_construction'],
-            ['14vw', '-20vh', 'barrow'],
-            ['-30vw', '10vh', 'camionBob'],
+            [ '165vw', '-10vh','table_construction',  1, "tavolo_costruzione.png"],
+            ['14vw', '-20vh', 'barrow', 4, 'structure_barrow', 'cariola.png', 'structure_wheel', 'ruota_cariola.png'],
         ];
         return importantObjects;
     } else{
@@ -249,8 +248,6 @@ function writeElements() {
     zoom: "document.getElementById('zoom')",
     standard: "document.getElementById('standard')",
     dezoom: "document.getElementById('dezoom')",
-    table_construction: "document.getElementById('table_construction')",
-    barrow: "document.getElementById('barrow')",
     camionBob: "document.getElementById('camionBob')",
     mission1: "document.getElementById('mission1')",
     mission2: "document.getElementById('mission2')",
@@ -653,6 +650,7 @@ function setupDialogue(e, state, saved_e) {
                 setUpPresideMovement(e, state);
                 setUpFreeCamRoam(e, state);
                 saveStatesElements(saved_e, state);
+                createNewImportantObject(e, state, saved_e, importantObjects.length, '-30vw', '10vh', 'camionBob', 6, 'structure_camion', 'camionBOB.png', 'wheel_camion1', 'ruota_camion2.png', 'wheel_camion2', 'ruota_camion2.png')
                 break;
             case 8:
                 state.cond_text = false;
@@ -660,6 +658,7 @@ function setupDialogue(e, state, saved_e) {
                 e.container_dialogue.style.opacity = 0;
                 state.cond_movement = true;
                 state.cond_dialogue = false;
+                deactivateHud(e);
                 scale('wide', e);
                 moveWorld(e, 40, -100, -50, 0, 4);
                 activateCinematicMode(e);
@@ -682,6 +681,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_movement = true;
                 state.cond_dialogue = false;
                 createNewCharacter('30vw', '68vh', "no_animation", -2, false, "Matthew", matTert.length, e, state, saved_e);
+                activateHud(e);
                 resetMoveWorld(e, -3, 5);
                 scale('standard', e);
                 saveStatesElements(saved_e, state);
@@ -909,6 +909,10 @@ function controlSkip(elements, state) {
 
 function activateHud(e){
     e.hud.style.display = '';
+}
+
+function deactivateHud(e){
+    e.hud.style.display = 'none';
 }
 
 function moveWorld(e, distanceX, distanceY, arriveDistanceX = null, arriveDistanceY = null, time = null){
@@ -1912,6 +1916,57 @@ function createDecoration(e, state, i) {
     e.world.appendChild(decoration_container);
 }
 
+function createImportantObjects(e, state, saved_e) {
+    for(let i=0;i<importantObjects.length;i++){
+        createObjects(e, state, i, saved_e);
+    }
+}
+
+function createNewImportantObject(e, state, saved_e, i, posX, posY, id_container, N_parameters, id1 = null, src1 = null, id2 = null, src2 = null, id3 = null, src3 = null, id4 = null, src4 = null) {
+    importantObjects.push([]);
+    let parameters_to_add = [id1, src1, id2, src2, id3, src3, id4, src4];
+    importantObjects[i][0] = posX;
+    importantObjects[i][1] = posY;
+    importantObjects[i][2] = id_container;
+    importantObjects[i][3] = N_parameters;
+    for(let j=0;j<N_parameters;j++){
+        importantObjects[i][j+4] = parameters_to_add[j];
+    }
+    createObjects(e, state, i, saved_e);
+}
+
+function createObjects(e, state, i, saved_e) {
+    if(importantObjects[i][3] == 1){
+        const object = document.createElement('img');
+        object.style.left = importantObjects[i][0];
+        object.style.top = importantObjects[i][1];
+        object.id = importantObjects[i][2];
+        object.className = 'school_imgs';
+        object.src = importantObjects[i][4];
+        e.world.appendChild(object);
+        e[importantObjects[i][2]] = document.getElementById(`${object.id}`); 
+        saved_e[importantObjects[i][2]] = `document.getElementById(${object.id})`;
+        return;
+    }
+    else {
+        const object_container = document.createElement('div');
+        object_container.style.left = importantObjects[i][0];
+        object_container.style.top = importantObjects[i][1];
+        object_container.id = importantObjects[i][2];
+        object_container.className = 'school_imgs';
+        for(let j=0;j<importantObjects[i][3];j+=2){
+            const object_img = document.createElement('img');
+            object_img.id = importantObjects[i][4 + j];
+            object_img.src = importantObjects[i][5 + j];
+            object_container.appendChild(object_img);
+        }
+        e.world.appendChild(object_container);
+        e[importantObjects[i][2]] = document.getElementById(`${object_container.id}`); 
+        saved_e[importantObjects[i][2]] = `document.getElementById(${object_container.id})`;
+        return;
+    } 
+}
+
 function createCharacter(e, state, i) {
     let source;
     let src_added = '';
@@ -1952,7 +2007,7 @@ function createCharacter(e, state, i) {
 
     character_container.appendChild(character_img);
     e.world.appendChild(character_container);
-    e.world.appendChild(document.getElementById("character."+i))
+    e.world.appendChild(document.getElementById("character."+i));
     switch (matTert[i][2]){
         case 'group':
             passiveAnimationGroup(character_container, i, e, state);
