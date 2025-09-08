@@ -408,6 +408,13 @@
             z-index: 2;
         }
 
+        #stacks_of_books {
+            width: 30vw;
+            height: 30vh;
+            position: fixed;
+            display: block;
+        }
+
         .decoration {
             width: 7vw;
             height: 7vh;
