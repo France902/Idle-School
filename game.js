@@ -1,5 +1,5 @@
-    localStorage.clear();
-    function startGame(e = null, state = null) {
+localStorage.clear();
+function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
         getSave();
@@ -386,7 +386,8 @@ function scale(condition, e) {
             return;
             break;
         case 'wide': 
-            zoom = 0.5;
+            e.world.style.transition = "transform 0.5s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
+            zoom = 0.6;
             e.world.style.transform = `scale(${zoom})`;
             return;
             break;
@@ -660,9 +661,12 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_dialogue = false;
                 deactivateHud(e);
                 scale('wide', e);
-                moveWorld(e, 40, -100, -50, 0, 4);
+                moveWorld(e, 40, -120, -60, 0, 3.9);
                 activateCinematicMode(e);
                 animationCamionCutscene(e, state);
+                setTimeout(() => {
+                    createNewImportantObject(e, state, saved_e, importantObjects.length, '70vw', '208vh', 'stacks_of_books', 1, 'cataste_di_libri.png');
+                }, 7000);
                 setTimeout(() => {
                     state.index++;
                     state.cond_text = true;
@@ -672,7 +676,7 @@ function setupDialogue(e, state, saved_e) {
                     state.cond_other_character = false;
                     deactivateCinematicMode(e);
                     showNextLine();
-                }, 6700);
+                }, 9000);
                 break;
             case 10:
                 state.cond_text = false;
@@ -1275,9 +1279,7 @@ function down(distance){
         }
     }
     for(let i=0;i<posWildNature.length;i++){
-        console.log(posWildNature[i][1] + "\n");
         posWildNature[i][1] = (parseFloat(posWildNature[i][1])  - distance) + 'vh';
-        console.log(posWildNature[i][1] + "\n\n")
     }
     addParameters(distance, 1, "subtract");
     importantStates.posCanvasY -= distance;
@@ -1945,7 +1947,8 @@ function createObjects(e, state, i, saved_e) {
         object.src = importantObjects[i][4];
         e.world.appendChild(object);
         e[importantObjects[i][2]] = document.getElementById(`${object.id}`); 
-        saved_e[importantObjects[i][2]] = `document.getElementById(${object.id})`;
+        saved_e[importantObjects[i][2]] = `document.getElementById("${object.id}")`;
+        console.log(saved_e[importantObjects[i][2]]);
         return;
     }
     else {
@@ -1962,7 +1965,7 @@ function createObjects(e, state, i, saved_e) {
         }
         e.world.appendChild(object_container);
         e[importantObjects[i][2]] = document.getElementById(`${object_container.id}`); 
-        saved_e[importantObjects[i][2]] = `document.getElementById(${object_container.id})`;
+        saved_e[importantObjects[i][2]] = `document.getElementById("${object_container.id}")`;
         return;
     } 
 }
