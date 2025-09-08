@@ -27,7 +27,7 @@
         h1 {
             position: fixed;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: "Comic Neue", cursive;
             font-size: 1.2vw;
             text-align: center;
 
@@ -357,11 +357,39 @@
             z-index: 4;
         }
 
+        #camionBob {
+            left: -30vw; 
+            top: 10vh; 
+            z-index: 5; 
+            transform-origin: center; 
+            opacity: 0;
+        }
+
         #structure_camion {
             width: 150vw;
             height: 130vh;
             position: fixed;
             z-index: 4;
+        }
+
+        #wheel_camion1 {
+            width: 12vw;
+            height: 23vh;
+            position: fixed;
+            z-index: 5;
+            transition: transform 1s linear;
+            margin-left: 35.5vw; 
+            margin-top: 86vh;
+        }
+
+        #wheel_camion2 {
+            width: 12vw;
+            height: 23vh;
+            position: fixed;
+            z-index: 5;
+            transition: transform 1s linear;
+            margin-left: 91.5vw; 
+            margin-top: 86vh;
         }
 
         #barrow{
@@ -396,14 +424,6 @@
             position: absolute;
             width: 5vw;
             height: 7.5vh;
-        }
-
-        .structure_wheel_camion{
-            width: 12vw;
-            height: 20vh;
-            position: fixed;
-            z-index: 5;
-            transition: transform 1s linear;
         }
 
         .bar {
@@ -578,6 +598,7 @@
             margin-left: 3vw; 
             margin-top: 1.3vh;
             color: black;
+            font-weight: 600;
         }
 
         .box_choise1 {
