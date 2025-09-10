@@ -1976,6 +1976,7 @@ function createCharacter(e, state, i) {
     const character_container = document.createElement('div');
     character_container.style.left = matTert[i][0];
     character_container.style.top = matTert[i][1];
+    character_container.style.height = '20vh';
     character_container.id = 'character.' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
@@ -2001,7 +2002,7 @@ function createCharacter(e, state, i) {
     const character_img = document.createElement('img');
     character_img.style.width = '6vw';
     character_img.id = 'characterImg.' + i;
-    character_img.style.height = '18vh';
+    character_img.style.height = '19vh';
 
     if(localStorage.getItem("saved") == null) {
         if(matTert[i][5] == "operaio") chooseSrc(i);
