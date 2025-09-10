@@ -1,4 +1,4 @@
-localStorage.clear();
+
 function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -2937,3 +2937,4 @@ window.onload = function(){
     document.getElementById('start_overlay').style.display = 'none';
     startGame();
 } 
+
