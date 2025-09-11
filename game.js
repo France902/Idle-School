@@ -1,4 +1,3 @@
-
 function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -267,6 +266,9 @@ function writeElements() {
     platform_1: "document.getElementById('platform_1')",
     platform_2: "document.getElementById('platform_2')",
     keyE: "document.getElementById('key_e')",
+    circle1: "document.getElementById('circle1')",
+    circle2: "document.getElementById('circle2')",
+    circle3: "document.getElementById('circle3')",
     click_circle: "document.getElementById('click_circle')",
 
     // Dialoghi e narrativa
@@ -330,6 +332,7 @@ function initialiseStates() {
     elementsHud: [],
     other_mission_opened: false,
     condMobileMovement: false,
+    cond_interactionCircle: false,
 
     // Posizioni
     posX: 0,
@@ -652,6 +655,9 @@ function setupDialogue(e, state, saved_e) {
                 setUpFreeCamRoam(e, state);
                 saveStatesElements(saved_e, state);
                 createNewImportantObject(e, state, saved_e, importantObjects.length, '-30vw', '10vh', 'camionBob', 6, 'structure_camion', 'camionBOB.png', 'wheel_camion1', 'ruota_camion2.png', 'wheel_camion2', 'ruota_camion2.png')
+                createInteractionCircle(e, state);
+                moveInteractionCircle(e, state, '164vw', '-10vh');
+                animateInteractionCircle(e, state);
                 break;
             case 8:
                 state.cond_text = false;
@@ -1848,6 +1854,52 @@ function fundraisingCycle(e, state){
     console.log("Scelto2");
 }
 
+function createInteractionCircle(e, state){
+    e.circle1.style.display = 'block';
+    e.circle2.style.display = 'block';
+    e.circle3.style.display = 'block';
+}
+
+function moveInteractionCircle(e, state, posX, posY){
+    e.circle1.style.marginLeft = posX;
+    e.circle1.style.marginTop = posY;
+    e.circle2.style.marginLeft = posX;
+    e.circle2.style.marginTop = posY;
+    e.circle3.style.marginLeft = posX;
+    e.circle3.style.marginTop = posY;
+    state.cond_interactionCircle = true;
+}
+
+function animateInteractionCircle(e, state){
+
+    const circles = [
+      document.getElementById('circle1'),
+      document.getElementById('circle2'),
+      document.getElementById('circle3')
+    ];
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    async function animateCircle(){
+      while(state.cond_interactionCircle){
+
+        for(let i=0; i<circles.length; i++){
+          circles.forEach((c,j)=> c.style.opacity = j===i ? '1':'0');
+          await sleep(700);
+        }
+      }
+    }
+
+    async function ripristineTransitionCircle(){
+        document.getElementById('circle1').style.transition = 'left 0.25s linear, top 0.25s linear, opacity 0.4s ease-out';
+        document.getElementById('circle2').style.transition = 'left 0.25s linear, top 0.25s linear, opacity 0.4s ease-out';
+        document.getElementById('circle3').style.transition = 'left 0.25s linear, top 0.25s linear, opacity 0.4s ease-out';
+        await sleep(100);
+        await ripristineTransitionCircle();
+    }
+
+    animateCircle();
+    ripristineTransitionCircle();
+}
 
 function interaction(index, e, state){
     switch(index){
@@ -1948,7 +2000,6 @@ function createObjects(e, state, i, saved_e) {
         e.world.appendChild(object);
         e[importantObjects[i][2]] = document.getElementById(`${object.id}`); 
         saved_e[importantObjects[i][2]] = `document.getElementById("${object.id}")`;
-        console.log(saved_e[importantObjects[i][2]]);
         return;
     }
     else {
@@ -2937,4 +2988,3 @@ window.onload = function(){
     document.getElementById('start_overlay').style.display = 'none';
     startGame();
 } 
-
