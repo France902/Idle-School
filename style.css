@@ -415,6 +415,43 @@
             display: block;
         }
 
+        #circle1 { 
+            width: 20vh; 
+            height: 20vh;
+            border-radius: 50%;
+            border: 2vh solid gold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+         }
+        #circle2 { 
+            width: 13vh; 
+            height: 13vh;
+            border-radius: 50%;
+            border: 2vh solid gold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+         }
+        #circle3 { 
+            width: 6.5vh; 
+            height: 6.5vh;
+            border-radius: 50%;
+            border: 2vh solid gold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+         }
+
         .decoration {
             width: 7vw;
             height: 7vh;
