@@ -1,3 +1,4 @@
+localStorage.clear();
 function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -333,6 +334,7 @@ function initialiseStates() {
     other_mission_opened: false,
     condMobileMovement: false,
     cond_interactionCircle: false,
+    menu_opened: false,
 
     // Posizioni
     posX: 0,
@@ -1565,13 +1567,20 @@ window.addEventListener('keyup', handleKeyup);
     else{
         document.getElementById('key_e'+0).style.opacity = '0';
         if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)){
+            if(!state.menu_opened) showInteractionCircle(e, state);
             document.getElementById('key_e'+1).style.opacity = '1';
             window.addEventListener('keydown', function(event) {
                 if (event.key === 'e' || event.key === 'E') {
-                    if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)) interaction(1, e, state);
+                    if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)){
+                        interaction(1, e, state);
+                    } 
                 }
             });
         } else{
+            if(!state.cond_interactionCircle && !state.menu_opened) {
+                state.cond_interactionCircle = true;
+                animateInteractionCircle(e, state);
+            }
             document.getElementById('key_e'+1).style.opacity = '0';
         }
     }
@@ -1694,6 +1703,10 @@ function toggleMenu() {
         
 let cont_menu = 0;
 function openConstructionMenu(e, state){
+        state.menu_opened = true;
+        e.circle1.style.display = 'none';
+        e.circle2.style.display = 'none';
+        e.circle3.style.display = 'none';
         state.cond_deactivate_movement = true;
         clearInterval(intervalMovement);
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
@@ -1883,6 +1896,12 @@ function animateInteractionCircle(e, state){
       while(state.cond_interactionCircle){
 
         for(let i=0; i<circles.length; i++){
+            if(!state.cond_interactionCircle) {
+                e.circle1.style.opacity = '1';
+                e.circle2.style.opacity = '0';
+                e.circle3.style.opacity = '0';
+                return;
+            }
           circles.forEach((c,j)=> c.style.opacity = j===i ? '1':'0');
           await sleep(700);
         }
@@ -1900,6 +1919,13 @@ function animateInteractionCircle(e, state){
     animateCircle();
     ripristineTransitionCircle();
 }
+
+function showInteractionCircle(e, state){
+        state.cond_interactionCircle = false;
+        e.circle1.style.opacity = '1';
+        e.circle2.style.opacity = '0';
+        e.circle3.style.opacity = '0';
+    }
 
 function interaction(index, e, state){
     switch(index){
