@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
@@ -38,164 +38,6 @@
             transform: translateZ(0); 
         }
 
-        #world {
-            will-change: transform;
-            transform: scale(0.07);
-            transform-origin: center center;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
-            margin-left: -3vw;
-            margin-top: 5vh;
-            transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear;
-            top: 0;
-            left: 0; 
-        }
-
-        #table_construction{
-            position: fixed;
-            width: 20vw;
-            height: 15vh;
-            z-index: 0;
-            transition: left 0.25s linear, top 0.25s linear;
-            object-fit: cover;
-        }
-
-        #construction_menu{
-            position: fixed;
-            width: 70vw;
-            height: 85vh;
-            object-fit: cover;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            top: 0vh;
-            left: 15vw;
-            opacity: 0;
-            transition: opacity 0.3s ease-out, top 1s ease-out;
-            z-index: 9999;
-        }
-
-        #lateral_arrow{
-            position: fixed;
-            width: 3vw;
-            height: 8vh;
-            left: 95vw;
-            z-index: 9999;
-            display: none;
-            pointer-events: all;
-        }
-
-        #platform_1 {
-            width: 10vw;
-            height: 12vh;
-            position: fixed;
-            background-color: rgb(168, 108, 3);
-            transition: left 0.25s linear, top 0.25s linear;
-            z-index: -1;
-        }
-
-        #platform_2 {
-            width: 23.44vw;        
-            height: 33.33vh;      
-            position: fixed;
-            background-color: rgb(124, 3, 168);
-            margin-top: 28.5vh;    
-            margin-left: 39.65vw;  
-            display: none; 
-            z-index: -1;
-        }
-
-        #preside_container {
-            position: fixed;
-            top: 50vh;
-            left: 30vw;
-            transform: translate(10%, -60%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 5vw;
-            height: 10vw;
-            border-radius: 1vw;
-            object-fit: cover;
-            backface-visibility: hidden;
-            z-index: 10;
-        }
-
-        #platform_container {
-            position: fixed;
-            transform: translate(-510%, 250%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 10vw;
-            height: 10vw;
-            border-radius: 1vw;
-            opacity: 0;
-        }
-
-        #tertiary_container{
-            position: fixed;
-            left: 80vw;
-            top: 39vh;
-        }
-        #tertiary_character{
-            width: 28vw;
-            height: 20vh;
-        }
-
-        #preside {
-            width: 5vw;
-            height: 19vh;
-            position: fixed;
-            top: 0vh;
-            left: 0vw;
-            transition: left 0.1s, top 0.1s;
-        }
-
-        #student {
-            width: 3.3vw;          
-            height: 5vh;       
-            background-color: red;
-            position: fixed;
-            top: 39vh;   
-            left: 72.7vw;
-            transition: left 0.25s linear, top 0.25s linear;
-        }
-
-        #missions {
-            position: fixed; 
-            left: 53vw; 
-            top: 30vh; 
-            width: 25vw;
-            z-index: 3;
-        }
-
-        #c_menu_main_text {
-            font-size: 8vh;
-            text-align: center;
-            position: absolute;
-            z-index: 9999;
-            font-family:'Courier New', Courier, monospace;
-            -webkit-text-stroke: 3px black;
-            text-shadow: 8px 8px 16px rgba(0,0,0,0.7);
-            letter-spacing: 6px;
-        }
-
-        #img_preside_dialogues {
-            position: fixed;
-            z-index: -1;
-            height: 60vh;
-            top: 6vh;
-            margin-left: -45vw;
-            object-fit: cover;
-            pointer-events: none;
-            transform: scale(0.8); 
-            transform-origin: center center;
-            transition: transform 0.3s linear;
-        }
         #anonymous_character_dialogues {
             position: fixed;
             z-index: -1;
@@ -203,94 +45,18 @@
             height: 60vh;
             top: 8vh;
             margin-left: 52vw;
-            object-fit: cover;
+            object-fit: fill;
             pointer-events: none; 
             transform: scale(0.9); 
             transform-origin: center center;
             transition: transform 0.3s linear;
         }
 
-        #dialogues_container {
-            position: fixed;
-            top: 0;
-            left: -1vw;
-            width: 100vw;
-            height: 97vh;
-            display: flex;
-            justify-content: center;
-            align-items: end;
-            opacity: 0;
-            transition: opacity 0.3s linear;
-            
-        }
-
-        #dialogues {
-            border-radius: 1.5vw;
-            padding-left: 4vw;
-            padding-right: 4vw;
-            margin: 0;
-            width: 80vw;
-            height: 33vh;
-            font-size: 5vh;
-            color: black;
-            text-align: left;
-            font-family: "Comic Neue", cursive;
-            font-weight: 700;
-            position: fixed;
-            z-index: 1;
-        }
-
-        #dialogues_text {
-            margin: 0;
-            padding: 0;
-            white-space: pre-wrap; 
-            word-wrap: break-word; 
-            overflow-wrap: break-word; 
-            margin-top: -4vh;
-            margin-left: 10vw;
-            z-index: 0;
-            opacity: 1;
-        }
-
-        #text_box_dialogues {
-            position: absolute;
-            width: 85vw;
-            height: 43vh; 
-            border-radius: 3.3vw;
-            z-index: -10;
-            opacity: 1;
-            margin-left: -2vw;
-            margin-top: -12.5vh;
-            border: 1vh solid black;
-        }
-
-        #character_name {
-            margin: 0;
-            padding: 0;
-            white-space: pre-wrap; 
-            word-wrap: break-word; 
-            overflow-wrap: break-word; 
-            margin-top: 2vh;
-        }
-
-        #name_box{
-            background-color: rgba(255, 255, 255);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            border-radius: 5vw;
-            padding-left: 0.5vw;
-            padding-right: 0.5vw;
-            margin: 0;
-            width: 13vw;
-            height: 10vh;
-            top: 46vh;
-            font-size: 5vh;
-            margin-left: 5vw;
-            color: black;
-            text-align: center;
-             font-family: "Comic Neue", cursive;
-            font-weight: 800;
-            position: fixed;
-            z-index: 10;
+        #barrow {
+            transition: margin-left 0.3s linear;
+            transform: scaleX(-1);
+            width: 15vw;
+            height: 15vh;
         }
 
         #bob_illustration, #tertiary_illustration {
@@ -303,6 +69,82 @@
             opacity: 0;
             transition: opacity 0.1s linear, left 0.25s linear, top 0.25s linear;
         }
+
+        #blueprint_img {
+            position: fixed;
+            width: 27vw;
+            height: 38vh;
+            opacity: 0.8;
+            margin-left: -30vw;
+            margin-top: 15vh;
+            border: 0.2vh solid black;
+        }
+
+        #camionBob {
+            left: -30vw; 
+            top: 10vh; 
+            z-index: 5; 
+            transform-origin: center; 
+            opacity: 0;
+        }
+
+        #character_name {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            margin-top: 2vh;
+        }
+
+        #choices {
+            width: 20vw;
+            height: 20vh;
+            position: fixed;
+            transform-origin: center center;
+            display: none;
+            z-index: 2;
+        }
+
+        #circle1 { 
+            width: 20vh; 
+            height: 20vh;
+            border-radius: 50%;
+            border: 2vh solid gold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+        }
+
+        #circle2 { 
+            width: 13vh; 
+            height: 13vh;
+            border-radius: 50%;
+            border: 2vh solid gold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+        }
+
+        #circle3 { 
+            width: 6.5vh; 
+            height: 6.5vh;
+            border-radius: 50%;
+            border: 2vh solid gold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+        }
+
         #cinematic-bars {
             position: fixed;
             top: 0;
@@ -326,14 +168,102 @@
             transition: transform 2s ease-out, opacity 0.3s;
         }
 
-        #start_overlay {
-            transform: center center;
-            width: 100vw;
-            height: 101vh;
-            top: -1vh;
-            background-color: black;
-            position: fixed;
+        #c_menu_main_text {
+            font-size: 8vh;
+            text-align: center;
+            position: absolute;
             z-index: 9999;
+            font-family:'Courier New', Courier, monospace;
+            -webkit-text-stroke: 3px black;
+            text-shadow: 8px 8px 16px rgba(0,0,0,0.7);
+            letter-spacing: 6px;
+        }
+
+        #construction_menu {
+            position: fixed;
+            width: 70vw;
+            height: 85vh;
+            object-fit: cover;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            top: 0vh;
+            left: 15vw;
+            opacity: 1;
+            transition: opacity 0.3s ease-out, top 1s ease-out;
+            z-index: 9999;
+        }
+
+        #dialogues {
+            border-radius: 1.5vw;
+            padding-left: 4vw;
+            padding-right: 4vw;
+            margin: 0;
+            width: 80vw;
+            height: 33vh;
+            font-size: 5vh;
+            color: black;
+            text-align: left;
+            font-family: "Comic Neue", cursive;
+            font-weight: 700;
+            position: fixed;
+            z-index: 1;
+        }
+
+        #dialogues_container {
+            position: fixed;
+            top: 0;
+            left: -1vw;
+            width: 100vw;
+            height: 97vh;
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            opacity: 0;
+            transition: opacity 0.3s linear;
+        }
+
+        #dialogues_text {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            margin-top: -4vh;
+            margin-left: 10vw;
+            z-index: 0;
+            opacity: 1;
+        }
+
+        #icon_img {
+            width: 3vw;
+            height: 3vw;
+            position: fixed;
+            margin-left: 21vw;
+            margin-top: -4vh;
+        }
+
+        #img_preside_dialogues {
+            position: fixed;
+            z-index: -1;
+            height: 60vh;
+            top: 6vh;
+            margin-left: -45vw;
+            object-fit: cover;
+            pointer-events: none;
+            transform: scale(0.8); 
+            transform-origin: center center;
+            transition: transform 0.3s linear;
+        }
+
+        #lateral_arrow {
+            position: fixed;
+            width: 3vw;
+            height: 8vh;
+            left: 95vw;
+            z-index: 9999;
+            display: none;
+            pointer-events: all;
         }
 
         #menu1 {
@@ -346,22 +276,124 @@
             border-radius: 5%;
         }
 
-        #blueprint_img {
-            position: fixed;
-            width: 27vw;
-            height: 38vh;
-            opacity: 0.8;
-            margin-left: -30vw;
-            margin-top: 15vh;
-            border: 0.2vh solid black;
+        #missions {
+            position: fixed; 
+            left: 53vw; 
+            top: 30vh; 
+            width: 25vw;
+            z-index: 3;
         }
 
-        #stamp_img{
+        #name_box {
+            background-color: rgba(255, 255, 255);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            border-radius: 5vw;
+            padding-left: 0.5vw;
+            padding-right: 0.5vw;
+            margin: 0;
+            width: 13vw;
+            height: 10vh;
+            top: 46vh;
+            font-size: 5vh;
+            margin-left: 5vw;
+            color: black;
+            text-align: center;
+            font-family: "Comic Neue", cursive;
+            font-weight: 800;
+            position: fixed;
+            z-index: 10;
+        }
+
+        #platform_1 {
+            width: 10vw;
+            height: 12vh;
+            position: fixed;
+            background-color: rgb(168, 108, 3);
+            transition: left 0.25s linear, top 0.25s linear;
+            z-index: -1;
+        }
+
+        #platform_2 {
+            width: 23.44vw;        
+            height: 33.33vh;      
+            position: fixed;
+            background-color: rgb(124, 3, 168);
+            margin-top: 28.5vh;    
+            margin-left: 39.65vw;  
+            display: none; 
+            z-index: -1;
+        }
+
+        #platform_container {
+            position: fixed;
+            transform: translate(-510%, 250%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 10vw;
+            height: 10vw;
+            border-radius: 1vw;
+            opacity: 0;
+        }
+
+        #preside {
+            width: 5vw;
+            height: 19vh;
+            position: fixed;
+            top: 0vh;
+            left: 0vw;
+            transition: left 0.1s, top 0.1s;
+        }
+
+        #preside_container {
+            position: fixed;
+            top: 50vh;
+            left: 30vw;
+            transform: translate(10%, -60%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 5vw;
+            height: 10vw;
+            border-radius: 1vw;
+            object-fit: cover;
+            backface-visibility: hidden;
+            z-index: 10;
+        }
+
+        #stamp_img {
             position: fixed;
             width: 15vw;
             height: 15vh;
             margin-left: -10vw;
             margin-top: -43vh;
+        }
+
+        #start_overlay {
+            transform: center center;
+            width: 100vw;
+            height: 101vh;
+            top: -1vh;
+            background-color: black;
+            position: fixed;
+            z-index: 9999;
+        }
+
+        #stacks_of_books {
+            width: 30vw;
+            height: 30vh;
+            position: fixed;
+            display: block;
+        }
+
+        #student {
+            width: 3.3vw;          
+            height: 5vh;       
+            background-color: red;
+            position: fixed;
+            top: 39vh;   
+            left: 72.7vw;
+            transition: left 0.25s linear, top 0.25s linear;
         }
 
         #structure_barrow {
@@ -370,6 +402,14 @@
             position: fixed;
             z-index: 5;
         }
+
+        #structure_camion {
+            width: 150vw;
+            height: 130vh;
+            position: fixed;
+            z-index: 4;
+        }
+
         #structure_wheel {
             width: 3vw;
             height: 5vh;
@@ -379,19 +419,36 @@
             z-index: 4;
         }
 
-        #camionBob {
-            left: -30vw; 
-            top: 10vh; 
-            z-index: 5; 
-            transform-origin: center; 
-            opacity: 0;
+        #table_construction {
+            position: fixed;
+            width: 20vw;
+            height: 15vh;
+            z-index: 0;
+            transition: left 0.25s linear, top 0.25s linear;
+            object-fit: cover;
         }
 
-        #structure_camion {
-            width: 150vw;
-            height: 130vh;
+        #tertiary_character {
+            width: 28vw;
+            height: 20vh;
+        }
+
+        #tertiary_container {
             position: fixed;
-            z-index: 4;
+            left: 80vw;
+            top: 39vh;
+        }
+
+        #text_box_dialogues {
+            position: absolute;
+            width: 85vw;
+            height: 43vh; 
+            border-radius: 3.3vw;
+            z-index: -10;
+            opacity: 1;
+            margin-left: -2vw;
+            margin-top: -12.5vh;
+            border: 1vh solid black;
         }
 
         #wheel_camion1 {
@@ -414,76 +471,32 @@
             margin-top: 86vh;
         }
 
-        #barrow{
-            transition: margin-left 0.3s linear;
-            transform: scaleX(-1);
-            width: 15vw;
-            height: 15vh;
-        }
-
-        #choices {
-            width: 20vw;
-            height: 20vh;
-            position: fixed;
+        #world {
+            will-change: transform;
+            transform: scale(0.07);
             transform-origin: center center;
-            display: none;
-            z-index: 2;
-        }
-
-        #stacks_of_books {
-            width: 30vw;
-            height: 30vh;
-            position: fixed;
-            display: block;
-        }
-
-        #circle1 { 
-            width: 20vh; 
-            height: 20vh;
-            border-radius: 50%;
-            border: 2vh solid gold;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.4s ease-out;
-            opacity: 0;
-         }
-        #circle2 { 
-            width: 13vh; 
-            height: 13vh;
-            border-radius: 50%;
-            border: 2vh solid gold;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.4s ease-out;
-            opacity: 0;
-         }
-        #circle3 { 
-            width: 6.5vh; 
-            height: 6.5vh;
-            border-radius: 50%;
-            border: 2vh solid gold;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.4s ease-out;
-            opacity: 0;
-         }
-
-        .decoration {
-            width: 7vw;
-            height: 7vh;
-            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            margin-left: -3vw;
+            margin-top: 5vh;
+            transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear;
+            top: 0;
+            left: 0; 
         }
 
         .arrow {
             position: absolute;
             width: 6vw;
             height: 9vh;
+        }
+
+        .arrow_choice {
+            width: 8vw;
+            height: 8vh;
+            position: absolute;
         }
 
         .arrow_oblique {
@@ -501,14 +514,14 @@
             z-index: 9999;
         }
 
-        .top {
-            top: 0;
-            transform: translateY(-100%);
-        }
-
         .bottom {
             bottom: 0;
             transform: translateY(100%);
+        }
+
+        .box_choise1 {
+            position: absolute;
+            width: 30vw;
         }
 
         .cinematic .top {
@@ -519,15 +532,40 @@
             transform: translateY(0);
         }
 
-        .hud-container {
+        .container_img_choice {
+            position: absolute;
+            width: 25vw;
+            height: 35vh;
+            background-color: aqua;
+            margin-left: 22vw;
+            margin-top: 27vh;
+        }
+
+        .cost {
             position: fixed;
-            top: 1.5vh;
-            right: 1vw;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 1vh;
-            z-index: 9998;
+            object-fit: fill;
+        }
+
+        .decoration {
+            width: 7vw;
+            height: 7vh;
+            position: absolute;
+        }
+
+        .display_choice {
+            position: fixed;
+            width: 50vw;
+            height: 40vh;
+            display: block;
+            left: 0;
+            top: 10vh;
+            object-fit: cover;
+            transform-origin: center;
+        }
+
+        .first_resource {
+            margin-top: -3vh;
+            position: absolute;
         }
 
         .hud-box {
@@ -542,10 +580,21 @@
             position: fixed;
         }
 
+        .hud-container {
+            position: fixed;
+            top: 1.5vh;
+            right: 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1vh;
+            z-index: 9998;
+        }
+
         .hud_missions {
             position: absolute;
             top: 14.5vh;
-            right: 5vw;
+            margin-left: -1vw;
             width: 25vw;
             background-color: rgba(50, 50, 50, 0.6);
             opacity: 1;
@@ -558,17 +607,36 @@
             transition: max-height 0.3s linear;
         }
 
-        .toggle-icon {
-            position: absolute;
-            top: 0.6vh;
-            right: 0.4vw;
-            width: 2vw;
-            height: 3vh;
-            opacity: 1;
-            transition: opacity 0.3s linear;
+        .hud_missions.closed {
+            max-height: 12vh;
+            cursor: pointer;
         }
 
-        .mission_1, .mission_2, .mission_3 {
+        .hud_missions.closed .mission_1 {
+            cursor: pointer;
+        }
+
+        .hud_missions.open {
+            max-height: 37vh;
+            cursor: auto;
+        }
+
+        .hud_missions.open .mission_1, 
+        .hud_missions.open .mission_2, 
+        .hud_missions.open .mission_3 {
+            opacity: 1;
+            cursor: auto;
+        }
+
+        .img_choice {
+            background-color: brown; 
+            width: 25vw; 
+            height: 25vh;
+        }
+
+        .mission_1, 
+        .mission_2, 
+        .mission_3 {
             display: flex;
             align-items: center;
             width: 100%;
@@ -583,64 +651,32 @@
             color: yellow;
         }
 
-        .mission_1 h1, .mission_2 h1, .mission_3 h1 {
+        .mission_1 h1, 
+        .mission_2 h1, 
+        .mission_3 h1 {
             font-size: 2.1vw;
             margin: 0;
-            padding-left: 6vw;
+            padding-left: 5.3vw;
             word-break: break-word;
             white-space: normal;
+            margin-top: -3vh;
         }
 
-        .mission_1 img, .mission_2 img, .mission_3 img {
+        .mission_1 img, 
+        .mission_2 img, 
+        .mission_3 img {
             width: 3.7vw;
             height: 5.5vh;
             margin-left: 1vw;
+            margin-top: -3vh;
         }
 
-        .mission_2, .mission_3 {
+        .mission_2, 
+        .mission_3 {
             opacity: 0;
             transition: opacity 0.4s linear;
             background-color: rgba(161, 160, 160, 0.6);
             border-top: 5px solid black;
-        }
-
-        .hud_missions.open .mission_1, .hud_missions.open .mission_2, .hud_missions.open .mission_3 {
-            opacity: 1;
-            cursor: auto;
-        }
-
-        .hud_missions.closed .mission_1 {
-            cursor: pointer;
-        }
-
-        .hud_missions.closed {
-            max-height: 12vh;
-            cursor: pointer;
-        }
-
-        .hud_missions.open {
-            max-height: 37vh;
-            cursor: auto;
-        }
-        .school_imgs {
-            position: fixed;
-            transform: scale(1);
-            transition: left 0.25s linear, top 0.25 linear;
-            will-change: transform, left, top;
-        }
-        .sprite {
-            backface-visibility: hidden;
-        }
-        .tile {
-            position: absolute;
-            width: 2100px;
-            height: 2400px;
-            display: block;
-            width: 210vw; 
-            height: 240vh;
-            transition: left 0.25s linear, top 0.25s linear;
-            left: 6vw;
-            top: 3vh;
         }
 
         .mobile_movement {
@@ -654,10 +690,15 @@
             pointer-events: all;
         }
 
-        .arrow_choice {
-            width: 8vw;
-            height: 8vh;
-            position: absolute;
+        .school_imgs {
+            position: fixed;
+            transform: scale(1);
+            transition: left 0.25s linear, top 0.25 linear;
+            will-change: transform, left, top;
+        }
+
+        .sprite {
+            backface-visibility: hidden;
         }
 
         .text_choice {
@@ -675,34 +716,10 @@
             font-weight: 600;
         }
 
-        .box_choise1 {
-            position: absolute;
-            width: 30vw;
-        }
-
-        .display_choice {
+        .text_cost {
             position: fixed;
-            width: 50vw;
-            height: 40vh;
-            display: block;
-            left: 0;
-            top: 10vh;
-            object-fit: cover;
-            transform-origin: center;
-        }
-
-        .container_img_choice {
-            position: absolute;
-            width: 25vw;
-            height: 35vh;
-            background-color: aqua;
-            margin-left: 22vw;
-            margin-top: 27vh;
-        }
-        .img_choice {
-            background-color: brown; 
-            width: 25vw; 
-            height: 25vh;
+            font-weight: 500;
+            font-size: 3.5vh;
         }
 
         .text_display_choice {
@@ -714,6 +731,18 @@
             text-align: center;
         }
 
+        .tile {
+            position: absolute;
+            width: 2100px;
+            height: 2400px;
+            display: block;
+            width: 210vw; 
+            height: 240vh;
+            transition: left 0.25s linear, top 0.25s linear;
+            left: 6vw;
+            top: 3vh;
+        }
+
         .title_display_choice {
             position: absolute;
             font-size: 7vh;
@@ -722,6 +751,22 @@
             margin-left: 30vw;
             margin-top: 10vh;
         }
+
+        .toggle-icon {
+            position: absolute;
+            top: 0.6vh;
+            right: 0.4vw;
+            width: 2vw;
+            height: 3vh;
+            opacity: 1;
+            transition: opacity 0.3s linear;
+        }
+
+        .top {
+            top: 0;
+            transform: translateY(-100%);
+        }
+
 
         @keyframes constructionLayoutAnimation {
             0% {
