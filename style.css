@@ -189,7 +189,7 @@
             display: flex;
             top: 0vh;
             left: 15vw;
-            opacity: 1;
+            opacity: 0;
             transition: opacity 0.3s ease-out, top 1s ease-out;
             z-index: 9999;
         }
