@@ -1753,7 +1753,7 @@ function closeConstructionMenu(e, state) {
 function assignLanguage(e, state) {
     let lines_italian = {
         c_menu_main_text: ["COSTRUISCI", "COMPRA"], 
-        first_c_m: "Prima costruzione",
+        first_c_m: "Entrata scuola",
         second_c_m: "Seconda costruzione",
         third_c_m: "Terza costruzione",
     }
@@ -1981,7 +1981,7 @@ function createDecoration(e, state, i) {
     decoration_container.style.left = posWildNature[i][0];
     decoration_container.style.top = posWildNature[i][1];
     decoration_container.style.width = '7vw';
-    decoration_container.style.height = '7vw';
+    decoration_container.style.height = '7vh';
     decoration_container.style.position = 'fixed';
     decoration_container.style.transformOrigin = 'center center';
     decoration_container.style.display = 'block';
