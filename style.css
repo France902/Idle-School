@@ -386,6 +386,13 @@
             display: block;
         }
 
+        #stand {
+            width: 23vw;
+            height: 40vh;
+            position: fixed;
+            opacity: 0;
+        }
+
         #student {
             width: 3.3vw;          
             height: 5vh;       
