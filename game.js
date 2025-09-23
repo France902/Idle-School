@@ -242,6 +242,7 @@ function writeElements() {
     world: "document.getElementById('world')",
     moneyText: "document.getElementById('money')",
     menu: "document.getElementById('missions')",
+    menu1: "document.getElementById('menu1')",
     hud: "document.getElementById('hud')",
     construction_menu: "document.getElementById('construction_menu')",
     lateral_arrow: "document.getElementById('lateral_arrow')",
@@ -299,6 +300,9 @@ function writeElements() {
     leftTop_arrow: "document.getElementById('leftTop_arrow')",
     rightBottom_arrow: "document.getElementById('rightBottom_arrow')",
     leftBottom_arrow: "document.getElementById('leftBottom_arrow')",
+
+    //oggetti idle
+    stand: "document.getElementById('stand')"
   };
 }
 
@@ -650,7 +654,7 @@ function setupDialogue(e, state, saved_e) {
                 resetMoveWorld(e, -3, 5);
                 setTimeout(() => {
                     matTert[5][2] = '';
-                    passiveAnimationBob(document.getElementById('character.5'), 5 );
+                    passiveAnimationBob(document.getElementById('character_5'), 5 );
                 }, 2000);
                 activateHud(e);
                 setUpPresideMovement(e, state);
@@ -703,7 +707,7 @@ function setupDialogue(e, state, saved_e) {
                     [300, 400, 300, 300, 300],
                     [[false], [false], [false], [false], [true]],
                 ];
-                moveCharacter(document.getElementById("character."+(matTert.length -1)), 5, jumps);
+                moveCharacter(document.getElementById('character_'+(matTert.length -1)), 5, jumps);
                 setTimeout(() => {
                     state.index++;
                     state.cond_text = true;
@@ -1212,7 +1216,7 @@ function assignZIndexP(){
 function changeZIndexElements(){
     for(let i=0;i<matTert.length;i++) {
         let Y = matTert[i][1];
-        document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+        document.getElementById('character_'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
     }
 }
 
@@ -1225,7 +1229,7 @@ function left(distance){
     for(let i=0;i<seatForObjects.length;i++){
         for(let j=0;j<seatForObjects[i].length-1;j+=2){
             seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
-        }
+        }   
     }
     addParameters(distance, 0, "add") 
     importantStates.posCanvasX += distance;
@@ -1779,7 +1783,7 @@ let layout_menu = "construction";
 function changeMenu(e, state){
     if(layout_menu == "construction") {
         layout_menu = "material_shop";
-        e.menu.style.opacity = '0';
+        e.menu.style.opacity = '0';        
         e.menu.style.pointerEvents = 'none';
         e.c_menu_main_text.style.opacity = '0';
         changeMaterialShop(e);
@@ -1814,6 +1818,7 @@ function changeMaterialShop(e){
     e.construction_menu.style.animation = "swipeLeft 1.5s ease-out";
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuRight 1s ease-out";
+            e.menu1.src = 'tavolo_menù.png';
     }, 1500);
 }
 
@@ -1821,6 +1826,7 @@ function changeConstructionMenu(e){
     e.construction_menu.style.animation = "swipeRight 1.5s ease-out";
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
+            e.menu1.src = 'menù_costruzione.png';
     }, 1500);
 }
 
@@ -1860,11 +1866,12 @@ function startFirstCycle(e, state, chosed = null){
 }
 
 function bookCycle(e, state){
-    console.log("Scelto 1");
+    e.stand.style.opacity = '1';
 }
 
 function fundraisingCycle(e, state){
-    console.log("Scelto2");
+    e.stand.src = 'stand_con_sindaco.png';
+    e.stand.style.opacity = '1';
 }
 
 function createInteractionCircle(e, state){
@@ -1931,7 +1938,7 @@ function interaction(index, e, state){
     switch(index){
         case 0:
             matTert[4][4] = true;
-            const character = document.getElementById('character.4');
+            const character = document.getElementById('character_4');
             character.style.transform = 'scaleX(1)';
             document.getElementById('key_e' + index).style.display = 'none';        
             jolt(character, e, state);
@@ -2054,7 +2061,7 @@ function createCharacter(e, state, i) {
     character_container.style.left = matTert[i][0];
     character_container.style.top = matTert[i][1];
     character_container.style.height = '20vh';
-    character_container.id = 'character.' + i;
+    character_container.id = 'character_' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
     character_container.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -2078,7 +2085,7 @@ function createCharacter(e, state, i) {
 
     const character_img = document.createElement('img');
     character_img.style.width = '6vw';
-    character_img.id = 'characterImg.' + i;
+    character_img.id = 'characterImg_' + i;
     character_img.style.height = '19vh';
 
     if(localStorage.getItem("saved") == null) {
@@ -2088,7 +2095,7 @@ function createCharacter(e, state, i) {
 
     character_container.appendChild(character_img);
     e.world.appendChild(character_container);
-    e.world.appendChild(document.getElementById("character."+i));
+    e.world.appendChild(document.getElementById('character_'+i));
     switch (matTert[i][2]){
         case 'group':
             passiveAnimationGroup(character_container, i, e, state);
@@ -2099,7 +2106,7 @@ function createCharacter(e, state, i) {
         case 'alone':
             let posX = parseFloat(matTert[i][0]) + 2;
             let posY = parseFloat(matTert[i][1]) - 10;
-            const illustration = createIllustration('vignetta_musica.png', posX, posY, e);
+            const illustration = createIllustration('vignetta_musica.png', posX, posY, e, i);
         animateIllustration(illustration, i);
         setInterval(() => {
             passiveAnimationAlone(character_container, i, e, illustration);
@@ -2108,7 +2115,7 @@ function createCharacter(e, state, i) {
         case 'walk-casually':
             let posX2 = parseFloat(matTert[i][0]) + 2;
             let posY2 = parseFloat(matTert[i][1]) - 10;
-            const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e);
+            const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e, i);
             animateIllustration(illustration2, i);
             passiveAnimationWalking(character_container, i, e, illustration2, state);
            
@@ -2125,7 +2132,7 @@ function assignZIndex(e, state, i, cond = false){
     let Y;
     if(!cond) { 
         Y = parseFloat(matTert[i][1]);
-        document.getElementById('character.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+        document.getElementById('character_'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
     }
     else {
         Y = parseFloat(posWildNature[i][1]);
@@ -2134,6 +2141,18 @@ function assignZIndex(e, state, i, cond = false){
     
     
 }
+
+function eliminateCharacter(e, i){
+            document.getElementById('character_'+i).remove();
+            document.getElementById('illustration_'+i).remove();
+            matTert.splice(i, 1);
+                for(let j=i;j<matTert.length;j++){
+                    document.getElementById('character_'+(j+1)).id = 'character_'+j;
+                    document.getElementById('characterImg_'+(j+1)).id = 'characterImg_'+j;
+                    if(matTert[j][2] != '') document.getElementById('illustration_'+(j+1)).id = 'illustration_'+j;
+                }
+}
+
 
 function animateIllustration(illustration, i){
     let interval = setInterval(() => {
@@ -2152,8 +2171,8 @@ function animateIllustration(illustration, i){
             }
         }, 5000);
 }
-let i_illustration = 0;
-function createIllustration(sr, posX, posY, e){
+let cont_illustration = 0;
+function createIllustration(sr, posX, posY, e, i_illustration){
         const illustration = document.createElement('img');
         illustration.src = sr;
         illustration.style.opacity = '0';
@@ -2163,14 +2182,15 @@ function createIllustration(sr, posX, posY, e){
         illustration.style.left = `${posX}vw`;
         illustration.style.top = `${posY}vh`;
         illustration.className = 'school_imgs';
-        illustration.id = 'illustration.'+i_illustration;
-        i_illustration++;
+        illustration.id = 'illustration_'+i_illustration;
+        cont_illustration++;
         e.world.appendChild(illustration);
         return illustration;
 }
 
 let interval = [];
     function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0) {
+        if(!existencecontrol(character)) return;
         state.maxTimeAnimationGroup[i] = 4000;
         passiveMovementGroup(character, i, e, state);
         passiveIllustrationGroup(posX, posY, i, e, state);
@@ -2219,7 +2239,7 @@ let interval = [];
                 posX = parseFloat(matTert[i][0]) + 2;
                 posY = parseFloat(matTert[i][1]) - 10;
         }
-        const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e);
+        const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e, i);
         moveIllustrationGroup(illustration, i, state);
     }
 
@@ -2268,6 +2288,7 @@ let interval = [];
     }
 let cont_work_alone = 0;
 async function passiveAnimationWorkAlone(character, i, e, state){
+    if(!existencecontrol(character)) return;
     character.style.transition = "left 0.5s linear, top 0.5s linear";
     e.barrow.style.transition = "left 0.35s linear, top 0.35s linear, transform 0.35s linear";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
@@ -2317,6 +2338,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
 }
 
 async function passiveAnimationAlone(character, i, e, illustration, state){
+    if(!existencecontrol(character)) return;
     character.style.transition = "left 0.25s linear, top 0.25s linear";
     illustration.style.transition = "left 0.25s linear, top 0.25s linear";
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
@@ -2347,7 +2369,13 @@ async function passiveAnimationAlone(character, i, e, illustration, state){
 
 let sommaX = 0;
 let sommaY = 0;
+
+function existencecontrol(c){
+    if(document.body.contains(c)) return true;
+    else return false;
+}
 function passiveAnimationWalking(character, i, e, illustration, state){
+    if(!existencecontrol(character)) return;
     let stepX = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
     sommaX+=(stepX*9);
     while(sommaX < -50 || sommaX > 150){
@@ -2459,7 +2487,7 @@ function moveCharacter(character, total_jumps, jumps){
     async function jump(character) {
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         for(let i=-1;i<total_jumps;i++){
-            if(i==-1 && character.id == "character.5") await sleep(1000);
+            if(i==-1 && character.id == 'character_5') await sleep(1000);
             else {
                 if (typeof window[jumps[0][i]] === 'function') {
                     await window[jumps[0][i]](character, jumps[2][i][0]);
@@ -2629,7 +2657,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
             }
         }
 }
-    if(!cond || character.id == 'character.5'){
+    if(!cond || character.id == 'character_5'){
         return;
     }
     else{
@@ -2643,6 +2671,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
 }
 
 function controlClose(character, state){
+    if(!existencecontrol(character)) return;
     let cont = 0;
     for(i=0;i<N;i++){
         if(Math.abs(parseFloat(character.style.left) - parseFloat(matTert[i][0])) <= 50 && Math.abs(parseFloat(character.style.top) - parseFloat(matTert[i][1]) <= 50)){
@@ -2713,13 +2742,13 @@ async function rightJumpP(character) {
 async function rightJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-    let posId = character.id.split(".")[1];
-    const characterImg = document.getElementById("characterImg."+posId);
+    let posId = character.id.split("_")[1];
+    const characterImg = document.getElementById('characterImg_'+posId);
     let source = characterImg.src.split("/").pop();
     let src_character = source.split("_")[0];
     src_character = src_character.split('.')[0];
     src_character += ".png";
-    document.getElementById("characterImg."+posId).src = src_character;
+    document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -2875,10 +2904,10 @@ function ripristineTransition(character){
 
 function diaologueB_P1(e, state) {
     setTimeout(() => {
-        const b = document.getElementById('character.5');
-        const t = document.getElementById('character.6');
-        const t_illustration = document.getElementById('illustration.5');
-        const bob_illustration = document.getElementById('illustration.4');
+        const b = document.getElementById('character_5');
+        const t = document.getElementById('character_6');
+        const t_illustration = document.getElementById('illustration_6');
+        const bob_illustration = document.getElementById('illustration_5');
         const jumps = [
                     ["leftJump","leftJump","leftJump"],
                     [300, 400, 0],
