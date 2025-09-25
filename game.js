@@ -352,6 +352,7 @@ function initialiseStates() {
     // Condizioni ambientali
     cond_platform_1: false,
     cond_deactivate_movement: false,
+    cond_run_preside: false,
 
     // state generico
     maxTimeAnimationGroup: [N],
@@ -1142,7 +1143,6 @@ function simulateKey(code, duration){
     }, duration);
 }
 
-
 function handleKeydown(event) {
 if(!state.cond_deactivate_movement){
     e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
@@ -1150,27 +1150,46 @@ if(!state.cond_deactivate_movement){
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
         currentDir = getDirection();
         if (currentDir.x === 0 && currentDir.y === 0) return;
-            if(!isCharging && !event.repeat){
-                isCharging = true;
+            if(!event.repeat){
                 jumpStartTime = performance.now();
+                cond_run = true;
+            } else {
+                if(performance.now() - jumpStartTime > 270 && !state.cond_run_preside){
+                    state.cond_run_preside = true;
+                    corsaPreside(event, currentDir);
+                } 
             }
         }
     }
 }
 
+async function corsaPreside(event, currentDir, distance = 9) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    if(cond_run){
+        currentDir = getDirection();
+        await jumpDirection(distance, currentDir);
+        await sleep(380);
+        await corsaPreside(event);
+    }
+    else {
+        state.cond_run_preside = false;
+        return;
+    } 
+    
+}
+
 function handleKeyup(event){
     if(!state.cond_deactivate_movement){
-        keys[event.code] = false;
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
-            if(isCharging){
-                isCharging = false;
-                let heldFor = performance.now() - jumpStartTime;
-                if(heldFor > 270){
-                    heldFor = 270;
-                } 
-                let distance = heldFor / 30;
-                jumpDirection(distance, currentDir);
+            if(state.cond_run_preside == false){
+                    let heldFor = performance.now() - jumpStartTime;
+                    if(heldFor > 270){
+                        heldFor = 270;
+                    } 
+                    let distance = heldFor / 30;
+                    jumpDirection(distance, currentDir);
             }
+            else cond_run = false;
         }
     }
 }
@@ -1189,7 +1208,12 @@ function getDirection(){
         dir.x = 0;
         dir.y = 0;
     }
-    
+    if(state.cond_run_preside == false){
+        keys["KeyW"] = false;
+        keys["KeyS"] = false;
+        keys["KeyA"] = false;
+        keys["KeyD"] = false;
+    }
     return dir;
 }
 
