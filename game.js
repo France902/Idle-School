@@ -211,7 +211,10 @@ function gameScripts(e, state) {
         e.world.style.transform = 'scale(0.07)';
         e.world.style.transition = 'margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear';
         waitForImagesToLoad(document.getElementById("world"), () => {
-        setTimeout(() => scaleWorld(e), 1000);
+            setTimeout(() => {
+                e.world.style.transform = "scale(0.07)";
+            }, 200);
+            setTimeout(() => scaleWorld(e), 1200);
         });
         e.preside_container.style.left = '50vw';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
@@ -221,7 +224,10 @@ function gameScripts(e, state) {
     else{
         activateCinematicMode(e);
         waitForImagesToLoad(document.getElementById("world"), () => {
-        setTimeout(() => scaleWorld(e), 1000);
+            setTimeout(() => {
+                e.world.style.transform = "scale(0.07)";
+            }, 200);
+            setTimeout(() => scaleWorld(e), 1200);
         });
         centralizationPreside(e, state);
         diaologueB_P1(e, state);
@@ -435,6 +441,27 @@ function scaleWorld(e) {
   function animate() {
     scale += speed;
     if (scale >= target) {
+      scale = target;
+      e.world.style.transform = `scale(${target})`;
+      return; 
+    }
+
+    e.world.style.transform = `scale(${scale})`;
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function scaleWorld2(e) {
+  let scale = 0.8;
+  const target = 0.07;
+  const speed = 0.006;
+
+
+  function animate() {
+    scale -= speed;
+    if (scale <= target) {
       scale = target;
       e.world.style.transform = `scale(${target})`;
       return; 
@@ -1150,26 +1177,26 @@ if(!state.cond_deactivate_movement){
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
         currentDir = getDirection();
         if (currentDir.x === 0 && currentDir.y === 0) return;
-            if(!event.repeat){
+            if(!isCharging){
                 jumpStartTime = performance.now();
-                cond_run = true;
+                isCharging = true;
             } else {
-                if(performance.now() - jumpStartTime > 270 && !state.cond_run_preside){
+                if(performance.now() - jumpStartTime > 350 && !state.cond_run_preside){
                     state.cond_run_preside = true;
-                    corsaPreside(event, currentDir);
+                    runPreside(event, currentDir);
                 } 
             }
         }
     }
 }
 
-async function corsaPreside(event, currentDir, distance = 9) {
+async function runPreside(event, currentDir, distance = 9) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    if(cond_run){
+    if(isCharging){
         currentDir = getDirection();
-        await jumpDirection(distance, currentDir);
+        jumpDirection(distance, currentDir);
         await sleep(380);
-        await corsaPreside(event);
+        await runPreside(event);
     }
     else {
         state.cond_run_preside = false;
@@ -1189,7 +1216,7 @@ function handleKeyup(event){
                     let distance = heldFor / 30;
                     jumpDirection(distance, currentDir);
             }
-            else cond_run = false;
+            isCharging = false;
         }
     }
 }
@@ -1199,7 +1226,6 @@ function getDirection(){
     if (keys["KeyS"]) dir.y += 1;
     if (keys["KeyA"]) dir.x -= 1;
     if (keys["KeyD"]) dir.x += 1;
-
     const magnitude = Math.hypot(dir.x, dir.y);
     if (magnitude > 0) {
         dir.x /= magnitude;
@@ -1264,7 +1290,7 @@ async function animationJumpLeft(distance){
     
     p.style.transform = "scaleX(-1)";
     p.src = "Preside.png";
-    const step = [60, 120, 180, 240, 300];
+    const step = [0, 60, 120, 180, 240];
     const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
         step.forEach((ms, i) => {
             setTimeout(() => {
@@ -1294,7 +1320,7 @@ function right(distance){
 async function animationJumpRight(distance){
     p.style.transform = "scaleX(1)";
     p.src = "Preside.png";
-    const step = [60, 120, 180, 240, 300];
+    const step = [0, 60, 120, 180, 240];
     const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
         step.forEach((ms, i) => {
             setTimeout(() => {
@@ -1324,7 +1350,7 @@ function down(distance){
 
 async function animationJumpDown(distance){
     p.src = "Preside_davanti.png";
-    const step = [60, 120, 180, 240, 300];
+    const step = [0, 60, 120, 180, 240];
     const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
         step.forEach((ms, i) => {
             setTimeout(() => {
@@ -1354,7 +1380,7 @@ function top(distance){
 
 async function animationJumpTop(distance){
     p.src = "Preside_dietro.png";
-    const step = [60, 120, 180, 240, 300];
+    const step = [0, 60, 120, 180, 240];
     const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
         step.forEach((ms, i) => {
             setTimeout(() => {
@@ -1488,7 +1514,7 @@ function diagonalBottomLeft(distance) {
 
 async function animationJumpDiagonal(distance) {
     p.src = "Preside_obliquo.png"; 
-    const step = [60, 120, 180, 240, 300];
+    const step = [0, 60, 120, 180, 240];
     const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
     step.forEach((ms, i) => {
         setTimeout(() => {
@@ -3064,6 +3090,9 @@ function createOnClicks(e, state){
 }
 
 window.onload = function(){
-    document.getElementById('start_overlay').style.display = 'none';
+    setTimeout(() => {
+            document.getElementById('start_overlay').style.display = 'none';
+    }, 300);
+    
     startGame();
 } 
