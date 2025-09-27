@@ -751,8 +751,9 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_skip = false;
                 e.container_dialogue.style.opacity = 0;
                 state.cond_movement = true;
+                state.cond_deactivate_movement = true;
                 state.cond_dialogue = false;
-                choose_in_display(e, state);
+                choose_in_display(e, state, saved_e);
                 moveWorld(e, 10, -90)
                 break;
         }
@@ -798,7 +799,7 @@ function setupDialogue(e, state, saved_e) {
     const arrow_choice2 = document.getElementById('arrow_choice2');
     let choice_for_key = 1;
     let answerLines;
-    let answerLines_it = ["Facciamo valere ogni soldo che hai speso allora!", "Come mai non avete ancora iniziato a costruire?"];
+    let answerLines_it = ["Facciamo valere ogni soldo che hai speso allora!", "Pensavo di essere in ritardo.."];
     let answerLines_en = ["Let's make every penny you spent worth it then!"];
     let answerLines_fr = ["Faisons en sorte que chaque euro dépensé en vaille la peine !"];
     let answerLines_es = ["¡Hagamos que valga cada centavo que gastaste entonces!"];
@@ -1890,33 +1891,39 @@ function setupMenuToggle(e) {
   });
 }
 
-function choose_in_display(e, state){
+function choose_in_display(e, state, saved_e){
     e.display_choice.style.opacity = '1';
     e.display_img_choice1.style.pointerEvents = 'all';
     e.display_img_choice2.style.pointerEvents = 'all';
     e.display_img_choice1.onclick = function(){
-        startFirstCycle(e, state, 1);
+        startFirstCycle(e, state, 1, saved_e);
     }
     e.display_img_choice2.onclick = function(){
-        startFirstCycle(e, state, 2);
+        startFirstCycle(e, state, 2, saved_e);
     }
 }
 
-function startFirstCycle(e, state, chosed = null){
+function startFirstCycle(e, state, chosed = null, saved_e){
     if(chosed == null) return;
     else {
         e.display_choice.style.opacity = '0';
         e.display_img_choice1.style.pointerEvents = 'none';
         e.display_img_choice2.style.pointerEvents = 'none';
         if(chosed == 1){
-            bookCycle(e, state);
+            bookCycle(e, state, saved_e);
         }
         else fundraisingCycle(e, state);
+        resetMoveWorld(e, -3, 5);
+        state.cond_deactivate_movement = false;
+        eliminateCharacter(e, 3);
     }
 }
 
-function bookCycle(e, state){
+function bookCycle(e, state, saved_e){
+    document.getElementById("stacks_of_books").style.display = 'none';
+    document.getElementById("stacks_of_books").remove();
     e.stand.style.opacity = '1';
+    animationFirstCycle(e, state, saved_e);
 }
 
 function fundraisingCycle(e, state){
@@ -1928,6 +1935,15 @@ function createInteractionCircle(e, state){
     e.circle1.style.display = 'block';
     e.circle2.style.display = 'block';
     e.circle3.style.display = 'block';
+}
+
+function animationFirstCycle(e, state, saved_e) {
+    let posX = Math.floor(Math.random() * 201) - 200;
+    let posY = Math.floor(Math.random() * 10) + 200;
+    setTimeout(() => {
+        createNewCharacter(`${posX}vw`, `${posY}vh`, "no_animation", -2, false, "Matthew", matTert.length, e, state, saved_e);
+    }, 500);
+    
 }
 
 function moveInteractionCircle(e, state, posX, posY){
@@ -2194,7 +2210,9 @@ function assignZIndex(e, state, i, cond = false){
 
 function eliminateCharacter(e, i){
             document.getElementById('character_'+i).remove();
-            document.getElementById('illustration_'+i).remove();
+            if (document.getElementById('illustration_' + i)) {
+                document.getElementById('illustration_' + i).remove();
+            }
             matTert.splice(i, 1);
                 for(let j=i;j<matTert.length;j++){
                     document.getElementById('character_'+(j+1)).id = 'character_'+j;
@@ -3092,7 +3110,7 @@ function createOnClicks(e, state){
 window.onload = function(){
     setTimeout(() => {
             document.getElementById('start_overlay').style.display = 'none';
-    }, 300);
+    }, 350);
     
     startGame();
 } 
