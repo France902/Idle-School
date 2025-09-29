@@ -24,6 +24,7 @@ function startGame(e = null, state = null) {
         backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
+        bookCycle(elements, state, e);
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -71,7 +72,8 @@ function initialiseMatTert(){
 function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
         const seatForObjects = [
-            [ '165vw', '2vh', '166vw', '-24vh', 'table_construction']
+            [ '165vw', '2vh', '166vw', '-24vh', 'table_construction'],
+            ['155vw', '112vh', 'stand'],
         ];
         return seatForObjects;
     } else{
@@ -170,8 +172,9 @@ function setPositionWildNature(mat_nature){
 function initialiseImportantObjects(){
     if(localStorage.getItem("saved") == null){
         const importantObjects = [
-            [ '165vw', '-10vh','table_construction',  1, "tavolo_costruzione.png"],
+            [ '165vw', '-10vh','table_construction',  1, 'tavolo_costruzione.png'],
             ['14vw', '-20vh', 'barrow', 4, 'structure_barrow', 'cariola.png', 'structure_wheel', 'ruota_cariola.png'],
+            ['140vw', '80vh', 'stand', 1, 'stand_libri.png']
         ];
         return importantObjects;
     } else{
@@ -1920,8 +1923,6 @@ function startFirstCycle(e, state, chosed = null, saved_e){
 }
 
 function bookCycle(e, state, saved_e){
-    document.getElementById("stacks_of_books").style.display = 'none';
-    document.getElementById("stacks_of_books").remove();
     e.stand.style.opacity = '1';
     animationFirstCycle(e, state, saved_e);
 }
@@ -1938,11 +1939,24 @@ function createInteractionCircle(e, state){
 }
 
 function animationFirstCycle(e, state, saved_e) {
-    let posX = Math.floor(Math.random() * 201) - 200;
-    let posY = Math.floor(Math.random() * 10) + 200;
+    let posX = Math.floor(Math.random() * 191) - 60;
+    let posY = Math.floor(Math.random() * 10) + 173;
     setTimeout(() => {
-        createNewCharacter(`${posX}vw`, `${posY}vh`, "no_animation", -2, false, "Matthew", matTert.length, e, state, saved_e);
+        createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
+        const i = matTert.length - 1;        
+        passiveAnimationStand(document.getElementById("character_"+i), i, e, state);
     }, 500);
+    
+}
+
+async function passiveAnimationStand(character, i, e, state){
+    
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    await returnToObject(character, seatForObjects[1][0], seatForObjects[1][1], false, state, e);
+    await sleep(1000);
+    await singleJumpAnimation(character, e, state);
+    await sleep(500);
+    await singleJumpAnimation(character, e, state);
     
 }
 
@@ -2258,15 +2272,14 @@ function createIllustration(sr, posX, posY, e, i_illustration){
 
 let interval = [];
     function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0) {
-        if(!existencecontrol(character)) return;
         state.maxTimeAnimationGroup[i] = 4000;
         passiveMovementGroup(character, i, e, state);
-        passiveIllustrationGroup(posX, posY, i, e, state);
+        passiveIllustrationGroup(posX, posY, i, e, state, character);
     }
 
     async function passiveMovementGroup(character, i, e, state){
+        if(!existencecontrol(character)) return;
         character.style.transition = "left 0.25s linear, top 0.25s linear";
-
         switch (i){
             case 5:
                 if(state.condBP1 == true){
@@ -2279,6 +2292,8 @@ let interval = [];
                     return;
                 }
             }, 4900);
+                break;
+            case 10:
                 break;
         }
         const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -2302,16 +2317,17 @@ let interval = [];
         await passiveMovementGroup(character, i, e, state);
     }
 
-    function passiveIllustrationGroup(posX, posY, i, e, state){
+    function passiveIllustrationGroup(posX, posY, i, e, state, character){
         if(posX == 0){
                 posX = parseFloat(matTert[i][0]) + 2;
                 posY = parseFloat(matTert[i][1]) - 10;
         }
         const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e, i);
-        moveIllustrationGroup(illustration, i, state);
+        moveIllustrationGroup(illustration, i, state, character);
     }
 
-    async function moveIllustrationGroup(illustration, i, state){
+    async function moveIllustrationGroup(illustration, i, state, character){
+        if(!existencecontrol(character)) return;
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
         switch (i){
             case 5:
@@ -2354,6 +2370,16 @@ let interval = [];
         illustration.style.opacity = '0';
         await moveIllustrationGroup(illustration, i, state);
     }
+
+    async function singleJumpAnimation(character, e, state){
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        let time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
+        await sleep(time);
+        character.style.top = (parseFloat(character.style.top) - 3) + 'vh';
+        await sleep(300);
+        character.style.top = (parseFloat(character.style.top) + 3) + 'vh';
+    }
+
 let cont_work_alone = 0;
 async function passiveAnimationWorkAlone(character, i, e, state){
     if(!existencecontrol(character)) return;
@@ -2725,15 +2751,23 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
             }
         }
 }
-    if(!cond || character.id == 'character_5'){
-        return;
+let posId = character.id[character.id.length - 1];
+
+    if(!cond || character.id == 'character_5' || character.id == 'character_10'){
+        return new Promise(resolve => {
+            // quando finisce l'animazione, chiami resolve()
+            resolve();
+        });
     }
     else{
-        let posId = character.id[character.id.length - 1];
         matTert[posId][0] = parseFloat(character.style.left) + 'vw';
         matTert[posId][1] = parseFloat(character.style.top) + 'vh';
         state.condBP1 = false;
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 2, parseFloat(character.style.top) - 10);
+        return new Promise(resolve => {
+            // quando finisce l'animazione, chiami resolve()
+            resolve();
+        });
     }
     }
 }
@@ -2810,13 +2844,16 @@ async function rightJumpP(character) {
 async function rightJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-    let posId = character.id.split("_")[1];
-    const characterImg = document.getElementById('characterImg_'+posId);
-    let source = characterImg.src.split("/").pop();
-    let src_character = source.split("_")[0];
-    src_character = src_character.split('.')[0];
-    src_character += ".png";
-    document.getElementById('characterImg_'+posId).src = src_character;
+    if(character.id != "character_10"){
+        let posId = character.id.split("_")[1];
+        const characterImg = document.getElementById('characterImg_'+posId);
+        let source = characterImg.src.split("/").pop();
+        let src_character = source.split("_")[0];
+        src_character = src_character.split('.')[0];
+        src_character += ".png";
+        document.getElementById('characterImg_'+posId).src = src_character;
+    }
+
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
