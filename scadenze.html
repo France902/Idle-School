@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lista Task — Idle School</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 24px; background:#fbfcfe; color:#111; }
+    h1 { margin: 0 0 12px 0; font-size: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 1000px; background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eef2f6; font-size: 14px; }
+    th { background: #f4f7fb; font-weight: 700; color:#0b3a66; }
+    tr:hover td { background: #fbfdff; }
+    .role { color:#435; font-weight:600; font-size:13px; }
+    .status { font-weight:700; font-size:13px; }
+    .open { color: #0b7; }
+    .btn { display:inline-block; margin:12px 0; padding:8px 12px; background:#0b66c2; color:#fff; border-radius:6px; text-decoration:none; cursor:pointer; border: none; }
+    .container { gap:12px; display:flex; flex-direction:column; }
+    @media (max-width:700px){ th,td{font-size:13px; padding:8px;} h1{font-size:18px;} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Task e scadenze — Idle School</h1>
+
+    <button id="downloadCsv" class="btn">Scarica come CSV</button>
+
+    <table id="tasksTable" aria-label="Tabella scadenze task">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Titolo</th>
+          <th>Autore (Ruolo)</th>
+          <th>Status</th>
+          <th>Scadenza</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>97</td>
+          <td>Aggiungere e finire il material shop</td>
+          <td class="role">France902 (Codice)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-14</td>
+        </tr>
+        <tr>
+          <td>96</td>
+          <td>Creare il primo ciclo idle</td>
+          <td class="role">France902 (Codice)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-14</td>
+        </tr>
+        <tr>
+          <td>94</td>
+          <td>Creare sprite di un paio di passanti casuali</td>
+          <td class="role">pojjlenders (Grafica)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-14</td>
+        </tr>
+        <tr>
+          <td>93</td>
+          <td>Passare su Squoosh ogni jpg (eccetto la mappa)</td>
+          <td class="role">pojjlenders (Grafica)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-14</td>
+        </tr>
+        <tr>
+          <td>90</td>
+          <td>Togliere le crepe dal tavolo di costruzione e rendere il disegnino più bello</td>
+          <td class="role">pojjlenders (Grafica)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-07</td>
+        </tr>
+        <tr>
+          <td>89</td>
+          <td>Creare sprite specifici per stand dei libri e stand raccolta fondi</td>
+          <td class="role">pojjlenders (Grafica)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-07</td>
+        </tr>
+        <tr>
+          <td>76</td>
+          <td>Migliorare il layout delle scelte</td>
+          <td class="role">pojjlenders (Grafica)</td>
+          <td class="status open">Open</td>
+          <td>2025-10-07</td>
+        </tr>
+        <tr>
