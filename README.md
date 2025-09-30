@@ -18,13 +18,11 @@ Obiettivo: Costruire e gestire una grande scuola, espandendola e migliorandola.
 
 
 
-Meccaniche:
+Meccaniche: Fare le scelte giuste, decidendo in base al bene della scuola e dell'insegnamento (o ai profitti), senza andare in bancarotta o traumatizzare gli studenti.
 
 
 
-
-
-Idle: Gestione di risorse (monete, prestigio) e missioni che offrono premi rapidi e costanti per guidare il giocatore.
+Idle: Gestione di risorse (monete, prestigio) e missioni per guidare il giocatore che offrono premi rapidi e costanti.
 
 
 
@@ -32,7 +30,7 @@ Movimento: Libero ma limitato dai bordi della mappa, con il preside come persona
 
 
 
-Personalizzazione: Arredamento, colori e temi per rendere la scuola unica e personale.
+Personalizzazione: Arredamento, colori e temi per rendere la scuola unica e personale, oltre alla lbera scelta dei dialoghi per intraprendere strade diverse nel gioco.
 
 
 
@@ -44,13 +42,15 @@ Vista: Prospettiva dall’alto a 60°, con la telecamera che segue il personaggi
 
 
 
-Grafica: Stile cartoonesco, allegro e accattivante.
+Grafica: Stile cartoon, allegro e accattivante.
 
 
 
 Narrativa: Leggera ma carismatica.
 
-Linee guida (partendo da inizio gioco)
+
+
+Linee guida (partendo da inizio gioco):
 
 Filmato iniziale
 
@@ -68,15 +68,15 @@ Nel menu si possono fare due cose:
 
 
 
-Cliccare su play per iniziare a giocare;
+  -Cliccare su play per iniziare a giocare;
 
 
 
-Accedere alle opzioni per cambiare lingua, suono e grafica (forse anche opzioni di accessibilità).
+  -Accedere alle opzioni per cambiare lingua, suono e grafica (forse anche opzioni di accessibilità).
 
 Premendo play parte una transizione e inizia il gioco.
 
-Si vede il preside sul grande giardino ancora vuoto, insieme ad alcuni operai della "Building & Co" che lo aiuteranno a costruire la scuola. Dopo i primi passi, parte un dialogo del preside che si chiede come farà a costruire l’edificio con pochi soldi (in alto a destra ci sono circa 100 monete). Si ricorda però di aver portato molti libri, romanzi e manuali, per la biblioteca della scuola. Sa che ne avanzeranno e decide di venderne qualcuno. Si muove verso la prima piattaforma e, sbloccandola, appare uno stand. Inizia così il primo ciclo di vendita, con poche persone in coda che comprano libri a 5 monete (o più). Qui si completano le prime missioni, come guadagnare monete, ottenendo prestigio.
+Si vede il preside sul grande giardino ancora vuoto, insieme ad alcuni operai della "Building & Co" che lo aiuteranno a costruire la scuola. Dopo i primi passi, parte un dialogo del preside che si chiede come farà a costruire l’edificio con pochi soldi (saldo iniziale di 100 monete). Si ricorda però di aver portato molti libri, romanzi e manuali, per la biblioteca della scuola. Sa che ne avanzeranno e decide di venderne qualcuno. Si muove verso la prima piattaforma e, sbloccandola, appare uno stand. Inizia così il primo ciclo di vendita, con poche persone in coda che comprano libri a 5 monete (o più). Qui si completano le prime missioni, come guadagnare monete, ottenendo prestigio.
 
 Dopo qualche vendita arriva Bob, il capo della Building & Co, dicendo che sono pronti a iniziare. Appare una piattaforma poco più a destra e in alto, dove costruire l’entrata della scuola. Costa 120 monete e la missione per costruirla dà anche 50 monete oltre al prestigio. Arriva poi il cugino del protagonista, Matthew, un tipo un po’ trasandato, che nota una cassetta della posta con nuove donazioni. Andando più in basso si raggiunge la cassetta e, premendola, si apre il menu missioni e quello della posta. La prima lettera è dello zio Richard, che decide di aiutare donando 200 monete.
 
