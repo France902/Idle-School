@@ -46,7 +46,7 @@ const importantStates = initialiseimportantStates();
 
 const posWildNature = initialiseWildNature();
 
-const N = 10;
+let N = 10;
 
 function initialiseMatTert(){
     if(localStorage.getItem("saved") == null){
@@ -61,6 +61,7 @@ function initialiseMatTert(){
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
         [ '113vw', '51vh', "walk-casually", -1, false, 'operaio'],
+        
         ];
         return matTert;
     } else{
@@ -530,71 +531,137 @@ function setupDialogue(e, state, saved_e) {
   }
 
   function changeLinesLanguage(){
-    const lines_en = [
+        const lines_en = [
         "Hi! I'm Bob, from Bob & Company!",
         "This place is really huge!",
-        ["I hope it was worth buying...", "I even had to give up my wallet to be able to buy it"],
-        "Don't worry! When you're with us, you can count on the best hands in town!",
-        "We're almost ready, come to the construction table whenever you want to start!",
+        ["I hope it was worth buying...", "I even had to give up my wallet to purchase it."],
+        "Don’t worry! When you’re with us, you can count on the best arms in the city!",
+        "We’re almost ready, when you want to start come to the construction table!",
         true,
-        "It seems I don't have enough materials to build something...",
-        "Don't worry! As my father used to say: 'build to sustain yourself, or sustain yourself to build!'",
+        "It seems I don’t have enough materials to build something...",
+        'Don’t worry! As my father used to say, "build to sustain yourself, or sustain yourself to build!"',
         true,
-        "I could sell some books I brought with me, but I'm not sure it's worth it...",
+        "I could sell some books I brought with me.",
         true,
-    ];
-    const lines_fr = [
-        "Salut ! Je suis Bob, de la Bob & Company !",
+        "Hi uncle!",
+        ["What te heck are you wearing?", "Matthew! Just in time..."],
+        "I’ll be your manager, so I put on the best suit from my wardrobe!",
+        "Why haven’t you started building yet?",
+        "We need money...",
+        "Don’t worry, leave it to me.",
+        "Let’s organize a fundraiser, with the mayor as special guest!",
+        "And how do we convince the mayor?",
+        "He’s my friend, and he also owes me a favor.",
+        "I’ll also prepare some exquisite lemonades. I know the perfect technique!",
+        "Does the mayor buy the lemons?",
+        true,
+        ];
+
+        const lines_fr = [
+        "Salut ! Je suis Bob, de Bob & Compagnie !",
         "Cet endroit est vraiment immense !",
-        ["J'espère que ça valait la peine de l'acheter...", "J'ai même dû donner mon portefeuille pour pouvoir l'acheter"],
-        "Ne t'inquiète pas ! Avec nous, tu peux compter sur les meilleures mains de la ville !",
-        "Nous sommes presque prêts, viens à la table de construction quand tu veux commencer !",
+        ["J’espère que ça valait la peine de l’acheter...", "J’ai même dû donner mon portefeuille pour l’acquérir."],
+        "Ne t’inquiète pas ! Avec nous, tu peux compter sur les meilleurs bras de la ville !",
+        "On est presque prêts, quand tu veux commencer viens à la table de construction !",
         true,
-        "On dirait que je n’ai pas assez de matériaux pour construire quoi que ce soit...",
-        "Ne t'inquiète pas ! Comme disait mon père : « construis pour vivre, ou vis pour construire ! »",
+        "Il semble que je n’ai pas assez de matériaux pour construire quelque chose...",
+        'Ne t’inquiète pas ! Comme disait mon père : "construis pour subsister, ou subsiste pour construire !"',
         true,
-        "Je pourrais vendre certains livres que j’ai apportés, mais je ne sais pas si ça en vaut la peine...",
+        "Je pourrais vendre quelques livres que j’ai apportés avec moi.",
         true,
-    ];
-    const lines_es = [
-        "¡Hola! ¡Soy Bob, de Bob & Company!",
+        "Salut, tonton !",
+        ["Mais comment es-tu habillé ?", "Matthew ! Juste à temps..."],
+        "Je serai ton manager, alors j’ai mis le meilleur costume de mon armoire !",
+        "Pourquoi n’avez-vous pas encore commencé à construire ?",
+        "Il nous faut de l’argent...",
+        "Ne t’inquiète pas, laisse-moi faire.",
+        "Organisons une collecte de fonds, avec le maire comme invité spécial !",
+        "Et comment allons-nous convaincre le maire ?",
+        "C’est mon ami, et il me doit aussi une faveur.",
+        "Je préparerai aussi de délicieuses citronnades. Je connais la technique parfaite !",
+        "C’est le maire qui achète les citrons ?",
+        true,
+        ];
+
+        const lines_es = [
+        "¡Hola! Soy Bob, de Bob & Company!",
         "¡Este lugar es realmente enorme!",
-        ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder comprarlo"],
-        "¡No te preocupes! ¡Cuando estás con nosotros puedes contar con las mejores manos de la ciudad!",
-        "Estamos casi listos, ¡ven a la mesa de construcción cuando quieras comenzar!",
+        ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder adquirirlo."],
+        "¡No te preocupes! Cuando estés con nosotros podrás contar con los mejores brazos de la ciudad.",
+        "¡Estamos casi listos, cuando quieras empezar ven a la mesa de construcción!",
         true,
         "Parece que no tengo suficientes materiales para construir algo...",
-        "¡No te preocupes! Como decía mi padre: «¡construye para vivir, o vive para construir!»",
+        '¡No te preocupes! Como decía mi padre: "¡construye para mantenerte, o mantente para construir!"',
         true,
-        "Podría vender algunos libros que traje conmigo, pero no sé si vale la pena...",
+        "Podría vender algunos libros que traje conmigo.",
         true,
-    ];
-    const lines_pt = [
-        "Olá! Sou o Bob, da Bob & Company!",
+        "¡Hola, tío!",
+        ["¿Pero cómo te has vestido?", "¡Matthew! Justo a tiempo..."],
+        "Seré tu mánager, así que me puse el mejor traje de mi armario.",
+        "¿Por qué no habéis empezado a construir todavía?",
+        "Necesitamos dinero...",
+        "Tranquilo, déjalo en mis manos.",
+        "¡Organicemos una recaudación de fondos, con el alcalde como invitado especial!",
+        "¿Y cómo convencemos al alcalde?",
+        "Es mi amigo, y además me debe un favor.",
+        "También prepararé unas exquisitas limonadas. ¡Conozco la técnica perfecta!",
+        "¿El alcalde compra los limones?",
+        true,
+        ];
+
+        const lines_pt = [
+        "Oi! Eu sou o Bob, da Bob & Companhia!",
         "Este lugar é realmente enorme!",
-        ["Espero que tenha valido a pena comprá-lo...", "Tive até que dar a minha carteira para poder comprá-lo"],
-        "Não se preocupe! Quando estiver conosco, pode contar com as melhores mãos da cidade!",
-        "Estamos quase prontos, venha à mesa de construção quando quiser começar!",
+        ["Espero que tenha valido a pena comprá-lo...", "Tive até de dar a minha carteira para poder comprá-lo."],
+        "Não se preocupe! Quando estiver conosco poderá contar com os melhores braços da cidade!",
+        "Estamos quase prontos, quando quiser começar venha para a mesa de construção!",
         true,
         "Parece que não tenho materiais suficientes para construir algo...",
-        "Não se preocupe! Como dizia meu pai: «construa para se sustentar, ou sustente-se para construir!»",
+        'Não se preocupe! Como dizia meu pai: "constrói para te sustentares, ou sustenta-te para construíres!"',
         true,
-        "Poderia vender alguns livros que trouxe comigo, mas não sei se vale a pena...",
+        "Eu poderia vender alguns livros que trouxe comigo.",
         true,
-    ];
-    const lines_de = [
-        "Hallo! Ich bin Bob, von Bob & Company!",
+        "Oi, tio!",
+        ["Mas como é que te vestiste?", "Matthew! Mesmo a tempo..."],
+        "Serei o teu gerente, então vesti o melhor terno do meu guarda-roupa!",
+        "Por que ainda não começaram a construir?",
+        "Precisamos de dinheiro...",
+        "Tranquilo, deixa comigo.",
+        "Vamos organizar uma angariação de fundos, com o prefeito como convidado especial!",
+        "E como vamos convencer o prefeito?",
+        "É meu amigo, e também me deve um favor.",
+        "Também vou preparar limonadas deliciosas. Conheço a técnica perfeita!",
+        "O prefeito compra os limões?",
+        true,
+        ];
+
+        const lines_de = [
+        "Hallo! Ich bin Bob von Bob & Company!",
         "Dieser Ort ist wirklich riesig!",
-        ["Ich hoffe, es hat sich gelohnt, es zu kaufen...", "Ich musste sogar meine Brieftasche hergeben, um es kaufen zu können"],
-        "Keine Sorge! Wenn du mit uns bist, kannst du auf die besten Hände der Stadt zählen!",
-        "Wir sind fast bereit, komm einfach zum Bautisch, wann immer du anfangen willst!",
+        ["Ich hoffe, es hat sich gelohnt, es zu kaufen...", "Ich musste sogar meine Brieftasche hergeben, um es zu erwerben."],
+        "Keine Sorge! Wenn du bei uns bist, kannst du auf die besten Arme der Stadt zählen!",
+        "Wir sind fast fertig, wenn du anfangen willst, komm zum Bautisch!",
         true,
-        "Es scheint, als hätte ich nicht genug Materialien, um etwas zu bauen...",
-        'Keine Sorge! Wie mein Vater immer sagte: "Baue, um dich zu erhalten, oder erhalte dich, um zu bauen!"',
+        "Es scheint, dass ich nicht genug Materialien habe, um etwas zu bauen...",
+        'Keine Sorge! Wie mein Vater sagte: "Baue, um dich zu erhalten, oder erhalte dich, um zu bauen!"',
         true,
-        "Ich könnte einige Bücher verkaufen, die ich mitgebracht habe, aber ich weiß nicht, ob es das wert ist...",
+        "Ich könnte ein paar Bücher verkaufen, die ich mitgebracht habe.",
         true,
-    ];
+        "Hallo Onkel!",
+        ["Aber was hast du da an?", "Matthew! Genau rechtzeitig..."],
+        "Ich werde dein Manager sein, also habe ich meinen besten Anzug aus dem Schrank geholt!",
+        "Warum habt ihr noch nicht angefangen zu bauen?",
+        "Wir brauchen Geld...",
+        "Keine Sorge, überlass das mir.",
+        "Lass uns eine Spendenaktion organisieren, mit dem Bürgermeister als Ehrengast!",
+        "Und wie überzeugen wir den Bürgermeister?",
+        "Er ist mein Freund, und er schuldet mir auch einen Gefallen.",
+        "Ich werde auch köstliche Limonaden zubereiten. Ich kenne die perfekte Technik!",
+        "Kauft der Bürgermeister die Zitronen?",
+        true,
+        ];
+
+
 
     const langCode = state.language[0] + state.language[1];
     switch (langCode){
@@ -802,12 +869,37 @@ function setupDialogue(e, state, saved_e) {
     const arrow_choice2 = document.getElementById('arrow_choice2');
     let choice_for_key = 1;
     let answerLines;
-    let answerLines_it = ["Facciamo valere ogni soldo che hai speso allora!", "Pensavo di essere in ritardo.."];
-    let answerLines_en = ["Let's make every penny you spent worth it then!"];
-    let answerLines_fr = ["Faisons en sorte que chaque euro dépensé en vaille la peine !"];
-    let answerLines_es = ["¡Hagamos que valga cada centavo que gastaste entonces!"];
-    let answerLines_pt = ["Vamos fazer cada centavo que você gastou valer a pena então!"];
-    let answerLines_de = ["Lass uns dafür sorgen, dass sich jeder ausgegebene Cent lohnt!"];
+        let answerLines_it = [
+        "Facciamo valere ogni soldo che hai speso allora!",
+        "Pensavo di essere in ritardo.."
+        ];
+
+        let answerLines_en = [
+        "Let's make every penny you spent worth it then!",
+        "I thought I was late.."
+        ];
+
+        let answerLines_fr = [
+        "Faisons en sorte que chaque euro dépensé en vaille la peine !",
+        "Je pensais être en retard.."
+        ];
+
+        let answerLines_es = [
+        "¡Hagamos que valga cada centavo que gastaste entonces!",
+        "Pensé que llegaba tarde.."
+        ];
+
+        let answerLines_pt = [
+        "Vamos fazer cada centavo que você gastou valer a pena então!",
+        "Achei que estava atrasado.."
+        ];
+
+        let answerLines_de = [
+        "Lass uns dafür sorgen, dass sich jeder ausgegebene Cent lohnt!",
+        "Ich dachte, ich wäre zu spät.."
+        ];
+
+
 
     const langCode = state.language[0] + state.language[1];
 
@@ -1941,23 +2033,29 @@ function createInteractionCircle(e, state){
 function animationFirstCycle(e, state, saved_e) {
     let posX = Math.floor(Math.random() * 191) - 60;
     let posY = Math.floor(Math.random() * 10) + 173;
+    let posX_exit = Math.floor(Math.random() * 191) - 60;
+    let posY_exit = Math.floor(Math.random() * 10) + 163;
     setTimeout(() => {
         createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
         const i = matTert.length - 1;        
-        passiveAnimationStand(document.getElementById("character_"+i), i, e, state);
+        passiveAnimationStand(document.getElementById("character_"+i), i, e, state, posX_exit, posY_exit, saved_e);
     }, 500);
     
 }
 
-async function passiveAnimationStand(character, i, e, state){
+async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exit, saved_e){
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     await returnToObject(character, seatForObjects[1][0], seatForObjects[1][1], false, state, e);
     await sleep(1000);
     await singleJumpAnimation(character, e, state);
-    await sleep(500);
+    await sleep(1000);
     await singleJumpAnimation(character, e, state);
-    
+    await sleep(1000);
+    await returnToObject(character, posX_exit, posY_exit, true, state, e);
+    await eliminateCharacter(e, i);
+    await sleep(500);
+    await animationFirstCycle(e, state, saved_e);
 }
 
 function moveInteractionCircle(e, state, posX, posY){
@@ -2037,7 +2135,7 @@ function creationTertiaryCharacters(e, state, saved_e) {
     let i;
     let scaleX;
     
-    for(i=0;i<N;i++){
+    for(i=0;i<matTert.length;i++){
         createCharacter(e, state, i);
         assignZIndex(e, state, i);
     }
@@ -2600,7 +2698,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
     let aQuarterStepY = false;
     if(x != false){
         let stepX = (parseFloat(x) - parseFloat(character.style.left)) / 8;
-        let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 9;
+        let stepY = (parseFloat(y) - parseFloat(character.style.top)) / 7;
         let diffStepX = Math.abs(stepX - Math.trunc(stepX));
         stepX -= diffStepX;
 
@@ -2625,10 +2723,10 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
 
         stepX = Math.trunc(stepX);
         stepY = Math.trunc(stepY);
-        move(character, order, stepX, stepY);
+        await move(character, order, stepX, stepY);
     }
     else{
-        move(character, order, stepx, stepy, x, state);
+        await move(character, order, stepx, stepy, x, state);
     }
     async function move(character, order, stepX, stepY, cond = true){
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
@@ -2754,20 +2852,13 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
 let posId = character.id[character.id.length - 1];
 
     if(!cond || character.id == 'character_5' || character.id == 'character_10'){
-        return new Promise(resolve => {
-            // quando finisce l'animazione, chiami resolve()
-            resolve();
-        });
+        return 
     }
     else{
         matTert[posId][0] = parseFloat(character.style.left) + 'vw';
         matTert[posId][1] = parseFloat(character.style.top) + 'vh';
         state.condBP1 = false;
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 2, parseFloat(character.style.top) - 10);
-        return new Promise(resolve => {
-            // quando finisce l'animazione, chiami resolve()
-            resolve();
-        });
     }
     }
 }
@@ -2775,7 +2866,7 @@ let posId = character.id[character.id.length - 1];
 function controlClose(character, state){
     if(!existencecontrol(character)) return;
     let cont = 0;
-    for(i=0;i<N;i++){
+    for(i=0;i<matTert.length;i++){
         if(Math.abs(parseFloat(character.style.left) - parseFloat(matTert[i][0])) <= 50 && Math.abs(parseFloat(character.style.top) - parseFloat(matTert[i][1]) <= 50)){
             state.ids[cont] = i;
             cont++;
@@ -2900,22 +2991,22 @@ async function topJump(character, half, a_quarter) {
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     };
     if (a_quarter) {
-        await step(-1.12, 0);
-        await step(-1.12, 60);
+        await step(-0.9, 0);
+        await step(-0.9, 60);
         await step(-0.65, 60);
         await step(0.65, 60);
         await ripristineTransition(character);
     }
     if(half){
-        await step(-2.25, 0);
-        await step(-2.25, 60);
+        await step(-1.75, 0);
+        await step(-1.75, 60);
         await step(-1.2, 60);
         await step(1.2, 60);
         await ripristineTransition(character);
     }
     else{
-        await step(-4.5, 0);
-        await step(-4.5, 60);
+        await step(-3.5, 0);
+        await step(-3.5, 60);
         await step(-2.5, 60);
         await step(2.5, 60);
         await ripristineTransition(character);
@@ -2981,24 +3072,24 @@ async function downJump(character, half, a_quarter) {
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
     };
     if (a_quarter) {
-        await step(0.375, 0);
-        await step(0.375, 60);
-        await step(0.25, 60);
-        await step(-0.25, 60);
+        await step(0.9, 0);
+        await step(0.9, 60);
+        await step(0.6, 60);
+        await step(-0.6, 60);
         await ripristineTransition(character);
     }
     if(half){
-        await step(0.75, 0);
-        await step(0.75, 60);
-        await step(0.5, 60);
-        await step(-0.5, 60);
+        await step(1.75, 0);
+        await step(1.75, 60);
+        await step(1.25, 60);
+        await step(-1.25, 60);
         await ripristineTransition(character);
     }
     else{
-        await step(2.5, 0);
+        await step(3.5, 0);
+        await step(3.5, 60);
         await step(2.5, 60);
-        await step(1.5, 60);
-        await step(-1.5, 60);
+        await step(-2.5, 60);
         await ripristineTransition(character);
     }
 }
@@ -3033,7 +3124,7 @@ function diaologueB_P1(e, state) {
             await rightJump(t, false); 
             await sleep(200);
             await rotateBob(b);
-            await returnToObject(t, seatForObjects[0][0], seatForObjects[0][1], false, state, e);
+            returnToObject(t, seatForObjects[0][0], seatForObjects[0][1], false, state, e);
             await moveCharacter(b, jumps[0].length, jumps);
             await sleep(700);
             await removeIllustration(bob_illustration, t_illustration);
