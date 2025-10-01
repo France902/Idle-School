@@ -1,4 +1,4 @@
-        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
@@ -201,7 +201,7 @@
             margin: 0;
             width: 80vw;
             height: 33vh;
-            font-size: 5vh;
+            font-size: 6vh;
             color: black;
             text-align: left;
             font-family: "Comic Neue", cursive;
@@ -229,7 +229,7 @@
             white-space: pre-wrap; 
             word-wrap: break-word; 
             overflow-wrap: break-word; 
-            margin-top: -4vh;
+            margin-top: 3.7vh;
             margin-left: 10vw;
             z-index: 0;
             opacity: 1;
@@ -712,7 +712,7 @@
             text-align: left;
             width: 25vw;
             height: 5vh;
-            font-size: 4vh;
+            font-size: 6.2vh;
             white-space: pre-wrap; 
             word-wrap: break-word; 
             overflow-wrap: break-word; 
