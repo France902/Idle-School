@@ -24,7 +24,6 @@ function startGame(e = null, state = null) {
         backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
-        bookCycle(elements, state, e);
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -358,6 +357,7 @@ function initialiseStates() {
     posBY: 39,
     ids: [],
     index: -1,
+    money: 0,
 
     // Condizioni ambientali
     cond_platform_1: false,
@@ -2031,10 +2031,10 @@ function createInteractionCircle(e, state){
 }
 
 function animationFirstCycle(e, state, saved_e) {
-    let posX = Math.floor(Math.random() * 191) - 60;
-    let posY = Math.floor(Math.random() * 10) + 173;
-    let posX_exit = Math.floor(Math.random() * 191) - 60;
-    let posY_exit = Math.floor(Math.random() * 10) + 163;
+    let posX = Math.floor(Math.random() * 141) - 80;
+    let posY = Math.floor(Math.random() * 10) + 230;
+    let posX_exit = Math.floor(Math.random() * 141) - 80;
+    let posY_exit = Math.floor(Math.random() * 10) + 230;
     setTimeout(() => {
         createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
         const i = matTert.length - 1;        
@@ -2052,10 +2052,16 @@ async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exi
     await sleep(1000);
     await singleJumpAnimation(character, e, state);
     await sleep(1000);
+    await addMoney(2, state);
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
     await eliminateCharacter(e, i);
     await sleep(500);
     await animationFirstCycle(e, state, saved_e);
+}
+
+function addMoney(qMoney, state) {
+    state.money += qMoney;
+    document.getElementById("money").innerHTML = state.money +  " 🪙";
 }
 
 function moveInteractionCircle(e, state, posX, posY){
