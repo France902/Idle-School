@@ -45,6 +45,8 @@ const importantStates = initialiseimportantStates();
 
 const posWildNature = initialiseWildNature();
 
+const posIdleCycle = initialiseposIdle();
+
 let N = 10;
 
 function initialiseMatTert(){
@@ -150,6 +152,18 @@ function initialiseWildNature(){
         return WildNature;
     }
     else return JSON.parse(localStorage.getItem("posWildNature"));
+}
+
+function initialiseposIdle() {
+    if(localStorage.getItem("saved") == null){
+        const posIdleCycle = [
+            [60, 173],
+        ];
+        return posIdleCycle;
+    } else{
+        const posIdleCycle= JSON.parse(localStorage.getItem("posIdleCycle"));
+        return posIdleCycle;
+    }
 }
 
 function setPositionWildNature(mat_nature){
@@ -1496,6 +1510,9 @@ function addParameters(distance, j, operation){
             for(i=0;i<importantObjects.length;i++){
                 importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + unit;
             }
+            for(i=0;i<posIdleCycle.length;i++){
+                posIdleCycle[i][j] = (parseFloat(posIdleCycle[i][j]) + distance);
+            }
             break;
         case "subtract": 
             for(i=0;i<matTert.length;i++){
@@ -1504,8 +1521,12 @@ function addParameters(distance, j, operation){
             for(i=0;i<importantObjects.length;i++){
                 importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + unit;
             }
+            for(i=0;i<posIdleCycle.length;i++){
+                posIdleCycle[i][j] = (parseFloat(posIdleCycle[i][j]) - distance);
+            }
             break;
     }
+
 }
 
 function diagonalTopRight(distance) {
@@ -2013,10 +2034,32 @@ function startFirstCycle(e, state, chosed = null, saved_e){
         eliminateCharacter(e, 3);
     }
 }
-
+let cont_first_cycle = 0;
 function bookCycle(e, state, saved_e){
     e.stand.style.opacity = '1';
-    animationFirstCycle(e, state, saved_e);
+    document.getElementById("stacks_of_books").style.display = 'none';
+    if(cont_first_cycle == 0){
+        const randomDelay1 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+        const randomDelay2 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+        setTimeout(() => {
+            animationFirstCycle(e, state, saved_e);
+        }, randomDelay1);
+        setTimeout(() => {
+            animationFirstCycle(e, state, saved_e);
+        }, randomDelay2);
+    }
+    else if(cont_first_cycle == 2) {
+        cont_first_cycle = 0;
+        const randomDelay1 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+        const randomDelay2 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+        setTimeout(() => {
+            animationFirstCycle(e, state, saved_e);
+        }, randomDelay1);
+        setTimeout(() => {
+            animationFirstCycle(e, state, saved_e);
+        }, randomDelay2);
+    }
+    
 }
 
 function fundraisingCycle(e, state){
@@ -2031,15 +2074,13 @@ function createInteractionCircle(e, state){
 }
 
 function animationFirstCycle(e, state, saved_e) {
-    let posX = Math.floor(Math.random() * 141) - 80;
-    let posY = Math.floor(Math.random() * 10) + 230;
-    let posX_exit = Math.floor(Math.random() * 141) - 80;
-    let posY_exit = Math.floor(Math.random() * 10) + 230;
-    setTimeout(() => {
-        createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
-        const i = matTert.length - 1;        
-        passiveAnimationStand(document.getElementById("character_"+i), i, e, state, posX_exit, posY_exit, saved_e);
-    }, 500);
+    let posX = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
+    let posY = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
+    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
+    let posY_exit = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
+    createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
+    let i = matTert.length - 1;     
+    passiveAnimationStand(document.getElementById("character_"+i), i, e, state, posX_exit, posY_exit, saved_e);
     
 }
 
@@ -2056,7 +2097,8 @@ async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exi
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
     await eliminateCharacter(e, i);
     await sleep(500);
-    await animationFirstCycle(e, state, saved_e);
+    cont_first_cycle++;
+    await bookCycle(e, state, saved_e);
 }
 
 function addMoney(qMoney, state) {
@@ -2327,6 +2369,7 @@ function assignZIndex(e, state, i, cond = false){
 }
 
 function eliminateCharacter(e, i){
+        if(document.getElementById('character_'+i) == null) i--;
             document.getElementById('character_'+i).remove();
             if (document.getElementById('illustration_' + i)) {
                 document.getElementById('illustration_' + i).remove();
@@ -2335,8 +2378,11 @@ function eliminateCharacter(e, i){
                 for(let j=i;j<matTert.length;j++){
                     document.getElementById('character_'+(j+1)).id = 'character_'+j;
                     document.getElementById('characterImg_'+(j+1)).id = 'characterImg_'+j;
-                    if(matTert[j][2] != '') document.getElementById('illustration_'+(j+1)).id = 'illustration_'+j;
+                    if(matTert[j][2] != '' && matTert[j][2] != 'passiveAnimationStand') {
+                        document.getElementById('illustration_'+(j+1)).id = 'illustration_'+j;
+                    }
                 }
+            
 }
 
 
@@ -2857,7 +2903,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
 }
 let posId = character.id[character.id.length - 1];
 
-    if(!cond || character.id == 'character_5' || character.id == 'character_10'){
+    if(!cond || character.id == 'character_5' || character.id == 'character_10' || character.id == 'character_11'){
         return 
     }
     else{
@@ -2883,23 +2929,27 @@ function controlClose(character, state){
 }
 let cond_ripeti_controllo = true;
 function fastAnimations(ids, state){
+    
     let i;
     if(cond_ripeti_controllo){
         for(i=0;i<ids.length-1;i++){
-            if(matTert[ids[i]][2] == 'group'){
-                cond_ripeti_controllo = false;
-                state.maxTimeAnimationGroup[ids[i]] /= 10;
+            if(matTert[ids[i]] != undefined) {
+                if(matTert[ids[i]][2] == 'group'){
+                    cond_ripeti_controllo = false;
+                    state.maxTimeAnimationGroup[ids[i]] /= 10;
+                }
             }
-            
         }
         
         for (let j = 0; j < ids.length - 1; j++) {
+            if(matTert[ids[i]] != undefined) {
             if (matTert[ids[j]][2] == 'group') {
                 setTimeout(() => {
                     state.maxTimeAnimationGroup[ids[j]] *= 10;
                     cond_ripeti_controllo = true;
                 }, 2000);
             }
+        }
         }
     }
     
@@ -2944,11 +2994,13 @@ async function rightJump(character, half, a_quarter) {
     if(character.id != "character_10"){
         let posId = character.id.split("_")[1];
         const characterImg = document.getElementById('characterImg_'+posId);
+        /*
         let source = characterImg.src.split("/").pop();
         let src_character = source.split("_")[0];
         src_character = src_character.split('.')[0];
         src_character += ".png";
         document.getElementById('characterImg_'+posId).src = src_character;
+        */
     }
 
     const step = async (topDelta, leftDelta, delay) => {
