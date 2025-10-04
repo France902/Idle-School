@@ -291,9 +291,9 @@ function writeElements() {
     platform_1: "document.getElementById('platform_1')",
     platform_2: "document.getElementById('platform_2')",
     keyE: "document.getElementById('key_e')",
-    circle1: "document.getElementById('circle1')",
-    circle2: "document.getElementById('circle2')",
-    circle3: "document.getElementById('circle3')",
+    circle1: "document.getElementById('missione1')",
+    circle2: "document.getElementById('missione1_no!')",
+    circle3: "document.getElementById('missione1')",
     click_circle: "document.getElementById('click_circle')",
 
     // Dialoghi e narrativa
@@ -3300,3 +3300,4 @@ window.onload = function(){
     
     startGame();
 } 
+
