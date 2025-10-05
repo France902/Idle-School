@@ -24,6 +24,12 @@ function startGame(e = null, state = null) {
         backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
+        bookCycle(elements, state, e);
+        setTimeout(() => {
+            bookCycle(elements, state, e);
+        }, 500) 
+
+        
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -2031,35 +2037,16 @@ function startFirstCycle(e, state, chosed = null, saved_e){
         else fundraisingCycle(e, state);
         resetMoveWorld(e, -3, 5);
         state.cond_deactivate_movement = false;
-        eliminateCharacter(e, 3);
+        eliminateCharacter(e, 3, null);
     }
 }
 let cont_first_cycle = 0;
 function bookCycle(e, state, saved_e){
     e.stand.style.opacity = '1';
-    document.getElementById("stacks_of_books").style.display = 'none';
-    if(cont_first_cycle == 0){
-        const randomDelay1 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-        const randomDelay2 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-        setTimeout(() => {
-            animationFirstCycle(e, state, saved_e);
-        }, randomDelay1);
-        setTimeout(() => {
-            animationFirstCycle(e, state, saved_e);
-        }, randomDelay2);
-    }
-    else if(cont_first_cycle == 2) {
-        cont_first_cycle = 0;
-        const randomDelay1 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-        const randomDelay2 = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-        setTimeout(() => {
-            animationFirstCycle(e, state, saved_e);
-        }, randomDelay1);
-        setTimeout(() => {
-            animationFirstCycle(e, state, saved_e);
-        }, randomDelay2);
-    }
-    
+    //document.getElementById("stacks_of_books").style.display = 'none';
+    setTimeout(() => {
+        animationFirstCycle(e, state, saved_e);
+    }, 500);
 }
 
 function fundraisingCycle(e, state){
@@ -2095,7 +2082,7 @@ async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exi
     await sleep(1000);
     await addMoney(2, state);
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
-    await eliminateCharacter(e, i);
+    await eliminateCharacter(e, i, character);
     await sleep(500);
     cont_first_cycle++;
     await bookCycle(e, state, saved_e);
@@ -2368,21 +2355,29 @@ function assignZIndex(e, state, i, cond = false){
     
 }
 
-function eliminateCharacter(e, i){
+function eliminateCharacter(e, i, character){
         if(document.getElementById('character_'+i) == null) i--;
+        if(document.getElementById('character_'+i).id != character.id) i--;
+        console.log(document.getElementById('character_'+i).id);
+        console.log(character.id);
             document.getElementById('character_'+i).remove();
             if (document.getElementById('illustration_' + i)) {
                 document.getElementById('illustration_' + i).remove();
             }
-            matTert.splice(i, 1);
-                for(let j=i;j<matTert.length;j++){
-                    document.getElementById('character_'+(j+1)).id = 'character_'+j;
-                    document.getElementById('characterImg_'+(j+1)).id = 'characterImg_'+j;
-                    if(matTert[j][2] != '' && matTert[j][2] != 'passiveAnimationStand') {
-                        document.getElementById('illustration_'+(j+1)).id = 'illustration_'+j;
-                    }
-                }
             
+                for(let j=i-1;j<matTert.length;j++){
+                    if(document.getElementById('character_'+(j+1))){
+                        document.getElementById('character_'+(j+1)).id = `character_${j}`;
+                        document.getElementById('characterImg_'+(j+1)).id = `characterImg_${j}`;
+                        if(matTert[j+1][2] != '' && matTert[j+1][2] != 'passiveAnimationStand') {
+                            document.getElementById('illustration_'+(j+1)).id = `illustration_${j}`;
+                        }
+                        console.log("eliminato");
+                    }
+                    
+                }
+
+                matTert.splice(i, 1);
 }
 
 
@@ -2901,9 +2896,12 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
             }
         }
 }
-let posId = character.id[character.id.length - 1];
-
-    if(!cond || character.id == 'character_5' || character.id == 'character_10' || character.id == 'character_11'){
+let posId;
+if(character.id.length == 11) posId = character.id[character.id.length - 1];
+else if(character.id.length == 12) posId = parseFloat(character.id[character.id.length - 2] + character.id[character.id.length - 1]);
+if(document.getElementById('character_'+posId) == null) posId--;
+if(document.getElementById('character_'+posId).id != character.id) posId++;
+    if(!cond || character.id == 'character_5' || matTert[posId][2] == 'passiveAnimationStand'){
         return 
     }
     else{
@@ -2942,7 +2940,7 @@ function fastAnimations(ids, state){
         }
         
         for (let j = 0; j < ids.length - 1; j++) {
-            if(matTert[ids[i]] != undefined) {
+            if(matTert[ids[j]] != undefined) {
             if (matTert[ids[j]][2] == 'group') {
                 setTimeout(() => {
                     state.maxTimeAnimationGroup[ids[j]] *= 10;
@@ -3300,5 +3298,3 @@ window.onload = function(){
     
     startGame();
 } 
-
-
