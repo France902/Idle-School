@@ -24,12 +24,7 @@ function startGame(e = null, state = null) {
         backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
-        bookCycle(elements, state, e);
-        setTimeout(() => {
-            bookCycle(elements, state, e);
-        }, 500) 
-
-        
+        writeMissions(elements, state);
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -52,6 +47,8 @@ const importantStates = initialiseimportantStates();
 const posWildNature = initialiseWildNature();
 
 const posIdleCycle = initialiseposIdle();
+
+const logConstructionMission = initialiseConstructionMission();
 
 let N = 10;
 
@@ -169,6 +166,20 @@ function initialiseposIdle() {
     } else{
         const posIdleCycle= JSON.parse(localStorage.getItem("posIdleCycle"));
         return posIdleCycle;
+    }
+}
+
+function initialiseConstructionMission() {
+    if(localStorage.getItem("saved") == null){
+        const logConstructionMission = [
+            ["Base della entrata", "15_M"],
+            ["Muri della entrata", "5_M", "3_V"],
+            ["Tetto della entrata", "5_L"],
+        ];
+        return logConstructionMission;
+    } else{
+        const logConstructionMission= JSON.parse(localStorage.getItem("logConstructionMission"));
+        return logConstructionMission;
     }
 }
 
@@ -388,6 +399,12 @@ function initialiseStates() {
     maxTimeAnimationGroup: [N],
     maxTimeAnimationWorkAlone: [N],
     maxTimeAnimationAlone: [N],
+
+    //risorse
+    brick_resource: 0, 
+    glass_resource: 0, 
+    wood_resource: 0,
+
   };
 }
 
@@ -1885,17 +1902,21 @@ function openConstructionMenu(e, state){
         e.circle2.style.display = 'none';
         e.circle3.style.display = 'none';
         state.cond_deactivate_movement = true;
+
         clearInterval(intervalMovement);
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
         e.construction_menu.style.opacity = '1';
         e.menu.style.opacity = '0';
         e.c_menu_main_text.style.opacity = '0';
+
          setTimeout(() => {
             e.menu.style.transition = 'opacity 0.1s linear';
             e.c_menu_main_text.style.transition = 'opacity 0.1s linear';
             e.menu.style.pointerEvents = 'all';
             e.menu.style.opacity = '1';
             e.c_menu_main_text.style.opacity = '1';
+            writeMissions(e, state);
+            controlProgress(e, state);
         }, 1000);
         e.lateral_arrow.style.display = 'block';
         if(cont_menu == 0) assignLanguage(e, state);
@@ -1918,6 +1939,62 @@ function openConstructionMenu(e, state){
                 cont_menu++;
             }
         });
+}
+
+function writeMissions(e, state) {
+    e.first_c_m.textContent = logConstructionMission[0][0];
+    e.second_c_m.textContent = logConstructionMission[1][0];
+    e.third_c_m.textContent = logConstructionMission[2][0];
+    for(let index=0;index<3;index++){
+        let j = 0;
+        while(j < (logConstructionMission[index].length -1)) {
+            document.getElementById("text"+index+"_cost"+j).style.display = 'block';
+            document.getElementById("text"+index+"_cost"+j).textContent = '0/' + parseFloat(logConstructionMission[index][j+1][0]);
+            let i = 1;
+            while(logConstructionMission[index][j+1][i] != "_") {
+                document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(logConstructionMission[index][j+1][i]);
+                i++;
+            }
+            i++;
+            document.getElementById("img"+index+"_cost"+j).style.display = 'block';
+            switch(logConstructionMission[index][j+1][i]) {
+                case 'M':
+                    document.getElementById("img"+index+"_cost"+j).src = "mattone.png";
+                    break;
+                case 'L':
+                    document.getElementById("img"+index+"_cost"+j).src = "legno.png";
+                    break;
+                case 'V':
+                    document.getElementById("img"+index+"_cost"+j).src = "vetro.png";
+                    break;
+            }
+            j++;
+        }
+        
+    }
+    
+}
+
+function controlProgress(e, state) {
+    for(let j=0;j<3;j++){
+        for(let i=1;i<logConstructionMission[j].length;i++) {
+            let resource = logConstructionMission[j][i];
+            resource = resource[resource.length - 1];
+            let q_resource = parseFloat(logConstructionMission[j][i]);
+            switch (resource) {
+                case 'M':
+                    if(state.brick_resource == q_resource) completeMission(j);
+                    break;
+                case 'V':
+                    if(state.glass_resource == q_resource) completeMission(j);
+                    break;
+                case 'L':
+                    if(state.wood_resource == q_resource) completeMission(j);
+                    break;
+            }
+        }
+    }
+
 }
 
 function closeConstructionMenu(e, state) {
@@ -2033,6 +2110,9 @@ function startFirstCycle(e, state, chosed = null, saved_e){
         e.display_img_choice2.style.pointerEvents = 'none';
         if(chosed == 1){
             bookCycle(e, state, saved_e);
+            setTimeout(() => {
+                bookCycle(e, state, saved_e);
+            }, 500) 
         }
         else fundraisingCycle(e, state);
         resetMoveWorld(e, -3, 5);
