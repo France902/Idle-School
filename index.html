@@ -46,7 +46,6 @@
     <div id="preside_container">
         <img src="Preside.png" id="preside">
     </div>
-    <img id="stand" class="school_imgs" src="stand_libri.png" style="left: 140vw; top: 80vw;">
     </div>
     <div id="dialogues_container">
         <div id="name_box">
@@ -90,30 +89,61 @@
             <div class="mission_1" id="mission1">
                 <img src="missioni_main_costruzioni.png">
                 <h1 id="first_c_m">School Entrance</h1>
+                <!--
                 <img src="blueprint1.png" id="icon_img">
-
-                <div class="first_resource" style="margin-left: 3.5vw;">
-                    <img class="cost" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.3vh;" src="legno.png">
-                    <p class="text_cost">0/20</p>
+                -->
+                <div class="resource" style="margin-left: 3.5vw;">
+                    <img class="cost" id="img0_cost0" style="width: 2vw; height: 4vh; margin-left: 3.8vw; margin-top: 3.3vh; " src="legno.png">
+                    <p class="text_cost" id="text0_cost0" ></p>
                 </div>
                 
-                <div class="first_resource" style="margin-left: 10vw;">
-                    <img class="cost" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.3vh;" src="mattone.png">
-                    <p class="text_cost">0/40</p>
+                <div class="resource" style="margin-left: 10vw;">
+                    <img class="cost" id="img0_cost1" style="width: 2vw; height: 4vh; margin-left: 3.8vw; margin-top: 3.3vh; " src="mattone.png">
+                    <p class="text_cost" id="text0_cost1"></p>
                 </div>
 
-                <div class="first_resource" style="margin-left: 16.5vw;">
-                    <img class="cost" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.3vh;" src="vetro.png">
-                    <p class="text_cost">0/30</p>
+                <div class="resource" style="margin-left: 16.5vw;">
+                    <img class="cost" id="img0_cost2" style="width: 2vw; height: 4vh; margin-left: 3.8vw; margin-top: 3.3vh; " src="vetro.png">
+                    <p class="text_cost" id="text0_cost2"></p>
                 </div>
             </div>
             <div class="mission_2" id="mission2">
                 <img src="missioni_secondarie_costruzioni.png">
                 <h1 id="second_c_m">Next Construction</h1>
+
+                <div class="resource" style="margin-left: 3.5vw;">
+                    <img class="cost" id="img1_cost0" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.6vh; " src="legno.png">
+                    <p class="text_cost" id="text1_cost0" ></p>
+                </div>
+                
+                <div class="resource" style="margin-left: 10vw;">
+                    <img class="cost" id="img1_cost1" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.6vh; " src="mattone.png">
+                    <p class="text_cost" id="text1_cost1"></p>
+                </div>
+
+                <div class="resource" style="margin-left: 16.5vw;">
+                    <img class="cost" id="img1_cost2" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.6vh; " src="vetro.png">
+                    <p class="text_cost" id="text1_cost2"></p>
+                </div>
             </div>
             <div class="mission_3" id="mission3">
                 <img src="missioni_secondarie_costruzioni.png">
                 <h1 id="third_c_m">Next Construction</h1>
+
+                <div class="resource" style="margin-left: 3.5vw;">
+                    <img class="cost" id="img2_cost0" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.9vh; " src="legno.png">
+                    <p class="text_cost" id="text2_cost0" ></p>
+                </div>
+                
+                <div class="resource" style="margin-left: 10vw;">
+                    <img class="cost" id="img2_cost1" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.9vh; " src="mattone.png">
+                    <p class="text_cost" id="text2_cost1"></p>
+                </div>
+
+                <div class="resource" style="margin-left: 16.5vw;">
+                    <img class="cost" id="img2_cost2" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.9vh; " src="vetro.png">
+                    <p class="text_cost" id="text2_cost2"></p>
+                </div>
             </div>
             </div>
             <h1 id="c_menu_main_text" style="margin-left: 27vw; margin-top: -40vh;">BUILD</h1>
@@ -124,7 +154,7 @@
         </div>
             
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
-        <div id="money" class="hud-box" style="opacity: 0;">0 🪙</div>
+        <div id="money" class="hud-box">0 🪙</div>
         <div class="mobile_movement" id="arrows_movement">
             <img src="freccia_dritta1.png" class="arrow" id="right_arrow">
             <img src="freccia_dritta1.png" class="arrow" id="left_arrow" style="margin-left: -10vw; transform: scaleX(-1);">
@@ -171,4 +201,3 @@
         
     </div>
 <script src="game.js" defer> </script>
-
