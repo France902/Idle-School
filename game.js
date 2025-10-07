@@ -285,6 +285,7 @@ function writeElements() {
     menu1: "document.getElementById('menu1')",
     hud: "document.getElementById('hud')",
     construction_menu: "document.getElementById('construction_menu')",
+    material_shop: "document.getElementById('material_shop')",
     lateral_arrow: "document.getElementById('lateral_arrow')",
     zoom: "document.getElementById('zoom')",
     standard: "document.getElementById('standard')",
@@ -297,6 +298,8 @@ function writeElements() {
     second_c_m: "document.getElementById('second_c_m')",
     third_c_m: "document.getElementById('third_c_m')",
     c_menu_main_text: "document.getElementById('c_menu_main_text')",
+    blueprint_img: "document.getElementById('blueprint_img')",
+    stamp_img: "document.getElementById('stamp_img')",
     choices: "document.getElementById('choices')",
     display_choice: "document.querySelector('.display_choice')",
     display_img_choice1: "document.getElementById('display_img_choice1')",
@@ -1994,7 +1997,6 @@ function controlProgress(e, state) {
             }
         }
     }
-
 }
 
 function closeConstructionMenu(e, state) {
@@ -2066,17 +2068,24 @@ function changeMenu(e, state){
 
 function changeMaterialShop(e){
     e.construction_menu.style.animation = "swipeLeft 1.5s ease-out";
+    e.blueprint_img.style.display = 'none';
+    e.stamp_img.style.display = 'none';
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuRight 1s ease-out";
             e.menu1.src = 'tavolo_menù.png';
+            e.material_shop.style.display = 'block';
     }, 1500);
 }
 
 function changeConstructionMenu(e){
     e.construction_menu.style.animation = "swipeRight 1.5s ease-out";
+    e.material_shop.style.display = 'none';
+    
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
             e.menu1.src = 'menù_costruzione.png';
+            e.blueprint_img.style.display = 'block';
+            e.stamp_img.style.display = 'block';
     }, 1500);
 }
 
