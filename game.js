@@ -249,7 +249,7 @@ function gameScripts(e, state) {
             setTimeout(() => {
                 e.world.style.transform = "scale(0.07)";
             }, 200);
-            setTimeout(() => scaleWorld(e), 1200);
+            setTimeout(() => scaleWorld(e), 600);
         });
         e.preside_container.style.left = '50vw';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
@@ -262,7 +262,7 @@ function gameScripts(e, state) {
             setTimeout(() => {
                 e.world.style.transform = "scale(0.12)";
             }, 200);
-            setTimeout(() => scaleWorld(e), 1200);
+            setTimeout(() => scaleWorld(e), 600);
         });
         centralizationPreside(e, state);
         diaologueB_P1(e, state);
