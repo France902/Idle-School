@@ -189,7 +189,7 @@
             display: flex;
             top: 0vh;
             left: 15vw;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease-out, top 1s ease-out;
             z-index: 9999;
         }
@@ -647,6 +647,11 @@
             background-color: brown; 
             width: 25vw; 
             height: 25vh;
+        }
+
+        .img_box_shop {
+            width: 13vw;
+            height: 18h;
         }
 
         .mission_1, 
