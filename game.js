@@ -25,6 +25,7 @@ function startGame(e = null, state = null) {
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
         writeMissions(elements, state);
+        openConstructionMenu(elements, state);
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -259,7 +260,7 @@ function gameScripts(e, state) {
         activateCinematicMode(e);
         waitForImagesToLoad(document.getElementById("world"), () => {
             setTimeout(() => {
-                e.world.style.transform = "scale(0.07)";
+                e.world.style.transform = "scale(0.12)";
             }, 200);
             setTimeout(() => scaleWorld(e), 1200);
         });
@@ -477,7 +478,7 @@ function waitForImagesToLoad(container, callback) {
 }
 
 function scaleWorld(e) {
-  let scale = 0.07;
+  let scale = 0.12;
   const target = 0.8;
   const speed = 0.006;
 
