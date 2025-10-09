@@ -11,6 +11,7 @@ function startGame(e = null, state = null) {
             state = initialiseStates();
         }
         else elements = initialiseElements(e);
+        drawMap(elements, state);
         moveWorldStart(elements, importantStates);
         createImportantObjects(elements, state, e);
         creationTertiaryCharacters(elements, state, e);
@@ -25,7 +26,6 @@ function startGame(e = null, state = null) {
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
         writeMissions(elements, state);
-        openConstructionMenu(elements, state);
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -221,14 +221,104 @@ function saveMats_ImportantStates(){
     localStorage.setItem("importantObjects", JSON.stringify(importantObjects));
     localStorage.setItem("posWildNature", JSON.stringify(posWildNature));
 }
+function drawMap(e, state) {
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Imposta il canvas a risoluzione più alta (es. 4x la finestra)
+    const scaleFactor = 4;
+    canvas.width = window.innerWidth * scaleFactor;
+    canvas.height = window.innerHeight * scaleFactor;
+
+    // Mantieni lo stile CSS invariato per non cambiare la visualizzazione
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+
+    // Funzioni helper vw/vh → px (usano la dimensione reale della finestra)
+    function vw(v) { return window.innerWidth * (v / 100); }
+    function vh(v) { return window.innerHeight * (v / 100); }
+
+    // Parametri base
+    let imgX = 200;   // centrato orizzontalmente (colonne calcolate intorno a questo)
+    let imgY = 50;   // top della prima riga
+    let imgW = 100;    // larghezza in vw
+    let imgH = 100;    // altezza in vh
+    let cols = 4;     // colonne
+    let rows = 4;     // righe
+
+    // Array dei percorsi (puoi modificarli liberamente)
+    const sources = [
+    "giardino_bordo_alto1.jpg",
+    "giardino_alto1.jpg",
+    "giardino_alto2.jpg",
+    "giardino_bordo_alto2.jpg",
+    "giardino_bordo_mezzo1.jpg",
+    "giardino_mezzo1.jpg",
+    "giardino_mezzo2.jpg",
+    "giardino_bordo_mezzo2.jpg",
+    "giardino_bordo_basso1.jpg",
+    "giardino_basso1.jpg",
+    "giardino_basso2.jpg",
+    "giardino_bordo_basso2.jpg",
+    "strada_bordo1.jpg",
+    "strada_mezzo1.jpg",
+    "strada_mezzo2.jpg",
+    "strada_bordo2.jpg"
+    ];
+
+    // Carica tutte le immagini in memoria
+    let images = [];
+    let loadedCount = 0;
+
+    sources.forEach((src, i) => {
+    const img = new Image();
+    img.onload = () => {
+        loadedCount++;
+        if (loadedCount === sources.length) drawImages(); // disegna solo dopo il caricamento completo
+    };
+    img.src = src;
+    images.push(img);
+    });
+
+    function drawImages() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Calcola offset per centrare la griglia
+    const totalWidth = vw(imgW * cols);
+    const startX = vw(imgX) - totalWidth / 2;
+
+    for (let j = 0; j < cols; j++) {
+        for (let i = 0; i < rows; i++) {
+        const index = i * cols + j;
+        if (!images[index]) continue;
+
+        ctx.drawImage(
+            images[index],
+            startX + vw(j * imgW),
+            vh(imgY - imgH / 2 + i * imgH),
+            vw(imgW),
+            vh(imgH)
+        );
+        }
+    }
+    }
+
+    // Aggiornamento su resize
+    window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawImages();
+    });
+
+}
 
 saveMats_ImportantStates();
 
+
+
 function moveWorldStart(e, importantStates){
-    e.canvas.style.transition = '';
-    e.canvas.style.left = importantStates.posCanvasX + "vw";
-    e.canvas.style.top = importantStates.posCanvasY + "vh";
     e.canvas.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
+    e.canvas.style.zIndex = '-9999';
 }
 
 function moveImportantObjectsStart(e){
@@ -249,7 +339,7 @@ function gameScripts(e, state) {
             setTimeout(() => {
                 e.world.style.transform = "scale(0.07)";
             }, 200);
-            setTimeout(() => scaleWorld(e), 600);
+            setTimeout(() => scaleWorld(e), 1200);
         });
         e.preside_container.style.left = '50vw';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
@@ -260,9 +350,9 @@ function gameScripts(e, state) {
         activateCinematicMode(e);
         waitForImagesToLoad(document.getElementById("world"), () => {
             setTimeout(() => {
-                e.world.style.transform = "scale(0.12)";
+                e.world.style.transform = "scale(0.07)";
             }, 200);
-            setTimeout(() => scaleWorld(e), 600);
+            setTimeout(() => scaleWorld(e), 1200);
         });
         centralizationPreside(e, state);
         diaologueB_P1(e, state);
@@ -478,9 +568,9 @@ function waitForImagesToLoad(container, callback) {
 }
 
 function scaleWorld(e) {
-  let scale = 0.12;
+  let scale = 0.07;
   const target = 0.8;
-  const speed = 0.006;
+  const speed = 0.005;
 
 
   function animate() {
@@ -488,9 +578,8 @@ function scaleWorld(e) {
     if (scale >= target) {
       scale = target;
       e.world.style.transform = `scale(${target})`;
-      return; 
+      return
     }
-
     e.world.style.transform = `scale(${scale})`;
     requestAnimationFrame(animate);
   }
@@ -503,16 +592,27 @@ function scaleWorld2(e) {
   const target = 0.07;
   const speed = 0.006;
 
+  
+  let scale2 = 1;
+  const target2 = 5;
+const speed2 = 0.048;
 
   function animate() {
     scale -= speed;
+    scale2 -= speed2;
     if (scale <= target) {
       scale = target;
       e.world.style.transform = `scale(${target})`;
-      return; 
+    }
+    else {
+        if(scale2 >= target2) {
+            e.canvas.style.transform = `scale(${target2})`;
+            return; 
+      }
     }
 
     e.world.style.transform = `scale(${scale})`;
+    e.canvas.style.transform = `scale(${scale2})`;
     requestAnimationFrame(animate);
   }
 
