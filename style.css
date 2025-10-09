@@ -189,7 +189,7 @@
             display: flex;
             top: 0vh;
             left: 15vw;
-            opacity: 1;
+            opacity: 0;
             transition: opacity 0.3s ease-out, top 1s ease-out;
             z-index: 9999;
         }
@@ -480,18 +480,14 @@
 
         #world {
             will-change: transform;
-            transform: scale(0.8);
             transform-origin: center center;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
+            transform: scale(0.07);
+            width: 100vw;
+            height: 100vh;
             margin-left: -3vw;
             margin-top: 5vh;
-            transition: margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear;
-            top: 0;
-            left: 0; 
+            transition: margin-top 1.5s linear, margin-left 1.5s linear, left 0.25s linear, top 0.25s linear;
+            background-color: aqua;
         }
 
         .arrow {
@@ -649,11 +645,6 @@
             height: 25vh;
         }
 
-        .img_box_shop {
-            width: 13vw;
-            height: 18h;
-        }
-
         .mission_1, 
         .mission_2, 
         .mission_3 {
@@ -714,7 +705,7 @@
             position: fixed;
             transform: scale(1);
             transition: left 0.25s linear, top 0.25 linear;
-            will-change: transform, left, top;
+            will-change: transform, center, center;
         }
 
         .sprite {
