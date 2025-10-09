@@ -225,28 +225,23 @@ function drawMap(e, state) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // Imposta il canvas a risoluzione più alta (es. 4x la finestra)
     const scaleFactor = 4;
     canvas.width = window.innerWidth * scaleFactor;
     canvas.height = window.innerHeight * scaleFactor;
 
-    // Mantieni lo stile CSS invariato per non cambiare la visualizzazione
     canvas.style.width = '100vw';
     canvas.style.height = '100vh';
 
-    // Funzioni helper vw/vh → px (usano la dimensione reale della finestra)
     function vw(v) { return window.innerWidth * (v / 100); }
     function vh(v) { return window.innerHeight * (v / 100); }
 
-    // Parametri base
-    let imgX = 200;   // centrato orizzontalmente (colonne calcolate intorno a questo)
-    let imgY = 50;   // top della prima riga
-    let imgW = 100;    // larghezza in vw
-    let imgH = 100;    // altezza in vh
-    let cols = 4;     // colonne
-    let rows = 4;     // righe
+    let imgX = 200;   
+    let imgY = 50;   
+    let imgW = 100;    
+    let imgH = 100;    
+    let cols = 4;     
+    let rows = 4;    
 
-    // Array dei percorsi (puoi modificarli liberamente)
     const sources = [
     "giardino_bordo_alto1.jpg",
     "giardino_alto1.jpg",
@@ -266,7 +261,6 @@ function drawMap(e, state) {
     "strada_bordo2.jpg"
     ];
 
-    // Carica tutte le immagini in memoria
     let images = [];
     let loadedCount = 0;
 
@@ -274,7 +268,7 @@ function drawMap(e, state) {
     const img = new Image();
     img.onload = () => {
         loadedCount++;
-        if (loadedCount === sources.length) drawImages(); // disegna solo dopo il caricamento completo
+        if (loadedCount === sources.length) drawImages(); 
     };
     img.src = src;
     images.push(img);
@@ -283,7 +277,6 @@ function drawMap(e, state) {
     function drawImages() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Calcola offset per centrare la griglia
     const totalWidth = vw(imgW * cols);
     const startX = vw(imgX) - totalWidth / 2;
 
@@ -303,7 +296,6 @@ function drawMap(e, state) {
     }
     }
 
-    // Aggiornamento su resize
     window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
