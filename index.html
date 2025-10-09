@@ -8,34 +8,17 @@
     <link rel="stylesheet" href="style.css">.
 </head>
 <body>
+
+    
+
     <div id="loader-container" >
          <div id="loader-bar"></div>
     </div>
     <div id="start_overlay"></div>
-  <div id="world">
-    <div id="canvas" class="school_imgs" style="top: -550vh; left: -200vw; z-index: -9999; transition: left 0.25s linear, top 0.25s linear; " >
-
-    <img src="giardino_bordo_alto1.jpg" class="tile" loading="eager">
-    <img src="giardino_alto1.jpg" class="tile" style="left: 214vw;" loading="eager">
-    <img src="giardino_alto2.jpg" class="tile" style="left: 422vw;" loading="eager">
-    <img src="giardino_bordo_alto2.jpg" class="tile" style="left: 630vw;" loading="eager">
-
-    <img src="giardino_bordo_mezzo1.jpg" class="tile" style="top: 242vh;" loading="eager">
-    <img src="giardino_mezzo1.jpg" class="tile" style="top: 242vh; left: 214vw;" loading="eager">
-    <img src="giardino_mezzo2.jpg" class="tile" style="top: 242vh; left: 422vw;" loading="eager">
-    <img src="giardino_bordo_mezzo2.jpg" class="tile" style="top: 242vh; left: 630vw;" loading="eager">
-
-    <img src="giardino_bordo_basso1.jpg" class="tile" style="top: 481vh;" loading="eager">
-    <img src="giardino_basso1.jpg" class="tile" style="top: 481vh; left: 214vw;" loading="eager">
-    <img src="giardino_basso2.jpg" class="tile" style="top: 481vh; left: 422vw;" loading="eager">
-    <img src="giardino_bordo_basso2.jpg" class="tile" style="top: 481vh; left: 630vw;" loading="eager">
-
-    <img src="strada_bordo1.jpg" class="tile" style="height: 180vh; top: 720vh; border: none;" loading="eager">
-    <img src="strada_mezzo1.jpg" class="tile" style="height: 180vh; top: 720vh; left: 212vw; border: none;" loading="eager">
-    <img src="strada_mezzo2.jpg" class="tile" style="height: 180vh; top: 720vh; left: 421vw; border: none;" loading="eager">
-    <img src="strada_bordo2.jpg" class="tile" style="height: 180vh; top: 720vh; left: 630vw; border: none;" loading="eager">
     
-    </div>
+    <div id="world">
+        <canvas id="canvas" class="school_imgs" style="position: fixed; z-index: -9999; opacity: 1; width: 100vw; height: 100vh; left: 165vw; top: -90vh; transform-origin: center center; transform: scale(8); background-color: aqua; "></canvas>
+
     <div id="platform_container">
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
@@ -47,7 +30,9 @@
     <div id="preside_container">
         <img src="Preside.png" id="preside">
     </div>
+
     </div>
+
     <div id="dialogues_container">
         <div id="name_box">
             <p id="character_name">name personaggio</p>
@@ -154,16 +139,16 @@
             <img id="stamp_img" src="bollino_bob.png">
                 <div id="material_shop" style="display: none; position: absolute; object-fit: cover;">
                     <div id="box_shop-1" class="box_shop" style="margin-left: -33vw; margin-top: -7vh;">
-                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-1">
+                        <img src="container_materiali.png" id="img_box_shop-1">
                     </div>
                     <div id="box_shop-2" class="box_shop" style="margin-left: -15vw; margin-top: -7vh;">
-                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-2">
+                        <img src="container_materiali.png" id="img_box_shop-2">
                     </div>
                     <div id="box_shop-3" class="box_shop" style="margin-left: 3vw; margin-top: -7vh;">
-                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-3">
+                        <img src="container_materiali.png" id="img_box_shop-3">
                     </div>
                     <div id="box_shop-4" class="box_shop" style="margin-left: 21vw; margin-top: -7vh;">
-                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-4">
+                        <img src="container_materiali.png" id="img_box_shop-4">
                         <h1 class="text_shop" id="text_box_shop-4" style="margin-top: -17vh; margin-left: 1.4vw;">Coming soon...</h1>
                     </div>
                 </div>
@@ -216,4 +201,6 @@
 -->
         
     </div>
+    
+
 <script src="game.js" defer> </script>
