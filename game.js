@@ -366,6 +366,7 @@ function writeElements() {
     moneyText: "document.getElementById('money')",
     menu: "document.getElementById('missions')",
     menu1: "document.getElementById('menu1')",
+    menu_base: "document.getElementById('menu_base')",
     hud: "document.getElementById('hud')",
     construction_menu: "document.getElementById('construction_menu')",
     material_shop: "document.getElementById('material_shop')",
@@ -1998,6 +1999,7 @@ function openConstructionMenu(e, state){
         e.circle2.style.display = 'none';
         e.circle3.style.display = 'none';
         state.cond_deactivate_movement = true;
+        e.menu_base.style.display = 'block';
 
         clearInterval(intervalMovement);
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
@@ -2015,6 +2017,17 @@ function openConstructionMenu(e, state){
             controlProgress(e, state);
         }, 1000);
         e.lateral_arrow.style.display = 'block';
+
+        document.getElementById('start_overlay').style.display = 'block';
+        document.getElementById('start_overlay').style.opacity = '0';
+        document.getElementById('start_overlay').style.transition = 'opacity 0.8s ease-out';
+        document.getElementById('menu_base').style.zIndex = '1000';
+        document.getElementById('start_overlay').style.zIndex = '9998';
+         setTimeout(() => {
+            document.getElementById('start_overlay').style.opacity = '0.2';
+        }, 200);
+        
+
         if(cont_menu == 0) assignLanguage(e, state);
         document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
@@ -2093,10 +2106,13 @@ function controlProgress(e, state) {
 }
 
 function closeConstructionMenu(e, state) {
+    document.getElementById('start_overlay').style.opacity = '0';
     e.construction_menu.style.opacity = '0';
     e.menu.style.pointerEvents = 'none';
     e.menu.style.opacity = '0';
+    e.menu_base.style.opacity = '0';
     e.c_menu_main_text.style.opacity = '0';
+    
 }
 
 function assignLanguage(e, state) {
@@ -2127,9 +2143,11 @@ function assignLanguage(e, state) {
 let layout_menu = "construction";
 function changeMenu(e, state){
     if(layout_menu == "construction") {
+        document.getElementById('start_overlay').style.display = 'none';
         layout_menu = "material_shop";
         e.menu.style.opacity = '0';        
         e.menu.style.pointerEvents = 'none';
+        e.menu_base.style.transform = 'scale(1.2) translate(-3.3vw)';
         e.c_menu_main_text.style.opacity = '0';
         changeMaterialShop(e);
         setTimeout(() => {
@@ -2142,10 +2160,13 @@ function changeMenu(e, state){
         }, 2500);
     }
     else if(layout_menu == "material_shop"){
+        document.getElementById('start_overlay').style.display = 'block';
         layout_menu = "construction";
+        e.menu_base.style.transform = 'scale(1) translate(-3.3vw)';
         e.c_menu_main_text.style.opacity = '0';
         changeConstructionMenu(e);
          setTimeout(() => {
+            e.menu.style.opacity = '1';    
             e.lateral_arrow.style.left = '95vw';
             e.lateral_arrow.style.transform = 'scaleX(1)';
         }, 1000);
@@ -2160,26 +2181,22 @@ function changeMenu(e, state){
 }
 
 function changeMaterialShop(e){
-    e.construction_menu.style.animation = "swipeLeft 1.5s ease-out";
+    e.construction_menu.style.animation = "swipeLeft 1.5s ease-out forwards";
     e.blueprint_img.style.display = 'none';
     e.stamp_img.style.display = 'none';
     setTimeout(() => {
-            e.construction_menu.style.animation = "changeMenuRight 1s ease-out";
-            e.menu1.src = 'tavolo_menù.png';
             e.material_shop.style.display = 'block';
     }, 1500);
 }
 
 function changeConstructionMenu(e){
-    e.construction_menu.style.animation = "swipeRight 1.5s ease-out";
     e.material_shop.style.display = 'none';
     
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
-            e.menu1.src = 'menù_costruzione.png';
             e.blueprint_img.style.display = 'block';
             e.stamp_img.style.display = 'block';
-    }, 1500);
+    }, 1000);
 }
 
 
@@ -2862,8 +2879,7 @@ function animationCamionCutscene(e, state){
         document.getElementById('wheel_camion2').style.animation = '';
     }, 5500);
     setTimeout(() => {
-
-            document.getElementById('start_overlay').style.display = 'block';
+            document.getElementById('start_overlay').style.display = '';
             document.getElementById('start_overlay').style.opacity = '0';
             document.getElementById('start_overlay').style.transition = 'opacity 0.8s ease-out';
             setTimeout(() => {
