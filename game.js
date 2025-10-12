@@ -335,7 +335,7 @@ function gameScripts(e, state) {
         });
         e.preside_container.style.left = '50vw';
         document.getElementById('cinematic-bars').classList.remove('cinematic');
-        activateHud(e)
+        activateHud(e);
         activateHudStart(e, state);
     }
     else{
@@ -399,6 +399,9 @@ function writeElements() {
     circle2: "document.getElementById('circle2')",
     circle3: "document.getElementById('circle3')",
     click_circle: "document.getElementById('click_circle')",
+    button_shop1: "document.getElementById('button_shop-1')",
+    button_shop2: "document.getElementById('button_shop-2')",
+    button_shop3: "document.getElementById('button_shop-3')",
 
     // Dialoghi e narrativa
     dialogues: "document.getElementById('dialogues')",
@@ -447,7 +450,7 @@ function initialiseElements(e) {
 function initialiseStates() {
   return {
     // state principale
-    money: 0,
+    money: 20,
     classes: 0,
     language: navigator.language || navigator.userLanguage,
 
@@ -475,7 +478,6 @@ function initialiseStates() {
     posBY: 39,
     ids: [],
     index: -1,
-    money: 0,
 
     // Condizioni ambientali
     cond_platform_1: false,
@@ -500,7 +502,6 @@ function activateHudStart(e, state){
         if(state.elementsHud[i] == true){
             switch (i){
                 case 0:
-                    
                     e.moneyText.style.opacity = '1';
                     break;
             }
@@ -2007,6 +2008,8 @@ function openConstructionMenu(e, state){
         e.menu.style.opacity = '0';
         e.c_menu_main_text.style.opacity = '0';
 
+        showMoney(state);
+
          setTimeout(() => {
             e.menu.style.transition = 'opacity 0.1s linear';
             e.c_menu_main_text.style.transition = 'opacity 0.1s linear';
@@ -2035,6 +2038,7 @@ function openConstructionMenu(e, state){
                 state.cond_skip = true;
                 state.cond_dialogue = true;
                 closeConstructionMenu(e, state);
+                showMoney(state);
                 if(cont_menu == 0){
                     state.cond_skip = true;
                     state.cond_dialogue = true;
@@ -2156,7 +2160,6 @@ function changeMenu(e, state){
         }, 1000);
         setTimeout(() => {
             e.c_menu_main_text.style.opacity = '1';
-            e.c_menu_main_text.textContent = state.lines_c_menu.c_menu_main_text[1];
         }, 2500);
     }
     else if(layout_menu == "material_shop"){
@@ -2199,6 +2202,31 @@ function changeConstructionMenu(e){
     }, 1000);
 }
 
+function buyMaterial(type, state) {
+    switch(type) {
+        case 1:
+            if(state.money >= 2) {
+                state.money -= 2;
+                state.brick_resource += 1;
+                showMoney(state);
+            }
+            break;
+        case 2:
+            if(state.money >= 4) {
+                state.money -= 4;
+                state.glass_resource += 1;
+                showMoney(state);
+            }
+            break;
+        case 3:
+            if(state.money >= 5) {
+                state.money -= 5;
+                state.wood_resource += 1;
+                showMoney(state);
+            }
+            break;
+    }
+}
 
 function setupMenuToggle(e) {
   e.toggle_icon.addEventListener('mouseenter', () => e.toggle_icon.style.opacity = '0.7');
@@ -2289,7 +2317,12 @@ async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exi
 
 function addMoney(qMoney, state) {
     state.money += qMoney;
-    document.getElementById("money").innerHTML = state.money +  " 🪙";
+    showMoney(state);
+}
+
+function showMoney(state) {
+    document.getElementById("money").style.opacity = '1';
+    document.getElementById("money").innerHTML = state.money + " 🪙";
 }
 
 function moveInteractionCircle(e, state, posX, posY){
@@ -3487,7 +3520,17 @@ function createOnClicks(e, state){
     e.mission3.onclick = function() {
         toggleMenu(e, state);
     }
+    e.button_shop1.onclick = function() {
+        buyMaterial(1, state);
+    }
+    e.button_shop2.onclick = function() {
+        buyMaterial(2, state);
+    }
+    e.button_shop3.onclick = function() {
+        buyMaterial(3, state);
+    }
 }
+
 
 window.onload = function(){
     setTimeout(() => {
