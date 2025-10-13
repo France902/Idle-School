@@ -570,8 +570,8 @@
         .box_shop {
             object-fit: cover;
             position: fixed;
-            width: 16vw;
-            height: 19vh;
+            width: 33vw;
+            height: 38vh;
             z-index: 10000;
         }
 
@@ -913,4 +913,3 @@
                 top: 200vh;
             }
         }
-
