@@ -1406,24 +1406,35 @@ if(!state.cond_deactivate_movement){
     e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
-        currentDir = getDirection();
-        if (currentDir.x === 0 && currentDir.y === 0) return;
-            if(!isCharging){
-                jumpStartTime = performance.now();
-                isCharging = true;
-            } else {
-                if(performance.now() - jumpStartTime > 350 && !state.cond_run_preside){
-                    state.cond_run_preside = true;
-                    runPreside(event, currentDir);
-                } 
-            }
+        setTimeout(() => {
+        if(jumpStartTime == 0) {
+                currentDir = getDirection();
+                if (currentDir.x === 0 && currentDir.y === 0) return;
+                if(!isCharging){
+                    jumpStartTime = performance.now();
+                    isCharging = true;
+                }
+        }
+        if(isCharging) {
+            
+            if(performance.now() - jumpStartTime > 350 && !state.cond_run_preside){
+                state.cond_run_preside = true;
+                runPreside(event, currentDir);
+            } 
+        }
+        else {
+            keys = {};
+        }
+        }, 50);
         }
     }
 }
 
 async function runPreside(event, currentDir, distance = 9) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+    
     if(isCharging){
+        
         currentDir = getDirection();
         jumpDirection(distance, currentDir);
         await sleep(380);
@@ -1431,6 +1442,8 @@ async function runPreside(event, currentDir, distance = 9) {
     }
     else {
         state.cond_run_preside = false;
+        keys = {};
+        jumpStartTime = 0;
         return;
     } 
     
@@ -1441,10 +1454,14 @@ function handleKeyup(event){
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
             if(state.cond_run_preside == false){
                     let heldFor = performance.now() - jumpStartTime;
+                    setTimeout(() => {
+                        jumpStartTime = 0;
+                    }, 300);
                     if(heldFor > 270){
                         heldFor = 270;
                     } 
                     let distance = heldFor / 30;
+                    keys = {};
                     jumpDirection(distance, currentDir);
             }
             isCharging = false;
@@ -1481,13 +1498,14 @@ function jumpDirection(distance, dir){
     else if(dir.x == 1 && dir.y == 0) right(distance);
     if(dir.y == 1 && dir.x == 0) down(distance);
     else if(dir.y == -1 && dir.x == 0) top(distance);
-    else if (dir.x == 0.7 && dir.y == -0.7) diagonalTopRight(distance);
-    else if (dir.x == -0.7 && dir.y == -0.7) diagonalTopLeft(distance);
-    else if (dir.x == 0.7 && dir.y == 0.7) diagonalLowRight(distance);
-    else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance);
+    else if (dir.x == 0.7 && dir.y == -0.7) diagonalTopRight(distance/2);
+    else if (dir.x == -0.7 && dir.y == -0.7) diagonalTopLeft(distance/2);
+    else if (dir.x == 0.7 && dir.y == 0.7) diagonalLowRight(distance/2);
+    else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance/2);
     control_position(state, e);
     assignZIndexP();
     changeZIndexElements();
+    
 }
 
 function assignZIndexP(){
