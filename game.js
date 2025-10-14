@@ -1407,8 +1407,8 @@ if(!state.cond_deactivate_movement){
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
         setTimeout(() => {
+            currentDir = getDirection();
         if(jumpStartTime == 0) {
-                currentDir = getDirection();
                 if (currentDir.x === 0 && currentDir.y === 0) return;
                 if(!isCharging){
                     jumpStartTime = performance.now();
@@ -1424,7 +1424,7 @@ if(!state.cond_deactivate_movement){
         else {
             keys = {};
         }
-        }, 50);
+        }, 150);
         }
     }
 }
@@ -1455,7 +1455,7 @@ function handleKeyup(event){
                     let heldFor = performance.now() - jumpStartTime;
                     setTimeout(() => {
                         jumpStartTime = 0;
-                    }, 300);
+                    }, 200);
                     if(heldFor > 270){
                         heldFor = 270;
                     } 
@@ -2000,12 +2000,21 @@ function setUpFreeCamRoam(e, state){
     }
 }
 
-
+let openSidebar = false;
 
 function toggleMenu() {
     const menu = document.getElementById('missions');
     menu.classList.toggle('open');
     menu.classList.toggle('closed');
+    openSidebar = !openSidebar;
+    if(openSidebar) {
+        document.getElementById("sidebar_mission2").style.opacity = '1';
+        document.getElementById("sidebar_mission3").style.opacity = '1';
+    }
+    else {
+        document.getElementById("sidebar_mission2").style.opacity = '0';
+        document.getElementById("sidebar_mission3").style.opacity = '0';
+    }
 }
         
     
@@ -2033,6 +2042,7 @@ function openConstructionMenu(e, state){
             e.menu.style.pointerEvents = 'all';
             e.menu.style.opacity = '1';
             e.c_menu_main_text.style.opacity = '1';
+            document.getElementById("sidebar_mission1").style.opacity = '1';
             writeMissions(e, state);
             controlProgress(e, state);
         }, 1000);
@@ -3556,7 +3566,3 @@ window.onload = function(){
     
     startGame();
 } 
-
-
-
-
