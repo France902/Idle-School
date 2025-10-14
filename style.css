@@ -72,10 +72,10 @@
 
         #blueprint_img {
             position: fixed;
-            width: 27vw;
-            height: 38vh;
+            width: 21vw;
+            height: 30vh;
             opacity: 0.8;
-            margin-left: -10vw;
+            margin-left: -15vw;
             margin-top: 15vh;
             border: 0.2vh solid black;
             z-index: 10000;
@@ -316,8 +316,8 @@
 
         #missions {
             position: fixed; 
-            left: 53vw; 
-            top: 30vh; 
+            left: 47vw; 
+            top: 31.5vh; 
             width: 25vw;
             z-index: 10000;
         }
@@ -404,7 +404,7 @@
             width: 15vw;
             height: 15vh;
             margin-left: -10vw;
-            margin-top: -43vh;
+            margin-top: -38vh;
             z-index: 10000;
         }
 
@@ -648,7 +648,7 @@
             top: 14.5vh;
             margin-left: -1vw;
             width: 25vw;
-            background-color: rgba(50, 50, 50, 0.6);
+            background-color: rgb(19, 50, 141, 0.9);
             opacity: 1;
             border-radius: 0.6vw;
             border: 5px solid black;
@@ -657,6 +657,7 @@
             box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.3);
             overflow: hidden;
             transition: max-height 0.3s linear;
+            z-index: 9999;
         }
 
         .hud_missions.closed {
@@ -741,7 +742,7 @@
         .mission_3 {
             opacity: 0;
             transition: opacity 0.4s linear;
-            background-color: rgba(161, 160, 160, 0.6);
+            background-color: rgba(56, 100, 233, 0.5);
             border-top: 5px solid black;
         }
 
@@ -851,6 +852,17 @@
         .top {
             top: 0;
             transform: translateY(-100%);
+        }
+
+        .sidebar_mission {
+            width: 6vw;
+            height: 11.3vh;
+            position: fixed;
+            border-top-right-radius: 30%;
+            background-color: yellow;
+            left: 70.7vw;
+            top: 32.5vh;
+            z-index:9999;
         }
 
 
