@@ -1425,7 +1425,7 @@ if(!state.cond_deactivate_movement){
         else {
             keys = {};
         }
-        }, 100);
+        }, 10);
         }
     }
 }
@@ -3557,4 +3557,5 @@ window.onload = function(){
     
     startGame();
 } 
+
 
