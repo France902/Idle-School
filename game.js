@@ -1418,7 +1418,6 @@ if(!state.cond_deactivate_movement){
         if(isCharging) {
             if(performance.now() - jumpStartTime > 350 && !state.cond_run_preside){
                 state.cond_run_preside = true;
-               currentDir = getDirection();
                 runPreside(event, currentDir);
             } 
         }
@@ -3557,6 +3556,7 @@ window.onload = function(){
     
     startGame();
 } 
+
 
 
 
