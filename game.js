@@ -450,7 +450,7 @@ function initialiseElements(e) {
 function initialiseStates() {
   return {
     // state principale
-    money: 20,
+    money: 50,
     classes: 0,
     language: navigator.language || navigator.userLanguage,
 
@@ -1407,8 +1407,8 @@ if(!state.cond_deactivate_movement){
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
         setTimeout(() => {
-            currentDir = getDirection();
         if(jumpStartTime == 0) {
+                currentDir = getDirection();
                 if (currentDir.x === 0 && currentDir.y === 0) return;
                 if(!isCharging){
                     jumpStartTime = performance.now();
@@ -1424,7 +1424,7 @@ if(!state.cond_deactivate_movement){
         else {
             keys = {};
         }
-        }, 150);
+        }, 50);
         }
     }
 }
@@ -2033,6 +2033,7 @@ function openConstructionMenu(e, state){
         e.construction_menu.style.opacity = '1';
         e.menu.style.opacity = '0';
         e.c_menu_main_text.style.opacity = '0';
+        document.getElementById("overlay_mission").style.opacity = '0';
 
         showMoney(state);
 
@@ -2080,33 +2081,42 @@ function openConstructionMenu(e, state){
             }
         });
 }
-
+let missionCompleted = 0;
 function writeMissions(e, state) {
     e.first_c_m.textContent = logConstructionMission[0][0];
     e.second_c_m.textContent = logConstructionMission[1][0];
     e.third_c_m.textContent = logConstructionMission[2][0];
-    for(let index=0;index<3;index++){
+    let type;
+    for(let index=0;index<3-missionCompleted;index++){
         let j = 0;
         while(j < (logConstructionMission[index].length -1)) {
-            document.getElementById("text"+index+"_cost"+j).style.display = 'block';
-            document.getElementById("text"+index+"_cost"+j).textContent = '0/' + parseFloat(logConstructionMission[index][j+1][0]);
             let i = 1;
             while(logConstructionMission[index][j+1][i] != "_") {
                 document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(logConstructionMission[index][j+1][i]);
                 i++;
             }
             i++;
-            document.getElementById("img"+index+"_cost"+j).style.display = 'block';
             switch(logConstructionMission[index][j+1][i]) {
                 case 'M':
                     document.getElementById("img"+index+"_cost"+j).src = "mattone.png";
+                    type = state.brick_resource;
                     break;
                 case 'L':
                     document.getElementById("img"+index+"_cost"+j).src = "legno.png";
+                    type = state.wood_resource;
                     break;
                 case 'V':
                     document.getElementById("img"+index+"_cost"+j).src = "vetro.png";
+                    type = state.glass_resource;
                     break;
+            }
+            document.getElementById("text"+index+"_cost"+j).style.display = 'block';
+            document.getElementById("text"+index+"_cost"+j).textContent = type+'/' + parseFloat(logConstructionMission[index][j+1][0]);
+            document.getElementById("img"+index+"_cost"+j).style.display = 'block';
+            i = 1;
+            while(logConstructionMission[index][j+1][i] != "_") {
+                document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(logConstructionMission[index][j+1][i]);
+                i++;
             }
             j++;
         }
@@ -2116,6 +2126,8 @@ function writeMissions(e, state) {
 }
 
 function controlProgress(e, state) {
+    let completed_materials = 0;
+    writeMissions(e, state);
     for(let j=0;j<3;j++){
         for(let i=1;i<logConstructionMission[j].length;i++) {
             let resource = logConstructionMission[j][i];
@@ -2123,17 +2135,35 @@ function controlProgress(e, state) {
             let q_resource = parseFloat(logConstructionMission[j][i]);
             switch (resource) {
                 case 'M':
-                    if(state.brick_resource == q_resource) completeMission(j);
+                    if(state.brick_resource >= q_resource) {
+                        state.brick_resource -= q_resource;
+                        completed_materials++;
+                    } 
                     break;
                 case 'V':
-                    if(state.glass_resource == q_resource) completeMission(j);
+                    if(state.glass_resource >= q_resource){
+                        state.glass_resource -= q_resource;
+                        completed_materials++;
+                    } 
                     break;
                 case 'L':
-                    if(state.wood_resource == q_resource) completeMission(j);
+                    if(state.wood_resource >= q_resource){
+                        state.wood_resource -= q_resource;
+                        completed_materials++;
+                    } 
                     break;
+            
             }
+            if(logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state);
         }
     }
+}
+
+function completeMission(index, e, state) {
+    missionCompleted++;
+    logConstructionMission.splice(index, 1);
+    logConstructionMission.push(["Nient'altro da fare"]);
+    writeMissions(e, state);
 }
 
 function closeConstructionMenu(e, state) {
@@ -2143,6 +2173,7 @@ function closeConstructionMenu(e, state) {
     e.menu.style.opacity = '0';
     e.menu_base.style.opacity = '0';
     e.c_menu_main_text.style.opacity = '0';
+    document.getElementById("overlay_mission").style.opacity = '1';
     
 }
 
@@ -2180,6 +2211,8 @@ function changeMenu(e, state){
         e.menu.style.pointerEvents = 'none';
         e.menu_base.style.transform = 'scale(1.2) translate(-3.3vw)';
         e.c_menu_main_text.style.opacity = '0';
+        document.getElementById('sidebar_mission1').style.opacity = '0';
+        document.getElementById("overlay_mission").style.opacity = '1';
         changeMaterialShop(e);
         setTimeout(() => {
             e.lateral_arrow.style.left = '5vw';
@@ -2194,7 +2227,9 @@ function changeMenu(e, state){
         layout_menu = "construction";
         e.menu_base.style.transform = 'scale(1) translate(-3.3vw)';
         e.c_menu_main_text.style.opacity = '0';
-        changeConstructionMenu(e);
+        document.getElementById('sidebar_mission1').style.opacity = '1';
+        document.getElementById("overlay_mission").style.opacity = '0';
+        changeConstructionMenu(e, state);
          setTimeout(() => {
             e.menu.style.opacity = '1';    
             e.lateral_arrow.style.left = '95vw';
@@ -2219,13 +2254,14 @@ function changeMaterialShop(e){
     }, 1500);
 }
 
-function changeConstructionMenu(e){
+function changeConstructionMenu(e, state){
     e.material_shop.style.display = 'none';
     
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
             e.blueprint_img.style.display = 'block';
             e.stamp_img.style.display = 'block';
+            controlProgress(e, state);
     }, 1000);
 }
 
@@ -3555,6 +3591,24 @@ function createOnClicks(e, state){
     }
     e.button_shop3.onclick = function() {
         buyMaterial(3, state);
+    }
+    document.getElementById("sidebar_mission1").onclick = function() {
+        overlayMission(1);
+    }
+    document.getElementById("sidebar_mission2").onclick = function() {
+        overlayMission(2);
+    }
+    document.getElementById("sidebar_mission3").onclick = function() {
+        overlayMission(3);
+    }
+}
+
+let overlay_mission = 1;
+function overlayMission(mission) {
+    if(mission != overlay_mission) {
+        document.getElementById("sidebar_mission"+ mission).style.backgroundColor = 'yellow';
+        document.getElementById("sidebar_mission"+ overlay_mission).style.backgroundColor = 'beige';
+        overlay_mission = mission;
     }
 }
 
