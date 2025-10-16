@@ -61,7 +61,7 @@ function initialiseMatTert(){
         [ '175vw', '-26vh', "group", 2, false, 'operaio'],
         [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
         [ '100vw', '111vh', "alone", -1, false, 'operaio'],
-        [ '80vw', '41vh', "group", 1, false, 'Bob'],
+        [ '80vw', '41vh', "group", 1, false, 'bob'],
         [ '90vw', '42vh', "group", 1, false, 'operaio'],
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
@@ -637,28 +637,28 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e) {
   const lines = [
-    ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
-    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
-    [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
-    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "Bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "Bob", 2, true, false, -100, 35],
+    ["Ciao! Sono Bob, della Bob & Company!", "bob", 2, 0, true],
+    ["Questo posto è proprio enorme!", "bob", 2, 0, false],
+    [["Spero che sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
+    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
     [true],
-    ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
-    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "Bob", 2, 0, false],
+    ["Sembra che non abbia abbastanza materiali per costruire qualcosa...", "preside", 1, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
     [true],
-    ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
+    ["Potrei vendere alcuni libri che ho portato con me.", "preside", 1, 0, false],
     [true],
     ["Ciao zio!", "Matthew", 2, 0, false],
-    [["Ma come ti sei vestito?", "Matthew! Giusto in tempo!"], "preside", 1, 0, false],
-    ["Da ora sarò il tuo manager, così mi sono messo il miglior abito del mio armadio!", "Matthew", 2, 0, false],
+    [["Ma come ti sei vestito?", "Matthew! Giusto in tempo..."], "preside", 1, 0, false],
+    ["Sarò il tuo manager, quindi mi sono messo il miglior abito mel mio armadio!", "Matthew", 2, 0, false],
     ["Come mai non avete ancora iniziato a costruire?", "Matthew", 2, 0, false],
-    ["Matt, ci servono soldi...", "preside", 1, 0, false],
+    ["Ci servono soldi...", "preside", 1, 0, false],
     ["Tranquillo, lascia fare a me.", "Matthew", 2, 0, false],
-    ["Organizzeremo una raccolta fondi con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
+    ["Organizziamo una raccolta fondi, con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
     ["E come facciamo a convincere il sindaco?", "preside", 1, 0, false],
-    ["Non ti preoccupare, è mio amico e mi deve anche un favore.", "Matthew", 2, 0, false],
+    ["è mio amico, e mi deve anche un favore.", "Matthew", 2, 0, false],
     ["Preparerò anche delle squisite limonate. Conosco la tecnica perfetta!", "Matthew", 2, 0, false],
-    ["E i limoni chi li compra? Il sindaco?", "preside", 1, 0, false],
+    ["I limoni li compra il sindaco?", "preside", 1, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -667,7 +667,7 @@ function setupDialogue(e, state, saved_e) {
 
   function changeLinesLanguage(){
         const lines_en = [
-        "Hi! I'm Bob, from 'Bob & Company'!",
+        "Hi! I'm Bob, from Bob & Company!",
         "This place is really huge!",
         ["I hope it was worth buying...", "I even had to give up my wallet to purchase it."],
         "Don’t worry! When you’re with us, you can count on the best arms in the city!",
@@ -693,7 +693,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_fr = [
-        "Salut ! Je suis Bob, de 'Bob & Compagnie' !",
+        "Salut ! Je suis Bob, de Bob & Compagnie !",
         "Cet endroit est vraiment immense !",
         ["J’espère que ça valait la peine de l’acheter...", "J’ai même dû donner mon portefeuille pour l’acquérir."],
         "Ne t’inquiète pas ! Avec nous, tu peux compter sur les meilleurs bras de la ville !",
@@ -719,7 +719,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_es = [
-        "¡Hola! Soy Bob, de 'Bob & Company'!",
+        "¡Hola! Soy Bob, de Bob & Company!",
         "¡Este lugar es realmente enorme!",
         ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder adquirirlo."],
         "¡No te preocupes! Cuando estés con nosotros podrás contar con los mejores brazos de la ciudad.",
@@ -745,7 +745,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_pt = [
-        "Oi! Eu sou o Bob, da 'Bob & Companhia'!",
+        "Oi! Eu sou o Bob, da Bob & Companhia!",
         "Este lugar é realmente enorme!",
         ["Espero que tenha valido a pena comprá-lo...", "Tive até de dar a minha carteira para poder comprá-lo."],
         "Não se preocupe! Quando estiver conosco poderá contar com os melhores braços da cidade!",
@@ -2127,9 +2127,12 @@ function writeMissions(e, state) {
 
 function controlProgress(e, state) {
     let completed_materials = 0;
+    let subtracted = false;
     writeMissions(e, state);
     for(let j=0;j<3;j++){
+        completed_materials = 0;
         for(let i=1;i<logConstructionMission[j].length;i++) {
+            subtracted = false;
             let resource = logConstructionMission[j][i];
             resource = resource[resource.length - 1];
             let q_resource = parseFloat(logConstructionMission[j][i]);
@@ -2138,29 +2141,51 @@ function controlProgress(e, state) {
                     if(state.brick_resource >= q_resource) {
                         state.brick_resource -= q_resource;
                         completed_materials++;
+                        subtracted = true;
                     } 
                     break;
                 case 'V':
                     if(state.glass_resource >= q_resource){
                         state.glass_resource -= q_resource;
                         completed_materials++;
+                        subtracted = true;
                     } 
                     break;
                 case 'L':
                     if(state.wood_resource >= q_resource){
                         state.wood_resource -= q_resource;
                         completed_materials++;
+                        subtracted = true;
                     } 
                     break;
             
             }
             if(logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state);
+            else if(subtracted) {
+                switch (resource) {
+                case 'M':
+                    state.brick_resource += q_resource;
+                    break;
+                case 'V':
+                    state.glass_resource += q_resource;
+                    break;
+                case 'L':
+                    state.wood_resource += q_resource;
+                    break;
+            
+            }
+            }
         }
+            
     }
 }
 
 function completeMission(index, e, state) {
     missionCompleted++;
+    for(let i=0;i<3;i++) {
+        document.getElementById("img"+index+"_cost"+i).style.display = 'none';
+        document.getElementById("text"+index+"_cost"+i).style.display = 'none';
+    }
     logConstructionMission.splice(index, 1);
     logConstructionMission.push(["Nient'altro da fare"]);
     writeMissions(e, state);
@@ -2271,6 +2296,7 @@ function buyMaterial(type, state) {
             if(state.money >= 2) {
                 state.money -= 2;
                 state.brick_resource += 1;
+                console.log(state.brick_resource);
                 showMoney(state);
             }
             break;
@@ -2703,6 +2729,7 @@ function createIllustration(sr, posX, posY, e, i_illustration){
         illustration.style.height = '15vh';
         illustration.style.left = `${posX}vw`;
         illustration.style.top = `${posY}vh`;
+        illustration.style.zIndex = '-9998';
         illustration.className = 'school_imgs';
         illustration.id = 'illustration_'+i_illustration;
         cont_illustration++;
@@ -2808,7 +2835,7 @@ let interval = [];
                 break;
         }
         illustration.style.opacity = '0';
-        await moveIllustrationGroup(illustration, i, state);
+        await moveIllustrationGroup(illustration, i, state, character);
     }
 
     async function singleJumpAnimation(character, e, state){
@@ -3620,7 +3647,3 @@ window.onload = function(){
     
     startGame();
 } 
-
-
-
-
