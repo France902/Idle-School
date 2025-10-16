@@ -639,26 +639,26 @@ function setupDialogue(e, state, saved_e) {
   const lines = [
     ["Ciao! Sono Bob, della Bob & Company!", "bob", 2, 0, true],
     ["Questo posto è proprio enorme!", "bob", 2, 0, false],
-    [["Spero che sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
-    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
+    [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
+    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "bob", 2, true, false, -100, 35],
     [true],
-    ["Sembra che non abbia abbastanza materiali per costruire qualcosa...", "preside", 1, 0, false],
-    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
+    ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "bob", 2, 0, false],
     [true],
-    ["Potrei vendere alcuni libri che ho portato con me.", "preside", 1, 0, false],
+    ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
     [true],
     ["Ciao zio!", "Matthew", 2, 0, false],
-    [["Ma come ti sei vestito?", "Matthew! Giusto in tempo..."], "preside", 1, 0, false],
-    ["Sarò il tuo manager, quindi mi sono messo il miglior abito mel mio armadio!", "Matthew", 2, 0, false],
+    [["Ma come ti sei vestito?", "Matthew! Giusto in tempo!"], "preside", 1, 0, false],
+    ["Da ora sarò il tuo manager, così mi sono messo il miglior abito del mio armadio!", "Matthew", 2, 0, false],
     ["Come mai non avete ancora iniziato a costruire?", "Matthew", 2, 0, false],
-    ["Ci servono soldi...", "preside", 1, 0, false],
+    ["Zio, ci servono soldi...", "preside", 1, 0, false],
     ["Tranquillo, lascia fare a me.", "Matthew", 2, 0, false],
-    ["Organizziamo una raccolta fondi, con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
+    ["Organizzeremo una raccolta fondi con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
     ["E come facciamo a convincere il sindaco?", "preside", 1, 0, false],
-    ["è mio amico, e mi deve anche un favore.", "Matthew", 2, 0, false],
+    ["Non ti preoccupare, è mio amico e mi deve anche un favore.", "Matthew", 2, 0, false],
     ["Preparerò anche delle squisite limonate. Conosco la tecnica perfetta!", "Matthew", 2, 0, false],
-    ["I limoni li compra il sindaco?", "preside", 1, 0, false],
+    ["E i limoni chi li compra? Il sindaco?", "preside", 1, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -3620,3 +3620,4 @@ window.onload = function(){
     
     startGame();
 } 
+
