@@ -61,7 +61,7 @@ function initialiseMatTert(){
         [ '175vw', '-26vh', "group", 2, false, 'operaio'],
         [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
         [ '100vw', '111vh', "alone", -1, false, 'operaio'],
-        [ '80vw', '41vh', "group", 1, false, 'bob'],
+        [ '80vw', '41vh', "group", 1, false, 'Bob'],
         [ '90vw', '42vh', "group", 1, false, 'operaio'],
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
@@ -3620,6 +3620,7 @@ window.onload = function(){
     
     startGame();
 } 
+
 
 
 
