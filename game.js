@@ -652,7 +652,7 @@ function setupDialogue(e, state, saved_e) {
     [["Ma come ti sei vestito?", "Matthew! Giusto in tempo!"], "preside", 1, 0, false],
     ["Da ora sarò il tuo manager, così mi sono messo il miglior abito del mio armadio!", "Matthew", 2, 0, false],
     ["Come mai non avete ancora iniziato a costruire?", "Matthew", 2, 0, false],
-    ["Zio, ci servono soldi...", "preside", 1, 0, false],
+    ["Matt, ci servono soldi...", "preside", 1, 0, false],
     ["Tranquillo, lascia fare a me.", "Matthew", 2, 0, false],
     ["Organizzeremo una raccolta fondi con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
     ["E come facciamo a convincere il sindaco?", "preside", 1, 0, false],
@@ -3620,5 +3620,6 @@ window.onload = function(){
     
     startGame();
 } 
+
 
 
