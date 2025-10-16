@@ -637,14 +637,14 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e) {
   const lines = [
-    ["Ciao! Sono Bob, della Bob & Company!", "bob", 2, 0, true],
-    ["Questo posto è proprio enorme!", "bob", 2, 0, false],
+    ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
+    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
     [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
-    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "bob", 2, true, false, -100, 35],
+    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "Bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "Bob", 2, true, false, -100, 35],
     [true],
     ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
-    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "bob", 2, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "Bob", 2, 0, false],
     [true],
     ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
     [true],
@@ -667,7 +667,7 @@ function setupDialogue(e, state, saved_e) {
 
   function changeLinesLanguage(){
         const lines_en = [
-        "Hi! I'm Bob, from Bob & Company!",
+        "Hi! I'm Bob, from 'Bob & Company'!",
         "This place is really huge!",
         ["I hope it was worth buying...", "I even had to give up my wallet to purchase it."],
         "Don’t worry! When you’re with us, you can count on the best arms in the city!",
@@ -693,7 +693,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_fr = [
-        "Salut ! Je suis Bob, de Bob & Compagnie !",
+        "Salut ! Je suis Bob, de 'Bob & Compagnie' !",
         "Cet endroit est vraiment immense !",
         ["J’espère que ça valait la peine de l’acheter...", "J’ai même dû donner mon portefeuille pour l’acquérir."],
         "Ne t’inquiète pas ! Avec nous, tu peux compter sur les meilleurs bras de la ville !",
@@ -719,7 +719,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_es = [
-        "¡Hola! Soy Bob, de Bob & Company!",
+        "¡Hola! Soy Bob, de 'Bob & Company'!",
         "¡Este lugar es realmente enorme!",
         ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder adquirirlo."],
         "¡No te preocupes! Cuando estés con nosotros podrás contar con los mejores brazos de la ciudad.",
@@ -745,7 +745,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_pt = [
-        "Oi! Eu sou o Bob, da Bob & Companhia!",
+        "Oi! Eu sou o Bob, da 'Bob & Companhia'!",
         "Este lugar é realmente enorme!",
         ["Espero que tenha valido a pena comprá-lo...", "Tive até de dar a minha carteira para poder comprá-lo."],
         "Não se preocupe! Quando estiver conosco poderá contar com os melhores braços da cidade!",
@@ -3620,4 +3620,5 @@ window.onload = function(){
     
     startGame();
 } 
+
 
