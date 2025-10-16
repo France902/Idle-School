@@ -18,21 +18,10 @@ Obiettivo: Costruire e gestire una grande scuola, espandendola e migliorandola.
 
 
 
-Meccaniche: Fare le scelte giuste, decidendo in base al bene della scuola e dell'insegnamento (o ai profitti), senza andare in bancarotta o traumatizzare gli studenti.
-
-
-
-Idle: Gestione di risorse (monete, prestigio) e missioni per guidare il giocatore che offrono premi rapidi e costanti.
-
-
-
-Movimento: Libero ma limitato dai bordi della mappa, con il preside come personaggio principale.
-
-
-
-Personalizzazione: Arredamento, colori e temi per rendere la scuola unica e personale, oltre alla lbera scelta dei dialoghi per intraprendere strade diverse nel gioco.
-
-
+Meccaniche:
+- Movimento pluridirezionale a pressione prolungata e corsa; movimento punta e clicca e per mobile con frecce sull'HUD.
+- Acquisto e gestione delle risorse per fare progressi nel gioco.
+- Scelte di passaggio nei dialoghi.
 
 Tecnologia: HTML, CSS, JavaScript.
 
