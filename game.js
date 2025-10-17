@@ -61,7 +61,7 @@ function initialiseMatTert(){
         [ '175vw', '-26vh', "group", 2, false, 'operaio'],
         [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
         [ '100vw', '111vh', "alone", -1, false, 'operaio'],
-        [ '80vw', '41vh', "group", 1, false, 'bob'],
+        [ '80vw', '41vh', "group", 1, false, 'Bob'],
         [ '90vw', '42vh', "group", 1, false, 'operaio'],
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
@@ -450,7 +450,7 @@ function initialiseElements(e) {
 function initialiseStates() {
   return {
     // state principale
-    money: 50,
+    money: 20,
     classes: 0,
     language: navigator.language || navigator.userLanguage,
 
@@ -637,28 +637,28 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e) {
   const lines = [
-    ["Ciao! Sono Bob, della Bob & Company!", "bob", 2, 0, true],
-    ["Questo posto è proprio enorme!", "bob", 2, 0, false],
-    [["Spero che sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
-    ["Puoi stare tranquillo! quando sei con noi potrai contare sulle migliori braccia della città!", "bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare vieni al tavolo di costruzione!", "bob", 2, true, false, -100, 35],
+    ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
+    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
+    [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
+    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "Bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "Bob", 2, true, false, -100, 35],
     [true],
-    ["Sembra che non abbia abbastanza materiali per costruire qualcosa...", "preside", 1, 0, false],
-    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti, o mantieniti per costruire!"', "bob", 2, 0, false],
+    ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "Bob", 2, 0, false],
     [true],
-    ["Potrei vendere alcuni libri che ho portato con me.", "preside", 1, 0, false],
+    ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
     [true],
     ["Ciao zio!", "Matthew", 2, 0, false],
-    [["Ma come ti sei vestito?", "Matthew! Giusto in tempo..."], "preside", 1, 0, false],
-    ["Sarò il tuo manager, quindi mi sono messo il miglior abito mel mio armadio!", "Matthew", 2, 0, false],
+    [["Ma come ti sei vestito?", "Matthew! Giusto in tempo!"], "preside", 1, 0, false],
+    ["Da ora sarò il tuo manager, così mi sono messo il miglior abito del mio armadio!", "Matthew", 2, 0, false],
     ["Come mai non avete ancora iniziato a costruire?", "Matthew", 2, 0, false],
-    ["Ci servono soldi...", "preside", 1, 0, false],
+    ["Matt, ci servono soldi...", "preside", 1, 0, false],
     ["Tranquillo, lascia fare a me.", "Matthew", 2, 0, false],
-    ["Organizziamo una raccolta fondi, con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
+    ["Organizzeremo una raccolta fondi con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
     ["E come facciamo a convincere il sindaco?", "preside", 1, 0, false],
-    ["è mio amico, e mi deve anche un favore.", "Matthew", 2, 0, false],
+    ["Non ti preoccupare, è mio amico e mi deve anche un favore.", "Matthew", 2, 0, false],
     ["Preparerò anche delle squisite limonate. Conosco la tecnica perfetta!", "Matthew", 2, 0, false],
-    ["I limoni li compra il sindaco?", "preside", 1, 0, false],
+    ["E i limoni chi li compra? Il sindaco?", "preside", 1, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -667,7 +667,7 @@ function setupDialogue(e, state, saved_e) {
 
   function changeLinesLanguage(){
         const lines_en = [
-        "Hi! I'm Bob, from Bob & Company!",
+        "Hi! I'm Bob, from 'Bob & Company'!",
         "This place is really huge!",
         ["I hope it was worth buying...", "I even had to give up my wallet to purchase it."],
         "Don’t worry! When you’re with us, you can count on the best arms in the city!",
@@ -693,7 +693,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_fr = [
-        "Salut ! Je suis Bob, de Bob & Compagnie !",
+        "Salut ! Je suis Bob, de 'Bob & Compagnie'!",
         "Cet endroit est vraiment immense !",
         ["J’espère que ça valait la peine de l’acheter...", "J’ai même dû donner mon portefeuille pour l’acquérir."],
         "Ne t’inquiète pas ! Avec nous, tu peux compter sur les meilleurs bras de la ville !",
@@ -719,7 +719,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_es = [
-        "¡Hola! Soy Bob, de Bob & Company!",
+        "¡Hola! Soy Bob, de 'Bob & Company'!",
         "¡Este lugar es realmente enorme!",
         ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder adquirirlo."],
         "¡No te preocupes! Cuando estés con nosotros podrás contar con los mejores brazos de la ciudad.",
@@ -745,7 +745,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_pt = [
-        "Oi! Eu sou o Bob, da Bob & Companhia!",
+        "Oi! Eu sou o Bob, da 'Bob & Companhia'!",
         "Este lugar é realmente enorme!",
         ["Espero que tenha valido a pena comprá-lo...", "Tive até de dar a minha carteira para poder comprá-lo."],
         "Não se preocupe! Quando estiver conosco poderá contar com os melhores braços da cidade!",
@@ -771,7 +771,7 @@ function setupDialogue(e, state, saved_e) {
         ];
 
         const lines_de = [
-        "Hallo! Ich bin Bob von Bob & Company!",
+        "Hallo! Ich bin Bob von 'Bob & Company'!",
         "Dieser Ort ist wirklich riesig!",
         ["Ich hoffe, es hat sich gelohnt, es zu kaufen...", "Ich musste sogar meine Brieftasche hergeben, um es zu erwerben."],
         "Keine Sorge! Wenn du bei uns bist, kannst du auf die besten Arme der Stadt zählen!",
@@ -2296,7 +2296,6 @@ function buyMaterial(type, state) {
             if(state.money >= 2) {
                 state.money -= 2;
                 state.brick_resource += 1;
-                console.log(state.brick_resource);
                 showMoney(state);
             }
             break;
@@ -2359,15 +2358,18 @@ function startFirstCycle(e, state, chosed = null, saved_e){
 let cont_first_cycle = 0;
 function bookCycle(e, state, saved_e){
     e.stand.style.opacity = '1';
-    //document.getElementById("stacks_of_books").style.display = 'none';
+    document.getElementById("stacks_of_books").style.display = 'none';
     setTimeout(() => {
-        animationFirstCycle(e, state, saved_e);
+        animationFirstCycle(e, state, saved_e, 1);
     }, 500);
 }
 
 function fundraisingCycle(e, state){
     e.stand.src = 'stand_con_sindaco.png';
     e.stand.style.opacity = '1';
+    setTimeout(() => {
+        animationFirstCycle(e, state, saved_e, 2);
+    }, 500);
 }
 
 function createInteractionCircle(e, state){
@@ -2376,18 +2378,18 @@ function createInteractionCircle(e, state){
     e.circle3.style.display = 'block';
 }
 
-function animationFirstCycle(e, state, saved_e) {
+function animationFirstCycle(e, state, saved_e, chosed) {
     let posX = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
     let posY = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
     let posX_exit = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
     let posY_exit = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
     createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
     let i = matTert.length - 1;     
-    passiveAnimationStand(document.getElementById("character_"+i), i, e, state, posX_exit, posY_exit, saved_e);
+    passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e);
     
 }
 
-async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exit, saved_e){
+async function passiveAnimationStand(character, i, e, state, saved_e){
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     await returnToObject(character, seatForObjects[1][0], seatForObjects[1][1], false, state, e);
@@ -2397,6 +2399,8 @@ async function passiveAnimationStand(character, i, e, state, posX_exit, posY_exi
     await singleJumpAnimation(character, e, state);
     await sleep(1000);
     await addMoney(2, state);
+    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
+    let posY_exit = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
     await eliminateCharacter(e, i, character);
     await sleep(500);
@@ -2679,8 +2683,6 @@ function assignZIndex(e, state, i, cond = false){
 function eliminateCharacter(e, i, character){
         if(document.getElementById('character_'+i) == null) i--;
         if(document.getElementById('character_'+i).id != character.id) i--;
-        console.log(document.getElementById('character_'+i).id);
-        console.log(character.id);
             document.getElementById('character_'+i).remove();
             if (document.getElementById('illustration_' + i)) {
                 document.getElementById('illustration_' + i).remove();
