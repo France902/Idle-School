@@ -1,4 +1,3 @@
-localStorage.clear();
 function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -12,7 +11,7 @@ function startGame(e = null, state = null) {
         }
         else elements = initialiseElements(e);
         drawMap(elements, state);
-        moveWorldStart(elements, importantStates);
+        moveWorldStart(elements, data.importantStates);
         createImportantObjects(elements, state, e);
         creationTertiaryCharacters(elements, state, e);
         createMapDecorations(elements, state, e);
@@ -36,20 +35,20 @@ function startGame(e = null, state = null) {
         localStorage.clear();
         location.reload();
     }
-    
-const matTert = initialiseMatTert();
 
-const importantObjects = initialiseImportantObjects();
+const data = initialiseData();
 
-const seatForObjects = initialiseseatForObjects();
-
-const importantStates = initialiseimportantStates();
-
-const posWildNature = initialiseWildNature();
-
-const posIdleCycle = initialiseposIdle();
-
-const logConstructionMission = initialiseConstructionMission();
+function initialiseData(){
+    return {
+        matTert: initialiseMatTert(),
+        importantObjects: initialiseImportantObjects(),
+        seatForObjects: initialiseseatForObjects(),
+        importantStates: initialiseimportantStates(),
+        posWildNature: initialiseWildNature(),
+        posIdleCycle: initialiseposIdle(),
+        logConstructionMission: initialiseConstructionMission(),
+    }
+}
 
 let N = 10;
 
@@ -215,11 +214,13 @@ function initialiseImportantObjects(){
     }
 }
 function saveMats_ImportantStates(){
-    localStorage.setItem("matTert", JSON.stringify(matTert));
-    localStorage.setItem("seatForObjects", JSON.stringify(seatForObjects));
-    localStorage.setItem("importantStates", JSON.stringify(importantStates));
-    localStorage.setItem("importantObjects", JSON.stringify(importantObjects));
-    localStorage.setItem("posWildNature", JSON.stringify(posWildNature));
+    localStorage.setItem("matTert", JSON.stringify(data.matTert));
+    localStorage.setItem("seatForObjects", JSON.stringify(data.seatForObjects));
+    localStorage.setItem("importantStates", JSON.stringify(data.importantStates));
+    localStorage.setItem("importantObjects", JSON.stringify(data.importantObjects));
+    localStorage.setItem("posWildNature", JSON.stringify(data.posWildNature));
+    localStorage.setItem("logConstructionMission", JSON.stringify(data.logConstructionMission));
+    localStorage.setItem("posIdleCycle", JSON.stringify(data.posIdleCycle));
 }
 function drawMap(e, state) {
     const canvas = document.getElementById('canvas');
@@ -314,11 +315,11 @@ function moveWorldStart(e, importantStates){
 }
 
 function moveImportantObjectsStart(e){
-    for(i=0;i<importantObjects.length;i++){
-        element = document.getElementById(importantObjects[i][2]);
+    for(i=0;i<data.importantObjects.length;i++){
+        element = document.getElementById(data.importantObjects[i][2]);
         element.style.transition = '';
-        element.style.left = importantObjects[i][0];
-        element.style.top = importantObjects[i][1];
+        element.style.left = data.importantObjects[i][0];
+        element.style.top = data.importantObjects[i][1];
         element.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     }
 }
@@ -886,14 +887,14 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_dialogue = false;
                 resetMoveWorld(e, -3, 5);
                 setTimeout(() => {
-                    matTert[5][2] = '';
+                    data.matTert[5][2] = '';
                     passiveAnimationBob(document.getElementById('character_5'), 5 );
                 }, 2000);
                 activateHud(e);
                 setUpPresideMovement(e, state);
                 setUpFreeCamRoam(e, state);
                 saveStatesElements(saved_e, state);
-                createNewImportantObject(e, state, saved_e, importantObjects.length, '-30vw', '10vh', 'camionBob', 6, 'structure_camion', 'camionBOB.png', 'wheel_camion1', 'ruota_camion2.png', 'wheel_camion2', 'ruota_camion2.png')
+                createNewImportantObject(e, state, saved_e, data.importantObjects.length, '-30vw', '10vh', 'camionBob', 6, 'structure_camion', 'camionBOB.png', 'wheel_camion1', 'ruota_camion2.png', 'wheel_camion2', 'ruota_camion2.png')
                 createInteractionCircle(e, state);
                 moveInteractionCircle(e, state, '164vw', '-10vh');
                 animateInteractionCircle(e, state);
@@ -910,7 +911,7 @@ function setupDialogue(e, state, saved_e) {
                 activateCinematicMode(e);
                 animationCamionCutscene(e, state);
                 setTimeout(() => {
-                    createNewImportantObject(e, state, saved_e, importantObjects.length, '70vw', '208vh', 'stacks_of_books', 1, 'cataste_di_libri.png');
+                    createNewImportantObject(e, state, saved_e, data.importantObjects.length, '70vw', '208vh', 'stacks_of_books', 1, 'cataste_di_libri.png');
                 }, 7000);
                 setTimeout(() => {
                     state.index++;
@@ -929,7 +930,7 @@ function setupDialogue(e, state, saved_e) {
                 e.container_dialogue.style.opacity = 0;
                 state.cond_movement = true;
                 state.cond_dialogue = false;
-                createNewCharacter('30vw', '68vh', "no_animation", -2, false, "Matthew", matTert.length, e, state, saved_e);
+                createNewCharacter('30vw', '68vh', "no_animation", -2, false, "Matthew", data.matTert.length, e, state, saved_e);
                 activateHud(e);
                 resetMoveWorld(e, -3, 5);
                 scale('standard', e);
@@ -940,7 +941,7 @@ function setupDialogue(e, state, saved_e) {
                     [300, 400, 300, 300, 300],
                     [[false], [false], [false], [false], [true]],
                 ];
-                moveCharacter(document.getElementById('character_'+(matTert.length -1)), 5, jumps);
+                moveCharacter(document.getElementById('character_'+(data.matTert.length -1)), 5, jumps);
                 setTimeout(() => {
                     state.index++;
                     state.cond_text = true;
@@ -1297,8 +1298,8 @@ function pointClickMovement(){
         y = yInVH + 40;
         x -= state.posX;
         y -= state.posY;
-            for(i=0;i<matTert.length;i++){
-                if(Math.abs(parseFloat(matTert[i][0]) - x) < 4 && Math.abs(parseFloat(matTert[i][1]) - y) < 4){
+            for(i=0;i<data.matTert.length;i++){
+                if(Math.abs(parseFloat(data.matTert[i][0]) - x) < 4 && Math.abs(parseFloat(data.matTert[i][1]) - y) < 4){
                     console.log("Hai cliccato il personaggio e in futuro succederà qls");
             }
             }   
@@ -1512,8 +1513,8 @@ function assignZIndexP(){
 }
 
 function changeZIndexElements(){
-    for(let i=0;i<matTert.length;i++) {
-        let Y = matTert[i][1];
+    for(let i=0;i<data.matTert.length;i++) {
+        let Y = data.matTert[i][1];
         document.getElementById('character_'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
     }
 }
@@ -1524,13 +1525,13 @@ function left(distance){
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
     });
-    for(let i=0;i<seatForObjects.length;i++){
-        for(let j=0;j<seatForObjects[i].length-1;j+=2){
-            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
+    for(let i=0;i<data.seatForObjects.length;i++){
+        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
         }   
     }
     addParameters(distance, 0, "add") 
-    importantStates.posCanvasX += distance;
+    data.importantStates.posCanvasX += distance;
     animationJumpLeft(distance);
 }
 
@@ -1554,14 +1555,14 @@ function right(distance){
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
     });
-    for(let i=0;i<seatForObjects.length;i++){
-        for(let j=0;j<seatForObjects[i].length-1;j+=2){
-            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
+    for(let i=0;i<data.seatForObjects.length;i++){
+        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
         }
     }
     addParameters(distance, 0, "subtract");
     
-    importantStates.posCanvasX -= distance;
+    data.importantStates.posCanvasX -= distance;
     animationJumpRight(distance);
 }
 
@@ -1583,16 +1584,16 @@ function down(distance){
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
-    for(let i=0;i<seatForObjects.length;i++){
-        for(let j=0;j<seatForObjects[i].length-1;j+=2){
-            seatForObjects[i][j+1] = (parseFloat(seatForObjects[i][j+1]) - distance) + 'vh';
+    for(let i=0;i<data.seatForObjects.length;i++){
+        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+            data.seatForObjects[i][j+1] = (parseFloat(data.seatForObjects[i][j+1]) - distance) + 'vh';
         }
     }
-    for(let i=0;i<posWildNature.length;i++){
-        posWildNature[i][1] = (parseFloat(posWildNature[i][1])  - distance) + 'vh';
+    for(let i=0;i<data.posWildNature.length;i++){
+        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1])  - distance) + 'vh';
     }
     addParameters(distance, 1, "subtract");
-    importantStates.posCanvasY -= distance;
+    data.importantStates.posCanvasY -= distance;
     animationJumpDown(distance);
 }
 
@@ -1613,16 +1614,16 @@ function top(distance){
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
-    for(let i=0;i<seatForObjects.length;i++){
-        for(let j=0;j<seatForObjects[i].length-1;j+=2){
-            seatForObjects[i][j+1] = (parseFloat(seatForObjects[i][j+1]) + distance) + 'vh';
+    for(let i=0;i<data.seatForObjects.length;i++){
+        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+            data.seatForObjects[i][j+1] = (parseFloat(data.seatForObjects[i][j+1]) + distance) + 'vh';
         }
     }
-    for(let i=0;i<posWildNature.length;i++){
-        posWildNature[i][1] = (parseFloat(posWildNature[i][1]) + distance) + 'vh';
+    for(let i=0;i<data.posWildNature.length;i++){
+        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) + distance) + 'vh';
     }
     addParameters(distance, 1, "add")
-    importantStates.posCanvasY += distance;
+    data.importantStates.posCanvasY += distance;
     animationJumpTop(distance);
 }
 
@@ -1642,25 +1643,25 @@ function addParameters(distance, j, operation){
     else unit = 'vh';
     switch(operation) {
         case "add":
-            for(i=0;i<matTert.length;i++){
-            matTert[i][j] = (parseFloat(matTert[i][j]) + distance) + unit;
+            for(i=0;i<data.matTert.length;i++){
+            data.matTert[i][j] = (parseFloat(data.matTert[i][j]) + distance) + unit;
             }
-            for(i=0;i<importantObjects.length;i++){
-                importantObjects[i][j] = (parseFloat(importantObjects[i][j]) + distance) + unit;
+            for(i=0;i<data.importantObjects.length;i++){
+                data.importantObjects[i][j] = (parseFloat(data.importantObjects[i][j]) + distance) + unit;
             }
-            for(i=0;i<posIdleCycle.length;i++){
-                posIdleCycle[i][j] = (parseFloat(posIdleCycle[i][j]) + distance);
+            for(i=0;i<data.posIdleCycle.length;i++){
+                data.posIdleCycle[i][j] = (parseFloat(data.posIdleCycle[i][j]) + distance);
             }
             break;
         case "subtract": 
-            for(i=0;i<matTert.length;i++){
-            matTert[i][j] = (parseFloat(matTert[i][j]) - distance) + unit;
+            for(i=0;i<data.matTert.length;i++){
+            data.matTert[i][j] = (parseFloat(data.matTert[i][j]) - distance) + unit;
             }
-            for(i=0;i<importantObjects.length;i++){
-                importantObjects[i][j] = (parseFloat(importantObjects[i][j]) - distance) + unit;
+            for(i=0;i<data.importantObjects.length;i++){
+                data.importantObjects[i][j] = (parseFloat(data.importantObjects[i][j]) - distance) + unit;
             }
-            for(i=0;i<posIdleCycle.length;i++){
-                posIdleCycle[i][j] = (parseFloat(posIdleCycle[i][j]) - distance);
+            for(i=0;i<data.posIdleCycle.length;i++){
+                data.posIdleCycle[i][j] = (parseFloat(data.posIdleCycle[i][j]) - distance);
             }
             break;
     }
@@ -1676,19 +1677,19 @@ function diagonalTopRight(distance) {
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
-    for (let i = 0; i < seatForObjects.length; i++) {
-        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
-            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
-            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) + distance) + 'vh';
+    for (let i = 0; i < data.seatForObjects.length; i++) {
+        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
+            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) + distance) + 'vh';
         }
     }
-    for(let i=0;i<posWildNature.length;i++){
-        posWildNature[i][1] = (parseFloat(posWildNature[i][1] + distance)) + 'vh';
+    for(let i=0;i<data.posWildNature.length;i++){
+        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1] + distance)) + 'vh';
     }
     addParameters(distance, 0, "subtract");
     addParameters(distance, 1, "add");
-    importantStates.posCanvasX -= distance;
-    importantStates.posCanvasY += distance;
+    data.importantStates.posCanvasX -= distance;
+    data.importantStates.posCanvasY += distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1701,19 +1702,19 @@ function diagonalTopLeft(distance) {
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
     });
-    for (let i = 0; i < seatForObjects.length; i++) {
-        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
-            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
-            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) + distance) + 'vh';
+    for (let i = 0; i < data.seatForObjects.length; i++) {
+        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
+            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) + distance) + 'vh';
         }
     }
-    for(let i=0;i<posWildNature.length;i++){
-        posWildNature[i][1] = (parseFloat(posWildNature[i][1] + distance)) + 'vh';
+    for(let i=0;i<data.posWildNature.length;i++){
+        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1] + distance)) + 'vh';
     }
     addParameters(distance, 0, "add");
     addParameters(distance, 1, "add");
-    importantStates.posCanvasX += distance;
-    importantStates.posCanvasY += distance;
+    data.importantStates.posCanvasX += distance;
+    data.importantStates.posCanvasY += distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1726,19 +1727,19 @@ function diagonalLowRight(distance) {
         img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
-    for (let i = 0; i < seatForObjects.length; i++) {
-        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
-            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) - distance) + 'vw';
-            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) - distance) + 'vh';
+    for (let i = 0; i < data.seatForObjects.length; i++) {
+        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
+            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) - distance) + 'vh';
         }
     }
-    for(let i=0;i<posWildNature.length;i++){
-        posWildNature[i][1] = (parseFloat(posWildNature[i][1]) - distance) + 'vh';
+    for(let i=0;i<data.posWildNature.length;i++){
+        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) - distance) + 'vh';
     }
     addParameters(distance, 0, "subtract");
     addParameters(distance, 1, "subtract");
-    importantStates.posCanvasX -= distance;
-    importantStates.posCanvasY -= distance;
+    data.importantStates.posCanvasX -= distance;
+    data.importantStates.posCanvasY -= distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1751,19 +1752,19 @@ function diagonalBottomLeft(distance) {
         img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
         img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
     });
-    for (let i = 0; i < seatForObjects.length; i++) {
-        for (let j = 0; j < seatForObjects[i].length - 1; j += 2) {
-            seatForObjects[i][j] = (parseFloat(seatForObjects[i][j]) + distance) + 'vw';
-            seatForObjects[i][j + 1] = (parseFloat(seatForObjects[i][j + 1]) - distance) + 'vh';
+    for (let i = 0; i < data.seatForObjects.length; i++) {
+        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
+            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) - distance) + 'vh';
         }
     }
-    for(let i=0;i<posWildNature.length;i++){
-        posWildNature[i][1] = (parseFloat(posWildNature[i][1]) - distance) + 'vh';
+    for(let i=0;i<data.posWildNature.length;i++){
+        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) - distance) + 'vh';
     }
     addParameters(distance, 0, "add");
     addParameters(distance, 1, "subtract");
-    importantStates.posCanvasX += distance;
-    importantStates.posCanvasY -= distance;
+    data.importantStates.posCanvasX += distance;
+    data.importantStates.posCanvasY -= distance;
     animationJumpDiagonal(distance);
 }
 
@@ -1869,7 +1870,7 @@ window.addEventListener('keyup', handleKeyup);
         document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-               if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(matTert[4][4] == false) interaction(0, e, state);
+               if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(data.matTert[4][4] == false) interaction(0, e, state);
             }
         });
     }
@@ -2083,20 +2084,20 @@ function openConstructionMenu(e, state){
 }
 let missionCompleted = 0;
 function writeMissions(e, state) {
-    e.first_c_m.textContent = logConstructionMission[0][0];
-    e.second_c_m.textContent = logConstructionMission[1][0];
-    e.third_c_m.textContent = logConstructionMission[2][0];
+    e.first_c_m.textContent = data.logConstructionMission[0][0];
+    e.second_c_m.textContent = data.logConstructionMission[1][0];
+    e.third_c_m.textContent = data.logConstructionMission[2][0];
     let type;
     for(let index=0;index<3-missionCompleted;index++){
         let j = 0;
-        while(j < (logConstructionMission[index].length -1)) {
+        while(j < (data.logConstructionMission[index].length -1)) {
             let i = 1;
-            while(logConstructionMission[index][j+1][i] != "_") {
-                document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(logConstructionMission[index][j+1][i]);
+            while(data.logConstructionMission[index][j+1][i] != "_") {
+                document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(data.logConstructionMission[index][j+1][i]);
                 i++;
             }
             i++;
-            switch(logConstructionMission[index][j+1][i]) {
+            switch(data.logConstructionMission[index][j+1][i]) {
                 case 'M':
                     document.getElementById("img"+index+"_cost"+j).src = "mattone.png";
                     type = state.brick_resource;
@@ -2111,11 +2112,11 @@ function writeMissions(e, state) {
                     break;
             }
             document.getElementById("text"+index+"_cost"+j).style.display = 'block';
-            document.getElementById("text"+index+"_cost"+j).textContent = type+'/' + parseFloat(logConstructionMission[index][j+1][0]);
+            document.getElementById("text"+index+"_cost"+j).textContent = type+'/' + parseFloat(data.logConstructionMission[index][j+1][0]);
             document.getElementById("img"+index+"_cost"+j).style.display = 'block';
             i = 1;
-            while(logConstructionMission[index][j+1][i] != "_") {
-                document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(logConstructionMission[index][j+1][i]);
+            while(data.logConstructionMission[index][j+1][i] != "_") {
+                document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(data.logConstructionMission[index][j+1][i]);
                 i++;
             }
             j++;
@@ -2131,11 +2132,11 @@ function controlProgress(e, state) {
     writeMissions(e, state);
     for(let j=0;j<3;j++){
         completed_materials = 0;
-        for(let i=1;i<logConstructionMission[j].length;i++) {
+        for(let i=1;i<data.logConstructionMission[j].length;i++) {
             subtracted = false;
-            let resource = logConstructionMission[j][i];
+            let resource = data.logConstructionMission[j][i];
             resource = resource[resource.length - 1];
-            let q_resource = parseFloat(logConstructionMission[j][i]);
+            let q_resource = parseFloat(data.logConstructionMission[j][i]);
             switch (resource) {
                 case 'M':
                     if(state.brick_resource >= q_resource) {
@@ -2160,7 +2161,7 @@ function controlProgress(e, state) {
                     break;
             
             }
-            if(logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state);
+            if(data.logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state);
             else if(subtracted) {
                 switch (resource) {
                 case 'M':
@@ -2186,8 +2187,8 @@ function completeMission(index, e, state) {
         document.getElementById("img"+index+"_cost"+i).style.display = 'none';
         document.getElementById("text"+index+"_cost"+i).style.display = 'none';
     }
-    logConstructionMission.splice(index, 1);
-    logConstructionMission.push(["Nient'altro da fare"]);
+    data.logConstructionMission.splice(index, 1);
+    data.logConstructionMission.push(["Nient'altro da fare"]);
     writeMissions(e, state);
 }
 
@@ -2347,9 +2348,14 @@ function startFirstCycle(e, state, chosed = null, saved_e){
             bookCycle(e, state, saved_e);
             setTimeout(() => {
                 bookCycle(e, state, saved_e);
-            }, 500) 
+            }, 500); 
         }
-        else fundraisingCycle(e, state);
+        else {
+            fundraisingCycle(e, state, saved_e);
+            setTimeout(() => {
+                fundraisingCycle(e, state, saved_e);
+            }, 500);
+        }
         resetMoveWorld(e, -3, 5);
         state.cond_deactivate_movement = false;
         eliminateCharacter(e, 3, null);
@@ -2364,9 +2370,10 @@ function bookCycle(e, state, saved_e){
     }, 500);
 }
 
-function fundraisingCycle(e, state){
+function fundraisingCycle(e, state, saved_e){
     e.stand.src = 'stand_con_sindaco.png';
     e.stand.style.opacity = '1';
+    document.getElementById("stacks_of_books").style.display = 'none';
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 2);
     }, 500);
@@ -2379,33 +2386,35 @@ function createInteractionCircle(e, state){
 }
 
 function animationFirstCycle(e, state, saved_e, chosed) {
-    let posX = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
-    let posY = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
-    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
-    let posY_exit = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
-    createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", matTert.length, e, state, saved_e);
-    let i = matTert.length - 1;     
-    passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e);
-    
+    let posX = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
+    let posY = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
+    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
+    let posY_exit = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
+    createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", data.matTert.length, e, state, saved_e);
+    let i = data.matTert.length - 1;
+    if(chosed == 2) passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e, chosed);
+    else passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e);
 }
 
-async function passiveAnimationStand(character, i, e, state, saved_e){
+async function passiveAnimationStand(character, i, e, state, saved_e, chosed){
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    await returnToObject(character, seatForObjects[1][0], seatForObjects[1][1], false, state, e);
+    await returnToObject(character, data.seatForObjects[1][0], data.seatForObjects[1][1], false, state, e);
     await sleep(1000);
     await singleJumpAnimation(character, e, state);
     await sleep(1000);
     await singleJumpAnimation(character, e, state);
     await sleep(1000);
-    await addMoney(2, state);
-    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(posIdleCycle[0][0]);
-    let posY_exit = Math.floor(Math.random() * 10) + posIdleCycle[0][1];
+    if(chosed == 2) addMoney(3, state);
+    else addMoney(2, state);
+    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
+    let posY_exit = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
-    await eliminateCharacter(e, i, character);
+    eliminateCharacter(e, i, character);
     await sleep(500);
     cont_first_cycle++;
-    await bookCycle(e, state, saved_e);
+    if(chosed == 2) fundraisingCycle(e, state, saved_e);
+    else bookCycle(e, state, saved_e);
 }
 
 function addMoney(qMoney, state) {
@@ -2475,7 +2484,7 @@ function showInteractionCircle(e, state){
 function interaction(index, e, state){
     switch(index){
         case 0:
-            matTert[4][4] = true;
+            data.matTert[4][4] = true;
             const character = document.getElementById('character_4');
             character.style.transform = 'scaleX(1)';
             document.getElementById('key_e' + index).style.display = 'none';        
@@ -2495,7 +2504,7 @@ function creationTertiaryCharacters(e, state, saved_e) {
     let i;
     let scaleX;
     
-    for(i=0;i<matTert.length;i++){
+    for(i=0;i<data.matTert.length;i++){
         createCharacter(e, state, i);
         assignZIndex(e, state, i);
     }
@@ -2505,16 +2514,16 @@ function creationTertiaryCharacters(e, state, saved_e) {
 
 function createNewCharacter(posX, posY, animation, rotation, no_illustration, src, i, e, state, saved_e){
     let parameters = [posX, posY, animation, rotation, no_illustration, src];
-    matTert.push([]);
-    for(let j=0;j<matTert[0].length;j++){
-        matTert[i][j] = parameters[j];
+    data.matTert.push([]);
+    for(let j=0;j<data.matTert[0].length;j++){
+        data.matTert[i][j] = parameters[j];
     }
     createCharacter(e, state, i);
     assignZIndex(e, state, i);
 }
 
 function createMapDecorations(e, state, saved_e) {
-    for(let i=0;i<posWildNature.length;i++){
+    for(let i=0;i<data.posWildNature.length;i++){
         createDecoration(e, state, i);
     }
     saveStatesElements(saved_e, state);
@@ -2523,8 +2532,8 @@ function createMapDecorations(e, state, saved_e) {
 
 function createDecoration(e, state, i) {
     const decoration_container = document.createElement('div');
-    decoration_container.style.left = posWildNature[i][0];
-    decoration_container.style.top = posWildNature[i][1];
+    decoration_container.style.left = data.posWildNature[i][0];
+    decoration_container.style.top = data.posWildNature[i][1];
     decoration_container.style.width = '7vw';
     decoration_container.style.height = '7vh';
     decoration_container.style.position = 'fixed';
@@ -2536,58 +2545,58 @@ function createDecoration(e, state, i) {
     decoration_container.className = 'school_imgs';
     const decoration_img = document.createElement('img');
     decoration_img.className = 'decoration';
-    decoration_img.src = posWildNature[i][2] + '.png';
+    decoration_img.src = data.posWildNature[i][2] + '.png';
     decoration_container.appendChild(decoration_img);
     e.world.appendChild(decoration_container);
 }
 
 function createImportantObjects(e, state, saved_e) {
-    for(let i=0;i<importantObjects.length;i++){
+    for(let i=0;i<data.importantObjects.length;i++){
         createObjects(e, state, i, saved_e);
     }
 }
 
 function createNewImportantObject(e, state, saved_e, i, posX, posY, id_container, N_parameters, id1 = null, src1 = null, id2 = null, src2 = null, id3 = null, src3 = null, id4 = null, src4 = null) {
-    importantObjects.push([]);
+    data.importantObjects.push([]);
     let parameters_to_add = [id1, src1, id2, src2, id3, src3, id4, src4];
-    importantObjects[i][0] = posX;
-    importantObjects[i][1] = posY;
-    importantObjects[i][2] = id_container;
-    importantObjects[i][3] = N_parameters;
+    data.importantObjects[i][0] = posX;
+    data.importantObjects[i][1] = posY;
+    data.importantObjects[i][2] = id_container;
+    data.importantObjects[i][3] = N_parameters;
     for(let j=0;j<N_parameters;j++){
-        importantObjects[i][j+4] = parameters_to_add[j];
+        data.importantObjects[i][j+4] = parameters_to_add[j];
     }
     createObjects(e, state, i, saved_e);
 }
 
 function createObjects(e, state, i, saved_e) {
-    if(importantObjects[i][3] == 1){
+    if(data.importantObjects[i][3] == 1){
         const object = document.createElement('img');
-        object.style.left = importantObjects[i][0];
-        object.style.top = importantObjects[i][1];
-        object.id = importantObjects[i][2];
+        object.style.left = data.importantObjects[i][0];
+        object.style.top = data.importantObjects[i][1];
+        object.id = data.importantObjects[i][2];
         object.className = 'school_imgs';
-        object.src = importantObjects[i][4];
+        object.src = data.importantObjects[i][4];
         e.world.appendChild(object);
-        e[importantObjects[i][2]] = document.getElementById(`${object.id}`); 
-        saved_e[importantObjects[i][2]] = `document.getElementById("${object.id}")`;
+        e[data.importantObjects[i][2]] = document.getElementById(`${object.id}`); 
+        saved_e[data.importantObjects[i][2]] = `document.getElementById("${object.id}")`;
         return;
     }
     else {
         const object_container = document.createElement('div');
-        object_container.style.left = importantObjects[i][0];
-        object_container.style.top = importantObjects[i][1];
-        object_container.id = importantObjects[i][2];
+        object_container.style.left = data.importantObjects[i][0];
+        object_container.style.top = data.importantObjects[i][1];
+        object_container.id = data.importantObjects[i][2];
         object_container.className = 'school_imgs';
-        for(let j=0;j<importantObjects[i][3];j+=2){
+        for(let j=0;j<data.importantObjects[i][3];j+=2){
             const object_img = document.createElement('img');
-            object_img.id = importantObjects[i][4 + j];
-            object_img.src = importantObjects[i][5 + j];
+            object_img.id = data.importantObjects[i][4 + j];
+            object_img.src = data.importantObjects[i][5 + j];
             object_container.appendChild(object_img);
         }
         e.world.appendChild(object_container);
-        e[importantObjects[i][2]] = document.getElementById(`${object_container.id}`); 
-        saved_e[importantObjects[i][2]] = `document.getElementById("${object_container.id}")`;
+        e[data.importantObjects[i][2]] = document.getElementById(`${object_container.id}`); 
+        saved_e[data.importantObjects[i][2]] = `document.getElementById("${object_container.id}")`;
         return;
     } 
 }
@@ -2596,14 +2605,14 @@ function createCharacter(e, state, i) {
     let source;
     let src_added = '';
     const character_container = document.createElement('div');
-    character_container.style.left = matTert[i][0];
-    character_container.style.top = matTert[i][1];
+    character_container.style.left = data.matTert[i][0];
+    character_container.style.top = data.matTert[i][1];
     character_container.style.height = '20vh';
     character_container.id = 'character_' + i;
     character_container.className = 'school_imgs';
     character_container.style.position = 'fixed';
     character_container.style.transition = 'left 0.25s linear, top 0.25s linear';
-    switch (matTert[i][3]) {
+    switch (data.matTert[i][3]) {
         case 1:
             character_container.style.transform = 'scaleX(1)';
             break;
@@ -2627,14 +2636,14 @@ function createCharacter(e, state, i) {
     character_img.style.height = '19vh';
 
     if(localStorage.getItem("saved") == null) {
-        if(matTert[i][5] == "operaio") chooseSrc(i);
+        if(data.matTert[i][5] == "operaio") chooseSrc(i);
     }
-    character_img.src = matTert[i][5] + src_added + '.png';
+    character_img.src = data.matTert[i][5] + src_added + '.png';
 
     character_container.appendChild(character_img);
     e.world.appendChild(character_container);
     e.world.appendChild(document.getElementById('character_'+i));
-    switch (matTert[i][2]){
+    switch (data.matTert[i][2]){
         case 'group':
             passiveAnimationGroup(character_container, i, e, state);
             break;
@@ -2642,8 +2651,8 @@ function createCharacter(e, state, i) {
              passiveAnimationWorkAlone(character_container, i, e);
             break;
         case 'alone':
-            let posX = parseFloat(matTert[i][0]) + 2;
-            let posY = parseFloat(matTert[i][1]) - 10;
+            let posX = parseFloat(data.matTert[i][0]) + 2;
+            let posY = parseFloat(data.matTert[i][1]) - 10;
             const illustration = createIllustration('vignetta_musica.png', posX, posY, e, i);
         animateIllustration(illustration, i);
         setInterval(() => {
@@ -2651,8 +2660,8 @@ function createCharacter(e, state, i) {
             }, 1000);
             break;
         case 'walk-casually':
-            let posX2 = parseFloat(matTert[i][0]) + 2;
-            let posY2 = parseFloat(matTert[i][1]) - 10;
+            let posX2 = parseFloat(data.matTert[i][0]) + 2;
+            let posY2 = parseFloat(data.matTert[i][1]) - 10;
             const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e, i);
             animateIllustration(illustration2, i);
             passiveAnimationWalking(character_container, i, e, illustration2, state);
@@ -2662,18 +2671,18 @@ function createCharacter(e, state, i) {
     function chooseSrc(i){
         let num = Math.floor(Math.random() * 3) + 1;
         src = `operaio${num}`;
-        matTert[i][5] = src;
+        data.matTert[i][5] = src;
     }
 }
 
 function assignZIndex(e, state, i, cond = false){
     let Y;
     if(!cond) { 
-        Y = parseFloat(matTert[i][1]);
+        Y = parseFloat(data.matTert[i][1]);
         document.getElementById('character_'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
     }
     else {
-        Y = parseFloat(posWildNature[i][1]);
+        Y = parseFloat(data.posWildNature[i][1]);
         document.getElementById('decoration_container.'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
     }
     
@@ -2688,25 +2697,25 @@ function eliminateCharacter(e, i, character){
                 document.getElementById('illustration_' + i).remove();
             }
             
-                for(let j=i-1;j<matTert.length;j++){
+                for(let j=i-1;j<data.matTert.length;j++){
                     if(document.getElementById('character_'+(j+1))){
                         document.getElementById('character_'+(j+1)).id = `character_${j}`;
                         document.getElementById('characterImg_'+(j+1)).id = `characterImg_${j}`;
-                        if(matTert[j+1][2] != '' && matTert[j+1][2] != 'passiveAnimationStand') {
+                        if(data.matTert[j+1][2] != '' && data.matTert[j+1][2] != 'passiveAnimationStand') {
                             document.getElementById('illustration_'+(j+1)).id = `illustration_${j}`;
                         }
-                        console.log("eliminato");
+                        
                     }
                     
                 }
 
-                matTert.splice(i, 1);
+                data.matTert.splice(i, 1);
 }
 
 
 function animateIllustration(illustration, i){
     let interval = setInterval(() => {
-            if(matTert[i][4] == false){
+            if(data.matTert[i][4] == false){
                 let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
                 setTimeout(() => {
                                 illustration.style.opacity = '1';
@@ -2731,7 +2740,7 @@ function createIllustration(sr, posX, posY, e, i_illustration){
         illustration.style.height = '15vh';
         illustration.style.left = `${posX}vw`;
         illustration.style.top = `${posY}vh`;
-        illustration.style.zIndex = '-9998';
+        illustration.style.zIndex = '-9997';
         illustration.className = 'school_imgs';
         illustration.id = 'illustration_'+i_illustration;
         cont_illustration++;
@@ -2788,8 +2797,8 @@ let interval = [];
 
     function passiveIllustrationGroup(posX, posY, i, e, state, character){
         if(posX == 0){
-                posX = parseFloat(matTert[i][0]) + 2;
-                posY = parseFloat(matTert[i][1]) - 10;
+                posX = parseFloat(data.matTert[i][0]) + 2;
+                posY = parseFloat(data.matTert[i][1]) - 10;
         }
         const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e, i);
         moveIllustrationGroup(illustration, i, state, character);
@@ -2907,7 +2916,7 @@ async function passiveAnimationAlone(character, i, e, illustration, state){
     let illustration_time = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (delay) => {
-        if(matTert[i][4] == true){
+        if(data.matTert[i][4] == true){
             illustration.style.opacity = '0';
             illustration.style.display = 'none';
             document.getElementById('key_e'+0).style.display = 'none';
@@ -2978,8 +2987,8 @@ async function passiveAnimationBob(character, i, e, illustration, state){
             }
             if(cont == 0) cond = true;
         }
-        let x = (parseFloat(matTert[num][0]) - 5) + 'vw';
-        let y = (parseFloat(matTert[num][1]) - 5) + 'vh';
+        let x = (parseFloat(data.matTert[num][0]) - 5) + 'vw';
+        let y = (parseFloat(data.matTert[num][1]) - 5) + 'vh';
         let delay = (Math.abs(parseFloat(character.style.left) - parseFloat(x)) / 8 * 1000) + (Math.abs(parseFloat(character.style.top) - parseFloat(y)) / 5 * 1000);
         await returnToObject(character, x, y, false, state, e);
         await sleep(delay);
@@ -3024,7 +3033,7 @@ async function jolt(character, e, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.2s ease-out, left 0.2s ease-out";
     const step = async (topDelta, leftDelta, delay) => {
-        if(topDelta == true) matTert[4][4] = true;
+        if(topDelta == true) data.matTert[4][4] = true;
         else{
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3042,7 +3051,7 @@ async function jolt(character, e, state) {
     await step(2, 1, 60);
     await step(2, 0.75, 60);
     await sleep(1500);
-    await returnToObject(character, seatForObjects[0][2], seatForObjects[0][3], true, state, e);
+    await returnToObject(character, data.seatForObjects[0][2], data.seatForObjects[0][3], true, state, e);
 }
 
 function moveCharacter(character, total_jumps, jumps){
@@ -3224,12 +3233,12 @@ if(character.id.length == 11) posId = character.id[character.id.length - 1];
 else if(character.id.length == 12) posId = parseFloat(character.id[character.id.length - 2] + character.id[character.id.length - 1]);
 if(document.getElementById('character_'+posId) == null) posId--;
 if(document.getElementById('character_'+posId).id != character.id) posId++;
-    if(!cond || character.id == 'character_5' || matTert[posId][2] == 'passiveAnimationStand'){
+    if(!cond || character.id == 'character_5' || data.matTert[posId][2] == 'passiveAnimationStand'){
         return 
     }
     else{
-        matTert[posId][0] = parseFloat(character.style.left) + 'vw';
-        matTert[posId][1] = parseFloat(character.style.top) + 'vh';
+        data.matTert[posId][0] = parseFloat(character.style.left) + 'vw';
+        data.matTert[posId][1] = parseFloat(character.style.top) + 'vh';
         state.condBP1 = false;
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 2, parseFloat(character.style.top) - 10);
     }
@@ -3239,8 +3248,8 @@ if(document.getElementById('character_'+posId).id != character.id) posId++;
 function controlClose(character, state){
     if(!existencecontrol(character)) return;
     let cont = 0;
-    for(i=0;i<matTert.length;i++){
-        if(Math.abs(parseFloat(character.style.left) - parseFloat(matTert[i][0])) <= 50 && Math.abs(parseFloat(character.style.top) - parseFloat(matTert[i][1]) <= 50)){
+    for(i=0;i<data.matTert.length;i++){
+        if(Math.abs(parseFloat(character.style.left) - parseFloat(data.matTert[i][0])) <= 50 && Math.abs(parseFloat(character.style.top) - parseFloat(data.matTert[i][1]) <= 50)){
             state.ids[cont] = i;
             cont++;
         }
@@ -3254,8 +3263,8 @@ function fastAnimations(ids, state){
     let i;
     if(cond_ripeti_controllo){
         for(i=0;i<ids.length-1;i++){
-            if(matTert[ids[i]] != undefined) {
-                if(matTert[ids[i]][2] == 'group'){
+            if(data.matTert[ids[i]] != undefined) {
+                if(data.matTert[ids[i]][2] == 'group'){
                     cond_ripeti_controllo = false;
                     state.maxTimeAnimationGroup[ids[i]] /= 10;
                 }
@@ -3263,8 +3272,8 @@ function fastAnimations(ids, state){
         }
         
         for (let j = 0; j < ids.length - 1; j++) {
-            if(matTert[ids[j]] != undefined) {
-            if (matTert[ids[j]][2] == 'group') {
+            if(data.matTert[ids[j]] != undefined) {
+            if (data.matTert[ids[j]][2] == 'group') {
                 setTimeout(() => {
                     state.maxTimeAnimationGroup[ids[j]] *= 10;
                     cond_ripeti_controllo = true;
@@ -3404,12 +3413,12 @@ async function leftJump(character, half, a_quarter) {
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
         if(i==5 && delay == 0){
             if(a_quarter){
-                matTert[i][0] = (parseFloat(matTert[i][0]) - 2.5) + "vw";
+                data.matTert[i][0] = (parseFloat(data.matTert[i][0]) - 2.5) + "vw";
             }
             else if(half){
-                matTert[i][0] = (parseFloat(matTert[i][0]) - 5) + "vw";
+                data.matTert[i][0] = (parseFloat(data.matTert[i][0]) - 5) + "vw";
             } else{
-                matTert[i][0] = (parseFloat(matTert[i][0]) - 8) + "vw";
+                data.matTert[i][0] = (parseFloat(data.matTert[i][0]) - 8) + "vw";
             }
         }
     };
@@ -3503,7 +3512,7 @@ function diaologueB_P1(e, state) {
             await rightJump(t, false); 
             await sleep(200);
             await rotateBob(b);
-            returnToObject(t, seatForObjects[0][0], seatForObjects[0][1], false, state, e);
+            returnToObject(t, data.seatForObjects[0][0], data.seatForObjects[0][1], false, state, e);
             await moveCharacter(b, jumps[0].length, jumps);
             await sleep(700);
             await removeIllustration(bob_illustration, t_illustration);
