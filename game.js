@@ -1,3 +1,4 @@
+localStorage.clear();
 function startGame(e = null, state = null) {
    
     if(localStorage.getItem("saved") && e == null){
@@ -24,6 +25,7 @@ function startGame(e = null, state = null) {
         backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
         createOnClicks(elements, state);
+        createListenersForRedraw(elements, state);
         writeMissions(elements, state);
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
@@ -222,6 +224,7 @@ function saveMats_ImportantStates(){
     localStorage.setItem("logConstructionMission", JSON.stringify(data.logConstructionMission));
     localStorage.setItem("posIdleCycle", JSON.stringify(data.posIdleCycle));
 }
+
 function drawMap(e, state) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -229,6 +232,7 @@ function drawMap(e, state) {
     const scaleFactor = 4;
     canvas.width = window.innerWidth * scaleFactor;
     canvas.height = window.innerHeight * scaleFactor;
+
 
     canvas.style.width = '100vw';
     canvas.style.height = '100vh';
@@ -2192,6 +2196,15 @@ function completeMission(index, e, state) {
     writeMissions(e, state);
 }
 
+let overlay_mission = 1;
+function overlayMission(mission) {
+    if(mission != overlay_mission) {
+        document.getElementById("sidebar_mission"+ mission).style.backgroundColor = 'yellow';
+        document.getElementById("sidebar_mission"+ overlay_mission).style.backgroundColor = 'beige';
+        overlay_mission = mission;
+    }
+}
+
 function closeConstructionMenu(e, state) {
     document.getElementById('start_overlay').style.opacity = '0';
     e.construction_menu.style.opacity = '0';
@@ -3321,17 +3334,14 @@ async function rightJumpP(character) {
 async function rightJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-    if(character.id != "character_10"){
-        let posId = character.id.split("_")[1];
-        const characterImg = document.getElementById('characterImg_'+posId);
-        /*
-        let source = characterImg.src.split("/").pop();
-        let src_character = source.split("_")[0];
-        src_character = src_character.split('.')[0];
-        src_character += ".png";
-        document.getElementById('characterImg_'+posId).src = src_character;
-        */
-    }
+    let posId = character.id.split("_")[1];
+    const characterImg = document.getElementById('characterImg_'+posId);
+    let source = characterImg.src.split("/").pop();
+    let src_character = source.split("_")[0];
+    src_character = src_character.split('.')[0];
+    src_character += ".png";
+    console.log(src_character)
+    document.getElementById('characterImg_'+posId).src = src_character;
 
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
@@ -3641,14 +3651,23 @@ function createOnClicks(e, state){
     }
 }
 
-let overlay_mission = 1;
-function overlayMission(mission) {
-    if(mission != overlay_mission) {
-        document.getElementById("sidebar_mission"+ mission).style.backgroundColor = 'yellow';
-        document.getElementById("sidebar_mission"+ overlay_mission).style.backgroundColor = 'beige';
-        overlay_mission = mission;
+function createListenersForRedraw(elements, state){
+    let redrawTimeout = null;
+    function requestRedraw() {
+        clearTimeout(redrawTimeout);
+        redrawTimeout = setTimeout(() => {
+            if (typeof drawMap === 'function' && typeof elements !== 'undefined' && typeof state !== 'undefined') {
+                drawMap(elements, state);
+            }
+        }, 1);
     }
+
+    window.addEventListener('resize', requestRedraw);
+
+    const fsEvents = ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange'];
+    fsEvents.forEach(evt => document.addEventListener(evt, requestRedraw));
 }
+
 
 
 window.onload = function(){
