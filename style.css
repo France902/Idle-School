@@ -713,6 +713,14 @@
             left: 4.8vw;
         }
 
+        .coin_icon {
+            position: absolute;
+            width: 1.75vw;
+            height: 3.5vh;
+            top: 0.8vh;
+            left: 2.2vw;
+        }
+
         .mission_1, 
         .mission_2, 
         .mission_3 {
@@ -945,3 +953,4 @@
                 top: 200vh;
             }
         }
+
