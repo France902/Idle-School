@@ -2309,21 +2309,21 @@ function buyMaterial(type, state) {
         case 1:
             if(state.money >= 2) {
                 state.money -= 2;
-                state.brick_resource += 1;
+                state.brick_resource += 9;
                 showMoney(state);
             }
             break;
         case 2:
             if(state.money >= 4) {
                 state.money -= 4;
-                state.glass_resource += 1;
+                state.glass_resource += 9;
                 showMoney(state);
             }
             break;
         case 3:
             if(state.money >= 5) {
                 state.money -= 5;
-                state.wood_resource += 1;
+                state.wood_resource += 9;
                 showMoney(state);
             }
             break;
@@ -3677,4 +3677,5 @@ window.onload = function(){
     
     startGame();
 } 
+
 
