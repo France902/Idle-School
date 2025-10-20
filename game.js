@@ -205,7 +205,7 @@ function setPositionWildNature(mat_nature){
 function initialiseImportantObjects(){
     if(localStorage.getItem("saved") == null){
         const importantObjects = [
-            [ '165vw', '-10vh','table_construction',  1, 'tavolo_costruzione.png'],
+            [ '173vw', '-10vh','table_construction',  1, 'tavolo_costruzione.png'],
             ['14vw', '-20vh', 'barrow', 4, 'structure_barrow', 'cariola.png', 'structure_wheel', 'ruota_cariola.png'],
             ['140vw', '80vh', 'stand', 1, 'stand_libri.png']
         ];
@@ -642,14 +642,14 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e) {
   const lines = [
-    ["Ciao! Sono Bob!", "Bob", 2, 0, true],
-    ["Ciao! Sono Bob!", "Bob", 2, 0, false],
+    ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
+    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
     [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
-    ["Ciao! Sono Bob!", "Bob", 2, 0, false],
-    ["Ciao! Sono Bob!", "Bob", 2, true, false, -100, 35],
+    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "Bob", 2, 0, false],
+    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "Bob", 2, true, false, -100, 35],
     [true],
     ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
-    ['Ciao! Sono Bob!', "Bob", 2, 0, false],
+    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "Bob", 2, 0, false],
     [true],
     ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
     [true],
@@ -1524,19 +1524,21 @@ function changeZIndexElements(){
 }
 
 function left(distance){
-    state.posX -= distance;
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
-    });
-    for(let i=0;i<data.seatForObjects.length;i++){
-        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
-            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
-        }   
+    if(addParameters(distance, 0, "add") == true) {
+        state.posX -= distance;
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
+        });
+        for(let i=0;i<data.seatForObjects.length;i++){
+            for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+                data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
+            }   
+        }
+        data.importantStates.posCanvasX += distance;
+        animationJumpLeft(distance);
     }
-    addParameters(distance, 0, "add") 
-    data.importantStates.posCanvasX += distance;
-    animationJumpLeft(distance);
+    else addParameters(distance, 0, "subtract")
 }
 
 async function animationJumpLeft(distance){
@@ -1553,7 +1555,7 @@ async function animationJumpLeft(distance){
 }
 
 function right(distance){
-    
+    if(addParameters(distance, 0, "subtract") == true) {
     state.posX += distance;
     e.imgsArray.forEach(img => {
         img.style.transition = 'left 0.25s linear, top 0.25s linear';
@@ -1564,10 +1566,10 @@ function right(distance){
             data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
         }
     }
-    addParameters(distance, 0, "subtract");
-    
+
     data.importantStates.posCanvasX -= distance;
     animationJumpRight(distance);
+} else addParameters(distance, 0, "add");
 }
 
 async function animationJumpRight(distance){
@@ -1583,22 +1585,24 @@ async function animationJumpRight(distance){
 }
 
 function down(distance){
-    state.posY += distance;
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
-    });
-    for(let i=0;i<data.seatForObjects.length;i++){
-        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
-            data.seatForObjects[i][j+1] = (parseFloat(data.seatForObjects[i][j+1]) - distance) + 'vh';
+    if(addParameters(distance, 1, "subtract") == true) {
+        state.posY += distance;
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
+        });
+        for(let i=0;i<data.seatForObjects.length;i++){
+            for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+                data.seatForObjects[i][j+1] = (parseFloat(data.seatForObjects[i][j+1]) - distance) + 'vh';
+            }
         }
-    }
-    for(let i=0;i<data.posWildNature.length;i++){
-        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1])  - distance) + 'vh';
-    }
-    addParameters(distance, 1, "subtract");
-    data.importantStates.posCanvasY -= distance;
-    animationJumpDown(distance);
+        for(let i=0;i<data.posWildNature.length;i++){
+            data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1])  - distance) + 'vh';
+        }
+        
+        data.importantStates.posCanvasY -= distance;
+        animationJumpDown(distance);
+    } else addParameters(distance, 1, "add");
 }
 
 async function animationJumpDown(distance){
@@ -1613,22 +1617,24 @@ async function animationJumpDown(distance){
 }
 
 function top(distance){
-    state.posY -= distance;
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
-    });
-    for(let i=0;i<data.seatForObjects.length;i++){
-        for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
-            data.seatForObjects[i][j+1] = (parseFloat(data.seatForObjects[i][j+1]) + distance) + 'vh';
+    if(addParameters(distance, 1, "add") == true) {
+        state.posY -= distance;
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
+        });
+        for(let i=0;i<data.seatForObjects.length;i++){
+            for(let j=0;j<data.seatForObjects[i].length-1;j+=2){
+                data.seatForObjects[i][j+1] = (parseFloat(data.seatForObjects[i][j+1]) + distance) + 'vh';
+            }
         }
-    }
-    for(let i=0;i<data.posWildNature.length;i++){
-        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) + distance) + 'vh';
-    }
-    addParameters(distance, 1, "add")
-    data.importantStates.posCanvasY += distance;
-    animationJumpTop(distance);
+        for(let i=0;i<data.posWildNature.length;i++){
+            data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) + distance) + 'vh';
+        }
+        
+        data.importantStates.posCanvasY += distance;
+        animationJumpTop(distance);
+} else addParameters(distance, 1, "subtract");
 }
 
 async function animationJumpTop(distance){
@@ -1642,7 +1648,7 @@ async function animationJumpTop(distance){
         });
 }
 
-function addParameters(distance, j, operation){
+function addParameters(distance, j, operation, cond_check = true){
     if(j==0) unit = 'vw';
     else unit = 'vh';
     switch(operation) {
@@ -1669,107 +1675,149 @@ function addParameters(distance, j, operation){
             }
             break;
     }
+    if(cond_check) {
+        for(let i=0;i<data.importantObjects.length;i++) {
+            if(conditionCheck(i)) {
+                return false;
+            }
+        }
+    }
+      
+    return true;
 
+}
+
+function conditionCheck(i) {
+    let width_px = document.getElementById(data.importantObjects[i][2]).offsetWidth;
+    let height_px = document.getElementById(data.importantObjects[i][2]).offsetHeight;
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+
+    let width_vw = (width_px / viewportWidth) * 100;
+    let height_vh = (height_px / viewportHeight) * 100;
+
+    if(Math.abs(parseFloat(data.importantObjects[i][0]) - 48) < (width_vw/2) && Math.abs(parseFloat(data.importantObjects[i][1]) - 48) < (height_vh/2)) return true;
+    else return false;
 }
 
 function diagonalTopRight(distance) {
-    state.posX += distance;
-    state.posY -= distance;
-    p.style.transform = 'scaleX(1)';
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
-        img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
-    });
-    for (let i = 0; i < data.seatForObjects.length; i++) {
-        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
-            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
-            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) + distance) + 'vh';
+    if(addParameters(distance, 0, "subtract") &&  addParameters(distance, 1, "add")) {
+        state.posX += distance;
+        state.posY -= distance;
+        p.style.transform = 'scaleX(1)';
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
+            img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
+        });
+        for (let i = 0; i < data.seatForObjects.length; i++) {
+            for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+                data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
+                data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) + distance) + 'vh';
+            }
         }
+        for(let i=0;i<data.posWildNature.length;i++){
+            data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1] + distance)) + 'vh';
+        }
+        
+    
+        data.importantStates.posCanvasX -= distance;
+        data.importantStates.posCanvasY += distance;
+        animationJumpDiagonal(distance);
+    } else {
+        addParameters(distance, 0, "add");
+        addParameters(distance, 1, "subtract");
     }
-    for(let i=0;i<data.posWildNature.length;i++){
-        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1] + distance)) + 'vh';
-    }
-    addParameters(distance, 0, "subtract");
-    addParameters(distance, 1, "add");
-    data.importantStates.posCanvasX -= distance;
-    data.importantStates.posCanvasY += distance;
-    animationJumpDiagonal(distance);
 }
 
 function diagonalTopLeft(distance) {
-    state.posX -= distance;
-    state.posY -= distance;
-    p.style.transform = 'scaleX(-1)';
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
-        img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
-    });
-    for (let i = 0; i < data.seatForObjects.length; i++) {
-        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
-            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
-            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) + distance) + 'vh';
+    if(addParameters(distance, 0, "add") && addParameters(distance, 1, "add")) {
+        state.posX -= distance;
+        state.posY -= distance;
+        p.style.transform = 'scaleX(-1)';
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
+            img.style.top = (parseFloat(img.style.top) + distance) + 'vh';
+        });
+        for (let i = 0; i < data.seatForObjects.length; i++) {
+            for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+                data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
+                data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) + distance) + 'vh';
+            }
         }
+        for(let i=0;i<data.posWildNature.length;i++){
+            data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1] + distance)) + 'vh';
+        }
+        
+        
+        data.importantStates.posCanvasX += distance;
+        data.importantStates.posCanvasY += distance;
+        animationJumpDiagonal(distance);
+    } else {
+        addParameters(distance, 0, "subtract");
+        addParameters(distance, 1, "subtract");
     }
-    for(let i=0;i<data.posWildNature.length;i++){
-        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1] + distance)) + 'vh';
-    }
-    addParameters(distance, 0, "add");
-    addParameters(distance, 1, "add");
-    data.importantStates.posCanvasX += distance;
-    data.importantStates.posCanvasY += distance;
-    animationJumpDiagonal(distance);
 }
 
 function diagonalLowRight(distance) {
-    state.posX += distance;
-    state.posY += distance;
-    p.style.transform = 'scaleX(1)';
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
-        img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
-    });
-    for (let i = 0; i < data.seatForObjects.length; i++) {
-        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
-            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
-            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) - distance) + 'vh';
+    if(addParameters(distance, 0, "subtract") && addParameters(distance, 1, "subtract")) {
+        state.posX += distance;
+        state.posY += distance;
+        p.style.transform = 'scaleX(1)';
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.left = (parseFloat(img.style.left) - distance) + 'vw';
+            img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
+        });
+        for (let i = 0; i < data.seatForObjects.length; i++) {
+            for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+                data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) - distance) + 'vw';
+                data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) - distance) + 'vh';
+            }
         }
+        for(let i=0;i<data.posWildNature.length;i++){
+            data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) - distance) + 'vh';
+        }
+        
+        data.importantStates.posCanvasX -= distance;
+        data.importantStates.posCanvasY -= distance;
+        animationJumpDiagonal(distance);
+    } else{
+        addParameters(distance, 0, "add");
+         addParameters(distance, 1, "add");
     }
-    for(let i=0;i<data.posWildNature.length;i++){
-        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) - distance) + 'vh';
-    }
-    addParameters(distance, 0, "subtract");
-    addParameters(distance, 1, "subtract");
-    data.importantStates.posCanvasX -= distance;
-    data.importantStates.posCanvasY -= distance;
-    animationJumpDiagonal(distance);
 }
 
-function diagonalBottomLeft(distance) {  
-    state.posX -= distance;
-    state.posY += distance;
-    p.style.transform = 'scaleX(-1)';
-    e.imgsArray.forEach(img => {
-        img.style.transition = 'left 0.25s linear, top 0.25s linear';
-        img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
-        img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
-    });
-    for (let i = 0; i < data.seatForObjects.length; i++) {
-        for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
-            data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
-            data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) - distance) + 'vh';
+function diagonalBottomLeft(distance) {
+    if(addParameters(distance, 0, "add") && addParameters(distance, 1, "subtract")) {  
+        state.posX -= distance;
+        state.posY += distance;
+        p.style.transform = 'scaleX(-1)';
+        e.imgsArray.forEach(img => {
+            img.style.transition = 'left 0.25s linear, top 0.25s linear';
+            img.style.left = (parseFloat(img.style.left) + distance) + 'vw';
+            img.style.top = (parseFloat(img.style.top) - distance) + 'vh';
+        });
+        for (let i = 0; i < data.seatForObjects.length; i++) {
+            for (let j = 0; j < data.seatForObjects[i].length - 1; j += 2) {
+                data.seatForObjects[i][j] = (parseFloat(data.seatForObjects[i][j]) + distance) + 'vw';
+                data.seatForObjects[i][j + 1] = (parseFloat(data.seatForObjects[i][j + 1]) - distance) + 'vh';
+            }
         }
+        for(let i=0;i<data.posWildNature.length;i++){
+            data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) - distance) + 'vh';
+        }
+
+        data.importantStates.posCanvasX += distance;
+        data.importantStates.posCanvasY -= distance;
+        animationJumpDiagonal(distance);
+    } else {
+        addParameters(distance, 0, "subtract");
+         addParameters(distance, 1, "add");
     }
-    for(let i=0;i<data.posWildNature.length;i++){
-        data.posWildNature[i][1] = (parseFloat(data.posWildNature[i][1]) - distance) + 'vh';
-    }
-    addParameters(distance, 0, "add");
-    addParameters(distance, 1, "subtract");
-    data.importantStates.posCanvasX += distance;
-    data.importantStates.posCanvasY -= distance;
-    animationJumpDiagonal(distance);
 }
 
 async function animationJumpDiagonal(distance) {
@@ -2309,21 +2357,21 @@ function buyMaterial(type, state) {
         case 1:
             if(state.money >= 2) {
                 state.money -= 2;
-                state.brick_resource += 9;
+                state.brick_resource += 1;
                 showMoney(state);
             }
             break;
         case 2:
             if(state.money >= 4) {
                 state.money -= 4;
-                state.glass_resource += 9;
+                state.glass_resource += 1;
                 showMoney(state);
             }
             break;
         case 3:
             if(state.money >= 5) {
                 state.money -= 5;
-                state.wood_resource += 9;
+                state.wood_resource += 1;
                 showMoney(state);
             }
             break;
@@ -3340,7 +3388,6 @@ async function rightJump(character, half, a_quarter) {
     let src_character = source.split("_")[0];
     src_character = src_character.split('.')[0];
     src_character += ".png";
-    console.log(src_character)
     document.getElementById('characterImg_'+posId).src = src_character;
 
     const step = async (topDelta, leftDelta, delay) => {
@@ -3677,5 +3724,3 @@ window.onload = function(){
     
     startGame();
 } 
-
-
