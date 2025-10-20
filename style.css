@@ -539,7 +539,7 @@
             margin-left: -3vw;
             margin-top: 5vh;
             transition: margin-top 1.5s linear, margin-left 1.5s linear, left 0.25s linear, top 0.25s linear;
-            background-color: aqua;
+         
         }
 
         .arrow {
@@ -953,4 +953,5 @@
                 top: 200vh;
             }
         }
+
 
