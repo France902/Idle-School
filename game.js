@@ -642,14 +642,14 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e) {
   const lines = [
-    ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
-    ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
+    ["Ciao! Sono Bob!", "Bob", 2, 0, true],
+    ["Ciao! Sono Bob!", "Bob", 2, 0, false],
     [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
-    ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "Bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "Bob", 2, true, false, -100, 35],
+    ["Ciao! Sono Bob!", "Bob", 2, 0, false],
+    ["Ciao! Sono Bob!", "Bob", 2, true, false, -100, 35],
     [true],
     ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
-    ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "Bob", 2, 0, false],
+    ['Ciao! Sono Bob!', "Bob", 2, 0, false],
     [true],
     ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
     [true],
@@ -3677,3 +3677,4 @@ window.onload = function(){
     
     startGame();
 } 
+
