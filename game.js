@@ -963,7 +963,8 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_deactivate_movement = true;
                 state.cond_dialogue = false;
                 choose_in_display(e, state, saved_e);
-                moveWorld(e, 10, -90)
+                moveWorld(e, 23, -86);
+                
                 break;
         }
         
@@ -2387,17 +2388,33 @@ function choose_in_display(e, state, saved_e){
     e.display_choice.style.opacity = '1';
     e.display_img_choice1.style.pointerEvents = 'all';
     e.display_img_choice2.style.pointerEvents = 'all';
+    e.stand.style.opacity = '1';
+    
     e.display_img_choice1.onclick = function(){
         startFirstCycle(e, state, 1, saved_e);
+    }
+    e.display_img_choice1.onmouseover = function(){
+        e.stand.src = 'stand_libri.png';
     }
     e.display_img_choice2.onclick = function(){
         startFirstCycle(e, state, 2, saved_e);
     }
+    e.display_img_choice2.onmouseover = function(){
+        e.stand.src = 'stand_con_sindaco.png';
+    }
+    e.stand.style.animation = 'choice_animation 2s infinite ease-in-out';
+    setTimeout(() => {
+        document.getElementById("start_overlay").style.opacity = '0.2';
+    }, 1);
+    
 }
 
 function startFirstCycle(e, state, chosed = null, saved_e){
     if(chosed == null) return;
     else {
+        e.stand.style.animation = '';
+        e.stand.style.opacity = '1';
+        document.getElementById("start_overlay").style.opacity = '0';
         e.display_choice.style.opacity = '0';
         e.display_img_choice1.style.pointerEvents = 'none';
         e.display_img_choice2.style.pointerEvents = 'none';
@@ -2420,7 +2437,7 @@ function startFirstCycle(e, state, chosed = null, saved_e){
 }
 let cont_first_cycle = 0;
 function bookCycle(e, state, saved_e){
-    e.stand.style.opacity = '1';
+    
     document.getElementById("stacks_of_books").style.display = 'none';
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 1);
@@ -2429,7 +2446,6 @@ function bookCycle(e, state, saved_e){
 
 function fundraisingCycle(e, state, saved_e){
     e.stand.src = 'stand_con_sindaco.png';
-    e.stand.style.opacity = '1';
     document.getElementById("stacks_of_books").style.display = 'none';
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 2);
