@@ -276,15 +276,16 @@
             margin-top: 9vh;
         }
 
-        #lateral_arrow {
+        #lateral_icon {
             position: fixed;
-            width: 3vw;
-            height: 8vh;
-            left: 95vw;
-            top: 90vh;
+            width: 5vw;
+            height: 9vh;
+            left: 92vw;
+            top: 88vh;
             z-index: 9999;
             display: none;
             pointer-events: all;
+            cursor: pointer;
         }
 
         #menu1 {
@@ -409,15 +410,6 @@
             object-fit: cover;
             backface-visibility: hidden;
             z-index: 10;
-        }
-
-        #stamp_img {
-            position: fixed;
-            width: 15vw;
-            height: 15vh;
-            margin-left: -10vw;
-            margin-top: -38vh;
-            z-index: 10000;
         }
 
         #start_overlay {
