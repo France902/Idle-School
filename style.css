@@ -98,6 +98,14 @@
             margin-top: 2vh;
         }
 
+        #choice_menu {
+            width: 55vw;
+            height: 65vh;
+            position: fixed;
+            left: 0vw;
+            top: 30vh;
+        }
+
         #choices {
             width: 20vw;
             height: 20vh;
@@ -435,6 +443,7 @@
             height: 40vh;
             position: fixed;
             opacity: 0;
+            z-index: 10000;
         }
 
         #student {
@@ -625,6 +634,15 @@
             top: 10vh;
             object-fit: cover;
             transform-origin: center;
+        }
+
+        .display_img_choice {
+            z-index: 10000; 
+            position: fixed; 
+            width: 32vw; 
+            height: 24vh;
+            cursor: pointer;
+
         }
 
         .resource {
@@ -847,8 +865,8 @@
             font-size: 7vh;
             width: 40vw;
             text-align: center;
-            margin-left: 30vw;
-            margin-top: 10vh;
+            margin-left: 10vw;
+            margin-top: 5vh;
         }
 
         .toggle-icon {
@@ -879,6 +897,17 @@
             pointer-events: all;
         }
 
+        @keyframes choice_animation {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
 
         @keyframes constructionLayoutAnimation {
             0% {
