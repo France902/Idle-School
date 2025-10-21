@@ -375,7 +375,7 @@ function writeElements() {
     hud: "document.getElementById('hud')",
     construction_menu: "document.getElementById('construction_menu')",
     material_shop: "document.getElementById('material_shop')",
-    lateral_arrow: "document.getElementById('lateral_arrow')",
+    lateral_icon: "document.getElementById('lateral_icon')",
     zoom: "document.getElementById('zoom')",
     standard: "document.getElementById('standard')",
     dezoom: "document.getElementById('dezoom')",
@@ -388,7 +388,6 @@ function writeElements() {
     third_c_m: "document.getElementById('third_c_m')",
     c_menu_main_text: "document.getElementById('c_menu_main_text')",
     blueprint_img: "document.getElementById('blueprint_img')",
-    stamp_img: "document.getElementById('stamp_img')",
     choices: "document.getElementById('choices')",
     display_choice: "document.querySelector('.display_choice')",
     display_img_choice1: "document.getElementById('display_img_choice1')",
@@ -2100,7 +2099,7 @@ function openConstructionMenu(e, state){
             writeMissions(e, state);
             controlProgress(e, state);
         }, 1000);
-        e.lateral_arrow.style.display = 'block';
+        e.lateral_icon.style.display = 'block';
 
         document.getElementById('start_overlay').style.display = 'block';
         document.getElementById('start_overlay').style.opacity = '0';
@@ -2302,8 +2301,7 @@ function changeMenu(e, state){
         document.getElementById("overlay_mission").style.opacity = '1';
         changeMaterialShop(e);
         setTimeout(() => {
-            e.lateral_arrow.style.left = '5vw';
-            e.lateral_arrow.style.transform = 'scaleX(-1)';
+            e.lateral_icon.src = 'bollino_bob.png';
         }, 1000);
         setTimeout(() => {
             e.c_menu_main_text.style.opacity = '1';
@@ -2319,8 +2317,8 @@ function changeMenu(e, state){
         changeConstructionMenu(e, state);
          setTimeout(() => {
             e.menu.style.opacity = '1';    
-            e.lateral_arrow.style.left = '95vw';
-            e.lateral_arrow.style.transform = 'scaleX(1)';
+            e.lateral_icon.style.left = '95vw';
+            e.lateral_icon.style.transform = 'scaleX(1)';
         }, 1000);
         setTimeout(() => {
             e.menu.style.pointerEvents = 'all';
@@ -2335,7 +2333,6 @@ function changeMenu(e, state){
 function changeMaterialShop(e){
     e.construction_menu.style.animation = "swipeLeft 1.5s ease-out forwards";
     e.blueprint_img.style.display = 'none';
-    e.stamp_img.style.display = 'none';
     setTimeout(() => {
             e.material_shop.style.display = 'block';
     }, 1500);
@@ -2347,7 +2344,6 @@ function changeConstructionMenu(e, state){
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
             e.blueprint_img.style.display = 'block';
-            e.stamp_img.style.display = 'block';
             controlProgress(e, state);
     }, 1000);
 }
@@ -3657,7 +3653,7 @@ function backgroundAdaption(e, state) {
 }
 
 function createOnClicks(e, state){
-    e.lateral_arrow.onclick = function() {
+    e.lateral_icon.onclick = function() {
         changeMenu(e, state);
     }
     e.zoom.onclick = function() {
