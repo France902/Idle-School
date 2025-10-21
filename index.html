@@ -15,7 +15,7 @@
          <div id="loader-bar"></div>
     </div>
 
-    
+    <div id="start_overlay"></div>
     <div id="world">
         <canvas id="canvas" class="school_imgs" style="position: fixed; z-index: -9999; opacity: 1; width: 100vw; height: 100vh; left: 165vw; top: -90vh; transform-origin: center center; transform: scale(8); "></canvas>
 
@@ -65,7 +65,7 @@
 
     
 
-    <div id="start_overlay"></div>
+    
     <div class="hud-container" id="hud" style="display: none; z-index: 9998;">
         
         <img src="zoom_avanti.png" id="zoom" style="width: 7.5vw; height: 5vw; transform: translate(-91vw); cursor: pointer; pointer-events: auto;">
@@ -201,14 +201,9 @@
         </div>
         <div class="display_choice" style="opacity: 0;">
             <h1 class="title_display_choice">SCEGLI TE!</h1>
-             <div class="container_img_choice" id="display_img_choice1">
-                <img src="" class="img_choice" id="img_choice1">
-             </div>
-             <h1 class="text_display_choice">Quadrante 1</h1>
-             <div class="container_img_choice" id="display_img_choice2" style="margin-left: 54vw;">
-                <img src="" class="img_choice" id="img_choice2">
-             </div>
-             <h1 class="text_display_choice" style="margin-left: 57vw;">Quadrante 2</h1>
+            <img src="menu_scelta.png" id="choice_menu">
+            <div class="display_img_choice" id="display_img_choice1" style="top: 34.5vh; left: 16.5vw;"></div>
+            <div class="display_img_choice" id="display_img_choice2" style="top: 61.8vh; left: 16.3vw;"></div>
         </div>
         <!--
         <div id="punti_prestigio" class="hud-box" style="opacity: 0;">0</div>
@@ -237,4 +232,3 @@
     
 
 <script src="game.js" defer> </script>
-
