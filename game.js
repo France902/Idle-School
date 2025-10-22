@@ -962,6 +962,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_movement = true;
                 state.cond_deactivate_movement = true;
                 state.cond_dialogue = false;
+                deactivateHud(e);
                 choose_in_display(e, state, saved_e);
                 moveWorld(e, 23, -86);
                 
@@ -2405,6 +2406,7 @@ function choose_in_display(e, state, saved_e){
     e.stand.style.animation = 'choice_animation 2s infinite ease-in-out';
     setTimeout(() => {
         document.getElementById("start_overlay").style.opacity = '0.2';
+        e.display_choice.style.display = 'block';
     }, 1);
     
 }
@@ -2412,6 +2414,7 @@ function choose_in_display(e, state, saved_e){
 function startFirstCycle(e, state, chosed = null, saved_e){
     if(chosed == null) return;
     else {
+        activateHud(e);
         e.stand.style.animation = '';
         e.stand.style.opacity = '1';
         document.getElementById("start_overlay").style.opacity = '0';
@@ -2497,7 +2500,7 @@ function addMoney(qMoney, state) {
 
 function showMoney(state) {
     document.getElementById("money").style.opacity = '1';
-    document.getElementById("money").innerHTML = state.money + " 🪙";
+    document.getElementById("money_text").innerHTML = state.money;
 }
 
 function moveInteractionCircle(e, state, posX, posY){
@@ -2568,6 +2571,34 @@ function interaction(index, e, state){
             openConstructionMenu(e, state);
             break;
     }
+}
+
+function mobileInteraction() {
+    // Crea un nuovo evento di tastiera "keydown"
+    let event = new KeyboardEvent('keydown', {
+        key: 'e',
+        code: 'KeyE',
+        keyCode: 69, // Codice del tasto 'E'
+        which: 69,
+        bubbles: true,
+        cancelable: true,
+        char: 'e',
+        charCode: 101 // Codice carattere di 'e' minuscola
+    });
+
+    // Invia l'evento al documento o a un elemento specifico (es. document.body)
+    document.dispatchEvent(event);
+
+    // Se volessi anche simulare il rilascio del tasto 'keyup':
+    let keyupEvent = new KeyboardEvent('keyup', {
+        key: 'e',
+        code: 'KeyE',
+        keyCode: 69,
+        which: 69,
+        bubbles: true,
+        cancelable: true
+    });
+    document.dispatchEvent(keyupEvent);
 }
 
 
@@ -3707,6 +3738,9 @@ function createOnClicks(e, state){
     }
     document.getElementById("sidebar_mission3").onclick = function() {
         overlayMission(3);
+    }
+    document.getElementById("mobile_interaction").onclick = function() {
+        mobileInteraction();
     }
 }
 
