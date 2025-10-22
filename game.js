@@ -457,6 +457,12 @@ function initialiseStates() {
     money: 20,
     classes: 0,
     language: navigator.language || navigator.userLanguage,
+    zoom: 0.8,
+    cont_menu: 0,
+    cont_illustration: 0,
+    missionCompleted: 0,
+    overlay_mission: 1,
+    layout_menu: "construction",
 
     // Interazioni e click
     cond_movement: false,
@@ -473,6 +479,7 @@ function initialiseStates() {
     condMobileMovement: false,
     cond_interactionCircle: false,
     menu_opened: false,
+    openSideBar: false,
 
     // Posizioni
     posX: 0,
@@ -492,6 +499,8 @@ function initialiseStates() {
     maxTimeAnimationGroup: [N],
     maxTimeAnimationWorkAlone: [N],
     maxTimeAnimationAlone: [N],
+    intervalMovement: null,
+    intervalAnimationBob: [],
 
     //risorse
     brick_resource: 0, 
@@ -513,31 +522,31 @@ function activateHudStart(e, state){
     }
 }
 
-let zoom = 0.8;
-function scale(condition, e) {
+
+function scale(condition, e, state) {
     e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
     switch (condition){
         case true:
-            if (zoom <= 1.32) {
-                zoom += 0.07;
-                e.world.style.transform = `scale(${zoom})`;
+            if (state.zoom <= 1.32) {
+                state.zoom += 0.07;
+                e.world.style.transform = `scale(${state.zoom})`;
             }
             break;
         case false:
-            if (zoom >= 0.65) {
-                zoom -= 0.07;
-                e.world.style.transform = `scale(${zoom})`;
+            if (state.zoom >= 0.65) {
+                state.zoom -= 0.07;
+                e.world.style.transform = `scale(${state.zoom})`;
             }
             break;
         case 'standard':
-            zoom = 0.8;
-            e.world.style.transform = `scale(${zoom})`;
+            state.zoom = 0.8;
+            e.world.style.transform = `scale(${state.zoom})`;
             return;
             break;
         case 'wide': 
             e.world.style.transition = "transform 0.5s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
-            zoom = 0.6;
-            e.world.style.transform = `scale(${zoom})`;
+            state.zoom = 0.6;
+            e.world.style.transform = `scale(${state.zoom})`;
             return;
             break;
     }
@@ -909,7 +918,7 @@ function setupDialogue(e, state, saved_e) {
                 state.cond_movement = true;
                 state.cond_dialogue = false;
                 deactivateHud(e);
-                scale('wide', e);
+                scale('wide', e, state);
                 moveWorld(e, 40, -120, -60, 0, 3.9);
                 activateCinematicMode(e);
                 animationCamionCutscene(e, state);
@@ -936,7 +945,7 @@ function setupDialogue(e, state, saved_e) {
                 createNewCharacter('30vw', '68vh', "no_animation", -2, false, "Matthew", data.matTert.length, e, state, saved_e);
                 activateHud(e);
                 resetMoveWorld(e, -3, 5);
-                scale('standard', e);
+                scale('standard', e, state);
                 saveStatesElements(saved_e, state);
                 saveMats_ImportantStates(e, state);
                 const jumps = [
@@ -1231,7 +1240,7 @@ function saveStatesElements(e, state){
     localStorage.setItem("elements", JSON.stringify(e));
 }
 
-let intervalMovement;
+
 
 
 function setUpPresideMovement(e, state) {
@@ -1250,7 +1259,7 @@ function setUpPresideMovement(e, state) {
     } else {
         window.removeEventListener('keyup', handleKeyup);
         window.removeEventListener('keydown', handleKeydown);
-        clearInterval(intervalMovement);
+        clearInterval(state.intervalMovement);
     }
 
 function pointClickMovement(){
@@ -1271,8 +1280,8 @@ function pointClickMovement(){
     
     function ClickMovement(event){
         let rect = e.world.getBoundingClientRect();
-        let xInWorld = (event.clientX - rect.left) / zoom;
-        let yInWorld = (event.clientY - rect.top) / zoom;
+        let xInWorld = (event.clientX - rect.left) / state.zoom;
+        let yInWorld = (event.clientY - rect.top) / state.zoom;
 
         let xInVW = (xInWorld / window.innerWidth) * 100;
         let yInVH = (yInWorld / window.innerHeight) * 100;
@@ -1286,7 +1295,7 @@ function pointClickMovement(){
 
 
 
-        if(zoom == 0.8){
+        if(state.zoom == 0.8){
             clickTimer2 = setTimeout(() => {
                 moveBar(e, state, xInVW, yInVH);
             }, 500);
@@ -1989,7 +1998,7 @@ function setUpFreeCamRoam(e, state){
         e.world.style.marginTop = '5vh';
         e.world.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out, left 0.25s linear, top 0.25s linear";
         e.world.style.transform = 'scale(0.8)';
-        zoom = 0.8;
+        state.zoom = 0.8;
         window.removeEventListener('keydown', movement);
     }
 
@@ -2054,14 +2063,12 @@ function setUpFreeCamRoam(e, state){
     }
 }
 
-let openSidebar = false;
-
-function toggleMenu() {
+function toggleMenu(e, state) {
     const menu = document.getElementById('missions');
     menu.classList.toggle('open');
     menu.classList.toggle('closed');
-    openSidebar = !openSidebar;
-    if(openSidebar) {
+    state.openSideBar = !state.openSideBar;
+    if(state.openSideBar) {
         document.getElementById("sidebar_mission2").style.opacity = '1';
         document.getElementById("sidebar_mission3").style.opacity = '1';
     }
@@ -2071,9 +2078,6 @@ function toggleMenu() {
     }
 }
         
-    
-        
-let cont_menu = 0;
 function openConstructionMenu(e, state){
         state.menu_opened = true;
         e.circle1.style.display = 'none';
@@ -2082,7 +2086,7 @@ function openConstructionMenu(e, state){
         state.cond_deactivate_movement = true;
         e.menu_base.style.display = 'block';
 
-        clearInterval(intervalMovement);
+        clearInterval(state.intervalMovement);
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
         e.construction_menu.style.opacity = '1';
         e.menu.style.opacity = '0';
@@ -2113,7 +2117,7 @@ function openConstructionMenu(e, state){
         }, 200);
         
 
-        if(cont_menu == 0) assignLanguage(e, state);
+        if(state.cont_menu == 0) assignLanguage(e, state);
         document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
                 state.cond_deactivate_movement = false;
@@ -2121,7 +2125,7 @@ function openConstructionMenu(e, state){
                 state.cond_dialogue = true;
                 closeConstructionMenu(e, state);
                 showMoney(state);
-                if(cont_menu == 0){
+                if(state.cont_menu == 0){
                     state.cond_skip = true;
                     state.cond_dialogue = true;
                     state.cond_text = true;
@@ -2131,17 +2135,17 @@ function openConstructionMenu(e, state){
                     e.moneyText.style.opacity = '1';
                     state.elementsHud[0] = true;
                 }
-                cont_menu++;
+                state.cont_menu++;
             }
         });
 }
-let missionCompleted = 0;
+
 function writeMissions(e, state) {
     e.first_c_m.textContent = data.logConstructionMission[0][0];
     e.second_c_m.textContent = data.logConstructionMission[1][0];
     e.third_c_m.textContent = data.logConstructionMission[2][0];
     let type;
-    for(let index=0;index<3-missionCompleted;index++){
+    for(let index=0;index<3-state.missionCompleted;index++){
         let j = 0;
         while(j < (data.logConstructionMission[index].length -1)) {
             let i = 1;
@@ -2235,7 +2239,7 @@ function controlProgress(e, state) {
 }
 
 function completeMission(index, e, state) {
-    missionCompleted++;
+    state.missionCompleted++;
     for(let i=0;i<3;i++) {
         document.getElementById("img"+index+"_cost"+i).style.display = 'none';
         document.getElementById("text"+index+"_cost"+i).style.display = 'none';
@@ -2245,12 +2249,11 @@ function completeMission(index, e, state) {
     writeMissions(e, state);
 }
 
-let overlay_mission = 1;
-function overlayMission(mission) {
-    if(mission != overlay_mission) {
+function overlayMission(mission, state) {
+    if(mission != state.overlay_mission) {
         document.getElementById("sidebar_mission"+ mission).style.backgroundColor = 'yellow';
-        document.getElementById("sidebar_mission"+ overlay_mission).style.backgroundColor = 'beige';
-        overlay_mission = mission;
+        document.getElementById("sidebar_mission"+ state.overlay_mission).style.backgroundColor = 'beige';
+        state.overlay_mission = mission;
     }
 }
 
@@ -2290,11 +2293,11 @@ function assignLanguage(e, state) {
     }
 }
 
-let layout_menu = "construction";
+
 function changeMenu(e, state){
-    if(layout_menu == "construction") {
+    if(state.layout_menu == "construction") {
         document.getElementById('start_overlay').style.display = 'none';
-        layout_menu = "material_shop";
+        state.layout_menu = "material_shop";
         e.menu.style.opacity = '0';        
         e.menu.style.pointerEvents = 'none';
         e.menu_base.style.transform = 'scale(1.2) translate(-3.3vw)';
@@ -2309,9 +2312,9 @@ function changeMenu(e, state){
             e.c_menu_main_text.style.opacity = '1';
         }, 2500);
     }
-    else if(layout_menu == "material_shop"){
+    else if(state.layout_menu == "material_shop"){
         document.getElementById('start_overlay').style.display = 'block';
-        layout_menu = "construction";
+        state.layout_menu = "construction";
         e.menu_base.style.transform = 'scale(1) translate(-3.3vw)';
         e.c_menu_main_text.style.opacity = '0';
         document.getElementById('sidebar_mission1').style.opacity = '1';
@@ -2601,9 +2604,6 @@ function mobileInteraction() {
     document.dispatchEvent(keyupEvent);
 }
 
-
-
-
 function creationTertiaryCharacters(e, state, saved_e) {
     let i;
     let scaleX;
@@ -2757,7 +2757,7 @@ function createCharacter(e, state, i) {
         case 'alone':
             let posX = parseFloat(data.matTert[i][0]) + 2;
             let posY = parseFloat(data.matTert[i][1]) - 10;
-            const illustration = createIllustration('vignetta_musica.png', posX, posY, e, i);
+            const illustration = createIllustration('vignetta_musica.png', posX, posY, e, i, state);
         animateIllustration(illustration, i);
         setInterval(() => {
             passiveAnimationAlone(character_container, i, e, illustration);
@@ -2766,7 +2766,7 @@ function createCharacter(e, state, i) {
         case 'walk-casually':
             let posX2 = parseFloat(data.matTert[i][0]) + 2;
             let posY2 = parseFloat(data.matTert[i][1]) - 10;
-            const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e, i);
+            const illustration2 = createIllustration('vignetta_fischietto.png', posX2, posY2, e, i, state);
             animateIllustration(illustration2, i);
             passiveAnimationWalking(character_container, i, e, illustration2, state);
            
@@ -2816,7 +2816,6 @@ function eliminateCharacter(e, i, character){
                 data.matTert.splice(i, 1);
 }
 
-
 function animateIllustration(illustration, i){
     let interval = setInterval(() => {
             if(data.matTert[i][4] == false){
@@ -2834,8 +2833,8 @@ function animateIllustration(illustration, i){
             }
         }, 5000);
 }
-let cont_illustration = 0;
-function createIllustration(sr, posX, posY, e, i_illustration){
+
+function createIllustration(sr, posX, posY, e, i_illustration, state){
         const illustration = document.createElement('img');
         illustration.src = sr;
         illustration.style.opacity = '0';
@@ -2847,12 +2846,12 @@ function createIllustration(sr, posX, posY, e, i_illustration){
         illustration.style.zIndex = '-9997';
         illustration.className = 'school_imgs';
         illustration.id = 'illustration_'+i_illustration;
-        cont_illustration++;
+        state.cont_illustration++;
         e.world.appendChild(illustration);
         return illustration;
 }
 
-let interval = [];
+
     function passiveAnimationGroup(character, i, e, state, posX = 0, posY = 0) {
         state.maxTimeAnimationGroup[i] = 4000;
         passiveMovementGroup(character, i, e, state);
@@ -2904,7 +2903,7 @@ let interval = [];
                 posX = parseFloat(data.matTert[i][0]) + 2;
                 posY = parseFloat(data.matTert[i][1]) - 10;
         }
-        const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e, i);
+        const illustration = createIllustration('vignetta_dialogo.png', posX, posY, e, i, state);
         moveIllustrationGroup(illustration, i, state, character);
     }
 
@@ -3622,7 +3621,7 @@ function diaologueB_P1(e, state) {
 
         function rotateBob(b) {
             b.style.transform = "scaleX(-1)";
-            clearInterval(interval[5]);
+            clearInterval(state.intervalAnimationBob[5]);
             bob_illustration.style.opacity = '1';
             bob_illustration.src = 'vignetta_esclamazione.png';
         }
@@ -3704,13 +3703,13 @@ function createOnClicks(e, state){
         changeMenu(e, state);
     }
     e.zoom.onclick = function() {
-        scale(true, e);
+        scale(true, e, state);
     }
     e.standard.onclick = function() {
-        scale('standard', e);
+        scale('standard', e, state);
     }
     e.dezoom.onclick = function() {
-        scale(false, e);
+        scale(false, e,state);
     }
     e.mission1.onclick = function() {
         toggleMenu(e, state);
@@ -3731,13 +3730,13 @@ function createOnClicks(e, state){
         buyMaterial(3, state);
     }
     document.getElementById("sidebar_mission1").onclick = function() {
-        overlayMission(1);
+        overlayMission(1, state);
     }
     document.getElementById("sidebar_mission2").onclick = function() {
-        overlayMission(2);
+        overlayMission(2, state);
     }
     document.getElementById("sidebar_mission3").onclick = function() {
-        overlayMission(3);
+        overlayMission(3, state);
     }
     document.getElementById("mobile_interaction").onclick = function() {
         mobileInteraction();
