@@ -185,48 +185,39 @@
             
         </div>
 
-        <img id="menu_base" src="tavolo_menù.png" style="z-index: 1000; display: none;">
+        <img id="menu_base" src="tavolo_menù.jpg" style="z-index: 1000; display: none;">
             
         <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
-        <div id="money" class="hud-box" style="opacity: 0; z-index: 10000;">0 🪙</div>
-        <div class="mobile_movement" id="arrows_movement">
-            <img src="freccia_dritta1.png" class="arrow" id="right_arrow">
-            <img src="freccia_dritta1.png" class="arrow" id="left_arrow" style="margin-left: -10vw; transform: scaleX(-1);">
-            <img src="freccia_dritta1.png" class="arrow" id="top_arrow" style="margin-left: -5vw; margin-top: -10vh; transform: rotate(270deg);">
-            <img src="freccia_dritta1.png" class="arrow" id="bottom_arrow" style="margin-left: -5vw; margin-top: 10vh; transform: rotate(90deg);">
-            <img src="freccia_obliqua.png" class="arrow_oblique" id="rightBottom_arrow" style="margin-left: -0.5vw; margin-top: 8vh; transform: rotate(45deg);">
-            <img src="freccia_obliqua.png" class="arrow_oblique" id="rightTop_arrow" style="margin-left: -0.5vw; margin-top: -8vh; transform: rotate(-45deg);">
-            <img src="freccia_obliqua.png" class="arrow_oblique" id="leftBottom_arrow" style="margin-left: -9vw; margin-top: 8vh; transform: rotate(135deg);">
-            <img src="freccia_obliqua.png" class="arrow_oblique" id="leftTop_arrow" style="margin-left: -9vw; margin-top: -8vh; transform: rotate(-135deg);">
+        <div id="money" class="hud-box" style="opacity: 0; z-index: 10000;">
+            <p id="money_text" style="font-size: 1.5vw; margin-left: -2vw; margin-top: 1.5vh;">0</p> 
+            <img class="coin_icon" id="coin_icon" src="moneta_school.png" style="z-index: 10001; position: fixed; left: 95.3vw; top: 3.1vh;">
         </div>
-        <div class="display_choice" style="opacity: 0;">
-            <h1 class="title_display_choice">SCEGLI TE!</h1>
-            <img src="menu_scelta.png" id="choice_menu">
-            <div class="display_img_choice" id="display_img_choice1" style="top: 34.5vh; left: 16.5vw;"></div>
-            <div class="display_img_choice" id="display_img_choice2" style="top: 61.8vh; left: 16.3vw;"></div>
+        
+        <div class="mobile_movement">
+            <div id="arrows_movement">
+                <img src="freccia_dritta1.png" class="arrow" id="right_arrow">
+                <img src="freccia_dritta1.png" class="arrow" id="left_arrow" style="margin-left: -10vw; transform: scaleX(-1);">
+                <img src="freccia_dritta1.png" class="arrow" id="top_arrow" style="margin-left: -5vw; margin-top: -10vh; transform: rotate(270deg);">
+                <img src="freccia_dritta1.png" class="arrow" id="bottom_arrow" style="margin-left: -5vw; margin-top: 10vh; transform: rotate(90deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="rightBottom_arrow" style="margin-left: -0.5vw; margin-top: 8vh; transform: rotate(45deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="rightTop_arrow" style="margin-left: -0.5vw; margin-top: -8vh; transform: rotate(-45deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="leftBottom_arrow" style="margin-left: -9vw; margin-top: 8vh; transform: rotate(135deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="leftTop_arrow" style="margin-left: -9vw; margin-top: -8vh; transform: rotate(-135deg);">
+            </div>
+            <img src="interazione_mobile.png" id="mobile_interaction">
         </div>
         <!--
         <div id="punti_prestigio" class="hud-box" style="opacity: 0;">0</div>
         <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
         -->
     </div>
-    <!--
 
-    <div id="cartello-orizzontale" class="school_imgs" style="position: fixed; width: 20vw; height: 7.87vh; left: 90vw; top: -10.33vh; z-index: 2; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-size: 1vw; color: #333; transition: left 0.25s linear, top 0.25s linear;">
-        <p id="text_cartello" style="font-size: 1.8vw; font-family: 'Gloria Hallelujah', cursive; white-space: nowrap; overflow: visible;">A new school is opening!</p>
-    </div>
-
-
-    <div id="platform_2">
-        <div class="banco" id="banco1" style="margin-top: 4.17vh; margin-left: 14.58vw;"><p>Banco1</p></div>
-        <div class="banco" id="banco2" style="margin-top: 20.835h; margin-left: 14.58vw;"><p>Banco2</p></div>
-        <div id="cattedra" style="margin-top: 12.5vh; margin-left: 1.56vw;"><p>Cattedra</p></div>
-    </div>
-
-    <div id="blocco_pulizia_1" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 31vh; display: none;"></div>
-
-    <div id="blocco_pulizia_2" class="blocco_pulizia" style="margin-left: 58.23vw; margin-top: 47vh; display: none;"></div>
--->
+    <div class="display_choice" style="opacity: 0;">
+            <h1 class="title_display_choice">SCEGLI TE!</h1>
+            <img src="menu_scelta.png" id="choice_menu">
+            <div class="display_img_choice" id="display_img_choice1" style="top: 34.5vh; left: 16.5vw;"></div>
+            <div class="display_img_choice" id="display_img_choice2" style="top: 61.8vh; left: 16.3vw;"></div>
+        </div>
         
     </div>
     
