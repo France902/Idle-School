@@ -331,6 +331,14 @@
             z-index: 10000;
         }
 
+        #mobile_interaction {
+            width: 7vw;
+            height: 12vh;
+            position: fixed;
+            left: 70vw;
+            top: 50vh;
+        }
+
         #name_box {
             background-color: rgba(255, 255, 255);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -658,7 +666,8 @@
             border: 0.15vw solid white;
             border-radius: 0.6vw;
             min-width: 8vw;
-            text-align: right;
+            height: 6vh;
+            text-align: center;
             position: fixed;
         }
 
