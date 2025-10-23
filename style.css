@@ -255,6 +255,14 @@
             opacity: 1;
         }
 
+        #entrance_floor {
+            width: 20vw;
+            height: 20vh;
+            background-color: aqua;
+            position: fixed;
+            z-index: 10000;
+        }
+
         #icon_img {
             width: 3vw;
             height: 3vw;
