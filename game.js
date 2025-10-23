@@ -24,7 +24,7 @@ function startGame(e = null, state = null) {
         gameScripts(elements, state);
         backgroundAdaption(elements, state);
         mobileAdaptation(elements, state);
-        createOnClicks(elements, state);
+        createOnClicks(elements, state, e);
         createListenersForRedraw(elements, state);
         writeMissions(elements, state);
         setInterval(() => {
@@ -49,6 +49,7 @@ function initialiseData(){
         posWildNature: initialiseWildNature(),
         posIdleCycle: initialiseposIdle(),
         logConstructionMission: initialiseConstructionMission(),
+        partSchool: initialisePartSchool(),
     }
 }
 
@@ -215,6 +216,19 @@ function initialiseImportantObjects(){
         return importantObjects;
     }
 }
+
+function initialisePartSchool(){
+    if(localStorage.getItem("saved") == null){
+        const partSchool = [
+            ['20vw', '40vh', 'entrance_floor', 1, 'entrata_scuola.png'],
+        ];
+        return partSchool;
+    } else{
+        const partSchool= JSON.parse(localStorage.getItem("partSchool"));
+        return partSchool;
+    }
+}
+
 function saveMats_ImportantStates(){
     localStorage.setItem("matTert", JSON.stringify(data.matTert));
     localStorage.setItem("seatForObjects", JSON.stringify(data.seatForObjects));
@@ -223,6 +237,7 @@ function saveMats_ImportantStates(){
     localStorage.setItem("posWildNature", JSON.stringify(data.posWildNature));
     localStorage.setItem("logConstructionMission", JSON.stringify(data.logConstructionMission));
     localStorage.setItem("posIdleCycle", JSON.stringify(data.posIdleCycle));
+    localStorage.setItem("partSchool", JSON.stringify(data.partSchool));
 }
 
 function drawMap(e, state) {
@@ -393,6 +408,7 @@ function writeElements() {
     display_img_choice1: "document.getElementById('display_img_choice1')",
     display_img_choice2: "document.getElementById('display_img_choice2')",
 
+
     // Giocatore e interazioni
     student: "document.querySelector('.student')",
     toggle_icon: "document.querySelector('.toggle-icon')",
@@ -454,7 +470,7 @@ function initialiseElements(e) {
 function initialiseStates() {
   return {
     // state principale
-    money: 20,
+    money: 40,
     classes: 0,
     language: navigator.language || navigator.userLanguage,
     zoom: 0.8,
@@ -903,7 +919,7 @@ function setupDialogue(e, state, saved_e) {
                     passiveAnimationBob(document.getElementById('character_5'), 5 );
                 }, 2000);
                 activateHud(e);
-                setUpPresideMovement(e, state);
+                setUpPresideMovement(e, state, saved_e);
                 setUpFreeCamRoam(e, state);
                 saveStatesElements(saved_e, state);
                 createNewImportantObject(e, state, saved_e, data.importantObjects.length, '-30vw', '10vh', 'camionBob', 6, 'structure_camion', 'camionBOB.png', 'wheel_camion1', 'ruota_camion2.png', 'wheel_camion2', 'ruota_camion2.png')
@@ -1243,7 +1259,7 @@ function saveStatesElements(e, state){
 
 
 
-function setUpPresideMovement(e, state) {
+function setUpPresideMovement(e, state, saved_e) {
   const p = e.preside;
   assignZIndexP();
   p.style.top = '0vh';
@@ -1516,7 +1532,7 @@ function jumpDirection(distance, dir){
     else if (dir.x == -0.7 && dir.y == -0.7) diagonalTopLeft(distance/2);
     else if (dir.x == 0.7 && dir.y == 0.7) diagonalLowRight(distance/2);
     else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance/2);
-    control_position(state, e);
+    control_position(state, e, saved_e);
     assignZIndexP();
     changeZIndexElements();
     
@@ -1669,6 +1685,9 @@ function addParameters(distance, j, operation, cond_check = true){
             for(i=0;i<data.importantObjects.length;i++){
                 data.importantObjects[i][j] = (parseFloat(data.importantObjects[i][j]) + distance) + unit;
             }
+            for(i=0;i<data.partSchool.length;i++){
+                data.partSchool[i][j] = (parseFloat(data.partSchool[i][j]) + distance) + unit;
+            }
             for(i=0;i<data.posIdleCycle.length;i++){
                 data.posIdleCycle[i][j] = (parseFloat(data.posIdleCycle[i][j]) + distance);
             }
@@ -1679,6 +1698,9 @@ function addParameters(distance, j, operation, cond_check = true){
             }
             for(i=0;i<data.importantObjects.length;i++){
                 data.importantObjects[i][j] = (parseFloat(data.importantObjects[i][j]) - distance) + unit;
+            }
+            for(i=0;i<data.partSchool.length;i++){
+                data.partSchool[i][j] = (parseFloat(data.partSchool[i][j]) - distance) + unit;
             }
             for(i=0;i<data.posIdleCycle.length;i++){
                 data.posIdleCycle[i][j] = (parseFloat(data.posIdleCycle[i][j]) - distance);
@@ -1925,14 +1947,14 @@ window.addEventListener('keyup', handleKeyup);
     
   }
   
-  function control_position(state, e) {
+  function control_position(state, e, saved_e) {
     state.posX = Math.round(state.posX);
     state.posY = Math.round(state.posY);
     if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)){
         document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-               if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(data.matTert[4][4] == false) interaction(0, e, state);
+               if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(data.matTert[4][4] == false) interaction(0, e, state, saved_e);
             }
         });
     }
@@ -1944,7 +1966,7 @@ window.addEventListener('keyup', handleKeyup);
             window.addEventListener('keydown', function(event) {
                 if (event.key === 'e' || event.key === 'E') {
                     if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)){
-                        interaction(1, e, state);
+                        interaction(1, e, state, saved_e);
                     } 
                 }
             });
@@ -2078,7 +2100,7 @@ function toggleMenu(e, state) {
     }
 }
         
-function openConstructionMenu(e, state){
+function openConstructionMenu(e, state, saved_e){
         state.menu_opened = true;
         e.circle1.style.display = 'none';
         e.circle2.style.display = 'none';
@@ -2103,7 +2125,7 @@ function openConstructionMenu(e, state){
             e.c_menu_main_text.style.opacity = '1';
             document.getElementById("sidebar_mission1").style.opacity = '1';
             writeMissions(e, state);
-            controlProgress(e, state);
+            controlProgress(e, state, saved_e);
         }, 1000);
         e.lateral_icon.style.display = 'block';
 
@@ -2183,7 +2205,7 @@ function writeMissions(e, state) {
     
 }
 
-function controlProgress(e, state) {
+function controlProgress(e, state, saved_e) {
     let completed_materials = 0;
     let subtracted = false;
     writeMissions(e, state);
@@ -2218,7 +2240,7 @@ function controlProgress(e, state) {
                     break;
             
             }
-            if(data.logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state);
+            if(data.logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state, saved_e);
             else if(subtracted) {
                 switch (resource) {
                 case 'M':
@@ -2238,15 +2260,25 @@ function controlProgress(e, state) {
     }
 }
 
-function completeMission(index, e, state) {
+function completeMission(index, e, state, saved_e) {
     state.missionCompleted++;
-    for(let i=0;i<3;i++) {
-        document.getElementById("img"+index+"_cost"+i).style.display = 'none';
-        document.getElementById("text"+index+"_cost"+i).style.display = 'none';
-    }
-    data.logConstructionMission.splice(index, 1);
-    data.logConstructionMission.push(["Nient'altro da fare"]);
-    writeMissions(e, state);
+    setTimeout(() => {
+        setTimeout(() => {
+            for(let i=0;i<3;i++) {
+                document.getElementById("img"+index+"_cost"+i).style.display = 'none';
+                document.getElementById("text"+index+"_cost"+i).style.display = 'none';
+            }
+            data.logConstructionMission.splice(index, 1);
+            data.logConstructionMission.push(["Nient'altro da fare"]);
+            writeMissions(e, state);
+        }, 1000);
+        buildPart(index, e, state, saved_e);
+    }, 1000);
+    
+}
+
+function buildPart(index, e, state, saved_e) {
+    createNewPartSchool(e, state, saved_e, index);
 }
 
 function overlayMission(mission, state) {
@@ -2294,7 +2326,7 @@ function assignLanguage(e, state) {
 }
 
 
-function changeMenu(e, state){
+function changeMenu(e, state, saved_e){
     if(state.layout_menu == "construction") {
         document.getElementById('start_overlay').style.display = 'none';
         state.layout_menu = "material_shop";
@@ -2319,7 +2351,7 @@ function changeMenu(e, state){
         e.c_menu_main_text.style.opacity = '0';
         document.getElementById('sidebar_mission1').style.opacity = '1';
         document.getElementById("overlay_mission").style.opacity = '0';
-        changeConstructionMenu(e, state);
+        changeConstructionMenu(e, state, saved_e);
          setTimeout(() => {
             e.menu.style.opacity = '1';    
             e.lateral_icon.style.left = '95vw';
@@ -2343,13 +2375,13 @@ function changeMaterialShop(e){
     }, 1500);
 }
 
-function changeConstructionMenu(e, state){
+function changeConstructionMenu(e, state, saved_e){
     e.material_shop.style.display = 'none';
     
     setTimeout(() => {
             e.construction_menu.style.animation = "changeMenuLeft 1s ease-out";
             e.blueprint_img.style.display = 'block';
-            controlProgress(e, state);
+            controlProgress(e, state, saved_e);
     }, 1000);
 }
 
@@ -2560,7 +2592,7 @@ function showInteractionCircle(e, state){
         e.circle3.style.opacity = '0';
     }
 
-function interaction(index, e, state){
+function interaction(index, e, state, saved_e){
     switch(index){
         case 0:
             data.matTert[4][4] = true;
@@ -2571,7 +2603,7 @@ function interaction(index, e, state){
             break;
         case 1:
             state.cond_table = true;
-            openConstructionMenu(e, state);
+            openConstructionMenu(e, state, saved_e);
             break;
     }
 }
@@ -2656,8 +2688,13 @@ function createDecoration(e, state, i) {
 
 function createImportantObjects(e, state, saved_e) {
     for(let i=0;i<data.importantObjects.length;i++){
-        createObjects(e, state, i, saved_e);
+        createObjects(e, state, i, saved_e, data.importantObjects);
     }
+    
+}
+
+function createNewPartSchool(e, state, saved_e, i) {
+    createObjects(e, state, i, saved_e, data.partSchool)
 }
 
 function createNewImportantObject(e, state, saved_e, i, posX, posY, id_container, N_parameters, id1 = null, src1 = null, id2 = null, src2 = null, id3 = null, src3 = null, id4 = null, src4 = null) {
@@ -2670,37 +2707,37 @@ function createNewImportantObject(e, state, saved_e, i, posX, posY, id_container
     for(let j=0;j<N_parameters;j++){
         data.importantObjects[i][j+4] = parameters_to_add[j];
     }
-    createObjects(e, state, i, saved_e);
+    createObjects(e, state, i, saved_e, data.importantObjects);
 }
 
-function createObjects(e, state, i, saved_e) {
-    if(data.importantObjects[i][3] == 1){
+function createObjects(e, state, i, saved_e, propertiesObject) {
+    if(propertiesObject[i][3] == 1){
         const object = document.createElement('img');
-        object.style.left = data.importantObjects[i][0];
-        object.style.top = data.importantObjects[i][1];
-        object.id = data.importantObjects[i][2];
+        object.style.left = propertiesObject[i][0];
+        object.style.top = propertiesObject[i][1];
+        object.id = propertiesObject[i][2];
         object.className = 'school_imgs';
-        object.src = data.importantObjects[i][4];
+        object.src = propertiesObject[i][4];
         e.world.appendChild(object);
-        e[data.importantObjects[i][2]] = document.getElementById(`${object.id}`); 
-        saved_e[data.importantObjects[i][2]] = `document.getElementById("${object.id}")`;
+        e[propertiesObject[i][2]] = document.getElementById(`${object.id}`); 
+        saved_e[propertiesObject[i][2]] = `document.getElementById("${object.id}")`;
         return;
     }
     else {
         const object_container = document.createElement('div');
-        object_container.style.left = data.importantObjects[i][0];
-        object_container.style.top = data.importantObjects[i][1];
-        object_container.id = data.importantObjects[i][2];
+        object_container.style.left = propertiesObject[i][0];
+        object_container.style.top = propertiesObject[i][1];
+        object_container.id = propertiesObject[i][2];
         object_container.className = 'school_imgs';
-        for(let j=0;j<data.importantObjects[i][3];j+=2){
+        for(let j=0;j<propertiesObject[i][3];j+=2){
             const object_img = document.createElement('img');
-            object_img.id = data.importantObjects[i][4 + j];
-            object_img.src = data.importantObjects[i][5 + j];
+            object_img.id = propertiesObject[i][4 + j];
+            object_img.src = propertiesObject[i][5 + j];
             object_container.appendChild(object_img);
         }
         e.world.appendChild(object_container);
-        e[data.importantObjects[i][2]] = document.getElementById(`${object_container.id}`); 
-        saved_e[data.importantObjects[i][2]] = `document.getElementById("${object_container.id}")`;
+        e[propertiesObject[i][2]] = document.getElementById(`${object_container.id}`); 
+        saved_e[propertiesObject[i][2]] = `document.getElementById("${object_container.id}")`;
         return;
     } 
 }
@@ -3698,9 +3735,9 @@ function backgroundAdaption(e, state) {
 
 }
 
-function createOnClicks(e, state){
+function createOnClicks(e, state, saved_e){
     e.lateral_icon.onclick = function() {
-        changeMenu(e, state);
+        changeMenu(e, state, saved_e);
     }
     e.zoom.onclick = function() {
         scale(true, e, state);
