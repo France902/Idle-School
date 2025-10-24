@@ -62,7 +62,7 @@ function initialiseMatTert(){
         [ '175vw', '-2vh', "group", -2, false, 'operaio' ],
         [ '175vw', '-26vh', "group", 2, false, 'operaio'],
         [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
-        [ '100vw', '111vh', "alone", -1, false, 'operaio'],
+        [ '97vw', '120vh', "alone", -1, false, 'operaio'],
         [ '80vw', '41vh', "group", 1, false, 'Bob'],
         [ '90vw', '42vh', "group", 1, false, 'operaio'],
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
@@ -80,7 +80,7 @@ function initialiseMatTert(){
 function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
         const seatForObjects = [
-            [ '165vw', '2vh', '166vw', '-24vh', 'table_construction'],
+            [ '165vw', '0vh', '166vw', '-24vh', 'table_construction'],
             ['155vw', '112vh', 'stand'],
         ];
         return seatForObjects;
@@ -220,7 +220,7 @@ function initialiseImportantObjects(){
 function initialisePartSchool(){
     if(localStorage.getItem("saved") == null){
         const partSchool = [
-            ['20vw', '40vh', 'entrance_floor', 1, 'entrata_scuola.png'],
+            ['150vw', '-200vh', 'entrance_floor', 1, 'entrata_scuola.png'],
         ];
         return partSchool;
     } else{
@@ -398,10 +398,11 @@ function writeElements() {
     mission1: "document.getElementById('mission1')",
     mission2: "document.getElementById('mission2')",
     mission3: "document.getElementById('mission3')",
-    first_c_m: "document.getElementById('first_c_m')",
-    second_c_m: "document.getElementById('second_c_m')",
-    third_c_m: "document.getElementById('third_c_m')",
+    title_mission1: "document.getElementById('title_mission1')",
+    title_mission2: "document.getElementById('title_mission2')",
+    title_mission3: "document.getElementById('title_mission3')",
     c_menu_main_text: "document.getElementById('c_menu_main_text')",
+    c_shop_main_text: "document.getElementById('c_shop_main_text')",
     blueprint_img: "document.getElementById('blueprint_img')",
     choices: "document.getElementById('choices')",
     display_choice: "document.querySelector('.display_choice')",
@@ -645,7 +646,7 @@ const speed2 = 0.048;
 
 function createInteractableKeys(e, state) {
     const pos_keys = [
-        ['90vw', '105vh'],
+        ['85vw', '115vh'],
         ['152vw', '-20vh'],
     ]
     for(let i=0;i<pos_keys.length;i++){
@@ -1954,7 +1955,7 @@ window.addEventListener('keyup', handleKeyup);
         document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-               if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)) if(data.matTert[4][4] == false) interaction(0, e, state, saved_e);
+               if((state.posX >= 38 && state.posX <= 48) && (state.posY >= 84 && state.posY <= 105)) if(data.matTert[4][4] == false) interaction(0, e, state, saved_e);
             }
         });
     }
@@ -2101,13 +2102,18 @@ function toggleMenu(e, state) {
 }
         
 function openConstructionMenu(e, state, saved_e){
+        state.layout_menu == "construction";
         state.menu_opened = true;
         e.circle1.style.display = 'none';
         e.circle2.style.display = 'none';
         e.circle3.style.display = 'none';
         state.cond_deactivate_movement = true;
-        e.menu_base.style.display = 'block';
-
+        e.menu_base.style.opacity = '1';
+        e.blueprint_img.style.display = 'block';
+        e.menu_base.style.transition = 'none';
+         setTimeout(() => {
+            e.menu_base.style.transform = 'scale(1) translate(-3.3vw)';
+        }, 1);
         clearInterval(state.intervalMovement);
         e.construction_menu.style.animation = 'constructionLayoutAnimation 1s ease-out';
         e.construction_menu.style.opacity = '1';
@@ -2126,6 +2132,7 @@ function openConstructionMenu(e, state, saved_e){
             document.getElementById("sidebar_mission1").style.opacity = '1';
             writeMissions(e, state);
             controlProgress(e, state, saved_e);
+            e.menu_base.style.transition = 'transform 1s linear';
         }, 1000);
         e.lateral_icon.style.display = 'block';
 
@@ -2163,9 +2170,9 @@ function openConstructionMenu(e, state, saved_e){
 }
 
 function writeMissions(e, state) {
-    e.first_c_m.textContent = data.logConstructionMission[0][0];
-    e.second_c_m.textContent = data.logConstructionMission[1][0];
-    e.third_c_m.textContent = data.logConstructionMission[2][0];
+    e.title_mission1.textContent = data.logConstructionMission[0][0];
+    e.title_mission2.textContent = data.logConstructionMission[1][0];
+    e.title_mission3.textContent = data.logConstructionMission[2][0];
     let type;
     for(let index=0;index<3-state.missionCompleted;index++){
         let j = 0;
@@ -2279,12 +2286,21 @@ function completeMission(index, e, state, saved_e) {
 
 function buildPart(index, e, state, saved_e) {
     createNewPartSchool(e, state, saved_e, index);
+    closeConstructionMenu(e, state);
+    moveWorld(e, (parseFloat(data.partSchool[index][0])*-1) + 44, (parseFloat(data.partSchool[index][1])*-1));
+    setTimeout(() => {
+        resetMoveWorld(e, -3, 5);
+    }, 2000);
 }
 
-function overlayMission(mission, state) {
+function overlayMission(mission, state, e) {
     if(mission != state.overlay_mission) {
         document.getElementById("sidebar_mission"+ mission).style.backgroundColor = 'yellow';
         document.getElementById("sidebar_mission"+ state.overlay_mission).style.backgroundColor = 'beige';
+        for(let i=1;i<4;i++) {
+            if(i==mission) document.getElementById("title_mission" + i).style.color = 'yellow';
+            else document.getElementById("title_mission" + i).style.color = 'white';
+        }
         state.overlay_mission = mission;
     }
 }
@@ -2297,12 +2313,16 @@ function closeConstructionMenu(e, state) {
     e.menu_base.style.opacity = '0';
     e.c_menu_main_text.style.opacity = '0';
     document.getElementById("overlay_mission").style.opacity = '1';
+    e.circle1.style.display = 'block';
+    e.circle2.style.display = 'block';
+    e.circle3.style.display = 'block';
     
 }
 
 function assignLanguage(e, state) {
     let lines_italian = {
-        c_menu_main_text: ["COSTRUISCI", "COMPRA"], 
+        c_menu_main_text: "COSTRUISCI",
+        c_shop_main_text: "COMPRA",
         first_c_m: "Entrata scuola",
         second_c_m: "Seconda costruzione",
         third_c_m: "Terza costruzione",
@@ -2317,10 +2337,11 @@ function assignLanguage(e, state) {
     }
 
     function SubstituteLanguage(lines_c_menu){
-        e.c_menu_main_text.textContent = lines_c_menu.c_menu_main_text[0];
-        e.first_c_m.textContent = lines_c_menu.first_c_m;
-        e.second_c_m.textContent = lines_c_menu.second_c_m;
-        e.third_c_m.textContent = lines_c_menu.third_c_m;
+        e.c_menu_main_text.textContent = lines_c_menu.c_menu_main_text;
+        e.c_shop_main_text.textContent = lines_c_menu.c_shop_main_text;
+        e.title_mission1.textContent = lines_c_menu.title_mission1;
+        e.title_mission2.textContent = lines_c_menu.title_mission2;
+        e.title_mission3.textContent = lines_c_menu.title_mission3;
         state.lines_c_menu = lines_c_menu;
     }
 }
@@ -2334,7 +2355,12 @@ function changeMenu(e, state, saved_e){
         e.menu.style.pointerEvents = 'none';
         e.menu_base.style.transform = 'scale(1.2) translate(-3.3vw)';
         e.c_menu_main_text.style.opacity = '0';
+        e.c_shop_main_text.style.opacity = '1';
         document.getElementById('sidebar_mission1').style.opacity = '0';
+        if(state.openSideBar) {
+            document.getElementById('sidebar_mission2').style.opacity = '0';
+            document.getElementById('sidebar_mission3').style.opacity = '0';
+        }
         document.getElementById("overlay_mission").style.opacity = '1';
         changeMaterialShop(e);
         setTimeout(() => {
@@ -2348,20 +2374,24 @@ function changeMenu(e, state, saved_e){
         document.getElementById('start_overlay').style.display = 'block';
         state.layout_menu = "construction";
         e.menu_base.style.transform = 'scale(1) translate(-3.3vw)';
-        e.c_menu_main_text.style.opacity = '0';
-        document.getElementById('sidebar_mission1').style.opacity = '1';
+        e.c_menu_main_text.style.opacity = '1';
+        e.c_shop_main_text.style.opacity = '0';
+        e.lateral_icon.src = 'material_shop_icon.png';
         document.getElementById("overlay_mission").style.opacity = '0';
         changeConstructionMenu(e, state, saved_e);
          setTimeout(() => {
             e.menu.style.opacity = '1';    
-            e.lateral_icon.style.left = '95vw';
             e.lateral_icon.style.transform = 'scaleX(1)';
+            document.getElementById('sidebar_mission1').style.opacity = '1';
+            if(state.openSideBar) {
+                document.getElementById('sidebar_mission2').style.opacity = '1';
+                document.getElementById('sidebar_mission3').style.opacity = '1';
+            }
         }, 1000);
         setTimeout(() => {
             e.menu.style.pointerEvents = 'all';
             e.menu.style.opacity = '1';
             e.c_menu_main_text.style.opacity = '1';
-            e.c_menu_main_text.textContent = state.lines_c_menu.c_menu_main_text[1];
         }, 2500);
         
     }
@@ -2475,8 +2505,8 @@ function startFirstCycle(e, state, chosed = null, saved_e){
 }
 let cont_first_cycle = 0;
 function bookCycle(e, state, saved_e){
-    
     document.getElementById("stacks_of_books").style.display = 'none';
+    eliminateCharacter(e, 10, document.getElementById('character_10'));
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 1);
     }, 500);
@@ -2485,6 +2515,7 @@ function bookCycle(e, state, saved_e){
 function fundraisingCycle(e, state, saved_e){
     e.stand.src = 'stand_con_sindaco.png';
     document.getElementById("stacks_of_books").style.display = 'none';
+    eliminateCharacter(e, 10, document.getElementById('character_10'));
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 2);
     }, 500);
@@ -3767,13 +3798,13 @@ function createOnClicks(e, state, saved_e){
         buyMaterial(3, state);
     }
     document.getElementById("sidebar_mission1").onclick = function() {
-        overlayMission(1, state);
+        overlayMission(1, state, e);
     }
     document.getElementById("sidebar_mission2").onclick = function() {
-        overlayMission(2, state);
+        overlayMission(2, state, e);
     }
     document.getElementById("sidebar_mission3").onclick = function() {
-        overlayMission(3, state);
+        overlayMission(3, state, e);
     }
     document.getElementById("mobile_interaction").onclick = function() {
         mobileInteraction();
