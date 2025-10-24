@@ -371,7 +371,7 @@
             width: 13vw;
             height: 30vh;
             position: fixed;
-            background-color: rgba(24, 39, 130, 0.7);
+            background-color: rgba(11, 11, 11, 0.7);
             border: solid 0.5vh black;
             z-index: 10000;
             left: -5vw;
