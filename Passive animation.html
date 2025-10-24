@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #parte_sopra{
+            width: 9vh;
+            height: 15vh;
+            position: fixed;
+            transform-origin: center;
+            transform: scale(0.9);
+            transition: left 0.4s linear, top 0.3s linear, transform 0.3s linear;
+        }
+
+        #parte_sotto{
+            width: 9vh;
+            height: 15vh;
+            position: fixed;
+            transform-origin: center;
+            transform: scale(0.9);
+            transition: left 0.4s linear, top 0.3s linear, transform 0.3s linear;
+        }
+    </style>
+</head>
+<body>
+    <img id="parte_sopra" src="Parte sopra.png">
+    <script defer>
+        const parte_sopra = document.getElementById("parte_sopra");
+        const isMale = true; // Cambia a false per animazione femmina
+
+        function randomDelay(min = 1000, max = 3000) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function animateMale() {
+            parte_sopra.style.transform = "scale(0.9) rotate(-50deg)";
+            setTimeout(() => {
+                parte_sopra.style.transform = "scale(0.9) rotate(5deg)";
+                setTimeout(() => {
+                    parte_sopra.style.transform = "scale(0.9) rotate(0deg)";
+                }, 300);
+            }, 300);
+        }
+
+        function animateFemale() {
+            studente.style.transform = "scale(1.05)";
+            setTimeout(() => {
+                studente.style.transform = "scale(0.85)";
+                setTimeout(() => {
+                    studente.style.transform = "scale(0.9)";
+                }, 300);
+            }, 300);
+        }
+
+        async function passiveAnimationStudent() {
+            while (true) {
+                await new Promise(r => setTimeout(r, randomDelay()));
+                if (isMale) {
+                    animateMale();
+                } else {
+                    animateFemale();
+                }
+            }
+        }
+        passiveAnimationStudent();
+    </script>
+</body>
+</html>
