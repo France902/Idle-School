@@ -16,6 +16,7 @@ function startGame(e = null, state = null) {
         createImportantObjects(elements, state, e);
         creationTertiaryCharacters(elements, state, e);
         createMapDecorations(elements, state, e);
+        createPauseListener(state);
         moveImportantObjectsStart(elements);
         saveStatesElements(e, state);
         createInteractableKeys(elements, state);
@@ -27,6 +28,7 @@ function startGame(e = null, state = null) {
         createOnClicks(elements, state, e);
         createListenersForRedraw(elements, state);
         writeMissions(elements, state);
+
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -497,6 +499,7 @@ function initialiseStates() {
     cond_interactionCircle: false,
     menu_opened: false,
     openSideBar: false,
+    pauseGame: false,
 
     // Posizioni
     posX: 0,
@@ -917,7 +920,7 @@ function setupDialogue(e, state, saved_e) {
                 resetMoveWorld(e, -3, 5);
                 setTimeout(() => {
                     data.matTert[5][2] = '';
-                    passiveAnimationBob(document.getElementById('character_5'), 5 );
+                    passiveAnimationBob(document.getElementById('character_5'), 5, e, state);
                 }, 2000);
                 activateHud(e);
                 setUpPresideMovement(e, state, saved_e);
@@ -2306,6 +2309,7 @@ function overlayMission(mission, state, e) {
 }
 
 function closeConstructionMenu(e, state) {
+    state.menu_opened = false;
     document.getElementById('start_overlay').style.opacity = '0';
     e.construction_menu.style.opacity = '0';
     e.menu.style.pointerEvents = 'none';
@@ -2316,7 +2320,6 @@ function closeConstructionMenu(e, state) {
     e.circle1.style.display = 'block';
     e.circle2.style.display = 'block';
     e.circle3.style.display = 'block';
-    
 }
 
 function assignLanguage(e, state) {
@@ -2947,7 +2950,16 @@ function createIllustration(sr, posX, posY, e, i_illustration, state){
         }
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
-        await sleep(time);
+        for(let i=0;i<=time/1000;i++) {
+            await sleep(1000);
+            if(state.pauseGame) {
+                while(state.pauseGame) {
+                    await sleep(500);
+                }
+            }
+        }
+        await sleep(time-(1000* (i-1)));
+        
         switch (i){
             case 5:
                 if(state.condBP1 == true){
@@ -2992,7 +3004,16 @@ function createIllustration(sr, posX, posY, e, i_illustration, state){
                 }
                 break;
         }
-        await sleep(Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000);
+        time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
+        for(let i=0;i<=time/1000;i++) {
+            await sleep(1000);
+            if(state.pauseGame) {
+                while(state.pauseGame) {
+                    await sleep(500);
+                }
+            }
+        }
+        await sleep(time-(1000* (i-1)));
         switch (i){
             case 5:
                 if(state.condBP1 == true){
@@ -3133,14 +3154,22 @@ function passiveAnimationWalking(character, i, e, illustration, state){
         stepY = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
         sommaY+=(stepY*9);
     }
-    
     returnToObject(character, false, false, false, state, e, stepX, stepY, illustration);
     setTimeout(() => {
-        passiveAnimationWalking(character, i, e, illustration, state);
+        if(state.pauseGame) {
+        let intervalId = setInterval(() => {
+            if(!state.pauseGame) {
+                setTimeout(() => {
+                    passiveAnimationWalking(character, i, e, illustration, state);
+                }, Math.abs(stepX) * 750 + Math.abs(stepY) * 750); 
+                clearInterval(intervalId);
+            }
+        }, 500);
+    } else passiveAnimationWalking(character, i, e, illustration, state);
     }, Math.abs(stepX) * 750 + Math.abs(stepY) * 750); 
 }
 
-async function passiveAnimationBob(character, i, e, illustration, state){
+async function passiveAnimationBob(character, i, e, state){
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const step = async () => {
         let num;
@@ -3273,129 +3302,143 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
 
         stepX = Math.trunc(stepX);
         stepY = Math.trunc(stepY);
-        await move(character, order, stepX, stepY);
+        await move(character, order, stepX, stepY, true, state);
     }
     else{
         await move(character, order, stepx, stepy, x, state);
     }
-    async function move(character, order, stepX, stepY, cond = true){
+    async function move(character, order, stepX, stepY, cond = true, state){
         const sleep =  ms => new Promise(r => setTimeout(r, ms));
-        const step = async (action, delay, parameter = false, parameter2 = false) => {
-            if (typeof window[action] === 'function') {
+        const step = async (state, action, delay, parameter = false, parameter2 = false) => {
+            return new Promise(resolve => {
+                if (typeof window[action] === 'function') {
                 window[action](character, parameter);
                 if(!cond){
                     window[action](illustration, parameter);
                     typeAnimation = controlClose(character, state);
                     if(typeAnimation != null){
                         fastAnimations(state.ids, state);
-                } 
-        }
-            }
-            await sleep(delay);
+                    } 
+                }
+                }
+                if(state.pauseGame) {
+                        setInterval(() => {
+                            if(!state.pauseGame) {
+                                resolve();
+                            }
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(() => {
+                            resolve();  
+                        }, delay);
+                    }
+                
+            });
         };
         if (!order) {
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
-                await step("leftJump", 500);
+                await step(state, "leftJump", 500);
             }
             if(halfStepX){
                 parameter = true;
-                await step("leftJump", 500, parameter);
+                await step(state, "leftJump", 500, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step("leftJump", 500, false, parameter2);
+                await step(state, "leftJump", 500, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step("rightJump", 500);
+                await step(state, "rightJump", 500);
             }
             if(halfStepX){
                 parameter = true;
-                await step("rightJump", 500, parameter);
+                await step(state, "rightJump", 500, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step("rightJump", 500, false, parameter2);
+                await step(state, "rightJump", 500, false, parameter2);
             }
         }
 
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step("topJump", 500);
+                await step(state, "topJump", 500);
             }
             if(halfStepY){
                 parameter = true;
-                await step("topJump", 500, parameter);
+                await step(state, "topJump", 500, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step("topJump", 500, false, parameter2);
+                await step(state, "topJump", 500, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step("downJump", 500);
+                await step(state, "downJump", 500);
             }
             if(halfStepY){
                 parameter = true;
-                await step("downJump", 500, parameter);
+                await step(state, "downJump", 500, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step("downJump", 500, false, parameter2);
+                await step(state, "downJump", 500, false, parameter2);
             }
         }
 
     } else {
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step("topJump", 500);
+                await step(state, "topJump", 500);
             }
             if(halfStepY){
                 parameter = true;
-                await step("topJump", 500, parameter);
+                await step(state, "topJump", 500, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step("topJump", 500, false, parameter2);
+                await step(state, "topJump", 500, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step("downJump", 500);
+                await step(state, "downJump", 500);
             }
             if(halfStepY){
                 parameter = true;
-                await step("downJump", 500, parameter);
+                await step(state, "downJump", 500, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step("downJump", 500, false, parameter2);
+                await step(state, "downJump", 500, false, parameter2);
             }
         }
 
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
-                await step("leftJump", 500);
+                await step(state, "leftJump", 500);
             }
             if(halfStepX){
                 parameter = true;
-                await step("leftJump", 500, parameter);
+                await step(state, "leftJump", 500, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step("leftJump", 500, false, parameter2);
+                await step(state, "leftJump", 500, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step("rightJump", 500);
+                await step(state, "rightJump", 500);
             }
             if(halfStepX){
                 parameter = true;
-                await step("rightJump", 500, parameter);
+                await step(state, "rightJump", 500, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step("rightJump", 500, false, parameter2);
+                await step(state, "rightJump", 500, false, parameter2);
             }
         }
 }
@@ -3430,7 +3473,7 @@ function controlClose(character, state){
 }
 let cond_ripeti_controllo = true;
 function fastAnimations(ids, state){
-    
+    /*
     let i;
     if(cond_ripeti_controllo){
         for(i=0;i<ids.length-1;i++){
@@ -3453,6 +3496,7 @@ function fastAnimations(ids, state){
         }
         }
     }
+        */
     
 }
     
@@ -3828,7 +3872,16 @@ function createListenersForRedraw(elements, state){
     fsEvents.forEach(evt => document.addEventListener(evt, requestRedraw));
 }
 
-
+function createPauseListener(state) {
+    window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !state.menu_opened) {
+        state.pauseGame = !state.pauseGame;
+        document.getElementById('start_overlay').style.display = 'block';
+        if(state.pauseGame) document.getElementById('start_overlay').style.opacity = '0.5';
+        else document.getElementById('start_overlay').style.opacity = '0';
+    }
+  });
+}
 
 window.onload = function(){
     setTimeout(() => {
