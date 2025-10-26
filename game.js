@@ -2545,10 +2545,19 @@ async function passiveAnimationStand(character, i, e, state, saved_e, chosed){
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     await returnToObject(character, data.seatForObjects[1][0], data.seatForObjects[1][1], false, state, e);
+    while(state.pauseGame) {
+        await sleep(1000);
+    }
     await sleep(1000);
     await singleJumpAnimation(character, e, state);
+    while(state.pauseGame) {
+        await sleep(1000);
+    }
     await sleep(1000);
     await singleJumpAnimation(character, e, state);
+    while(state.pauseGame) {
+        await sleep(1000);
+    }
     await sleep(1000);
     if(chosed == 2) addMoney(3, state);
     else addMoney(2, state);
@@ -2556,6 +2565,9 @@ async function passiveAnimationStand(character, i, e, state, saved_e, chosed){
     let posY_exit = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
     eliminateCharacter(e, i, character);
+    while(state.pauseGame) {
+        await sleep(1000);
+    }
     await sleep(500);
     cont_first_cycle++;
     if(chosed == 2) fundraisingCycle(e, state, saved_e);
@@ -2823,7 +2835,7 @@ function createCharacter(e, state, i) {
             passiveAnimationGroup(character_container, i, e, state);
             break;
         case 'work-alone':
-             passiveAnimationWorkAlone(character_container, i, e);
+             passiveAnimationWorkAlone(character_container, i, e, state);
             break;
         case 'alone':
             let posX = parseFloat(data.matTert[i][0]) + 2;
@@ -2831,7 +2843,7 @@ function createCharacter(e, state, i) {
             const illustration = createIllustration('vignetta_musica.png', posX, posY, e, i, state);
         animateIllustration(illustration, i);
         setInterval(() => {
-            passiveAnimationAlone(character_container, i, e, illustration);
+            if(!state.pauseGame) passiveAnimationAlone(character_container, i, e, illustration, state);
             }, 1000);
             break;
         case 'walk-casually':
@@ -3095,10 +3107,32 @@ async function passiveAnimationWorkAlone(character, i, e, state){
         }
     };
     await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true);
+    await pauseControl(time, state);
     await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true);
+    await pauseControl(time, state);
     await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false);
+    await pauseControl(time, state);
     await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false);
+    await pauseControl(time, state);
     await passiveAnimationWorkAlone(character, i, e, state);
+
+}
+
+async function pauseControl(time, state) {
+        const sleep =  ms => new Promise(r => setTimeout(r, ms));
+        for(let i=0;i<=time/1000;i++) {
+            await sleep(1000);
+            if(state.pauseGame) {
+                while(state.pauseGame) {
+                    await sleep(500);
+                }
+            }
+        }
+        await sleep(time-(1000* (i-1)));
+        return new Promise(resolve => {
+                resolve();
+            });
+
 }
 
 async function passiveAnimationAlone(character, i, e, illustration, state){
@@ -3126,9 +3160,15 @@ async function passiveAnimationAlone(character, i, e, illustration, state){
         }
         
     };
-    step(Math.floor(Math.random() * (1000 - 200 + 1)) + 400);
-    step(Math.floor(Math.random() * (1000 - 200 + 1)) + 400);
-    step(Math.floor(Math.random() * (1000 - 200 + 1)) + 400);
+    let time = Math.floor(Math.random() * (1000 - 200 + 1)) + 400;
+    step(time);
+    pauseControl(time, state);
+    time = Math.floor(Math.random() * (1000 - 200 + 1)) + 400;
+    step(time);
+    pauseControl(time, state);
+    time = Math.floor(Math.random() * (1000 - 200 + 1)) + 400;
+    step(time);
+    pauseControl(time, state);
 }
 
 let sommaX = 0;
@@ -3193,7 +3233,7 @@ async function passiveAnimationBob(character, i, e, state){
         await returnToObject(character, x, y, false, state, e);
         await sleep(delay);
     };
-    while(true){
+    while(!state.pauseGame){
         await step();
     } 
 }
