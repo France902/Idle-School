@@ -459,7 +459,6 @@
             height: 40vh;
             position: fixed;
             opacity: 0;
-            z-index: 10000;
         }
 
         #student {
