@@ -28,7 +28,6 @@ function startGame(e = null, state = null) {
         createOnClicks(elements, state, e);
         createListenersForRedraw(elements, state);
         writeMissions(elements, state);
-
         setInterval(() => {
             if(state.cond_movement) saveMats_ImportantStates();
         }, 2000);
@@ -2512,15 +2511,19 @@ function startFirstCycle(e, state, chosed = null, saved_e){
         e.display_img_choice2.style.pointerEvents = 'none';
         if(chosed == 1){
             bookCycle(e, state, saved_e);
+            /*
             setTimeout(() => {
                 bookCycle(e, state, saved_e);
             }, 500); 
+            */
         }
         else {
             fundraisingCycle(e, state, saved_e);
+            /*
             setTimeout(() => {
                 fundraisingCycle(e, state, saved_e);
             }, 500);
+            */
         }
         resetMoveWorld(e, -3, 5);
         state.cond_deactivate_movement = false;
@@ -2528,18 +2531,18 @@ function startFirstCycle(e, state, chosed = null, saved_e){
     }
 }
 let cont_first_cycle = 0;
-function bookCycle(e, state, saved_e){
+function bookCycle(e, state, saved_e, cond_matthew = false){
     document.getElementById("stacks_of_books").style.display = 'none';
-    eliminateCharacter(e, 10, document.getElementById('character_10'));
+    if(!cond_matthew) eliminateCharacter(e, 10, document.getElementById('character_10'));
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 1);
     }, 500);
 }
 
-function fundraisingCycle(e, state, saved_e){
+function fundraisingCycle(e, state, saved_e, cond_matthew = false){
     e.stand.src = 'stand_con_sindaco.png';
     document.getElementById("stacks_of_books").style.display = 'none';
-    eliminateCharacter(e, 10, document.getElementById('character_10'));
+    if(!cond_matthew) eliminateCharacter(e, 10, document.getElementById('character_10'));
     setTimeout(() => {
         animationFirstCycle(e, state, saved_e, 2);
     }, 500);
@@ -2554,17 +2557,74 @@ function createInteractionCircle(e, state){
 function animationFirstCycle(e, state, saved_e, chosed) {
     let posX = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
     let posY = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
-    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
-    let posY_exit = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
+    posX -= 20;
     createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", data.matTert.length, e, state, saved_e);
     let i = data.matTert.length - 1;
     if(chosed == 2) passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e, chosed);
     else passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e);
 }
 
+async function animationCar(e, state, object, character) {
+    
+    return new Promise(resolve => {
+        object.style.animation = 'animationCar 0.5s infinite';
+        document.getElementById("wheel_car1").style.animation = 'animation_wheel 1s linear infinite';
+        document.getElementById("wheel_car2").style.animation = 'animation_wheel 1s linear infinite';
+        object.style.zIndex = character.style.zIndex + 1;
+        object.style.left = (parseFloat(character.style.left) - 17) + "vw";
+        setTimeout(() => {
+            object.style.animation = '';
+            document.getElementById("wheel_car1").style.animation = '';
+            document.getElementById("wheel_car2").style.animation = '';
+        }, 5000);
+        setTimeout(() => {
+            character.style.opacity = '1';
+            resolve();
+        }, 6000);
+    });
+
+}
+
+async function exitCar(object, i) {
+    return new Promise(resolve => {
+        object.style.transition = 'left 7s linear';
+        object.style.left = parseFloat(object.style.left) + 650 + "vw";
+        object.style.animation = 'animationCar 0.5s infinite';
+        document.getElementById("wheel_car1").style.animation = 'animation_wheel 1s linear infinite';
+        document.getElementById("wheel_car2").style.animation = 'animation_wheel 1s linear infinite';
+        setTimeout(() => {
+            object.style.animation = '';
+            document.getElementById("wheel_car1").style.animation = '';
+            document.getElementById("wheel_car2").style.animation = '';
+        }, 5000);
+        setTimeout(() => {
+            eliminateImportantObject(object, i);
+            object.style.display = 'none';
+            resolve();
+        }, 5000);
+    });
+
+}
+
+function eliminateImportantObject(object, i) {
+    object.remove();
+    for(let j=i;j<data.importantObjects-1;j++) {
+        data.importantObjects[j] = data.importantObjects[j+1];
+    }
+}
+let cont_car = 0;
 async function passiveAnimationStand(character, i, e, state, saved_e, chosed){
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+    character.style.opacity = '0';
+    let posX_exit = character.style.left;
+    let posY_exit = character.style.top;
+    if(cont_car == 2) cont_car = 1;
+    else cont_car++; 
+    createNewImportantObject(e, state, saved_e, data.importantObjects.length, "-350vw", "220vh", "car"+cont_car, 6, "car"+cont_car, "macchina"+cont_car+".png", "wheel_car1", "ruota_camion2.png", "wheel_car2", "ruota_camion2.png");
+    let index_object = data.importantObjects.length-1;
+    await sleep(500);
+    await animationCar(e, state, document.getElementById("car"+cont_car), character);
     await returnToObject(character, data.seatForObjects[1][0], data.seatForObjects[1][1], false, state, e);
     while(state.pauseGame) {
         await sleep(1000);
@@ -2582,17 +2642,17 @@ async function passiveAnimationStand(character, i, e, state, saved_e, chosed){
     await sleep(1000);
     if(chosed == 2) addMoney(3, state);
     else addMoney(2, state);
-    let posX_exit = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
-    let posY_exit = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
+
     await returnToObject(character, posX_exit, posY_exit, true, state, e);
     eliminateCharacter(e, i, character);
+    await exitCar(document.getElementById("car"+cont_car), index_object);
     while(state.pauseGame) {
         await sleep(1000);
     }
     await sleep(500);
     cont_first_cycle++;
-    if(chosed == 2) fundraisingCycle(e, state, saved_e);
-    else bookCycle(e, state, saved_e);
+    if(chosed == 2) fundraisingCycle(e, state, saved_e, true);
+    else bookCycle(e, state, saved_e, true);
 }
 
 function addMoney(qMoney, state) {
@@ -2676,22 +2736,20 @@ function interaction(index, e, state, saved_e){
 }
 
 function mobileInteraction() {
-    // Crea un nuovo evento di tastiera "keydown"
+
     let event = new KeyboardEvent('keydown', {
         key: 'e',
         code: 'KeyE',
-        keyCode: 69, // Codice del tasto 'E'
+        keyCode: 69, 
         which: 69,
         bubbles: true,
         cancelable: true,
         char: 'e',
-        charCode: 101 // Codice carattere di 'e' minuscola
+        charCode: 101 
     });
 
-    // Invia l'evento al documento o a un elemento specifico (es. document.body)
     document.dispatchEvent(event);
 
-    // Se volessi anche simulare il rilascio del tasto 'keyup':
     let keyupEvent = new KeyboardEvent('keyup', {
         key: 'e',
         code: 'KeyE',
@@ -3597,6 +3655,7 @@ async function rightJumpP(character) {
 async function rightJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+    /*
     let posId = character.id.split("_")[1];
     const characterImg = document.getElementById('characterImg_'+posId);
     let source = characterImg.src.split("/").pop();
@@ -3604,7 +3663,7 @@ async function rightJump(character, half, a_quarter) {
     src_character = src_character.split('.')[0];
     src_character += ".png";
     document.getElementById('characterImg_'+posId).src = src_character;
-
+*/
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
