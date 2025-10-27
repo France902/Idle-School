@@ -1317,7 +1317,7 @@ function pointClickMovement(){
 
         if(state.zoom == 0.8){
             clickTimer2 = setTimeout(() => {
-                moveBar(e, state, xInVW, yInVH);
+                moveCircle(e, state, xInVW, yInVH);
             }, 500);
         }
         
@@ -1347,11 +1347,32 @@ pointClickMovement();
 
 
 
-function moveBar(e, state, x, y){
+function moveCircle(e, state, x, y){
     x += 45;
     y += 55;
     x -= state.posX;
     y -= state.posY;
+    let num;
+    if(x > 50) {
+        num = (x-50)/5;
+        num -= 1;
+        x -= num;
+    } else {
+        num = (x)/5;
+        num = 10 - num;
+        num += 1;
+        x += num;
+    }
+    if(y > 50) {
+        num = (y-50)/5;
+        num -= 1;
+        y -= num;
+    } else {
+        num = y/5;
+        num = 10 - num;
+        num += 1;
+        y += num;
+    }
     e.click_circle.style.left = `${x}vw`;
     e.click_circle.style.top = `${y}vh`;
     e.click_circle.style.opacity = '1';
