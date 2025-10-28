@@ -2580,7 +2580,7 @@ async function animationCar(e, state, object, character) {
         setTimeout(() => {
             character.style.opacity = '1';
             resolve();
-        }, 6000);
+        }, 5999);
     });
 
 }
@@ -4010,3 +4010,4 @@ window.onload = function(){
     
     startGame();
 } 
+
