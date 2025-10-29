@@ -481,6 +481,8 @@ function initialiseStates() {
     missionCompleted: 0,
     overlay_mission: 1,
     layout_menu: "construction",
+    canPause: true,
+
 
     // Interazioni e click
     cond_movement: false,
@@ -2127,6 +2129,7 @@ function toggleMenu(e, state) {
 function openConstructionMenu(e, state, saved_e){
         state.layout_menu == "construction";
         state.menu_opened = true;
+        state.canPause = false;
         e.circle1.style.display = 'none';
         e.circle2.style.display = 'none';
         e.circle3.style.display = 'none';
@@ -2330,6 +2333,9 @@ function overlayMission(mission, state, e) {
 
 function closeConstructionMenu(e, state) {
     state.menu_opened = false;
+    setTimeout(() => {
+        state.canPause = true;
+    }, 2000);
     document.getElementById('start_overlay').style.opacity = '0';
     e.construction_menu.style.opacity = '0';
     e.menu.style.pointerEvents = 'none';
@@ -2557,8 +2563,9 @@ function createInteractionCircle(e, state){
 function animationFirstCycle(e, state, saved_e, chosed) {
     let posX = Math.floor(Math.random() * 101) + Math.abs(data.posIdleCycle[0][0]);
     let posY = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
+    const randomNum = Math.floor(Math.random() * 4) + 1;
     posX -= 20;
-    createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "Personaggio_anonimo", data.matTert.length, e, state, saved_e);
+    createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "passante"+randomNum, data.matTert.length, e, state, saved_e);
     let i = data.matTert.length - 1;
     if(chosed == 2) passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e, chosed);
     else passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e);
@@ -2580,7 +2587,7 @@ async function animationCar(e, state, object, character) {
         setTimeout(() => {
             character.style.opacity = '1';
             resolve();
-        }, 5999);
+        }, 6000);
     });
 
 }
@@ -3652,18 +3659,21 @@ async function rightJumpP(character) {
     await step(2, 1, 100);
 }
 
-async function rightJump(character, half, a_quarter) {
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-    character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-    /*
-    let posId = character.id.split("_")[1];
+function getSrc(posId) {
     const characterImg = document.getElementById('characterImg_'+posId);
     let source = characterImg.src.split("/").pop();
     let src_character = source.split("_")[0];
     src_character = src_character.split('.')[0];
+    return src_character;
+}
+
+async function rightJump(character, half, a_quarter) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
+    let posId = character.id.split("_")[1];
+    let src_character = getSrc(posId);
     src_character += ".png";
     document.getElementById('characterImg_'+posId).src = src_character;
-*/
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3703,7 +3713,10 @@ async function rightJump(character, half, a_quarter) {
 async function topJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-
+    let posId = character.id.split("_")[1];
+    let src_character = getSrc(posId);
+    src_character += "_dietro.png";
+    document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3714,9 +3727,6 @@ async function topJump(character, half, a_quarter) {
         await step(-0.9, 60);
         await step(-0.65, 60);
         await step(0.65, 60);
-        await ripristineTransition(character);
-    }
-    if(half){
         await step(-1.75, 0);
         await step(-1.75, 60);
         await step(-1.2, 60);
@@ -3724,6 +3734,9 @@ async function topJump(character, half, a_quarter) {
         await ripristineTransition(character);
     }
     else{
+        await ripristineTransition(character);
+    }
+    if(half){
         await step(-3.5, 0);
         await step(-3.5, 60);
         await step(-2.5, 60);
@@ -3785,7 +3798,10 @@ async function leftJump(character, half, a_quarter) {
 async function downJump(character, half, a_quarter) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
-
+    let posId = character.id.split("_")[1];
+    let src_character = getSrc(posId);
+    src_character += "_davanti.png";
+    document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3994,12 +4010,13 @@ function createListenersForRedraw(elements, state){
 
 function createPauseListener(state) {
     window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !state.menu_opened) {
+    if (e.key === 'Escape' && state.canPause && !e.repeat) {
         state.pauseGame = !state.pauseGame;
         document.getElementById('start_overlay').style.display = 'block';
         if(state.pauseGame) document.getElementById('start_overlay').style.opacity = '0.5';
         else document.getElementById('start_overlay').style.opacity = '0';
     }
+    return;
   });
 }
 
@@ -4010,4 +4027,3 @@ window.onload = function(){
     
     startGame();
 } 
-
