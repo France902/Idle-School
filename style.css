@@ -270,11 +270,20 @@
         }
 
         #entrance_floor {
-            width: 20vw;
-            height: 20vh;
+            width: 80vw;
+            height: 130vh;
+            background-color: aqua;
+            position: fixed;
+            z-index: 9999;
+        }
+
+        #entrance_roof {
+            width: 80vw;
+            height: 130vh;
             background-color: aqua;
             position: fixed;
             z-index: 10000;
+            opacity: 0.5;
         }
 
         #icon_img {
