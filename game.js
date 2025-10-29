@@ -64,7 +64,7 @@ function initialiseMatTert(){
         [ '175vw', '-26vh', "group", 2, false, 'operaio'],
         [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
         [ '97vw', '120vh', "alone", -1, false, 'operaio'],
-        [ '80vw', '41vh', "group", 1, false, 'Bob'],
+        [ '80vw', '41vh', "group", -1, false, 'Bob'],
         [ '90vw', '42vh', "group", 1, false, 'operaio'],
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
@@ -221,7 +221,9 @@ function initialiseImportantObjects(){
 function initialisePartSchool(){
     if(localStorage.getItem("saved") == null){
         const partSchool = [
-            ['150vw', '-200vh', 'entrance_floor', 1, 'entrata_scuola.png'],
+            ['100vw', '-200vh', 'entrance_floor', 1, 'pavimento_scuola.jpg'],
+            [],
+            ['100vw', '-200vh', 'entrance_roof', 1, 'soffitto_scuola.jpg']
         ];
         return partSchool;
     } else{
@@ -472,7 +474,7 @@ function initialiseElements(e) {
 function initialiseStates() {
   return {
     // state principale
-    money: 40,
+    money: 100,
     classes: 0,
     language: navigator.language || navigator.userLanguage,
     zoom: 0.8,
@@ -897,7 +899,7 @@ function setupDialogue(e, state, saved_e) {
     const left = pos === 1;
     e.boxname.style.left = left ? "16vw" : "65vw";
     e.imgPreside.style.transform = left ? "scale(0.9)" : "scale(0.8)";
-    e.anonymousCharacter.style.transform = left ? "scaleX(-1) scale(0.9)" : "scaleX(-1) scale(1)";
+    e.anonymousCharacter.style.transform = left ? "scaleX(1) scale(0.9)" : "scaleX(1) scale(1)";
     e.imgPreside.style.opacity = left ? "1" : "0.8";
     e.anonymousCharacter.style.opacity = left ? "0.8" : "1";
   }
@@ -1196,7 +1198,7 @@ function setupDialogue(e, state, saved_e) {
         if(name != 'preside'){
             e.anonymousCharacter.src = name + ".png"; 
             e.anonymousCharacter.style.transition = '';
-            e.anonymousCharacter.style.transform = 'scaleX(-1)';
+            e.anonymousCharacter.style.transform = 'scaleX(1)';
         }
     }
 }
@@ -2313,9 +2315,11 @@ function completeMission(index, e, state, saved_e) {
 function buildPart(index, e, state, saved_e) {
     createNewPartSchool(e, state, saved_e, index);
     closeConstructionMenu(e, state);
-    moveWorld(e, (parseFloat(data.partSchool[index][0])*-1) + 44, (parseFloat(data.partSchool[index][1])*-1));
+    scale("wide", e, state);
+    moveWorld(e, (parseFloat(data.partSchool[index][0])*-1) + 5, (parseFloat(data.partSchool[index][1])*-1)-70);
     setTimeout(() => {
         resetMoveWorld(e, -3, 5);
+        scale("standard", e, state);
     }, 2000);
 }
 
@@ -3673,6 +3677,8 @@ async function rightJump(character, half, a_quarter) {
     let posId = character.id.split("_")[1];
     let src_character = getSrc(posId);
     src_character += ".png";
+    character.style.transform = 'scaleX(-1)';
+    if(document.getElementById('illustration_'+posId)) document.getElementById('illustration_'+posId).style.transform = 'scaleX(1)';
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
@@ -3727,6 +3733,9 @@ async function topJump(character, half, a_quarter) {
         await step(-0.9, 60);
         await step(-0.65, 60);
         await step(0.65, 60);
+        await ripristineTransition(character);
+    }
+    if(half){
         await step(-1.75, 0);
         await step(-1.75, 60);
         await step(-1.2, 60);
@@ -3734,9 +3743,6 @@ async function topJump(character, half, a_quarter) {
         await ripristineTransition(character);
     }
     else{
-        await ripristineTransition(character);
-    }
-    if(half){
         await step(-3.5, 0);
         await step(-3.5, 60);
         await step(-2.5, 60);
@@ -3749,7 +3755,11 @@ async function leftJump(character, half, a_quarter) {
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
     let i = character.id;
     i = i[i.length - 1];
-
+    character.style.transform = 'scaleX(1)';
+    let posId = character.id.split("_")[1];
+    let src_character = getSrc(posId);
+    src_character += ".png";
+    document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3868,7 +3878,7 @@ function diaologueB_P1(e, state) {
         }
 
         function rotateBob(b) {
-            b.style.transform = "scaleX(-1)";
+            b.style.transform = "scaleX(1)";
             clearInterval(state.intervalAnimationBob[5]);
             bob_illustration.style.opacity = '1';
             bob_illustration.src = 'vignetta_esclamazione.png';
