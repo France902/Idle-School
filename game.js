@@ -2569,6 +2569,9 @@ function animationFirstCycle(e, state, saved_e, chosed) {
     let posY = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
     const randomNum = Math.floor(Math.random() * 4) + 1;
     posX -= 20;
+    eliminateCharacter(e, 3, document.getElementById("character_"+3));
+    eliminateImportantObject(document.getElementById("barrow"),  1, document.getElementById("structure_barrow"), document.getElementById("structure_wheel"));
+    //createNewImportantObject(e, state, saved_e, data.importantObjects.length, '-200vw', '-50vh', 'bulldozer', 1, 'ruspa.png');
     createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "passante"+randomNum, data.matTert.length, e, state, saved_e);
     let i = data.matTert.length - 1;
     if(chosed == 2) passiveAnimationStand(document.getElementById("character_"+i), i, e, state, saved_e, chosed);
@@ -2617,8 +2620,10 @@ async function exitCar(object, i) {
 
 }
 
-function eliminateImportantObject(object, i) {
+function eliminateImportantObject(object, i, linkedObject1 = null, linkedObject2 = null) {
     object.remove();
+    if(linkedObject1 != null) linkedObject1.remove();
+    if(linkedObject2 != null) linkedObject2.remove();
     for(let j=i;j<data.importantObjects-1;j++) {
         data.importantObjects[j] = data.importantObjects[j+1];
     }
@@ -2978,7 +2983,7 @@ function eliminateCharacter(e, i, character){
                     if(document.getElementById('character_'+(j+1))){
                         document.getElementById('character_'+(j+1)).id = `character_${j}`;
                         document.getElementById('characterImg_'+(j+1)).id = `characterImg_${j}`;
-                        if(data.matTert[j+1][2] != '' && data.matTert[j+1][2] != 'passiveAnimationStand') {
+                        if(document.getElementById('illustration_'+(j+1))) {
                             document.getElementById('illustration_'+(j+1)).id = `illustration_${j}`;
                         }
                         
@@ -3160,6 +3165,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
     const step = async (action, delay, scaleX) => {
         await sleep(delay);
+        if(!existencecontrol(character)) return;
         if(scaleX) {
             character.style.transform = 'scaleX(-1)';
             e.barrow.style.transform = 'scaleX(1)';
