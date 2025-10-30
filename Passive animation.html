@@ -17,16 +17,16 @@
         }
 
         #personaggio {
-            position: fixed; 
-            bottom: 150px; 
-            transform-origin: bottom center; 
+            position: fixed;
+            bottom: 150px;
+            transform-origin: bottom center;
             transition: transform 0.2s ease-out, opacity 0.3s;
         }
 
         #palla {
-            position: fixed; 
-            bottom: 190px; 
-            transform-origin: bottom center; 
+            position: fixed;
+            bottom: 190px;
+            transform-origin: bottom center;
             transition: transform 0.2s ease-out, opacity 0.3s;
         }
 
@@ -41,8 +41,9 @@
             height: auto;
             left: 50%; 
             transform: translateX(-50%); 
-            opacity: 0; 
-            margin-left: 18vh;
+            opacity: 0;
+            margin-left: 13vh;
+            z-index: 15;
         }
 
         /*ANIMAZIONI KEYFRAMES */
@@ -52,7 +53,7 @@
                 transform: translateY(0) translateX(-50%); 
             }
             50% { 
-                transform: translateY(-20vh) translateX(-30%); 
+                transform: translateY(-30vh) translateX(-50%); 
             }
         }
         
@@ -72,10 +73,11 @@
 </head>
 <body>
     
-    <img id="personaggio" src="Personaggio_anonimo.png" alt="Personaggio">
+    
     
     <img id="palla" src="pallone_calcio.png" alt="Palla da calcio">
 
+    <img id="personaggio" src="Personaggio_anonimo.png" alt="Personaggio">
     
     <script defer>
         const personaggio = document.getElementById("personaggio");
@@ -124,4 +126,3 @@
     </script>
 </body>
 </html>
-
