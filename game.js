@@ -512,6 +512,7 @@ function initialiseStates() {
     posBY: 39,
     ids: [],
     index: -1,
+    heldFor: 0,
 
     // Condizioni ambientali
     cond_platform_1: false,
@@ -976,7 +977,7 @@ function setupDialogue(e, state, saved_e) {
                     [300, 400, 300, 300, 300],
                     [[false], [false], [false], [false], [true]],
                 ];
-                moveCharacter(document.getElementById('character_'+(data.matTert.length -1)), 5, jumps);
+                moveCharacter(document.getElementById('character_'+(data.matTert.length -1)), 5, jumps, state);
                 setTimeout(() => {
                     state.index++;
                     state.cond_text = true;
@@ -1466,8 +1467,8 @@ if(!state.cond_deactivate_movement){
     e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
+        changeHeight(p, state);
         setTimeout(() => {
-            changeHeight();
         if(jumpStartTime == 0) {
                 currentDir = getDirection();
                 if (currentDir.x === 0 && currentDir.y === 0) return;
@@ -1493,7 +1494,7 @@ if(!state.cond_deactivate_movement){
 async function runPreside(event, currentDir, distance = 9) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(isCharging){
-        resetHeight();
+        resetHeight(p);
         currentDir = getDirection();
         jumpDirection(distance, currentDir);
         
@@ -1508,47 +1509,32 @@ async function runPreside(event, currentDir, distance = 9) {
     } 
     
 }
-let heldFor = 0;
 function handleKeyup(event){
     if(!state.cond_deactivate_movement){
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
-            resetHeight();
+            setTimeout(() => {
+                resetHeight(p);
+            }, 20);
+            
             if(state.cond_run_preside == false){
-                    heldFor = performance.now() - jumpStartTime;
+                    state.heldFor = performance.now() - jumpStartTime;
                     setTimeout(() => {
                         jumpStartTime = 0;
                     }, 200);
-                    if(heldFor > 270){
-                        heldFor = 270;
+                    if(state.heldFor > 270){
+                        state.heldFor = 270;
                     } 
-                    let distance = heldFor / 30;
+                    let distance = state.heldFor / 30;
                     keys = {};
                     jumpDirection(distance, currentDir);
-                    heldFor = 0;
+                    setTimeout(() => {
+                        state.heldFor = 0;
+                    }, 20);
+                    
             }
             isCharging = false;
         }
     }
-}
-
-async function changeHeight() {
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-    if(parseFloat(p.style.height) > 16.5) p.style.height = parseFloat(p.style.height) - 0.5 + "vh";
-    else return;
-    await sleep(20);
-    if(heldFor != 0 || state.cond_run_preside) {
-        await resetHeight();
-        return;
-    }
-    else await changeHeight();
-}
-
-async function resetHeight() {
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-    if(parseFloat(p.style.height) != 19) p.style.height = parseFloat(p.style.height) + 0.5 + "vh";
-    else return;
-    await sleep(20);
-    await resetHeight();
 }
 
 function getDirection(){
@@ -1998,6 +1984,30 @@ window.addEventListener('keyup', handleKeyup);
     
     
   }
+
+async function changeHeight(character, state, condPreside = true) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    if(parseFloat(character.style.height) > 16.5 && condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
+    else if(parseFloat(character.style.height) > 17.5 && !condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
+         else return;
+    if(condPreside) await sleep(20);
+    else await sleep(30);
+    if((state.heldFor != 0 || state.cond_run_preside) && condPreside) {
+        await resetHeight(character);
+        return;
+    }
+    else await changeHeight(character, state, condPreside);
+}
+
+async function resetHeight(character, condPreside = true) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    if(parseFloat(character.style.height) != 19 && condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
+    else if(parseFloat(character.style.height) != 20 && !condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
+        else return;
+    if(condPreside) await sleep(20);
+    else await sleep(30);
+    await resetHeight(character, condPreside);
+}
   
   function control_position(state, e, saved_e) {
     state.posX = Math.round(state.posX);
@@ -2914,9 +2924,9 @@ function createCharacter(e, state, i) {
     character_container.style.left = data.matTert[i][0];
     character_container.style.top = data.matTert[i][1];
     character_container.style.height = '20vh';
+    character_container.style.width= '6vw';
     character_container.id = 'character_' + i;
     character_container.className = 'school_imgs';
-    character_container.style.position = 'fixed';
     character_container.style.transition = 'left 0.25s linear, top 0.25s linear';
     switch (data.matTert[i][3]) {
         case 1:
@@ -2939,6 +2949,10 @@ function createCharacter(e, state, i) {
     const character_img = document.createElement('img');
     character_img.style.width = '6vw';
     character_img.id = 'characterImg_' + i;
+    character_img.style.transition = 'height 0.03s linear';
+    character_img.style.position = 'fixed';
+    character_img.style.bottom = '0vh';
+    character_img.style.transformOrigin = 'bottom center';
     character_img.style.height = '19vh';
 
     if(localStorage.getItem("saved") == null) {
@@ -3187,7 +3201,7 @@ async function passiveAnimationWorkAlone(character, i, e, state){
     character.style.transition = "left 0.5s linear, top 0.5s linear";
     e.barrow.style.transition = "left 0.35s linear, top 0.35s linear, transform 0.35s linear";
     const sleep =  ms => new Promise(r => setTimeout(r, ms));
-    const step = async (action, delay, scaleX) => {
+    const step = async (action, delay, scaleX, state) => {
         await sleep(delay);
         if(!existencecontrol(character)) return;
         if(scaleX) {
@@ -3223,16 +3237,16 @@ async function passiveAnimationWorkAlone(character, i, e, state){
             }
         }
         if (typeof window[action] === 'function') {
-            window[action](character, false);
+            window[action](character, false, false, state);
         }
     };
-    await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true);
+    await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true, state);
     await pauseControl(time, state);
-    await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true);
+    await step("rightJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, true, state);
     await pauseControl(time, state);
-    await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false);
+    await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false, state);
     await pauseControl(time, state);
-    await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false);
+    await step("leftJump", Math.floor(Math.random() * (4000 - 1000 + 1)) + 2000, false, state);
     await pauseControl(time, state);
     await passiveAnimationWorkAlone(character, i, e, state);
 
@@ -3414,14 +3428,14 @@ async function jolt(character, e, state) {
     await returnToObject(character, data.seatForObjects[0][2], data.seatForObjects[0][3], true, state, e);
 }
 
-function moveCharacter(character, total_jumps, jumps){
+function moveCharacter(character, total_jumps, jumps, state){
     async function jump(character) {
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         for(let i=-1;i<total_jumps;i++){
             if(i==-1 && character.id == 'character_5') await sleep(1000);
             else {
                 if (typeof window[jumps[0][i]] === 'function') {
-                    await window[jumps[0][i]](character, jumps[2][i][0]);
+                    await window[jumps[0][i]](character, jumps[2][i][0], false, state);
                 }
                 await sleep(jumps[1][i]);
             }
@@ -3472,9 +3486,9 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         const step = async (state, action, delay, parameter = false, parameter2 = false) => {
             return new Promise(resolve => {
                 if (typeof window[action] === 'function') {
-                window[action](character, parameter);
+                window[action](character, parameter, parameter2, state);
                 if(!cond){
-                    window[action](illustration, parameter);
+                    window[action](illustration, parameter, parameter2, state);
                     typeAnimation = controlClose(character, state);
                     if(typeAnimation != null){
                         fastAnimations(state.ids, state);
@@ -3491,7 +3505,7 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
                     else {
                         setTimeout(() => {
                             resolve();  
-                        }, delay);
+                        }, delay+150);
                     }
                 
             });
@@ -3701,7 +3715,7 @@ function getSrc(posId) {
     return src_character;
 }
 
-async function rightJump(character, half, a_quarter) {
+async function rightJump(character, half, a_quarter, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
     let posId = character.id.split("_")[1];
@@ -3710,14 +3724,20 @@ async function rightJump(character, half, a_quarter) {
     character.style.transform = 'scaleX(-1)';
     if(document.getElementById('illustration_'+posId)) document.getElementById('illustration_'+posId).style.transform = 'scaleX(1)';
     document.getElementById('characterImg_'+posId).src = src_character;
-    const step = async (topDelta, leftDelta, delay) => {
-        await sleep(delay);
+    const step = async (topDelta, leftDelta, delay, condChangeHeight = false) => {
+        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        setTimeout(() => {
+           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
+        }, 200);
+        if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
+        await sleep(delay);
+        character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
         
     };
     if (a_quarter) {
-        await step(-0.375, 0.375, 0);
+        await step(-0.375, 0.375, 0, true);
         await step(-0.375, 0.375, 60);
         await step(-0.25, 0.5, 60);
         await step(0.25, 0.5, 60);
@@ -3726,7 +3746,7 @@ async function rightJump(character, half, a_quarter) {
         await ripristineTransition(character);
     }
     if(half){
-        await step(-0.75, 0.75, 0);
+        await step(-0.75, 0.75, 0, true);
         await step(-0.75, 0.75, 60);
         await step(-0.5, 1, 60);
         await step(0.5, 1, 60);
@@ -3735,7 +3755,7 @@ async function rightJump(character, half, a_quarter) {
         await ripristineTransition(character);
     }
     else{
-        await step(-1.5, 1.5, 0);
+        await step(-1.5, 1.5, 0, true);
         await step(-1.5, 1.5, 60);
         await step(-0.5, 1, 60);
         await step(0.5, 1, 60);
@@ -3746,41 +3766,46 @@ async function rightJump(character, half, a_quarter) {
     
 }
 
-async function topJump(character, half, a_quarter) {
+async function topJump(character, half, a_quarter, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
     let posId = character.id.split("_")[1];
     let src_character = getSrc(posId);
     src_character += "_dietro.png";
     document.getElementById('characterImg_'+posId).src = src_character;
-    const step = async (topDelta, delay) => {
-        await sleep(delay);
+    const step = async (topDelta, delay, condChangeHeight = false) => {
+        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        setTimeout(() => {
+           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
+        }, 200);
+        if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
+        await sleep(delay);
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     };
     if (a_quarter) {
-        await step(-0.9, 0);
+        await step(-0.9, 0, true);
         await step(-0.9, 60);
         await step(-0.65, 60);
         await step(0.65, 60);
         await ripristineTransition(character);
     }
     if(half){
-        await step(-1.75, 0);
+        await step(-1.75, 0, true);
         await step(-1.75, 60);
         await step(-1.2, 60);
         await step(1.2, 60);
         await ripristineTransition(character);
     }
     else{
-        await step(-3.5, 0);
+        await step(-3.5, 0, true);
         await step(-3.5, 60);
         await step(-2.5, 60);
         await step(2.5, 60);
         await ripristineTransition(character);
     }
 }
-async function leftJump(character, half, a_quarter) {
+async function leftJump(character, half, a_quarter, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
     let i = character.id;
@@ -3790,10 +3815,15 @@ async function leftJump(character, half, a_quarter) {
     let src_character = getSrc(posId);
     src_character += ".png";
     document.getElementById('characterImg_'+posId).src = src_character;
-    const step = async (topDelta, leftDelta, delay) => {
-        await sleep(delay);
+    const step = async (topDelta, leftDelta, delay, condChangeHeight  = false) => {
+        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        setTimeout(() => {
+           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
+        }, 200);
+        if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
+        await sleep(delay);
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
         if(i==5 && delay == 0){
             if(a_quarter){
@@ -3807,7 +3837,7 @@ async function leftJump(character, half, a_quarter) {
         }
     };
     if (a_quarter) {
-        await step(-0.375, -0.375, 0);
+        await step(-0.375, -0.375, 0, true);
         await step(-0.375, -0.375, 60);
         await step(-0.25, -0.5, 60);
         await step(0.25, -0.5, 60);
@@ -3816,7 +3846,7 @@ async function leftJump(character, half, a_quarter) {
         await ripristineTransition(character);
     }
     if(half){
-        await step(-0.75, -0.75, 0);
+        await step(-0.75, -0.75, 0, true);
         await step(-0.75, -0.75, 60);
         await step(-0.5, -1, 60);
         await step(0.5, -1, 60);
@@ -3825,7 +3855,7 @@ async function leftJump(character, half, a_quarter) {
         await ripristineTransition(character);
     }
     else{
-        await step(-1.5, -1.5, 0);
+        await step(-1.5, -1.5, 0, true);
         await step(-1.5, -1.5, 60);
         await step(-0.5, -1, 60);
         await step(0.5, -1, 60);
@@ -3835,33 +3865,39 @@ async function leftJump(character, half, a_quarter) {
     }
 }
 
-async function downJump(character, half, a_quarter) {
+async function downJump(character, half, a_quarter, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     character.style.transition = "top 0.06s ease-out, left 0.06s ease-out";
     let posId = character.id.split("_")[1];
     let src_character = getSrc(posId);
     src_character += "_davanti.png";
     document.getElementById('characterImg_'+posId).src = src_character;
-    const step = async (topDelta, delay) => {
-        await sleep(delay);
+    const step = async (topDelta, delay, condChangeHeight = false) => {
+        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        setTimeout(() => {
+           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
+        }, 200);
+        if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
+        await sleep(delay);
+        character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
     };
     if (a_quarter) {
-        await step(0.9, 0);
+        await step(0.9, 0, true);
         await step(0.9, 60);
         await step(0.6, 60);
         await step(-0.6, 60);
         await ripristineTransition(character);
     }
     if(half){
-        await step(1.75, 0);
+        await step(1.75, 0, true);
         await step(1.75, 60);
         await step(1.25, 60);
         await step(-1.25, 60);
         await ripristineTransition(character);
     }
     else{
-        await step(3.5, 0);
+        await step(3.5, 0, true);
         await step(3.5, 60);
         await step(2.5, 60);
         await step(-2.5, 60);
@@ -3894,13 +3930,13 @@ function diaologueB_P1(e, state) {
 
         async function exit(b, t) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
-            await rightJump(t, false);
+            await rightJump(t, false, false, state);
             await sleep(200); 
-            await rightJump(t, false); 
+            await rightJump(t, false, false, state); 
             await sleep(200);
             await rotateBob(b);
             returnToObject(t, data.seatForObjects[0][0], data.seatForObjects[0][1], false, state, e);
-            await moveCharacter(b, jumps[0].length, jumps);
+            await moveCharacter(b, jumps[0].length, jumps, state);
             await sleep(700);
             await removeIllustration(bob_illustration, t_illustration);
             await sleep(2300);
