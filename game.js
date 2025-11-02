@@ -1269,8 +1269,9 @@ function saveStatesElements(e, state){
 function setUpPresideMovement(e, state, saved_e) {
   const p = e.preside;
   assignZIndexP();
-  p.style.top = '0vh';
+  p.style.bottom = '0vh';
   p.style.left = '0vw';
+  p.style.height = '19vh';
     let isCharging = false;
     let jumpStartTime = 0;
     let currentDir = { x: 0, y: 0 };
@@ -1466,6 +1467,7 @@ if(!state.cond_deactivate_movement){
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
         setTimeout(() => {
+            changeHeight();
         if(jumpStartTime == 0) {
                 currentDir = getDirection();
                 if (currentDir.x === 0 && currentDir.y === 0) return;
@@ -1490,11 +1492,11 @@ if(!state.cond_deactivate_movement){
 
 async function runPreside(event, currentDir, distance = 9) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    
     if(isCharging){
-        
+        resetHeight();
         currentDir = getDirection();
         jumpDirection(distance, currentDir);
+        
         await sleep(380);
         await runPreside(event);
     }
@@ -1506,12 +1508,13 @@ async function runPreside(event, currentDir, distance = 9) {
     } 
     
 }
-
+let heldFor = 0;
 function handleKeyup(event){
     if(!state.cond_deactivate_movement){
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
+            resetHeight();
             if(state.cond_run_preside == false){
-                    let heldFor = performance.now() - jumpStartTime;
+                    heldFor = performance.now() - jumpStartTime;
                     setTimeout(() => {
                         jumpStartTime = 0;
                     }, 200);
@@ -1521,11 +1524,33 @@ function handleKeyup(event){
                     let distance = heldFor / 30;
                     keys = {};
                     jumpDirection(distance, currentDir);
+                    heldFor = 0;
             }
             isCharging = false;
         }
     }
 }
+
+async function changeHeight() {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    if(parseFloat(p.style.height) > 16.5) p.style.height = parseFloat(p.style.height) - 0.5 + "vh";
+    else return;
+    await sleep(20);
+    if(heldFor != 0 || state.cond_run_preside) {
+        await resetHeight();
+        return;
+    }
+    else await changeHeight();
+}
+
+async function resetHeight() {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    if(parseFloat(p.style.height) != 19) p.style.height = parseFloat(p.style.height) + 0.5 + "vh";
+    else return;
+    await sleep(20);
+    await resetHeight();
+}
+
 function getDirection(){
     let dir = { x: 0, y: 0 };
     if (keys["KeyW"]) dir.y -= 1;
@@ -1596,14 +1621,13 @@ function left(distance){
 }
 
 async function animationJumpLeft(distance){
-    
     p.style.transform = "scaleX(-1)";
     p.src = "Preside.png";
     const step = [0, 60, 120, 180, 240];
-    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+    const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
         step.forEach((ms, i) => {
             setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                p.style.bottom = (parseFloat(p.style.bottom) + delta[i]) + 'vh';
             }, ms);
         });
 }
@@ -1630,10 +1654,10 @@ async function animationJumpRight(distance){
     p.style.transform = "scaleX(1)";
     p.src = "Preside.png";
     const step = [0, 60, 120, 180, 240];
-    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+    const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
         step.forEach((ms, i) => {
             setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                p.style.bottom = (parseFloat(p.style.bottom) + delta[i]) + 'vh';
             }, ms);
         });
 }
@@ -1662,10 +1686,10 @@ function down(distance){
 async function animationJumpDown(distance){
     p.src = "Preside_davanti.png";
     const step = [0, 60, 120, 180, 240];
-    const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
+    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
         step.forEach((ms, i) => {
             setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                p.style.bottom = (parseFloat(p.style.bottom) + delta[i]) + 'vh';
             }, ms);
         });
 }
@@ -1694,10 +1718,10 @@ function top(distance){
 async function animationJumpTop(distance){
     p.src = "Preside_dietro.png";
     const step = [0, 60, 120, 180, 240];
-    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+    const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
         step.forEach((ms, i) => {
             setTimeout(() => {
-                p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+                p.style.bottom = (parseFloat(p.style.bottom) + delta[i]) + 'vh';
             }, ms);
         });
 }
@@ -1883,10 +1907,10 @@ function diagonalBottomLeft(distance) {
 async function animationJumpDiagonal(distance) {
     p.src = "Preside_obliquo.png"; 
     const step = [0, 60, 120, 180, 240];
-    const delta = [distance/2*-1, distance/2*-1, 0, distance/2, distance/2];
+    const delta = [distance/2, distance/2, 0, distance/2*-1, distance/2*-1];
     step.forEach((ms, i) => {
         setTimeout(() => {
-            p.style.top = (parseFloat(p.style.top) + delta[i]) + 'vh';
+            p.style.bottom = (parseFloat(p.style.bottom) + delta[i]) + 'vh';
         }, ms);
     });
 }
@@ -3652,7 +3676,7 @@ async function doubleJump(p) {
 
 async function rightJumpP(character) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    character.style.transition = "top 0.1s ease-out, left 0.1s ease-out";
+    character.style.transition = "top 0.1s linear, left 0.1s linear, height 0.02s linear";
 
     const step = async (topDelta, leftDelta, delay) => {
         await sleep(delay);
