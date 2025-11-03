@@ -438,7 +438,7 @@
             width: 5vw;
             height: 19vh;
             position: fixed;
-            top: 0vh;
+            bottom: 0vh;
             left: 0vw;
             transition: left 0.1s, top 0.1s;
         }
@@ -1043,3 +1043,4 @@
                 top: 220vh;
             }
         }
+
