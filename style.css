@@ -440,7 +440,7 @@
             position: fixed;
             bottom: 0vh;
             left: 0vw;
-            transition: left 0.1s, top 0.1s;
+            transition: left 0.1s, top 0.1s,height 0.02s linear;
         }
 
         #preside_container {
@@ -1043,4 +1043,5 @@
                 top: 220vh;
             }
         }
+
 
