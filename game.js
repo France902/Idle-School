@@ -69,7 +69,6 @@ function initialiseMatTert(){
         [ '190vw', '101vh', "group", -1, false, 'operaio'],
         [ '200vw', '101vh', "group", 1, false, 'operaio'],
         [ '113vw', '51vh', "walk-casually", -1, false, 'operaio'],
-        
         ];
         return matTert;
     } else{
@@ -1572,10 +1571,12 @@ function jumpDirection(distance, dir){
     else if (dir.x == 0.7 && dir.y == 0.7) diagonalLowRight(distance/2);
     else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance/2);
     control_position(state, e, saved_e);
+    
     assignZIndexP();
     changeZIndexElements();
     
 }
+
 
 function assignZIndexP(){
     e.preside.style.zIndex = `${Math.trunc(state.posY/5) + 10}`;
@@ -3095,7 +3096,7 @@ function createIllustration(sr, posX, posY, e, i_illustration, state){
         }
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         time = Math.floor(Math.random() * (state.maxTimeAnimationGroup[i] - 1000 + 1)) + 1000;
-        for(let i=0;i<=time/1000;i++) {
+        for(let j=0;j<=time/1000;j++) {
             await sleep(1000);
             if(state.pauseGame) {
                 while(state.pauseGame) {
@@ -3117,6 +3118,9 @@ function createIllustration(sr, posX, posY, e, i_illustration, state){
                 }
                 break;
         }
+        changeHeight(document.getElementById("characterImg_"+i), state, false);
+        await sleep(170);
+        resetHeight(document.getElementById("characterImg_"+i), false);
         character.style.top = (parseFloat(character.style.top) - 3) + 'vh';
         await sleep(300);
         character.style.top = (parseFloat(character.style.top) + 3) + 'vh';
@@ -3284,6 +3288,9 @@ async function passiveAnimationAlone(character, i, e, illustration, state){
         }
         else{
             let dec = (Math.floor(Math.random() * 1) + 2);
+            changeHeight(document.getElementById("characterImg_"+i), state, false);
+            await sleep(170);
+            resetHeight(document.getElementById("characterImg_"+i), false);
             character.style.top = parseFloat(character.style.top) - dec + 'vh';
             illustration.style.top = parseFloat(illustration.style.top) - dec + 'vh';
             setTimeout(() => {
@@ -3678,28 +3685,43 @@ function centralizationPreside(e, state) {
     const p = e.preside_container;
     p.style.top = "50vh";
     p.style.left = "30vw";
-    doubleJump(p);
+    doubleJump(p, e, state);
 }
-async function doubleJump(p) {
+async function doubleJump(p, e, state) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     await sleep(2000); 
-    await rightJumpP(p);
+    await rightJumpP(p, e, state);
     await sleep(500); 
-    await rightJumpP(p); 
+    await rightJumpP(p, e, state); 
 }
 
-async function rightJumpP(character) {
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-    character.style.transition = "top 0.1s linear, left 0.1s linear, height 0.02s linear";
+async function rightJumpP(character, e, state) {
 
-    const step = async (topDelta, leftDelta, delay) => {
+    const p = e.preside; 
+    p.style.bottom = '0vh';
+    p.style.left = '0vw';
+    p.style.height = '19vh';
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    character.style.transition = "top 0.1s linear, left 0.1s linear, height 0.04s linear";
+
+    const step = async (topDelta, leftDelta, delay, condHeight = false) => {
         await sleep(delay);
-        character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
-        character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
+        if(condHeight) {
+            changeHeight(p, state);
+            setTimeout(() => {
+                resetHeight(p)
+            }, 140);
+        }
+        else {
+            character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
+            character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
+        }
+
     };
 
 
-    await step(-2, 1, 0);
+    await step(0, 0, 0, true);
+    await step(-2, 1, 140);
     await step(-2, 2, 100);
     await step(-0.5, 2, 100);
     await step(0.5, 2, 100);
