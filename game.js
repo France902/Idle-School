@@ -81,7 +81,7 @@ function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
         const seatForObjects = [
             [ '165vw', '0vh', '166vw', '-24vh', 'table_construction'],
-            ['155vw', '112vh', 'stand'],
+            ['155vw', '112vh', 'standSeat'],
         ];
         return seatForObjects;
     } else{
@@ -524,6 +524,8 @@ function initialiseStates() {
     maxTimeAnimationAlone: [N],
     intervalMovement: null,
     intervalAnimationBob: [],
+    condPresidePassiveAnimation: false,
+    animationPresideStart:  false,
 
     //risorse
     brick_resource: 0, 
@@ -1467,6 +1469,7 @@ if(!state.cond_deactivate_movement){
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
         changeHeight(p, state);
+        state.animationPresideStart = false;
         setTimeout(() => {
         if(jumpStartTime == 0) {
                 currentDir = getDirection();
@@ -1570,13 +1573,44 @@ function jumpDirection(distance, dir){
     else if (dir.x == -0.7 && dir.y == -0.7) diagonalTopLeft(distance/2);
     else if (dir.x == 0.7 && dir.y == 0.7) diagonalLowRight(distance/2);
     else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance/2);
+    state.condPresidePassiveAnimation = false;
+    setTimeout(() => {
+        state.condPresidePassiveAnimation = true;
+        countdownPassiveAnimation(state);
+    }, 200);
     control_position(state, e, saved_e);
-    
     assignZIndexP();
     changeZIndexElements();
     
 }
 
+async function countdownPassiveAnimation(state) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    for(let i=0;i<40;i++) {
+        if(!state.condPresidePassiveAnimation) return;
+        await sleep(100);
+    }
+    state.animationPresideStart = true;
+    passiveAnimationPreside(p, state);
+}
+
+async function passiveAnimationPreside(p, state) {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const n_casuale = Math.floor(Math.random() * (4000 - 1000 + 1)) + 1000;
+    p.style.transition = 'left 0.1s, bottom 0.25s, height 0.02s linear';
+    await sleep(n_casuale);
+    if(!state.animationPresideStart) return;
+    changeHeight(p, state);
+    await sleep(170);
+    resetHeight(p);
+    state.cond_deactivate_movement = true;
+    p.style.bottom = (parseFloat(p.style.bottom) + 4) + "vh";
+    await sleep(250);
+    p.style.bottom = (parseFloat(p.style.bottom) - 4) + "vh";
+    await sleep(250);
+    state.cond_deactivate_movement = false;
+    await passiveAnimationPreside(p, state);
+}
 
 function assignZIndexP(){
     e.preside.style.zIndex = `${Math.trunc(state.posY/5) + 10}`;
@@ -1759,6 +1793,7 @@ function addParameters(distance, j, operation, cond_check = true){
 }
 
 function conditionCheck(i) {
+    console.log(i)
     let width_px = document.getElementById(data.importantObjects[i][2]).offsetWidth;
     let height_px = document.getElementById(data.importantObjects[i][2]).offsetHeight;
 
@@ -1987,6 +2022,7 @@ window.addEventListener('keyup', handleKeyup);
   }
 
 async function changeHeight(character, state, condPreside = true) {
+    if(!existencecontrol(character)) return;
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(parseFloat(character.style.height) > 16.5 && condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
     else if(parseFloat(character.style.height) > 17.5 && !condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
@@ -2001,6 +2037,7 @@ async function changeHeight(character, state, condPreside = true) {
 }
 
 async function resetHeight(character, condPreside = true) {
+    if(!existencecontrol(character)) return;
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(parseFloat(character.style.height) != 19 && condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
     else if(parseFloat(character.style.height) != 20 && !condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
@@ -2604,8 +2641,8 @@ function animationFirstCycle(e, state, saved_e, chosed) {
     let posY = Math.floor(Math.random() * 10) + data.posIdleCycle[0][1];
     const randomNum = Math.floor(Math.random() * 4) + 1;
     posX -= 20;
-    eliminateCharacter(e, 3, document.getElementById("character_"+3));
-    eliminateImportantObject(document.getElementById("barrow"),  1, document.getElementById("structure_barrow"), document.getElementById("structure_wheel"));
+    //eliminateCharacter(e, 3, document.getElementById("character_"+3));
+    //eliminateImportantObject(document.getElementById("barrow"),  1, document.getElementById("structure_barrow"), document.getElementById("structure_wheel"));
     //createNewImportantObject(e, state, saved_e, data.importantObjects.length, '-200vw', '-50vh', 'bulldozer', 1, 'ruspa.png');
     createNewCharacter(`${posX}vw`, `${posY}vh`, "passiveAnimationStand", 1, false, "passante"+randomNum, data.matTert.length, e, state, saved_e);
     let i = data.matTert.length - 1;
