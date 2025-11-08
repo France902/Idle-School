@@ -59,7 +59,7 @@ let N = 10;
 function initialiseMatTert(){
     if(localStorage.getItem("saved") == null){
     const matTert = [
-        [ '185vw', '-14vh', "group", 1, false, 'operaio'],
+        [ /*left*/'185vw',/*bottom*/'-14vh',/*tipo animazione*/"group", /*verso*/1, /*illustrazione tolta*/false, /*src*/'operaio'],
         [ '175vw', '-2vh', "group", -2, false, 'operaio' ],
         [ '175vw', '-26vh', "group", 2, false, 'operaio'],
         [ '25vw', '-26vh', "work-alone", 1, false, 'operaio'],
@@ -80,7 +80,7 @@ function initialiseMatTert(){
 function initialiseseatForObjects(){
     if(localStorage.getItem("saved") == null){
         const seatForObjects = [
-            [ '165vw', '0vh', '166vw', '-24vh', 'table_construction'],
+            [/*left1*/'165vw',/*top1*/ '0vh',/*left2*/'166vw',/*top2*/'-24vh',/*id*/'table_construction'],
             ['155vw', '112vh', 'standSeat'],
         ];
         return seatForObjects;
@@ -106,7 +106,7 @@ function initialiseWildNature(){
     if(localStorage.getItem("saved") == null) {
         let WildNature = [
             //Centro
-            [null, null, "fiore1", 101, 0, 0],
+            [/*left*/null,/*top*/null,/*src*/"fiore1",/*range posizione*/101,/*range spostato a destra*/0,/*range spostato in alto*/0],
             [null, null, "fiore2", 101, 0, 0],
             [null, null, "erba1", 101, 0, 0],
             [null, null, "erba2", 101, 0, 0],
@@ -163,7 +163,7 @@ function initialiseWildNature(){
 function initialiseposIdle() {
     if(localStorage.getItem("saved") == null){
         const posIdleCycle = [
-            [60, 173],
+            [/*left*/60,/*top*/173],
         ];
         return posIdleCycle;
     } else{
@@ -175,7 +175,7 @@ function initialiseposIdle() {
 function initialiseConstructionMission() {
     if(localStorage.getItem("saved") == null){
         const logConstructionMission = [
-            ["Base della entrata", "15_M"],
+            [/*Testo legato*/"Base della entrata",/*costo risorse*/"15_M"],
             ["Muri della entrata", "5_M", "3_V"],
             ["Tetto della entrata", "5_L"],
         ];
@@ -206,7 +206,7 @@ function setPositionWildNature(mat_nature){
 function initialiseImportantObjects(){
     if(localStorage.getItem("saved") == null){
         const importantObjects = [
-            [ '173vw', '-10vh','table_construction',  1, 'tavolo_costruzione.png'],
+            [/*left*/'173vw',/*top*/'-10vh',/*id container*/'table_construction',/*Numero elementi*/1,/*src*/'tavolo_costruzione.png'],
             ['14vw', '-20vh', 'barrow', 4, 'structure_barrow', 'cariola.png', 'structure_wheel', 'ruota_cariola.png'],
             ['140vw', '80vh', 'stand', 1, 'stand_libri.png']
         ];
@@ -220,8 +220,8 @@ function initialiseImportantObjects(){
 function initialisePartSchool(){
     if(localStorage.getItem("saved") == null){
         const partSchool = [
+            [/*left*/'100vw',/*top*/'-200vh',/*id container*/'entrance_floor',/*numero elementi*/1,/*src*/'pavimento_scuola.jpg'],
             ['100vw', '-200vh', 'entrance_floor', 1, 'pavimento_scuola.jpg'],
-            [],
             ['100vw', '-200vh', 'entrance_roof', 1, 'soffitto_scuola.jpg']
         ];
         return partSchool;
@@ -410,6 +410,7 @@ function writeElements() {
     display_choice: "document.querySelector('.display_choice')",
     display_img_choice1: "document.getElementById('display_img_choice1')",
     display_img_choice2: "document.getElementById('display_img_choice2')",
+    partSchoolCompleted: "document.getElementById('partSchoolCompleted')",
 
 
     // Giocatore e interazioni
@@ -654,7 +655,7 @@ const speed2 = 0.048;
 
 function createInteractableKeys(e, state) {
     const pos_keys = [
-        ['85vw', '115vh'],
+        [/*left*/'85vw',/*top*/'115vh'],
         ['152vw', '-20vh'],
     ]
     for(let i=0;i<pos_keys.length;i++){
@@ -1793,7 +1794,6 @@ function addParameters(distance, j, operation, cond_check = true){
 }
 
 function conditionCheck(i) {
-    console.log(i)
     let width_px = document.getElementById(data.importantObjects[i][2]).offsetWidth;
     let height_px = document.getElementById(data.importantObjects[i][2]).offsetHeight;
 
@@ -2276,7 +2276,7 @@ function writeMissions(e, state) {
     let type;
     for(let index=0;index<3-state.missionCompleted;index++){
         let j = 0;
-        while(j < (data.logConstructionMission[index].length -1)) {
+        while(j < (data.logConstructionMission[index].length -3)) {
             let i = 1;
             while(data.logConstructionMission[index][j+1][i] != "_") {
                 document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(data.logConstructionMission[index][j+1][i]);
@@ -2318,7 +2318,7 @@ function controlProgress(e, state, saved_e) {
     writeMissions(e, state);
     for(let j=0;j<3;j++){
         completed_materials = 0;
-        for(let i=1;i<data.logConstructionMission[j].length;i++) {
+        for(let i=1;i<data.logConstructionMission[j].length-2;i++) {
             subtracted = false;
             let resource = data.logConstructionMission[j][i];
             resource = resource[resource.length - 1];
@@ -2347,7 +2347,7 @@ function controlProgress(e, state, saved_e) {
                     break;
             
             }
-            if(data.logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state, saved_e);
+            if(data.logConstructionMission[j].length - 3 ==  completed_materials) completeMission(j, e, state, saved_e);
             else if(subtracted) {
                 switch (resource) {
                 case 'M':
@@ -2375,6 +2375,7 @@ function completeMission(index, e, state, saved_e) {
                 document.getElementById("img"+index+"_cost"+i).style.display = 'none';
                 document.getElementById("text"+index+"_cost"+i).style.display = 'none';
             }
+
             data.logConstructionMission.splice(index, 1);
             data.logConstructionMission.push(["Nient'altro da fare"]);
             writeMissions(e, state);
@@ -2385,14 +2386,24 @@ function completeMission(index, e, state, saved_e) {
 }
 
 function buildPart(index, e, state, saved_e) {
+    let time = 2000;
     createNewPartSchool(e, state, saved_e, index);
     closeConstructionMenu(e, state);
     scale("wide", e, state);
     moveWorld(e, (parseFloat(data.partSchool[index][0])*-1) + 5, (parseFloat(data.partSchool[index][1])*-1)-70);
+    if(state.missionCompleted == 3) {
+        time = 4000;
+        setTimeout(() => {
+            e.partSchoolCompleted.style.display = 'block';
+            e.partSchoolCompleted.style.animation= "textPartSchool 0.7s forwards";
+
+        }, 2000);
+    }
     setTimeout(() => {
+        e.partSchoolCompleted.style.display = 'none';
         resetMoveWorld(e, -3, 5);
         scale("standard", e, state);
-    }, 2000);
+    }, time);
 }
 
 function overlayMission(mission, state, e) {
