@@ -283,7 +283,7 @@
             background-color: aqua;
             position: fixed;
             z-index: 10000;
-            opacity: 0.5;
+            opacity: 0.7;
         }
 
         #icon_img {
@@ -401,6 +401,21 @@
             top: 40vh;
         }
 
+        #partSchoolCompleted {
+            display: none;
+            position: fixed;
+            width: 50vw;
+            height: 10vh;
+            font-size: 5vw;
+            font-style: italic;
+            -webkit-text-stroke: 0.5px black;
+            text-shadow: 3px 3px 3px black; 
+            left: 24vw;
+            top: 60vh;
+            text-align: center;
+            transform-origin: center center;
+            transition: transform 0.1s;
+        }
 
         #platform_1 {
             width: 10vw;
@@ -964,6 +979,15 @@
             }
             100% {
                 opacity: 1;
+            }
+        }
+
+        @keyframes textPartSchool {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
             }
         }
 
