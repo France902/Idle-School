@@ -1013,7 +1013,14 @@ function setupDialogue(e, state, saved_e, condShowNextLine = false) {
                 deactivateHud(e);
                 choose_in_display(e, state, saved_e);
                 moveWorld(e, 23, -86);
-                
+                break;
+            case 25: 
+                state.cond_text = false;
+                state.cond_skip = false;
+                e.container_dialogue.style.opacity = 0;
+                state.cond_movement = true;
+                state.cond_deactivate_movement = false;
+                state.cond_dialogue = false;
                 break;
         }
         
