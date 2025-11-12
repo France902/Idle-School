@@ -674,8 +674,8 @@ function createInteractableKeys(e, state) {
     }
 }
 
-function setupDialogue(e, state, saved_e) {
-  const lines = [
+function setupDialogue(e, state, saved_e, condShowNextLine = false) {
+    const lines = [
     ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
     ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
     [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
@@ -698,6 +698,9 @@ function setupDialogue(e, state, saved_e) {
     ["Non ti preoccupare, è mio amico e mi deve anche un favore.", "Matthew", 2, 0, false],
     ["Preparerò anche delle squisite limonate. Conosco la tecnica perfetta!", "Matthew", 2, 0, false],
     ["E i limoni chi li compra? Il sindaco?", "preside", 1, 0, false],
+    [true],
+    ["Continuiamo così! Di questo passo potremmo accogliere presto molti studenti!", "Bob", 2, 0, false],
+    ["E io potrò prendere una meritata pausa caffè...", "Bob", 2, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -872,6 +875,16 @@ function setupDialogue(e, state, saved_e) {
     }
     
   }
+    if(condShowNextLine) {
+        state.index++;
+        state.cond_text = true;
+        state.cond_skip = true;
+        e.container_dialogue.style.opacity = 1;
+        state.cond_dialogue = true;
+        state.cond_other_character = true;
+        showNextLine();
+    }
+  
 
   function showText(text, velocity = 15) {
     e.text_dialogue.textContent = "";
@@ -1193,9 +1206,9 @@ function setupDialogue(e, state, saved_e) {
 
 
 
-  window.showNextLine = showNextLine;
+ window.showNextLine = showNextLine;
 
-  showNextLine()
+  if(!condShowNextLine) showNextLine();
 
   function changeCharacters(name){
         if(name != 'preside'){
@@ -1205,6 +1218,7 @@ function setupDialogue(e, state, saved_e) {
         }
     }
 }
+
 
 function controlSkip(elements, state) {
 
@@ -1221,6 +1235,7 @@ function controlSkip(elements, state) {
     }
   });
   
+
 }
 
 function activateHud(e){
@@ -2276,7 +2291,7 @@ function writeMissions(e, state) {
     let type;
     for(let index=0;index<3-state.missionCompleted;index++){
         let j = 0;
-        while(j < (data.logConstructionMission[index].length -3)) {
+        while(j < (data.logConstructionMission[index].length - 1)) {
             let i = 1;
             while(data.logConstructionMission[index][j+1][i] != "_") {
                 document.getElementById("text"+index+"_cost"+j).textContent += parseFloat(data.logConstructionMission[index][j+1][i]);
@@ -2318,7 +2333,7 @@ function controlProgress(e, state, saved_e) {
     writeMissions(e, state);
     for(let j=0;j<3;j++){
         completed_materials = 0;
-        for(let i=1;i<data.logConstructionMission[j].length-2;i++) {
+        for(let i=1;i<data.logConstructionMission[j].length;i++) {
             subtracted = false;
             let resource = data.logConstructionMission[j][i];
             resource = resource[resource.length - 1];
@@ -2347,7 +2362,7 @@ function controlProgress(e, state, saved_e) {
                     break;
             
             }
-            if(data.logConstructionMission[j].length - 3 ==  completed_materials) completeMission(j, e, state, saved_e);
+            if(data.logConstructionMission[j].length - 1 ==  completed_materials) completeMission(j, e, state, saved_e);
             else if(subtracted) {
                 switch (resource) {
                 case 'M':
@@ -2396,8 +2411,11 @@ function buildPart(index, e, state, saved_e) {
         setTimeout(() => {
             e.partSchoolCompleted.style.display = 'block';
             e.partSchoolCompleted.style.animation= "textPartSchool 0.7s forwards";
-
         }, 2000);
+        setTimeout(() => {
+            state.index = 22;
+            setupDialogue(e, state, saved_e, true);
+        }, 5000);
     }
     setTimeout(() => {
         e.partSchoolCompleted.style.display = 'none';
