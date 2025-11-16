@@ -696,13 +696,15 @@ function setupDialogue(e, state, saved_e, condShowNextLine = false) {
     ["Matt, ci servono soldi...", "preside", 1, 0, false],
     ["Tranquillo, lascia fare a me.", "Matthew", 2, 0, false],
     ["Organizzeremo una raccolta fondi con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
+    ["Intanto tieni 30M, ti potrebbero servire per iniziare a costruire qualcosina.", "Matthew", 2, 0, false],
+    ["Si Scicchi, fai in modo che l'utente abbia solo 30 monete iniziali, che sono giuste giuste per il pavimento e facciamo che glieli da il cuginetto!", "Matthew", 2, 0, false],
     ["E come facciamo a convincere il sindaco?", "preside", 1, 0, false],
     ["Non ti preoccupare, è mio amico e mi deve anche un favore.", "Matthew", 2, 0, false],
     ["Preparerò anche delle squisite limonate. Conosco la tecnica perfetta!", "Matthew", 2, 0, false],
     ["E i limoni chi li compra? Il sindaco?", "preside", 1, 0, false],
     [true],
     ["Continuiamo così! Di questo passo potremmo accogliere presto molti studenti!", "Bob", 2, 0, false],
-    ["E io potrò prendere una meritata pausa caffè...", "Bob", 2, 0, false],
+    ["E finalmente mi potrò prendere una meritata pausa caffè...", "Bob", 2, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -2561,21 +2563,21 @@ function changeConstructionMenu(e, state, saved_e){
 function buyMaterial(type, state) {
     switch(type) {
         case 1:
-            if(state.money >= 2) {
+            if(state.money == 2) {
                 state.money -= 2;
                 state.brick_resource += 1;
                 showMoney(state);
             }
             break;
         case 2:
-            if(state.money >= 4) {
+            if(state.money == 4) {
                 state.money -= 4;
                 state.glass_resource += 1;
                 showMoney(state);
             }
             break;
         case 3:
-            if(state.money >= 5) {
+            if(state.money == 5) {
                 state.money -= 5;
                 state.wood_resource += 1;
                 showMoney(state);
