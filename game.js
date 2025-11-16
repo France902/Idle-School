@@ -175,9 +175,11 @@ function initialiseposIdle() {
 function initialiseConstructionMission() {
     if(localStorage.getItem("saved") == null){
         const logConstructionMission = [
-            [/*Testo legato*/"Base della entrata",/*costo risorse*/"15_M"],
-            ["Muri della entrata", "5_M", "3_V"],
-            ["Tetto della entrata", "5_L"],
+            [/*Testo legato*/"Pavimento",/*costo risorse*/"15_M"],
+            ["Muri", "10_M", "7_V"],
+            ["Tetto", "13_M", "8_L"],
+            ["Ingresso", "5_L"],
+            ["Aula1", "10_M", "10_V", "10_L"],
         ];
         return logConstructionMission;
     } else{
@@ -2397,9 +2399,9 @@ function completeMission(index, e, state, saved_e) {
                 document.getElementById("img"+index+"_cost"+i).style.display = 'none';
                 document.getElementById("text"+index+"_cost"+i).style.display = 'none';
             }
-
+// qua è da levare il fatto che mette delle missioni che si chiamano missione completata, ma togliere le missioniu e mettere una voce a parte che dica missioni completate.
             data.logConstructionMission.splice(index, 1);
-            data.logConstructionMission.push(["Nient'altro da fare"]);
+            data.logConstructionMission.push(["Missioni completate"]);
             writeMissions(e, state);
         }, 1000);
         buildPart(index, e, state, saved_e);
