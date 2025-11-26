@@ -175,11 +175,9 @@ function initialiseposIdle() {
 function initialiseConstructionMission() {
     if(localStorage.getItem("saved") == null){
         const logConstructionMission = [
-            [/*Testo legato*/"Pavimento",/*costo risorse*/"15_M"],
-            ["Muri", "10_M", "7_V"],
-            ["Tetto", "13_M", "8_L"],
-            ["Ingresso", "5_L"],
-            ["Aula1", "10_M", "10_V", "10_L"],
+            [/*Testo legato*/"Base della entrata",/*costo risorse*/"15_M"],
+            ["Muri della entrata", "5_M", "3_V"],
+            ["Tetto della entrata", "5_L"],
         ];
         return logConstructionMission;
     } else{
@@ -486,6 +484,7 @@ function initialiseStates() {
     overlay_mission: 1,
     layout_menu: "construction",
     canPause: true,
+    Nmission: 3,
 
 
     // Interazioni e click
@@ -678,33 +677,32 @@ function createInteractableKeys(e, state) {
 
 function setupDialogue(e, state, saved_e, condShowNextLine = false) {
     const lines = [
-    ["Ciao! Sono Bob, della 'Bob & Company'!", "Bob", 2, 0, true],
+    ["Ciao! Sono [Bob], della '[Bob & Company]'!", "Bob", 2, 0, true],
     ["Questo posto è proprio enorme!", "Bob", 2, 0, false],
     [["Spero che ne sia valsa la pena comprarlo...", "Ho dovuto dare persino il portafoglio per poterlo acquistare."], "preside", 1, 0, false],
     ["Stai tranquillo! Quando sei con noi puoi contare sulle migliori braccia della città!", "Bob", 2, 0, false],
-    ["Siamo quasi pronti, quando vuoi iniziare visita il tavolo da costruzione!", "Bob", 2, true, false, -100, 35],
+    ["Siamo quasi pronti, quando vuoi iniziare visita il [tavolo da costruzione]!", "Bob", 2, true, false, -100, 35],
     [true],
-    ["Sembra che tu non abbia abbastanza materiali per costruire...", "preside", 1, 0, false],
+    ["Sembra che tu non abbia abbastanza [materiali] per costruire...", "preside", 1, 0, false],
     ['Non preoccuparti! come diceva mio padre "costruisci per mantenerti o mantieniti per costruire!"', "Bob", 2, 0, false],
     [true],
-    ["Mhh.. Potrei vendere alcuni dei libri che ho portato con me.", "preside", 1, 0, false],
+    ["Mhh.. Potrei vendere alcuni dei [libri] che ho portato con me.", "preside", 1, 0, false],
     [true],
     ["Ciao zio!", "Matthew", 2, 0, false],
     [["Ma come ti sei vestito?", "Matthew! Giusto in tempo!"], "preside", 1, 0, false],
-    ["Da ora sarò il tuo manager, così mi sono messo il miglior abito del mio armadio!", "Matthew", 2, 0, false],
+    ["Da ora sarò il tuo [manager], così mi sono messo il miglior abito del mio armadio!", "Matthew", 2, 0, false],
     ["Come mai non avete ancora iniziato a costruire?", "Matthew", 2, 0, false],
     ["Matt, ci servono soldi...", "preside", 1, 0, false],
     ["Tranquillo, lascia fare a me.", "Matthew", 2, 0, false],
-    ["Organizzeremo una raccolta fondi con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
-    ["Intanto tieni 30M, ti potrebbero servire per iniziare a costruire qualcosina.", "Matthew", 2, 0, false],
-    ["Si Scicchi, fai in modo che l'utente abbia solo 30 monete iniziali, che sono giuste giuste per il pavimento e facciamo che glieli da il cuginetto!", "Matthew", 2, 0, false],
+    ["Organizzeremo una [raccolta fondi] con il sindaco come ospite speciale!", "Matthew", 2, 0, false],
+    ["Intanto tieni [30M], ti potrebbero servire per iniziare a costruire qualcosa.", "Matthew", 2, 0, false],
     ["E come facciamo a convincere il sindaco?", "preside", 1, 0, false],
     ["Non ti preoccupare, è mio amico e mi deve anche un favore.", "Matthew", 2, 0, false],
     ["Preparerò anche delle squisite limonate. Conosco la tecnica perfetta!", "Matthew", 2, 0, false],
     ["E i limoni chi li compra? Il sindaco?", "preside", 1, 0, false],
     [true],
-    ["Continuiamo così! Di questo passo potremmo accogliere presto molti studenti!", "Bob", 2, 0, false],
-    ["E finalmente mi potrò prendere una meritata pausa caffè...", "Bob", 2, 0, false],
+    ["Sembra già uno splendore!", "Bob", 2, 0, false],
+    ["Ora che la base è costruita, bisogna dare spazio a [porte] e [finestre].", "Bob", 2, 0, false],
     [true],
   ];
   if(state.language != 'it-IT'){
@@ -713,138 +711,156 @@ function setupDialogue(e, state, saved_e, condShowNextLine = false) {
 
   function changeLinesLanguage(){
         const lines_en = [
-        "Hi! I'm Bob, from 'Bob & Company'!",
-        "This place is really huge!",
-        ["I hope it was worth buying...", "I even had to give up my wallet to purchase it."],
-        "Don’t worry! When you’re with us, you can count on the best arms in the city!",
-        "We’re almost ready, when you want to start come to the construction table!",
-        true,
-        "It seems I don’t have enough materials to build something...",
-        'Don’t worry! As my father used to say, "build to sustain yourself, or sustain yourself to build!"',
-        true,
-        "I could sell some books I brought with me.",
-        true,
-        "Hi uncle!",
-        ["What te heck are you wearing?", "Matthew! Just in time..."],
-        "I’ll be your manager, so I put on the best suit from my wardrobe!",
-        "Why haven’t you started building yet?",
-        "We need money...",
-        "Don’t worry, leave it to me.",
-        "Let’s organize a fundraiser, with the mayor as special guest!",
-        "And how do we convince the mayor?",
-        "He’s my friend, and he also owes me a favor.",
-        "I’ll also prepare some exquisite lemonades. I know the perfect technique!",
-        "Does the mayor buy the lemons?",
-        true,
+            "Hi! I'm [Bob], from '[Bob & Company]'!",
+            "This place is really huge!",
+            ["I hope it was worth buying...", "I even had to give up my [wallet] to purchase it."],
+            "Don’t worry! When you’re with us, you can count on the best arms in the city!",
+            "We’re almost ready, when you want to start visit the [construction table]!",
+            true,
+            "It seems you don’t have enough [materials] to build something...",
+            'Don’t worry! As my father used to say, "build to sustain yourself, or sustain yourself to build!"',
+            true,
+            "I could sell some of the [books] I brought with me.",
+            true,
+            "Hi uncle!",
+            ["What the heck are you wearing?", "Matthew! Just in time..."],
+            "I’ll be your [manager], so I put on the best suit from my wardrobe!",
+            "Why haven’t you started building yet?",
+            "We need money...",
+            "Don’t worry, leave it to me.",
+            "Let’s organize a [fundraiser], with the mayor as special guest!",
+            "In the meantime, take [30M], it might help you start building something.",
+            "And how do we convince the mayor?",
+            "He’s my friend, and he also owes me a favor.",
+            "I’ll also prepare some exquisite lemonades. I know the perfect technique!",
+            "Does the mayor buy the [lemons]?",
+            true,
+            "It already looks wonderful!",
+            "Now that the base is built, it's time to make room for [doors] and [windows].",
+            true,
         ];
 
         const lines_fr = [
-        "Salut ! Je suis Bob, de 'Bob & Compagnie'!",
-        "Cet endroit est vraiment immense !",
-        ["J’espère que ça valait la peine de l’acheter...", "J’ai même dû donner mon portefeuille pour l’acquérir."],
-        "Ne t’inquiète pas ! Avec nous, tu peux compter sur les meilleurs bras de la ville !",
-        "On est presque prêts, quand tu veux commencer viens à la table de construction !",
-        true,
-        "Il semble que je n’ai pas assez de matériaux pour construire quelque chose...",
-        'Ne t’inquiète pas ! Comme disait mon père : "construis pour subsister, ou subsiste pour construire !"',
-        true,
-        "Je pourrais vendre quelques livres que j’ai apportés avec moi.",
-        true,
-        "Salut, tonton !",
-        ["Mais comment es-tu habillé ?", "Matthew ! Juste à temps..."],
-        "Je serai ton manager, alors j’ai mis le meilleur costume de mon armoire !",
-        "Pourquoi n’avez-vous pas encore commencé à construire ?",
-        "Il nous faut de l’argent...",
-        "Ne t’inquiète pas, laisse-moi faire.",
-        "Organisons une collecte de fonds, avec le maire comme invité spécial !",
-        "Et comment allons-nous convaincre le maire ?",
-        "C’est mon ami, et il me doit aussi une faveur.",
-        "Je préparerai aussi de délicieuses citronnades. Je connais la technique parfaite !",
-        "C’est le maire qui achète les citrons ?",
-        true,
+            "Salut ! Je suis [Bob], de '[Bob & Compagnie]'!",
+            "Cet endroit est vraiment immense !",
+            ["J’espère que ça valait la peine de l’acheter...", "J’ai même dû donner mon [portefeuille] pour l’acquérir."],
+            "Ne t’inquiète pas ! Avec nous, tu peux compter sur les meilleurs bras de la ville !",
+            "On est presque prêts, quand tu veux commencer viens à la [table de construction] !",
+            true,
+            "Il semble que tu n’aies pas assez de [matériaux] pour construire quelque chose...",
+            'Ne t’inquiète pas ! Comme disait mon père : "construis pour subsister, ou subsiste pour construire !"',
+            true,
+            "Je pourrais vendre quelques-uns des [livres] que j’ai apportés avec moi.",
+            true,
+            "Salut, tonton !",
+            ["Mais comment es-tu habillé ?", "Matthew ! Juste à temps..."],
+            "Je serai ton [manager], alors j’ai mis le meilleur costume de mon armoire !",
+            "Pourquoi n’avez-vous pas encore commencé à construire ?",
+            "Il nous faut de l’argent...",
+            "Ne t’inquiète pas, laisse-moi faire.",
+            "Organisons une [collecte de fonds], avec le maire comme invité spécial !",
+            "En attendant, prends [30M], ça pourrait t’aider à commencer à construire quelque chose.",
+            "Et comment allons-nous convaincre le maire ?",
+            "C’est mon ami, et il me doit aussi une faveur.",
+            "Je préparerai aussi de délicieuses [citronnades]. Je connais la technique parfaite !",
+            "C’est le maire qui achète les [citrons] ?",
+            true,
+            "Ça a déjà fière allure !",
+            "Maintenant que la base est construite, il faut faire de la place pour des [portes] et des [fenêtres].",
+            true,
         ];
 
         const lines_es = [
-        "¡Hola! Soy Bob, de 'Bob & Company'!",
-        "¡Este lugar es realmente enorme!",
-        ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi cartera para poder adquirirlo."],
-        "¡No te preocupes! Cuando estés con nosotros podrás contar con los mejores brazos de la ciudad.",
-        "¡Estamos casi listos, cuando quieras empezar ven a la mesa de construcción!",
-        true,
-        "Parece que no tengo suficientes materiales para construir algo...",
-        '¡No te preocupes! Como decía mi padre: "¡construye para mantenerte, o mantente para construir!"',
-        true,
-        "Podría vender algunos libros que traje conmigo.",
-        true,
-        "¡Hola, tío!",
-        ["¿Pero cómo te has vestido?", "¡Matthew! Justo a tiempo..."],
-        "Seré tu mánager, así que me puse el mejor traje de mi armario.",
-        "¿Por qué no habéis empezado a construir todavía?",
-        "Necesitamos dinero...",
-        "Tranquilo, déjalo en mis manos.",
-        "¡Organicemos una recaudación de fondos, con el alcalde como invitado especial!",
-        "¿Y cómo convencemos al alcalde?",
-        "Es mi amigo, y además me debe un favor.",
-        "También prepararé unas exquisitas limonadas. ¡Conozco la técnica perfecta!",
-        "¿El alcalde compra los limones?",
-        true,
+            "¡Hola! Soy [Bob], de '[Bob & Company]'!",
+            "¡Este lugar es realmente enorme!",
+            ["Espero que haya valido la pena comprarlo...", "Tuve que dar incluso mi [cartera] para poder adquirirlo."],
+            "¡No te preocupes! Cuando estés con nosotros podrás contar con los mejores brazos de la ciudad.",
+            "¡Estamos casi listos, cuando quieras empezar ven a la [mesa de construcción]!",
+            true,
+            "Parece que no tienes suficientes [materiales] para construir algo...",
+            '¡No te preocupes! Como decía mi padre: "¡construye para mantenerte, o mantente para construir!"',
+            true,
+            "Podría vender algunos de los [libros] que traje conmigo.",
+            true,
+            "¡Hola, tío!",
+            ["¿Pero cómo te has vestido?", "¡Matthew! Justo a tiempo..."],
+            "Seré tu [mánager], así que me puse el mejor traje de mi armario.",
+            "¿Por qué no habéis empezado a construir todavía?",
+            "Necesitamos dinero...",
+            "Tranquilo, déjalo en mis manos.",
+            "¡Organicemos una [recaudación de fondos], con el alcalde como invitado especial!",
+            "Mientras tanto, toma [30M], podrían ayudarte a empezar a construir algo.",
+            "¿Y cómo convencemos al alcalde?",
+            "Es mi amigo, y además me debe un favor.",
+            "También prepararé unas exquisitas [limonadas]. ¡Conozco la técnica perfecta!",
+            "¿El alcalde compra los [limones]?",
+            true,
+            "¡Ya se ve espectacular!",
+            "Ahora que la base está construida, hay que dejar espacio para [puertas] y [ventanas].",
+            true,
         ];
 
         const lines_pt = [
-        "Oi! Eu sou o Bob, da 'Bob & Companhia'!",
-        "Este lugar é realmente enorme!",
-        ["Espero que tenha valido a pena comprá-lo...", "Tive até de dar a minha carteira para poder comprá-lo."],
-        "Não se preocupe! Quando estiver conosco poderá contar com os melhores braços da cidade!",
-        "Estamos quase prontos, quando quiser começar venha para a mesa de construção!",
-        true,
-        "Parece que não tenho materiais suficientes para construir algo...",
-        'Não se preocupe! Como dizia meu pai: "constrói para te sustentares, ou sustenta-te para construíres!"',
-        true,
-        "Eu poderia vender alguns livros que trouxe comigo.",
-        true,
-        "Oi, tio!",
-        ["Mas como é que te vestiste?", "Matthew! Mesmo a tempo..."],
-        "Serei o teu gerente, então vesti o melhor terno do meu guarda-roupa!",
-        "Por que ainda não começaram a construir?",
-        "Precisamos de dinheiro...",
-        "Tranquilo, deixa comigo.",
-        "Vamos organizar uma angariação de fundos, com o prefeito como convidado especial!",
-        "E como vamos convencer o prefeito?",
-        "É meu amigo, e também me deve um favor.",
-        "Também vou preparar limonadas deliciosas. Conheço a técnica perfeita!",
-        "O prefeito compra os limões?",
-        true,
+            "Oi! Eu sou o [Bob], da '[Bob & Companhia]'!",
+            "Este lugar é realmente enorme!",
+            ["Espero que tenha valido a pena comprá-lo...", "Tive até de dar a minha [carteira] para poder comprá-lo."],
+            "Não se preocupe! Quando estiver conosco poderá contar com os melhores braços da cidade!",
+            "Estamos quase prontos, quando quiser começar venha para a [mesa de construção]!",
+            true,
+            "Parece que você não tem [materiais] suficientes para construir algo...",
+            'Não se preocupe! Como dizia meu pai: "constrói para te sustentares, ou sustenta-te para construíres!"',
+            true,
+            "Eu poderia vender alguns dos [livros] que trouxe comigo.",
+            true,
+            "Oi, tio!",
+            ["Mas como é que te vestiste?", "Matthew! Mesmo a tempo..."],
+            "Serei o teu [gerente], então vesti o melhor terno do meu guarda-roupa!",
+            "Por que ainda não começaram a construir?",
+            "Precisamos de dinheiro...",
+            "Tranquilo, deixa comigo.",
+            "Vamos organizar uma [angariação de fundos], com o prefeito como convidado especial!",
+            "Enquanto isso, fica com [30M], pode ser útil para começar a construir algo.",
+            "E como vamos convencer o prefeito?",
+            "É meu amigo, e também me deve um favor.",
+            "Também vou preparar [limonadas] deliciosas. Conheço a técnica perfeita!",
+            "O prefeito compra os [limões]?",
+            true,
+            "Já está com um ótimo aspecto!",
+            "Agora que a base está construída, é hora de abrir espaço para [portas] e [janelas].",
+            true,
         ];
 
         const lines_de = [
-        "Hallo! Ich bin Bob von 'Bob & Company'!",
-        "Dieser Ort ist wirklich riesig!",
-        ["Ich hoffe, es hat sich gelohnt, es zu kaufen...", "Ich musste sogar meine Brieftasche hergeben, um es zu erwerben."],
-        "Keine Sorge! Wenn du bei uns bist, kannst du auf die besten Arme der Stadt zählen!",
-        "Wir sind fast fertig, wenn du anfangen willst, komm zum Bautisch!",
-        true,
-        "Es scheint, dass ich nicht genug Materialien habe, um etwas zu bauen...",
-        'Keine Sorge! Wie mein Vater sagte: "Baue, um dich zu erhalten, oder erhalte dich, um zu bauen!"',
-        true,
-        "Ich könnte ein paar Bücher verkaufen, die ich mitgebracht habe.",
-        true,
-        "Hallo Onkel!",
-        ["Aber was hast du da an?", "Matthew! Genau rechtzeitig..."],
-        "Ich werde dein Manager sein, also habe ich meinen besten Anzug aus dem Schrank geholt!",
-        "Warum habt ihr noch nicht angefangen zu bauen?",
-        "Wir brauchen Geld...",
-        "Keine Sorge, überlass das mir.",
-        "Lass uns eine Spendenaktion organisieren, mit dem Bürgermeister als Ehrengast!",
-        "Und wie überzeugen wir den Bürgermeister?",
-        "Er ist mein Freund, und er schuldet mir auch einen Gefallen.",
-        "Ich werde auch köstliche Limonaden zubereiten. Ich kenne die perfekte Technik!",
-        "Kauft der Bürgermeister die Zitronen?",
-        true,
+            "Hallo! Ich bin [Bob] von '[Bob & Company]'!",
+            "Dieser Ort ist wirklich riesig!",
+            ["Ich hoffe, es hat sich gelohnt, es zu kaufen...", "Ich musste sogar meine [Brieftasche] hergeben, um es zu erwerben."],
+            "Keine Sorge! Wenn du bei uns bist, kannst du auf die besten Arme der Stadt zählen!",
+            "Wir sind fast fertig, wenn du anfangen willst, komm zum [Bautisch]!",
+            true,
+            "Es scheint, dass du nicht genug [Materialien] hast, um etwas zu bauen...",
+            'Keine Sorge! Wie mein Vater sagte: "Baue, um dich zu erhalten, oder erhalte dich, um zu bauen!"',
+            true,
+            "Ich könnte einige der [Bücher] verkaufen, die ich mitgebracht habe.",
+            true,
+            "Hallo Onkel!",
+            ["Aber was hast du da an?", "Matthew! Genau rechtzeitig..."],
+            "Ich werde dein [Manager] sein, also habe ich meinen besten Anzug aus dem Schrank geholt!",
+            "Warum habt ihr noch nicht angefangen zu bauen?",
+            "Wir brauchen Geld...",
+            "Keine Sorge, überlass das mir.",
+            "Lass uns eine [Spendenaktion] organisieren, mit dem Bürgermeister als Ehrengast!",
+            "Nimm inzwischen [30M], die könnten dir helfen, mit dem Bauen anzufangen.",
+            "Und wie überzeugen wir den Bürgermeister?",
+            "Er ist mein Freund, und er schuldet mir auch einen Gefallen.",
+            "Ich werde auch köstliche [Limonaden] zubereiten. Ich kenne die perfekte Technik!",
+            "Kauft der Bürgermeister die [Zitronen]?",
+            true,
+            "Es sieht schon großartig aus!",
+            "Jetzt, wo die Basis gebaut ist, brauchen wir Platz für [Türen] und [Fenster].",
+            true,
         ];
 
-
-
-    const langCode = state.language[0] + state.language[1];
+const langCode = state.language[0] + state.language[1];
     switch (langCode){
         case 'en':
             for(i=0;i<lines.length;i++){
@@ -891,19 +907,55 @@ function setupDialogue(e, state, saved_e, condShowNextLine = false) {
   
 
   function showText(text, velocity = 15) {
-    e.text_dialogue.textContent = "";
+    e.text_dialogue.innerHTML = "";
     let i = 0;
     state.cond_skip = true;
+    let boldSpan = null;
+    let boldMode = false;
     let write = function () {
       if (!state.cond_text) {
-        e.text_dialogue.textContent = text;
+        for(i=0;i<text.length;i++) {
+            if(text[i] == "[") {
+                
+                let primaParte = text.substring(0, i);
+                let secondaParte = text.substring(i+1);
+                console.log(primaParte + " " + secondaParte);
+                text = `${primaParte}<strong style=\"font-family: cursive; font-weight: 900;\">${secondaParte}`;
+                i+=56;
+            }
+            else if(text[i] == "]") {
+                text[i] = " ";
+                let primaParte = text.substring(0, i);
+                let secondaParte = text.substring(i+1);
+                text = primaParte + "</strong>" + secondaParte;
+            }
+        }
+        e.text_dialogue.innerHTML = text;
         state.cond_text = true;
         state.cond_skip = false;
         return;
       }
       if (i < text.length) {
-        e.text_dialogue.textContent += text[i++];
-        setTimeout(write, velocity);
+        if(text[i] == "[") {
+            boldMode = true;
+            boldSpan = document.createElement("span");
+            boldSpan.style.fontFamily = "cursive";
+            e.text_dialogue.appendChild(boldSpan);
+            i++;
+            return setTimeout(write, velocity);
+        } 
+        if(text[i] == "]") {
+            boldSpan = null;
+            boldMode = false;
+            i++;
+            return setTimeout(write, velocity);
+        }
+        else {
+            const target = boldMode ? boldSpan : e.text_dialogue;
+            target.appendChild(document.createTextNode(text[i]));
+            i++;
+            setTimeout(write, velocity);
+        }
       } else {
         state.cond_skip = false;
       }
@@ -1025,6 +1077,10 @@ function setupDialogue(e, state, saved_e, condShowNextLine = false) {
                 state.cond_movement = true;
                 state.cond_deactivate_movement = false;
                 state.cond_dialogue = false;
+                data.logConstructionMission[0] = ["Finestre", "4_V"];
+                data.logConstructionMission[1] = ["Porta", "2_V", "5_L",];
+                data.logConstructionMission[2] = ["Forma piastrella", "20_m",];
+                state.Nmission += 3;
                 break;
         }
         
@@ -2042,13 +2098,12 @@ e.leftBottom_arrow.addEventListener("touchend", stop);
 
 window.addEventListener('keydown', handleKeydown);
 window.addEventListener('keyup', handleKeyup);
-
-    
     
   }
 
 async function changeHeight(character, state, condPreside = true) {
     if(!existencecontrol(character)) return;
+    if(character.id == "characterImg_9") console.log(character.style.height);
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(parseFloat(character.style.height) > 16.5 && condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
     else if(parseFloat(character.style.height) > 17.5 && !condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
@@ -2300,7 +2355,7 @@ function writeMissions(e, state) {
     e.title_mission2.textContent = data.logConstructionMission[1][0];
     e.title_mission3.textContent = data.logConstructionMission[2][0];
     let type;
-    for(let index=0;index<3-state.missionCompleted;index++){
+    for(let index=0;index<state.Nmission-state.missionCompleted;index++){
         let j = 0;
         while(j < (data.logConstructionMission[index].length - 1)) {
             let i = 1;
@@ -2334,6 +2389,16 @@ function writeMissions(e, state) {
             j++;
         }
         
+    }
+    if(state.Nmission-state.missionCompleted < 3) {
+        for(i=0;i<3;i++) {
+            if(state.Nmission-state.missionCompleted <= i) {
+                for(j=0;j<3;j++) {
+                    document.getElementById("text"+i+"_cost"+j).style.display = 'none';
+                    document.getElementById("img"+i+"_cost"+j).style.display = 'none';
+                }
+            }
+        }
     }
     
 }
@@ -2401,9 +2466,9 @@ function completeMission(index, e, state, saved_e) {
                 document.getElementById("img"+index+"_cost"+i).style.display = 'none';
                 document.getElementById("text"+index+"_cost"+i).style.display = 'none';
             }
-// qua è da levare il fatto che mette delle missioni che si chiamano missione completata, ma togliere le missioniu e mettere una voce a parte che dica missioni completate.
+
             data.logConstructionMission.splice(index, 1);
-            data.logConstructionMission.push(["Missioni completate"]);
+            data.logConstructionMission.push(["Nient'altro da fare"]);
             writeMissions(e, state);
         }, 1000);
         buildPart(index, e, state, saved_e);
@@ -2563,21 +2628,21 @@ function changeConstructionMenu(e, state, saved_e){
 function buyMaterial(type, state) {
     switch(type) {
         case 1:
-            if(state.money == 2) {
+            if(state.money >= 2) {
                 state.money -= 2;
                 state.brick_resource += 1;
                 showMoney(state);
             }
             break;
         case 2:
-            if(state.money == 4) {
+            if(state.money >= 4) {
                 state.money -= 4;
                 state.glass_resource += 1;
                 showMoney(state);
             }
             break;
         case 3:
-            if(state.money == 5) {
+            if(state.money >= 5) {
                 state.money -= 5;
                 state.wood_resource += 1;
                 showMoney(state);
@@ -3825,9 +3890,7 @@ async function rightJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay, condChangeHeight = false) => {
         if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        setTimeout(() => {
-           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
-        }, 200);
+        
         if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
@@ -3874,9 +3937,7 @@ async function topJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay, condChangeHeight = false) => {
         if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        setTimeout(() => {
-           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
-        }, 200);
+        
         if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         await sleep(delay);
@@ -3916,9 +3977,7 @@ async function leftJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay, condChangeHeight  = false) => {
         if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        setTimeout(() => {
-           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
-        }, 200);
+        
         if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
@@ -3973,9 +4032,7 @@ async function downJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay, condChangeHeight = false) => {
         if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        setTimeout(() => {
-           if(condChangeHeight) resetHeight(document.getElementById('characterImg_'+posId), false); 
-        }, 200);
+        
         if(condChangeHeight) await sleep(180);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         await sleep(delay);
@@ -4196,9 +4253,10 @@ function createPauseListener(state) {
 }
 
 window.onload = function(){
-    setTimeout(() => {
+    waitForImagesToLoad(document.getElementById("world"), () => {
+        setTimeout(() => {
             document.getElementById('start_overlay').style.display = 'none';
-    }, 350);
-    
+        }, 350);
+    });
     startGame();
 } 
