@@ -208,7 +208,6 @@ function initialiseImportantObjects(){
         const importantObjects = [
             [/*left*/'173vw',/*top*/'-10vh',/*id container*/'table_construction',/*Numero elementi*/1,/*src*/'tavolo_costruzione.png'],
             ['14vw', '-20vh', 'barrow', 4, 'structure_barrow', 'cariola.png', 'structure_wheel', 'ruota_cariola.png'],
-            ['140vw', '80vh', 'stand', 1, 'stand_libri.png']
         ];
         return importantObjects;
     } else{
@@ -657,7 +656,7 @@ const speed2 = 0.048;
 function createInteractableKeys(e, state) {
     const pos_keys = [
         [/*left*/'85vw',/*top*/'115vh'],
-        ['152vw', '-20vh'],
+        ['157vw', '-17vh'],
     ]
     for(let i=0;i<pos_keys.length;i++){
         if(pos_keys[i][0] != false){
@@ -896,7 +895,6 @@ const langCode = state.language[0] + state.language[1];
     
   }
     if(condShowNextLine) {
-        state.index++;
         state.cond_text = true;
         state.cond_skip = true;
         e.container_dialogue.style.opacity = 1;
@@ -916,10 +914,8 @@ const langCode = state.language[0] + state.language[1];
       if (!state.cond_text) {
         for(i=0;i<text.length;i++) {
             if(text[i] == "[") {
-                
                 let primaParte = text.substring(0, i);
                 let secondaParte = text.substring(i+1);
-                console.log(primaParte + " " + secondaParte);
                 text = `${primaParte}<strong style=\"font-family: cursive; font-weight: 900;\">${secondaParte}`;
                 i+=56;
             }
@@ -1003,7 +999,7 @@ const langCode = state.language[0] + state.language[1];
                 saveStatesElements(saved_e, state);
                 createNewImportantObject(e, state, saved_e, data.importantObjects.length, '-30vw', '10vh', 'camionBob', 6, 'structure_camion', 'camionBOB.png', 'wheel_camion1', 'ruota_camion2.png', 'wheel_camion2', 'ruota_camion2.png')
                 createInteractionCircle(e, state);
-                moveInteractionCircle(e, state, '164vw', '-10vh');
+                moveInteractionCircle(e, state, '170vw', '-5vh');
                 animateInteractionCircle(e, state);
                 break;
             case 8:
@@ -1059,7 +1055,7 @@ const langCode = state.language[0] + state.language[1];
                     showNextLine();
                 }, 3000);
                 break;
-            case 22:
+            case 23:
                 state.cond_text = false;
                 state.cond_skip = false;
                 e.container_dialogue.style.opacity = 0;
@@ -1067,10 +1063,11 @@ const langCode = state.language[0] + state.language[1];
                 state.cond_deactivate_movement = true;
                 state.cond_dialogue = false;
                 deactivateHud(e);
+                createNewImportantObject(e, state, saved_e, data.importantObjects.length, '35vw', '145vh', 'stand', 1, 'stand_libri.png');
                 choose_in_display(e, state, saved_e);
                 moveWorld(e, 23, -86);
                 break;
-            case 25: 
+            case 26: 
                 state.cond_text = false;
                 state.cond_skip = false;
                 e.container_dialogue.style.opacity = 0;
@@ -1079,7 +1076,7 @@ const langCode = state.language[0] + state.language[1];
                 state.cond_dialogue = false;
                 data.logConstructionMission[0] = ["Finestre", "4_V"];
                 data.logConstructionMission[1] = ["Porta", "2_V", "5_L",];
-                data.logConstructionMission[2] = ["Forma piastrella", "20_m",];
+                data.logConstructionMission[2] = ["Forma piastrella", "20_M",];
                 state.Nmission += 3;
                 break;
         }
@@ -1661,7 +1658,7 @@ function jumpDirection(distance, dir){
         state.condPresidePassiveAnimation = true;
         countdownPassiveAnimation(state);
     }, 200);
-    control_position(state, e, saved_e);
+    controlPosition(state, e, saved_e);
     assignZIndexP();
     changeZIndexElements();
     
@@ -2103,12 +2100,11 @@ window.addEventListener('keyup', handleKeyup);
 
 async function changeHeight(character, state, condPreside = true) {
     if(!existencecontrol(character)) return;
-    if(character.id == "characterImg_9") console.log(character.style.height);
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(parseFloat(character.style.height) > 16.5 && condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
     else if(parseFloat(character.style.height) > 17.5 && !condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
          else return;
-    if(condPreside) await sleep(20);
+    if(condPreside) await sleep(25);
     else await sleep(30);
     if((state.heldFor != 0 || state.cond_run_preside) && condPreside) {
         await resetHeight(character);
@@ -2120,18 +2116,18 @@ async function changeHeight(character, state, condPreside = true) {
 async function resetHeight(character, condPreside = true) {
     if(!existencecontrol(character)) return;
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    if(parseFloat(character.style.height) != 19 && condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
-    else if(parseFloat(character.style.height) != 20 && !condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
-        else return;
-    if(condPreside) await sleep(20);
+    if(parseFloat(character.style.height) < 19 && condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
+    else if(parseFloat(character.style.height) < 20 && !condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
+    else return;
+    if(condPreside) await sleep(25);
     else await sleep(30);
     await resetHeight(character, condPreside);
 }
   
-  function control_position(state, e, saved_e) {
+  function controlPosition(state, e, saved_e) {
     state.posX = Math.round(state.posX);
     state.posY = Math.round(state.posY);
-    if((state.posX >= 40 && state.posX <= 50) && (state.posY >= 66 && state.posY <= 79)){
+    if((state.posX >= 38 && state.posX <= 48) && (state.posY >= 84 && state.posY <= 105)){
         document.getElementById('key_e'+0).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
@@ -2141,12 +2137,12 @@ async function resetHeight(character, condPreside = true) {
     }
     else{
         document.getElementById('key_e'+0).style.opacity = '0';
-        if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)){
+        if((state.posX >= 110 && state.posX <= 125) && (state.posY >=-60 && state.posY <= -43)){
             if(!state.menu_opened) showInteractionCircle(e, state);
             document.getElementById('key_e'+1).style.opacity = '1';
             window.addEventListener('keydown', function(event) {
                 if (event.key === 'e' || event.key === 'E') {
-                    if((state.posX >= 103 && state.posX <= 110) && (state.posY >=-60 && state.posY <= -48)){
+                    if((state.posX >= 110 && state.posX <= 125) && (state.posY >=-60 && state.posY <= -43)){
                         interaction(1, e, state, saved_e);
                     } 
                 }
@@ -2489,7 +2485,8 @@ function buildPart(index, e, state, saved_e) {
             e.partSchoolCompleted.style.animation= "textPartSchool 0.7s forwards";
         }, 2000);
         setTimeout(() => {
-            state.index = 22;
+            state.index = 24;
+
             setupDialogue(e, state, saved_e, true);
         }, 5000);
     }
@@ -2997,6 +2994,7 @@ function createDecoration(e, state, i) {
     decoration_container.style.zIndex = '-9998';
     decoration_container.id = 'decoration_container.'+i;
     decoration_container.className = 'school_imgs';
+    
     const decoration_img = document.createElement('img');
     decoration_img.className = 'decoration';
     decoration_img.src = data.posWildNature[i][2] + '.png';
@@ -3096,7 +3094,8 @@ function createCharacter(e, state, i) {
     character_img.style.position = 'fixed';
     character_img.style.bottom = '0vh';
     character_img.style.transformOrigin = 'bottom center';
-    character_img.style.height = '19vh';
+    character_img.style.height = '20vh';
+    character_img.style.imageRendering = 'crisp-edges';
 
     if(localStorage.getItem("saved") == null) {
         if(data.matTert[i][5] == "operaio") chooseSrc(i);
@@ -3461,7 +3460,7 @@ function existencecontrol(c){
     if(document.body.contains(c)) return true;
     else return false;
 }
-function passiveAnimationWalking(character, i, e, illustration, state){
+async function passiveAnimationWalking(character, i, e, illustration, state){
     if(!existencecontrol(character)) return;
     let stepX = Math.floor(Math.random() * (5 - (-5) + 1)) + (-5);
     sommaX+=(stepX*9);
@@ -3489,7 +3488,7 @@ function passiveAnimationWalking(character, i, e, illustration, state){
             }
         }, 500);
     } else passiveAnimationWalking(character, i, e, illustration, state);
-    }, Math.abs(stepX) * 750 + Math.abs(stepY) * 750); 
+    }, Math.abs(stepX) * 1500 + Math.abs(stepY) * 1500); 
 }
 
 async function passiveAnimationBob(character, i, e, state){
@@ -3662,106 +3661,107 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         if (!order) {
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
-                await step(state, "leftJump", 500);
+                
+                await step(state, "leftJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 500, parameter);
+                await step(state, "leftJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 500, false, parameter2);
+                await step(state, "leftJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 500);
+                await step(state, "rightJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 500, parameter);
+                await step(state, "rightJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 500, false, parameter2);
+                await step(state, "rightJump", 800, false, parameter2);
             }
         }
 
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 500);
+                await step(state, "topJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 500, parameter);
+                await step(state, "topJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 500, false, parameter2);
+                await step(state, "topJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 500);
+                await step(state, "downJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 500, parameter);
+                await step(state, "downJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 500, false, parameter2);
+                await step(state, "downJump", 800, false, parameter2);
             }
         }
 
     } else {
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 500);
+                await step(state, "topJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 500, parameter);
+                await step(state, "topJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 500, false, parameter2);
+                await step(state, "topJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 500);
+                await step(state, "downJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 500, parameter);
+                await step(state, "downJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 500, false, parameter2);
+                await step(state, "downJump", 800, false, parameter2);
             }
         }
 
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
-                await step(state, "leftJump", 500);
+                await step(state, "leftJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 500, parameter);
+                await step(state, "leftJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 500, false, parameter2);
+                await step(state, "leftJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 500);
+                await step(state, "rightJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 500, parameter);
+                await step(state, "rightJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 500, false, parameter2);
+                await step(state, "rightJump", 800, false, parameter2);
             }
         }
 }
@@ -3889,9 +3889,10 @@ async function rightJump(character, half, a_quarter, state) {
     if(document.getElementById('illustration_'+posId)) document.getElementById('illustration_'+posId).style.transform = 'scaleX(1)';
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay, condChangeHeight = false) => {
-        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        
-        if(condChangeHeight) await sleep(180);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
+        if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
         await sleep(delay);
@@ -3936,9 +3937,10 @@ async function topJump(character, half, a_quarter, state) {
     src_character += "_dietro.png";
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay, condChangeHeight = false) => {
-        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        
-        if(condChangeHeight) await sleep(180);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
+        if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         await sleep(delay);
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
@@ -3976,9 +3978,10 @@ async function leftJump(character, half, a_quarter, state) {
     src_character += ".png";
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay, condChangeHeight  = false) => {
-        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        
-        if(condChangeHeight) await sleep(180);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
+        if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         character.style.left = (parseFloat(character.style.left) + leftDelta) + 'vw';
         await sleep(delay);
@@ -4031,9 +4034,10 @@ async function downJump(character, half, a_quarter, state) {
     src_character += "_davanti.png";
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay, condChangeHeight = false) => {
-        if(condChangeHeight) changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        
-        if(condChangeHeight) await sleep(180);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
+        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
+        if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
         await sleep(delay);
         character.style.transition = "top 0.25s ease-out, left 0.25s ease-out";
@@ -4108,8 +4112,8 @@ function diaologueB_P1(e, state) {
         
         function removeIllustration(b, t) {
             return new Promise(resolve => {
-                b.style.opacity = '0';
-                t.style.opacity = '0';
+                b.remove();
+                t.remove();
                 setTimeout(() => {
                     resolve();
                 }, 200);
