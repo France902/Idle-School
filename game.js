@@ -3662,106 +3662,106 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
                 
-                await step(state, "leftJump", 800);
+                await step(state, "leftJump", 1000);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 800, parameter);
+                await step(state, "leftJump", 1000, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 800, false, parameter2);
+                await step(state, "leftJump", 1000, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 800);
+                await step(state, "rightJump", 1000);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 800, parameter);
+                await step(state, "rightJump", 1000, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 800, false, parameter2);
+                await step(state, "rightJump", 1000, false, parameter2);
             }
         }
 
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 800);
+                await step(state, "topJump", 1000);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 800, parameter);
+                await step(state, "topJump", 1000, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 800, false, parameter2);
+                await step(state, "topJump", 1000, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 800);
+                await step(state, "downJump", 1000);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 800, parameter);
+                await step(state, "downJump", 1000, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 800, false, parameter2);
+                await step(state, "downJump", 1000, false, parameter2);
             }
         }
 
     } else {
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 800);
+                await step(state, "topJump", 1000);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 800, parameter);
+                await step(state, "topJump", 1000, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 800, false, parameter2);
+                await step(state, "topJump", 1000, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 800);
+                await step(state, "downJump", 1000);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 800, parameter);
+                await step(state, "downJump", 1000, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 800, false, parameter2);
+                await step(state, "downJump", 1000, false, parameter2);
             }
         }
 
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
-                await step(state, "leftJump", 800);
+                await step(state, "leftJump", 1000);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 800, parameter);
+                await step(state, "leftJump", 1000, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 800, false, parameter2);
+                await step(state, "leftJump", 1000, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 800);
+                await step(state, "rightJump", 1000);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 800, parameter);
+                await step(state, "rightJump", 1000, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 800, false, parameter2);
+                await step(state, "rightJump", 1000, false, parameter2);
             }
         }
 }
@@ -4086,7 +4086,7 @@ function diaologueB_P1(e, state) {
         bob_illustration.style.opacity = '0';
         t_illustration.style.opacity = '0';
         state.condBP1 = true;
-        removeIllustration(bob_illustration, t_illustration);
+        removeIllustration(t_illustration);
 
         async function exit(b, t) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -4098,7 +4098,7 @@ function diaologueB_P1(e, state) {
             returnToObject(t, data.seatForObjects[0][0], data.seatForObjects[0][1], false, state, e);
             await moveCharacter(b, jumps[0].length, jumps, state);
             await sleep(700);
-            await removeIllustration(bob_illustration, t_illustration);
+            await removeIllustration(bob_illustration);
             await sleep(2300);
             await dialogue(b, t);
         }
@@ -4110,10 +4110,9 @@ function diaologueB_P1(e, state) {
             bob_illustration.src = 'vignetta_esclamazione.png';
         }
         
-        function removeIllustration(b, t) {
+        function removeIllustration(i) {
             return new Promise(resolve => {
-                b.remove();
-                t.remove();
+                i.remove();
                 setTimeout(() => {
                     resolve();
                 }, 200);
