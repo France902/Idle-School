@@ -12,7 +12,7 @@ function startGame(e = null, state = null) {
         }
         else elements = initialiseElements(e);
         drawMap(elements, state);
-        moveWorldStart(elements, data.importantStates);
+        moveWorldStart(elements, state);
         createImportantObjects(elements, state, e);
         creationTertiaryCharacters(elements, state, e);
         createMapDecorations(elements, state, e);
@@ -29,7 +29,10 @@ function startGame(e = null, state = null) {
         createListenersForRedraw(elements, state);
         writeMissions(elements, state);
         setInterval(() => {
-            if(state.cond_movement) saveMats_ImportantStates();
+            if(state.cond_movement) {
+                saveMats_ImportantStates();
+                saveStates(state);
+            }
         }, 2000);
         }  
     }
@@ -163,7 +166,7 @@ function initialiseWildNature(){
 function initialiseposIdle() {
     if(localStorage.getItem("saved") == null){
         const posIdleCycle = [
-            [/*left*/60,/*top*/173],
+            [/*left*/250,/*top*/113],
         ];
         return posIdleCycle;
     } else{
@@ -329,9 +332,11 @@ saveMats_ImportantStates();
 
 
 
-function moveWorldStart(e, importantStates){
+function moveWorldStart(e, state){
     e.canvas.style.transition = "transform 0.25s linear, margin-top 1.5s ease-out, margin-left 1.5s ease-out";
     e.canvas.style.zIndex = '-9999';
+    e.canvas.style.left = (parseFloat(e.canvas.style.left) + (state.posX*-1))  + "vw";
+    e.canvas.style.top = (parseFloat(e.canvas.style.top) + (state.posY*-1))  + "vh";
 }
 
 function moveImportantObjectsStart(e){
@@ -484,7 +489,6 @@ function initialiseStates() {
     layout_menu: "construction",
     canPause: true,
     Nmission: 3,
-
 
     // Interazioni e click
     cond_movement: false,
@@ -1014,7 +1018,7 @@ const langCode = state.language[0] + state.language[1];
                 activateCinematicMode(e);
                 animationCamionCutscene(e, state);
                 setTimeout(() => {
-                    createNewImportantObject(e, state, saved_e, data.importantObjects.length, '70vw', '208vh', 'stacks_of_books', 1, 'cataste_di_libri.png');
+                    createNewImportantObject(e, state, saved_e, data.importantObjects.length, '190vw', '150vh', 'stacks_of_books', 1, 'cataste_di_libri.png');
                 }, 7000);
                 setTimeout(() => {
                     state.index++;
@@ -1033,7 +1037,7 @@ const langCode = state.language[0] + state.language[1];
                 e.container_dialogue.style.opacity = 0;
                 state.cond_movement = true;
                 state.cond_dialogue = false;
-                createNewCharacter('30vw', '68vh', "no_animation", -2, false, "Matthew", data.matTert.length, e, state, saved_e);
+                createNewCharacter('143vw', '15vh', "no_animation", -2, false, "Matthew", data.matTert.length, e, state, saved_e);
                 activateHud(e);
                 resetMoveWorld(e, -3, 5);
                 scale('standard', e, state);
@@ -1063,7 +1067,7 @@ const langCode = state.language[0] + state.language[1];
                 state.cond_deactivate_movement = true;
                 state.cond_dialogue = false;
                 deactivateHud(e);
-                createNewImportantObject(e, state, saved_e, data.importantObjects.length, '35vw', '145vh', 'stand', 1, 'stand_libri.png');
+                createNewImportantObject(e, state, saved_e, data.importantObjects.length, '150vw', '87vh', 'stand', 1, 'stand_libri.png');
                 choose_in_display(e, state, saved_e);
                 moveWorld(e, 23, -86);
                 break;
@@ -1345,7 +1349,9 @@ function saveStatesElements(e, state){
     localStorage.setItem("elements", JSON.stringify(e));
 }
 
-
+function saveStates(state) {
+    localStorage.setItem("state", JSON.stringify(state));
+}
 
 
 function setUpPresideMovement(e, state, saved_e) {
@@ -1699,7 +1705,7 @@ function assignZIndexP(){
 function changeZIndexElements(){
     for(let i=0;i<data.matTert.length;i++) {
         let Y = data.matTert[i][1];
-        document.getElementById('character_'+ i).style.zIndex = `${Math.trunc(Y/5)}`;
+        document.getElementById('character_'+ i).style.zIndex = `${Math.trunc(Y/2)}`;
     }
 }
 
@@ -2811,7 +2817,7 @@ async function passiveAnimationStand(character, i, e, state, saved_e, chosed){
     let posY_exit = character.style.top;
     if(cont_car == 2) cont_car = 1;
     else cont_car++; 
-    createNewImportantObject(e, state, saved_e, data.importantObjects.length, "-350vw", "220vh", "car"+cont_car, 6, "car"+cont_car, "macchina"+cont_car+".png", "wheel_car1", "ruota_camion2.png", "wheel_car2", "ruota_camion2.png");
+    createNewImportantObject(e, state, saved_e, data.importantObjects.length, "-150vw", "170vh", "car"+cont_car, 6, "car"+cont_car, "macchina"+cont_car+".png", "wheel_car1", "ruota_camion2.png", "wheel_car2", "ruota_camion2.png");
     let index_object = data.importantObjects.length-1;
     await sleep(500);
     await animationCar(e, state, document.getElementById("car"+cont_car), character);
@@ -2963,12 +2969,18 @@ function creationTertiaryCharacters(e, state, saved_e) {
     saveMats_ImportantStates();
 }
 
+function calculateWorldShift(array, state, i) {
+    array[i][0] = (parseFloat(array[i][0]) + (state.posX*-1)) + "vw";
+    array[i][1] = (parseFloat(array[i][1]) + (state.posY*-1)) + "vh";
+}
+
 function createNewCharacter(posX, posY, animation, rotation, no_illustration, src, i, e, state, saved_e){
     let parameters = [posX, posY, animation, rotation, no_illustration, src];
     data.matTert.push([]);
     for(let j=0;j<data.matTert[0].length;j++){
         data.matTert[i][j] = parameters[j];
     }
+    calculateWorldShift(data.matTert, state, i);
     createCharacter(e, state, i);
     assignZIndex(e, state, i);
 }
@@ -3010,7 +3022,8 @@ function createImportantObjects(e, state, saved_e) {
 }
 
 function createNewPartSchool(e, state, saved_e, i) {
-    createObjects(e, state, i, saved_e, data.partSchool)
+    calculateWorldShift(data.importantObjects, state, i);
+    createObjects(e, state, i, saved_e, data.partSchool);
 }
 
 function createNewImportantObject(e, state, saved_e, i, posX, posY, id_container, N_parameters, id1 = null, src1 = null, id2 = null, src2 = null, id3 = null, src3 = null, id4 = null, src4 = null) {
@@ -3023,6 +3036,7 @@ function createNewImportantObject(e, state, saved_e, i, posX, posY, id_container
     for(let j=0;j<N_parameters;j++){
         data.importantObjects[i][j+4] = parameters_to_add[j];
     }
+    calculateWorldShift(data.importantObjects, state, i);
     createObjects(e, state, i, saved_e, data.importantObjects);
 }
 
@@ -3662,106 +3676,106 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
                 
-                await step(state, "leftJump", 1000);
+                await step(state, "leftJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 1000, parameter);
+                await step(state, "leftJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 1000, false, parameter2);
+                await step(state, "leftJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 1000);
+                await step(state, "rightJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 1000, parameter);
+                await step(state, "rightJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 1000, false, parameter2);
+                await step(state, "rightJump", 800, false, parameter2);
             }
         }
 
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 1000);
+                await step(state, "topJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 1000, parameter);
+                await step(state, "topJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 1000, false, parameter2);
+                await step(state, "topJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 1000);
+                await step(state, "downJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 1000, parameter);
+                await step(state, "downJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 1000, false, parameter2);
+                await step(state, "downJump", 800, false, parameter2);
             }
         }
 
     } else {
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 1000);
+                await step(state, "topJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 1000, parameter);
+                await step(state, "topJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 1000, false, parameter2);
+                await step(state, "topJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 1000);
+                await step(state, "downJump", 800);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 1000, parameter);
+                await step(state, "downJump", 800, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 1000, false, parameter2);
+                await step(state, "downJump", 800, false, parameter2);
             }
         }
 
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
-                await step(state, "leftJump", 1000);
+                await step(state, "leftJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 1000, parameter);
+                await step(state, "leftJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 1000, false, parameter2);
+                await step(state, "leftJump", 800, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 1000);
+                await step(state, "rightJump", 800);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 1000, parameter);
+                await step(state, "rightJump", 800, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 1000, false, parameter2);
+                await step(state, "rightJump", 800, false, parameter2);
             }
         }
 }
@@ -3774,8 +3788,6 @@ if(document.getElementById('character_'+posId).id != character.id) posId++;
         return 
     }
     else{
-        data.matTert[posId][0] = parseFloat(character.style.left) + 'vw';
-        data.matTert[posId][1] = parseFloat(character.style.top) + 'vh';
         state.condBP1 = false;
         await passiveAnimationGroup(character, 6, e, state, parseFloat(character.style.left) + 2, parseFloat(character.style.top) - 10);
     }
@@ -3890,7 +3902,7 @@ async function rightJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay, condChangeHeight = false) => {
         if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight) await sleep(200);
         if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
         if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3938,7 +3950,7 @@ async function topJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay, condChangeHeight = false) => {
         if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight) await sleep(200);
         if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
         if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -3979,7 +3991,7 @@ async function leftJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, leftDelta, delay, condChangeHeight  = false) => {
         if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight) await sleep(200);
         if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
         if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
@@ -4035,7 +4047,7 @@ async function downJump(character, half, a_quarter, state) {
     document.getElementById('characterImg_'+posId).src = src_character;
     const step = async (topDelta, delay, condChangeHeight = false) => {
         if(condChangeHeight && character.id != 'illustration_'+posId) await changeHeight(document.getElementById('characterImg_'+posId), state, false);
-        if(condChangeHeight) await sleep(250);
+        if(condChangeHeight) await sleep(200);
         if(condChangeHeight && character.id != 'illustration_'+posId) await resetHeight(document.getElementById('characterImg_'+posId), false);
         if(character.id == 'illustration_'+posId && condChangeHeight) await sleep(350);
         character.style.top = (parseFloat(character.style.top) + topDelta) + 'vh';
