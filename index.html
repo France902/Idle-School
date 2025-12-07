@@ -9,7 +9,11 @@
 </head>
 <body>
 
-    
+    <div class="audio-container" aria-hidden="true" id="audio-container">
+        <audio id="freeRoaming1" preload="auto">
+           <source src="ost/Hopesland.mp3" type="audio/mpeg">
+        </audio>
+    </div>
 
     <div id="loader-container" >
          <div id="loader-bar"></div>
@@ -23,9 +27,9 @@
             <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
     </div>
 
-    <img class="school_imgs" src="" id="circle1" style="left: 0; top: 0;">
-    <img class="school_imgs" src=""  id="circle2" style="left: 0; top: 0;">
-    <img class="school_imgs" src=""  id="circle3" style="left: 0; top: 0;">
+    <img class="school_imgs" id="circle1" style="left: 0; top: 0;">
+    <img class="school_imgs" id="circle2" style="left: 0; top: 0;">
+    <img class="school_imgs" id="circle3" style="left: 0; top: 0;">
 
     <div id="preside_container">
         <img src="Preside.png" id="preside">
@@ -187,7 +191,7 @@
 
         <img id="menu_base" src="tavolo_menù.jpg" style="z-index: 1000; opacity: 0;">
             
-        <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto reset</p></button>
+        <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto <strong></strong> reset</p></button>
         <div id="money" class="hud-box" style="opacity: 0; z-index: 10000;">
             <p id="money_text" style="font-size: 1.5vw; margin-left: -2vw; margin-top: 1.5vh;">0</p> 
             <img class="coin_icon" id="coin_icon" src="moneta_school.png" style="z-index: 10001; position: fixed; left: 95.3vw; top: 3.1vh;">
@@ -218,7 +222,6 @@
             <div class="display_img_choice" id="display_img_choice1" style="top: 34.5vh; left: 16.5vw;"></div>
             <div class="display_img_choice" id="display_img_choice2" style="top: 61.8vh; left: 16.3vw;"></div>
         </div>
-        
     </div>
     
 
