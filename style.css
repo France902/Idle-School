@@ -615,6 +615,20 @@
             background-color: aqua;
         }
 
+        .audio-container {
+            position: absolute;
+            left: -9999vw;
+            width: 1vw;
+            height: 1vh;
+            overflow: hidden;
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .audio-container [tabindex] { 
+            outline: none; 
+        }
+
         .arrow {
             position: absolute;
             width: 6vw;
@@ -1058,12 +1072,12 @@
         }
         @keyframes animationCar {
             0% {
-                top: 220vh;
+                top: 227vh;
             }
             50% {
-                top: 219vh;
+                top: 226vh;
             }
             100% {
-                top: 220vh;
+                top: 227vh;
             }
         }
