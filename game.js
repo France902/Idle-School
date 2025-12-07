@@ -605,24 +605,47 @@ function waitForImagesToLoad(container, callback) {
 }
 
 function scaleWorld(e) {
-  let scale = 0.07;
-  const target = 0.8;
-  const speed = 0.005;
+    let scale = 0.07;
+    const target = 0.8;
+    let speed = 0.0007; 
 
+    function animate() {
 
-  function animate() {
-    scale += speed;
-    if (scale >= target) {
-      scale = target;
-      e.world.style.transform = `scale(${target})`;
-      return
+        if (scale <= 0.15 && scale > 0.1) {
+            if(scale < 0.11) speed += 0.000035;
+            else if(scale < 0.12) speed += 0.00005;
+            else if(scale < 0.13) speed += 0.000065;
+            else if(scale < 0.14) speed += 0.000070;
+        } else if(scale < 0.4 && scale > 0.15) {
+            speed += 0.0001;
+        } else if(scale >= 0.4) {
+            speed -= 0.000045;
+        } else {
+            if(scale < 0.02) speed += 0.000002;
+            else if(scale < 0.03) speed += 0.000006;
+            else if(scale < 0.04) speed += 0.000010;
+            else if(scale < 0.05) speed += 0.000014;
+            else if(scale < 0.06) speed += 0.000018;
+            else if(scale < 0.07) speed += 0.000022;
+            else if(scale < 0.08) speed += 0.000026;
+            else if(scale < 0.09) speed += 0.000030;
+        }
+
+        scale += speed;
+
+        if (scale >= target) {
+            scale = target;
+            e.world.style.transform = `scale(${target})`;
+            return;
+        }
+
+        e.world.style.transform = `scale(${scale})`;
+        requestAnimationFrame(animate);
     }
-    e.world.style.transform = `scale(${scale})`;
-    requestAnimationFrame(animate);
-  }
 
-  requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 }
+
 
 function scaleWorld2(e) {
   let scale = 0.8;
@@ -1550,23 +1573,27 @@ function simulateKey(code, duration){
 }
 
 function handleKeydown(event) {
+   console.log(state.cond_deactivate_movement) 
 if(!state.cond_deactivate_movement){
     e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
     keys[event.code] = true;
     if (["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)) {
-        changeHeight(p, state);
+        changeHeight(p, state, true, 15);
         state.animationPresideStart = false;
         setTimeout(() => {
         if(jumpStartTime == 0) {
+            console.log(keys);
                 currentDir = getDirection();
                 if (currentDir.x === 0 && currentDir.y === 0) return;
                 if(!isCharging){
                     jumpStartTime = performance.now();
+                    console.log(jumpStartTime);
                     isCharging = true;
                 }
         }
         if(isCharging) {
             if(performance.now() - jumpStartTime > 350 && !state.cond_run_preside){
+                console.log("si")
                 state.cond_run_preside = true;
                 runPreside(event, currentDir);
             } 
@@ -1581,8 +1608,9 @@ if(!state.cond_deactivate_movement){
 
 async function runPreside(event, currentDir, distance = 9) {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+    state.cond_deactivate_movement = false;
     if(isCharging){
-        resetHeight(p);
+        resetHeight(p, true, 15);
         currentDir = getDirection();
         jumpDirection(distance, currentDir);
         
@@ -1598,29 +1626,29 @@ async function runPreside(event, currentDir, distance = 9) {
     
 }
 function handleKeyup(event){
+    console.log(state.cond_deactivate_movement) 
     if(!state.cond_deactivate_movement){
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
             setTimeout(() => {
-                resetHeight(p);
-            }, 20);
-            
-            if(state.cond_run_preside == false){
+                resetHeight(p, true, 15);
+            }, 200);
+            setTimeout(() => {
+            if(!state.cond_run_preside){
+                if(jumpStartTime == 0) return;
+                state.cond_deactivate_movement = true;
                     state.heldFor = performance.now() - jumpStartTime;
-                    setTimeout(() => {
-                        jumpStartTime = 0;
-                    }, 200);
+                    jumpStartTime = 0;
                     if(state.heldFor > 270){
                         state.heldFor = 270;
                     } 
                     let distance = state.heldFor / 30;
-                    keys = {};
-                    jumpDirection(distance, currentDir);
-                    setTimeout(() => {
-                        state.heldFor = 0;
-                    }, 20);
                     
+                    state.heldFor = 0;
+                    jumpDirection(distance, currentDir);
+                    keys = {};
             }
             isCharging = false;
+            }, 50);
         }
     }
 }
@@ -1661,9 +1689,12 @@ function jumpDirection(distance, dir){
     else if (dir.x == -0.7 && dir.y == 0.7) diagonalBottomLeft(distance/2);
     state.condPresidePassiveAnimation = false;
     setTimeout(() => {
+        if(state.heldFor != 0) return;
+        state.cond_deactivate_movement = false;
         state.condPresidePassiveAnimation = true;
         countdownPassiveAnimation(state);
-    }, 200);
+    }, 300);
+    
     controlPosition(state, e, saved_e);
     assignZIndexP();
     changeZIndexElements();
@@ -1686,9 +1717,9 @@ async function passiveAnimationPreside(p, state) {
     p.style.transition = 'left 0.1s, bottom 0.25s, height 0.02s linear';
     await sleep(n_casuale);
     if(!state.animationPresideStart) return;
-    changeHeight(p, state);
+    changeHeight(p, state, true, 25);
     await sleep(170);
-    resetHeight(p);
+    resetHeight(p, true, 25);
     state.cond_deactivate_movement = true;
     p.style.bottom = (parseFloat(p.style.bottom) + 4) + "vh";
     await sleep(250);
@@ -2104,30 +2135,30 @@ window.addEventListener('keyup', handleKeyup);
     
   }
 
-async function changeHeight(character, state, condPreside = true) {
+async function changeHeight(character, state, condPreside = true, speedForPhase = 30) {
     if(!existencecontrol(character)) return;
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(parseFloat(character.style.height) > 16.5 && condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
     else if(parseFloat(character.style.height) > 17.5 && !condPreside) character.style.height = parseFloat(character.style.height) - 0.5 + "vh";
          else return;
-    if(condPreside) await sleep(25);
-    else await sleep(30);
+    if(condPreside) await sleep(speedForPhase);
+    else await sleep(speedForPhase);
     if((state.heldFor != 0 || state.cond_run_preside) && condPreside) {
-        await resetHeight(character);
+        await resetHeight(character, true, 15);
         return;
     }
-    else await changeHeight(character, state, condPreside);
+    else await changeHeight(character, state, condPreside, speedForPhase);
 }
 
-async function resetHeight(character, condPreside = true) {
+async function resetHeight(character, condPreside = true, speedForPhase = 30) {
     if(!existencecontrol(character)) return;
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     if(parseFloat(character.style.height) < 19 && condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
     else if(parseFloat(character.style.height) < 20 && !condPreside) character.style.height = parseFloat(character.style.height) + 0.5 + "vh";
     else return;
-    if(condPreside) await sleep(25);
-    else await sleep(30);
-    await resetHeight(character, condPreside);
+    if(condPreside) await sleep(speedForPhase);
+    else await sleep(speedForPhase);
+    await resetHeight(character, condPreside, speedForPhase);
 }
   
   function controlPosition(state, e, saved_e) {
@@ -3676,53 +3707,53 @@ async function returnToObject(character, x, y, order = false, state, e, stepx, s
         if(stepX < 0) {
             for(let i = 0; i > stepX; i--) {
                 
-                await step(state, "leftJump", 800);
+                await step(state, "leftJump", 900);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "leftJump", 800, parameter);
+                await step(state, "leftJump", 900, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "leftJump", 800, false, parameter2);
+                await step(state, "leftJump", 900, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepX; i++) {
-                await step(state, "rightJump", 800);
+                await step(state, "rightJump", 900);
             }
             if(halfStepX){
                 parameter = true;
-                await step(state, "rightJump", 800, parameter);
+                await step(state, "rightJump", 900, parameter);
             }
             if(aQuarterStepX){
                 parameter2 = true;
-                await step(state, "rightJump", 800, false, parameter2);
+                await step(state, "rightJump", 900, false, parameter2);
             }
         }
 
         if(stepY < 0) {
             for(let i = 0; i > stepY; i--) {
-                await step(state, "topJump", 800);
+                await step(state, "topJump", 900);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "topJump", 800, parameter);
+                await step(state, "topJump", 900, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "topJump", 800, false, parameter2);
+                await step(state, "topJump", 900, false, parameter2);
             }
         } else {
             for(let i = 0; i < stepY; i++) {
-                await step(state, "downJump", 800);
+                await step(state, "downJump", 900);
             }
             if(halfStepY){
                 parameter = true;
-                await step(state, "downJump", 800, parameter);
+                await step(state, "downJump", 900, parameter);
             }
             if(aQuarterStepY){
                 parameter2 = true;
-                await step(state, "downJump", 800, false, parameter2);
+                await step(state, "downJump", 900, false, parameter2);
             }
         }
 
@@ -3861,9 +3892,9 @@ async function rightJumpP(character, e, state) {
     const step = async (topDelta, leftDelta, delay, condHeight = false) => {
         await sleep(delay);
         if(condHeight) {
-            changeHeight(p, state);
+            changeHeight(p, state, true, 25);
             setTimeout(() => {
-                resetHeight(p)
+                resetHeight(p, true, 25)
             }, 140);
         }
         else {
