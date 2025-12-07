@@ -460,7 +460,10 @@ function writeElements() {
     leftBottom_arrow: "document.getElementById('leftBottom_arrow')",
 
     //oggetti idle
-    stand: "document.getElementById('stand')"
+    stand: "document.getElementById('stand')",
+
+    //audio
+    freeRoaming1: "document.getElementById('freeRoaming1')",
   };
 }
 
@@ -1019,6 +1022,9 @@ const langCode = state.language[0] + state.language[1];
                 setTimeout(() => {
                     data.matTert[5][2] = '';
                     passiveAnimationBob(document.getElementById('character_5'), 5, e, state);
+                    setTimeout(() => {
+                        configureAudio(e.freeRoaming1);
+                    }, 1000);
                 }, 2000);
                 activateHud(e);
                 setUpPresideMovement(e, state, saved_e);
@@ -3180,6 +3186,33 @@ function createCharacter(e, state, i) {
         src = `operaio${num}`;
         data.matTert[i][5] = src;
     }
+}
+
+function configureAudio(src) {
+    const audio = src;
+
+    audio.currentTime = 0;
+    audio.volume = 0;
+    audio.loop = false; 
+    audio.play();
+
+    const targetVol = 0.2;
+    const fadeSpeed = 0.01; 
+    const tick = 50;  
+
+    const fadeIn = setInterval(() => {
+        if (audio.volume < targetVol) {
+            audio.volume = Math.min(audio.volume + fadeSpeed, targetVol);
+        } else {
+            clearInterval(fadeIn);
+        }
+    }, tick);
+
+    audio.onended = () => {
+        audio.currentTime = 0;
+        audio.loop = true;   
+        audio.play();
+    };
 }
 
 function assignZIndex(e, state, i, cond = false){
