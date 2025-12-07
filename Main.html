@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Idle School</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">.
+</head>
+<body>
+
+    <div class="audio-container" aria-hidden="true" id="audio-container">
+        <audio id="freeRoaming1" preload="auto">
+           <source src="ost/Hopesland.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <div id="loader-container" >
+         <div id="loader-bar"></div>
+    </div>
+
+    <div id="start_overlay"></div>
+    <div id="world">
+        <canvas id="canvas" class="school_imgs" style="position: fixed; z-index: -9999; opacity: 1; width: 100vw; height: 100vh; left: 165vw; top: -90vh; transform-origin: center center; transform: scale(8); "></canvas>
+
+    <div id="platform_container">
+            <img class="school_imgs" src="a_rock.jpg" style="position: fixed; left: 50vw; top: -30vh; width: 15vw; height: 25vh; z-index: 0;">
+    </div>
+
+    <img class="school_imgs" id="circle1" style="left: 0; top: 0;">
+    <img class="school_imgs" id="circle2" style="left: 0; top: 0;">
+    <img class="school_imgs" id="circle3" style="left: 0; top: 0;">
+
+    <div id="preside_container">
+        <img src="Preside.png" id="preside">
+    </div>
+
+    </div>
+
+    <div id="dialogues_container">
+        <div id="name_box">
+            <p id="character_name">name personaggio</p>
+        </div>
+        <div id="dialogues">
+            <img src="text-box.png" id="text_box_dialogues">
+            <p id="dialogues_text">Prova-dialogo</p>
+        </div>
+        <div id="choices">
+            <div class="box_choise1">
+                <img src="selezione_scelte.png" class="arrow_choice" id="arrow_choice1" style="left: -20vw; top: -17vh; opacity: 0; cursor: pointer; pointer-events: all;">
+                <h1 class="text_choice" id="choice1" style="left: -16vw; top: -16.5vh; cursor: pointer; pointer-events: all;">Testo scelta 1</h1>
+            </div>
+            <div class="box_choise1">
+                <img src="selezione_scelte.png" class="arrow_choice" id="arrow_choice2" style="left: 11vw; top: -17vh; opacity: 0; cursor: pointer; pointer-events: all;">
+                <h1 class="text_choice" id="choice2" style="left: 19vw; top: -16.5vh; cursor: pointer; pointer-events: all;">Testo scelta 2</h1>
+            </div>
+        </div>
+        <img src="Preside.png" id="img_preside_dialogues">
+
+        <img src="Personaggio_anonimo.png" id="anonymous_character_dialogues">
+        
+    </div>
+
+    <div id="cinematic-bars" class="cinematic">
+        <div class="bar top"></div>
+        <div class="bar bottom"></div>
+    </div>
+    <div id="click_circle" style="left: 0; top: 0;"></div>
+
+    
+
+    
+    <div class="hud-container" id="hud" style="display: none; z-index: 9998;">
+        <h1 id="partSchoolCompleted">ENTRATA COMPLETATA!</h1>
+        <img src="zoom_avanti.png" id="zoom" style="width: 7.5vw; height: 5vw; transform: translate(-91vw); cursor: pointer; pointer-events: auto;">
+        <img src="zoom_reimposta.png" id="standard" style="width: 7.5vw; height: 5vw; transform: translate(-91vw, -2vh); cursor: pointer; pointer-events: auto;" >
+        <img src="zoom_indietro.png" id="dezoom" style="width: 7.5vw; height: 5vw; transform: translate(-91vw, -4vh); cursor: pointer; pointer-events: auto;" >
+        <div id="construction_menu">
+            <div id="missions" class="hud_missions closed">
+            <div class="mission_1" id="mission1">
+                <img src="missioni_main_costruzioni.png">
+                <h1 id="title_mission1">School Entrance</h1>
+                <!--
+                <img src="blueprint1.png" id="icon_img">
+                -->
+                <div class="resource" style="margin-left: 3.5vw;">
+                    <img class="cost" id="img0_cost0" style="width: 2vw; height: 4vh; margin-left: 3.8vw; margin-top: 3.3vh; " src="legno.png">
+                    <p class="text_cost" id="text0_cost0" ></p>
+                </div>
+                
+                <div class="resource" style="margin-left: 10vw;">
+                    <img class="cost" id="img0_cost1" style="width: 2vw; height: 4vh; margin-left: 3.8vw; margin-top: 3.3vh; " src="mattone.png">
+                    <p class="text_cost" id="text0_cost1"></p>
+                </div>
+
+                <div class="resource" style="margin-left: 16.5vw;">
+                    <img class="cost" id="img0_cost2" style="width: 2vw; height: 4vh; margin-left: 3.8vw; margin-top: 3.3vh; " src="vetro.png">
+                    <p class="text_cost" id="text0_cost2"></p>
+                </div>
+
+                
+            </div>
+            <div class="mission_2" id="mission2">
+                <img src="missioni_secondarie_costruzioni.png">
+                <h1 id="title_mission2">Next Construction</h1>
+
+                <div class="resource" style="margin-left: 3.5vw;">
+                    <img class="cost" id="img1_cost0" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.6vh; " src="legno.png">
+                    <p class="text_cost" id="text1_cost0" ></p>
+                </div>
+                
+                <div class="resource" style="margin-left: 10vw;">
+                    <img class="cost" id="img1_cost1" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.6vh; " src="mattone.png">
+                    <p class="text_cost" id="text1_cost1"></p>
+                </div>
+
+                <div class="resource" style="margin-left: 16.5vw;">
+                    <img class="cost" id="img1_cost2" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.6vh; " src="vetro.png">
+                    <p class="text_cost" id="text1_cost2"></p>
+                </div>
+            </div>
+            <div class="mission_3" id="mission3">
+                <img src="missioni_secondarie_costruzioni.png">
+                <h1 id="title_mission3">Next Construction</h1>
+
+                <div class="resource" style="margin-left: 3.5vw;">
+                    <img class="cost" id="img2_cost0" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.9vh; " src="legno.png">
+                    <p class="text_cost" id="text2_cost0" ></p>
+                </div>
+                
+                <div class="resource" style="margin-left: 10vw;">
+                    <img class="cost" id="img2_cost1" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.9vh; " src="mattone.png">
+                    <p class="text_cost" id="text2_cost1"></p>
+                </div>
+
+                <div class="resource" style="margin-left: 16.5vw;">
+                    <img class="cost" id="img2_cost2" style="width: 2vw; height: 4vh; margin-left: 3.5vw; margin-top: 3.9vh; " src="vetro.png">
+                    <p class="text_cost" id="text2_cost2"></p>
+                </div>
+            </div>
+        </div>
+            <h1 id="c_menu_main_text" style="margin-left: 27vw; margin-top: -35vh;">BUILD</h1>
+            <img id="blueprint_img" src="blueprint1.png">
+            <img id="lateral_icon" src="material_shop_icon.png">
+            <img id="menu1" src="menù_costruzione.png">
+            <div class="sidebar_mission" id="sidebar_mission1" style="opacity: 0;"></div>
+            <div class="sidebar_mission" id="sidebar_mission2" style="margin-top: 13vh; opacity: 0; background-color: beige;"></div>
+            <div class="sidebar_mission" id="sidebar_mission3" style="margin-top: 26vh; opacity: 0; background-color: beige;" ></div>
+            <div id="overlay_mission" style="opacity: 0;"></div>
+
+                <div id="material_shop" style="display: none; position: fixed; object-fit: cover; z-index: 10000; width: 100vw; height: 100vh;">
+                    <h1 id="c_shop_main_text" style="margin-left: 157vw; margin-top: 10vh;">BUY</h1>
+                    <div id="box_shop-1" class="box_shop" style="margin-left: 122vw; margin-top: 35vh;">
+                        <button class="text_shop" id="button_shop-1">2 <img class="coin_icon" id="coin_icon" src="moneta_school.png"></button>
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-1" >
+                        <img class="material_icon" id="material_icon-1" src="mattone.png">
+                    </div>
+                    <div id="box_shop-2" class="box_shop" style="margin-left: 143vw; margin-top: 35vh;">
+                        <button class="text_shop" id="button_shop-2">4 <img class="coin_icon" id="coin_icon" src="moneta_school.png"></button>
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-2">
+                        <img class="material_icon" id="material_icon-1" src="vetro.png">
+                    </div>
+                    <div id="box_shop-3" class="box_shop" style="margin-left: 164vw; margin-top: 35vh;">
+                        <button class="text_shop" id="button_shop-3">5 <img class="coin_icon" id="coin_icon" src="moneta_school.png"></button>
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-3">
+                        <img class="material_icon" id="material_icon-1" src="legno.png">
+                    </div>
+                    <div id="box_shop-4" class="box_shop" style="margin-left: 185vw; margin-top: 35vh;">
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-4">
+                        <img src="lucchetto.png" id="img_shop_placeholder">
+                    </div>
+                    <div id="box_shop-5" class="box_shop" style="margin-left: 122vw; margin-top: 70vh;">
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-5">
+                        <img src="lucchetto.png" id="img_shop_placeholder">
+                    </div>
+                    <div id="box_shop-6" class="box_shop" style="margin-left: 143vw; margin-top: 70vh;">
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-6">
+                        <img src="lucchetto.png" id="img_shop_placeholder">
+                    </div>
+                    <div id="box_shop-7" class="box_shop" style="margin-left: 164vw; margin-top: 70vh;">
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-7">
+                        <img src="lucchetto.png" id="img_shop_placeholder">
+                    </div>
+                    <div id="box_shop-8" class="box_shop" style="margin-left: 185vw; margin-top: 70vh;">
+                        <img src="container_materiali.png" class="img_box_shop" id="img_box_shop-8">
+                        <img src="lucchetto.png" id="img_shop_placeholder">
+                    </div>
+                </div>
+            
+        </div>
+
+        <img id="menu_base" src="tavolo_menù.jpg" style="z-index: 1000; opacity: 0;">
+            
+        <button onclick="reset()" style="width: 5vw; height: 5vh; pointer-events: all;"><p>Tasto <strong></strong> reset</p></button>
+        <div id="money" class="hud-box" style="opacity: 0; z-index: 10000;">
+            <p id="money_text" style="font-size: 1.5vw; margin-left: -2vw; margin-top: 1.5vh;">0</p> 
+            <img class="coin_icon" id="coin_icon" src="moneta_school.png" style="z-index: 10001; position: fixed; left: 95.3vw; top: 3.1vh;">
+        </div>
+        
+        <div class="mobile_movement">
+            <div id="arrows_movement">
+                <img src="freccia_dritta1.png" class="arrow" id="right_arrow">
+                <img src="freccia_dritta1.png" class="arrow" id="left_arrow" style="margin-left: -10vw; transform: scaleX(-1);">
+                <img src="freccia_dritta1.png" class="arrow" id="top_arrow" style="margin-left: -5vw; margin-top: -10vh; transform: rotate(270deg);">
+                <img src="freccia_dritta1.png" class="arrow" id="bottom_arrow" style="margin-left: -5vw; margin-top: 10vh; transform: rotate(90deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="rightBottom_arrow" style="margin-left: -0.5vw; margin-top: 8vh; transform: rotate(45deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="rightTop_arrow" style="margin-left: -0.5vw; margin-top: -8vh; transform: rotate(-45deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="leftBottom_arrow" style="margin-left: -9vw; margin-top: 8vh; transform: rotate(135deg);">
+                <img src="freccia_obliqua.png" class="arrow_oblique" id="leftTop_arrow" style="margin-left: -9vw; margin-top: -8vh; transform: rotate(-135deg);">
+            </div>
+            <img src="interazione_mobile.png" id="mobile_interaction">
+        </div>
+        <!--
+        <div id="punti_prestigio" class="hud-box" style="opacity: 0;">0</div>
+        <div id="classes" class="hud-box" style="top: 8vh;">0 🏫</div>
+        -->
+    </div>
+
+    <div class="display_choice" style="opacity: 0;">
+            <h1 class="title_display_choice">SCEGLI TE!</h1>
+            <img src="menu_scelta.png" id="choice_menu">
+            <div class="display_img_choice" id="display_img_choice1" style="top: 34.5vh; left: 16.5vw;"></div>
+            <div class="display_img_choice" id="display_img_choice2" style="top: 61.8vh; left: 16.3vw;"></div>
+        </div>
+    </div>
+    
+
+<script src="game.js" defer> </script>
