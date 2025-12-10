@@ -89,6 +89,12 @@
             opacity: 0;
         }
 
+        #canvas {
+            image-rendering:crisp-edges;
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
         #car1 {
             width: 40vw;
             height: 40vh;
@@ -272,18 +278,33 @@
         #entrance_floor {
             width: 80vw;
             height: 130vh;
-            background-color: aqua;
             position: fixed;
+            z-index: 1;
+        }
+
+        #walls {
             z-index: 9999;
+        }
+
+        #entrance_wall {
+            width: 80vw;
+            height: 30vh;
+            position: fixed;
+        }
+
+        #entrance_wall2 {
+            width: 80vw;
+            height: 30vh;
+            position: fixed;
+            top: 100vh;
         }
 
         #entrance_roof {
             width: 80vw;
-            height: 130vh;
-            background-color: aqua;
+            height: 100vh;
             position: fixed;
             z-index: 10000;
-            opacity: 0.7;
+            opacity: 1;
         }
 
         #icon_img {
