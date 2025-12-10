@@ -54,6 +54,7 @@ function initialiseData(){
         posIdleCycle: initialiseposIdle(),
         logConstructionMission: initialiseConstructionMission(),
         partSchool: initialisePartSchool(),
+        interactionLog: initialiseInteractionLog(),
     }
 }
 
@@ -223,13 +224,26 @@ function initialisePartSchool(){
     if(localStorage.getItem("saved") == null){
         const partSchool = [
             [/*left*/'100vw',/*top*/'-200vh',/*id container*/'entrance_floor',/*numero elementi*/1,/*src*/'pavimento_scuola.jpg'],
-            ['100vw', '-200vh', 'entrance_floor', 1, 'pavimento_scuola.jpg'],
+            ['100vw', '-200vh', 'walls', 4, 'entrance_wall', 'muro_scuola.jpg', 'entrance_wall2', 'muro_scuola.jpg'],
             ['100vw', '-200vh', 'entrance_roof', 1, 'soffitto_scuola.jpg']
         ];
         return partSchool;
     } else{
         const partSchool= JSON.parse(localStorage.getItem("partSchool"));
         return partSchool;
+    }
+}
+
+function initialiseInteractionLog(){
+    if(localStorage.getItem("saved") == null){
+        const interactionLog = [
+            [/*range orizzontale 1*/38,/*range orizzontale 2*/48,/*range verticale 1*/84,/*range verticale 2*/105],
+            [110, 125, -60, -43],
+        ];
+        return interactionLog;
+    } else{
+        const interactionLog= JSON.parse(localStorage.getItem("interactionLog"));
+        return interactionLog;
     }
 }
 
@@ -242,11 +256,14 @@ function saveMats_ImportantStates(){
     localStorage.setItem("logConstructionMission", JSON.stringify(data.logConstructionMission));
     localStorage.setItem("posIdleCycle", JSON.stringify(data.posIdleCycle));
     localStorage.setItem("partSchool", JSON.stringify(data.partSchool));
+    localStorage.setItem("interactionLog", JSON.stringify(data.interactionLog));
 }
 
 function drawMap(e, state) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+
+    ctx.imageSmoothingEnabled = false;
 
     const scaleFactor = 4;
     canvas.width = window.innerWidth * scaleFactor;
@@ -1010,6 +1027,7 @@ const langCode = state.language[0] + state.language[1];
     }
     else{
         deactivateCinematicMode(e);
+        state.animationPresideStart = false;
     if(lines[state.index][0] == true){
         switch (state.index) {
             case 5:
@@ -1024,6 +1042,7 @@ const langCode = state.language[0] + state.language[1];
                     passiveAnimationBob(document.getElementById('character_5'), 5, e, state);
                     setTimeout(() => {
                         configureAudio(e.freeRoaming1);
+                        state.animationPresideStart = true;
                     }, 1000);
                 }, 2000);
                 activateHud(e);
@@ -1086,7 +1105,7 @@ const langCode = state.language[0] + state.language[1];
                     state.cond_dialogue = true;
                     state.cond_other_character = true;
                     showNextLine();
-                }, 3000);
+                }, 5000);
                 break;
             case 23:
                 state.cond_text = false;
@@ -1111,6 +1130,7 @@ const langCode = state.language[0] + state.language[1];
                 data.logConstructionMission[1] = ["Porta", "2_V", "5_L",];
                 data.logConstructionMission[2] = ["Forma piastrella", "20_M",];
                 state.Nmission += 3;
+                state.animationPresideStart = true;
                 break;
         }
         
@@ -1579,7 +1599,6 @@ function simulateKey(code, duration){
 }
 
 function handleKeydown(event) {
-   console.log(state.cond_deactivate_movement) 
 if(!state.cond_deactivate_movement){
     e.imgsArray = Array.from(document.querySelectorAll('.school_imgs'));
     keys[event.code] = true;
@@ -1588,18 +1607,15 @@ if(!state.cond_deactivate_movement){
         state.animationPresideStart = false;
         setTimeout(() => {
         if(jumpStartTime == 0) {
-            console.log(keys);
                 currentDir = getDirection();
                 if (currentDir.x === 0 && currentDir.y === 0) return;
                 if(!isCharging){
                     jumpStartTime = performance.now();
-                    console.log(jumpStartTime);
                     isCharging = true;
                 }
         }
         if(isCharging) {
             if(performance.now() - jumpStartTime > 350 && !state.cond_run_preside){
-                console.log("si")
                 state.cond_run_preside = true;
                 runPreside(event, currentDir);
             } 
@@ -1632,7 +1648,6 @@ async function runPreside(event, currentDir, distance = 9) {
     
 }
 function handleKeyup(event){
-    console.log(state.cond_deactivate_movement) 
     if(!state.cond_deactivate_movement){
         if(["KeyW", "KeyA", "KeyS", "KeyD"].includes(event.code)){
             setTimeout(() => {
@@ -2170,33 +2185,27 @@ async function resetHeight(character, condPreside = true, speedForPhase = 30) {
   function controlPosition(state, e, saved_e) {
     state.posX = Math.round(state.posX);
     state.posY = Math.round(state.posY);
-    if((state.posX >= 38 && state.posX <= 48) && (state.posY >= 84 && state.posY <= 105)){
-        document.getElementById('key_e'+0).style.opacity = '1';
+
+    for(let i=0;i<data.interactionLog.length;i++) {
+        if((state.posX >= data.interactionLog[i][0] && state.posX <= data.interactionLog[i][1]) && (state.posY >= data.interactionLog[i][2] && state.posY <= data.interactionLog[i][3])){
+        document.getElementById('key_e'+i).style.opacity = '1';
         window.addEventListener('keydown', function(event) {
             if (event.key === 'e' || event.key === 'E') {
-               if((state.posX >= 38 && state.posX <= 48) && (state.posY >= 84 && state.posY <= 105)) if(data.matTert[4][4] == false) interaction(0, e, state, saved_e);
-            }
-        });
-    }
-    else{
-        document.getElementById('key_e'+0).style.opacity = '0';
-        if((state.posX >= 110 && state.posX <= 125) && (state.posY >=-60 && state.posY <= -43)){
-            if(!state.menu_opened) showInteractionCircle(e, state);
-            document.getElementById('key_e'+1).style.opacity = '1';
-            window.addEventListener('keydown', function(event) {
-                if (event.key === 'e' || event.key === 'E') {
-                    if((state.posX >= 110 && state.posX <= 125) && (state.posY >=-60 && state.posY <= -43)){
-                        interaction(1, e, state, saved_e);
-                    } 
+               if((state.posX >= data.interactionLog[i][0] && state.posX <= data.interactionLog[i][1]) && (state.posY >= data.interactionLog[i][2] && state.posY <= data.interactionLog[i][3])) {
+                if(i==0) {
+                    if(!data.matTert[4][4]) interaction(0, e, state, saved_e);
+                } else if(i==1) {
+                    if(!state.menu_opened) interaction(i, e, state, saved_e);
+                }
+                }
                 }
             });
-        } else{
-            if(!state.cond_interactionCircle && !state.menu_opened) {
-                state.cond_interactionCircle = true;
-                animateInteractionCircle(e, state);
-            }
-            document.getElementById('key_e'+1).style.opacity = '0';
-        }
+        } else document.getElementById('key_e'+i).style.opacity = '0';
+    }
+
+    if(!state.cond_interactionCircle && !state.menu_opened) {
+        state.cond_interactionCircle = true;
+        animateInteractionCircle(e, state);
     }
 }
 
@@ -2446,7 +2455,7 @@ function controlProgress(e, state, saved_e) {
     let completed_materials = 0;
     let subtracted = false;
     writeMissions(e, state);
-    for(let j=0;j<3;j++){
+    for(let j=0;j<3;j++) {
         completed_materials = 0;
         for(let i=1;i<data.logConstructionMission[j].length;i++) {
             subtracted = false;
@@ -2510,7 +2519,14 @@ function completeMission(index, e, state, saved_e) {
             data.logConstructionMission.push(["Nient'altro da fare"]);
             writeMissions(e, state);
         }, 1000);
+
         buildPart(index, e, state, saved_e);
+
+        for(let i=index;i<data.partSchool.length;i++) {
+            data.partSchool[i] = data.partSchool[i+1];
+        }
+
+        
     }, 1000);
     
 }
@@ -2529,7 +2545,6 @@ function buildPart(index, e, state, saved_e) {
         }, 2000);
         setTimeout(() => {
             state.index = 24;
-
             setupDialogue(e, state, saved_e, true);
         }, 5000);
     }
@@ -2736,6 +2751,7 @@ function startFirstCycle(e, state, chosed = null, saved_e){
         e.display_choice.style.opacity = '0';
         e.display_img_choice1.style.pointerEvents = 'none';
         e.display_img_choice2.style.pointerEvents = 'none';
+        state.animationPresideStart = true;
         if(chosed == 1){
             bookCycle(e, state, saved_e);
             /*
@@ -2754,7 +2770,7 @@ function startFirstCycle(e, state, chosed = null, saved_e){
         }
         resetMoveWorld(e, -3, 5);
         state.cond_deactivate_movement = false;
-        eliminateCharacter(e, 3, null);
+        eliminateCharacter(e, 3, document.getElementById('character_3'));
     }
 }
 let cont_first_cycle = 0;
@@ -2798,6 +2814,8 @@ function animationFirstCycle(e, state, saved_e, chosed) {
 async function animationCar(e, state, object, character) {
     
     return new Promise(resolve => {
+        document.documentElement.style.setProperty("--pos1", object.style.top);
+        document.documentElement.style.setProperty("--pos2", (parseFloat));
         object.style.animation = 'animationCar 0.5s infinite';
         document.getElementById("wheel_car1").style.animation = 'animation_wheel 1s linear infinite';
         document.getElementById("wheel_car2").style.animation = 'animation_wheel 1s linear infinite';
@@ -2815,6 +2833,7 @@ async function animationCar(e, state, object, character) {
     });
 
 }
+
 
 async function exitCar(object, i) {
     return new Promise(resolve => {
@@ -4231,7 +4250,7 @@ function mobileAdaptation(e, state){
 
     function checkOrientation(){
         if (window.matchMedia("(orientation: portrait)").matches) {
-             document.body.style.transform = 'rotate(90deg)';
+            document.body.style.transform = 'rotate(90deg)';
         } else {
             document.body.style.transform = 'rotate(0deg)';
         }
